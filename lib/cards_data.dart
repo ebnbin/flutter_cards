@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:built_collection/built_collection.dart';
 import 'package:flutter/cupertino.dart';
 
 /// 卡片数据. 管理 [BaseCard].
@@ -28,7 +29,7 @@ class CardsData {
           column: column,
         );
         baseCard.data = data;
-        cards.add(baseCard);
+        _cards.add(baseCard);
       }
     }
   }
@@ -38,7 +39,8 @@ class CardsData {
   /// 列数.
   int get columns => 4;
 
-  List<BaseCard> cards = [];
+  List<BaseCard> _cards = [];
+  BuiltList<BaseCard> get cards => _cards.build();
 }
 
 /// 整个游戏所有元素都由 [BaseCard] 组成.
