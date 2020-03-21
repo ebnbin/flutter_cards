@@ -1,6 +1,7 @@
 import 'package:cards/cards_data.dart' as data;
 import 'package:flutter/material.dart';
 
+/// 卡片页面.
 class Cards extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _CardsState();
@@ -12,7 +13,7 @@ class _CardsState extends State<Cards> with TickerProviderStateMixin {
     return Scaffold(
       body: SafeArea(
         child: Stack(
-          children: _cards.cards.map<Widget>((card) {
+          children: _cards.cards.map<Widget>((data.Card card) {
             return _buildCard(card);
           }).toList(),
         ),
@@ -20,27 +21,25 @@ class _CardsState extends State<Cards> with TickerProviderStateMixin {
     );
   }
 
+  /// 每一个卡片.
   Widget _buildCard(data.Card card) {
     return Positioned.fromRect(
-      rect: card.position(context),
+      rect: card.rect(context),
       child: Transform(
         transform: card.transform,
         alignment: Alignment.center,
         child: Card(
-          clipBehavior: Clip.antiAliasWithSaveLayer,
+          elevation: card.elevation,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(card.radius),
+          ),
+          clipBehavior: Clip.antiAlias,
           child: GestureDetector(
             child: Center(
               child: Text('$card'),
             ),
-            onTap: card.animationValue == null ? () {
-              card.createAnimation(() {
-                setState(() {
-                });
-              }, this,
-                duration: 1000,
-                curve: Curves.easeInOut,
-              );
-            } : null,
+            onTap: _cards.onTap(setState, this, card),
+            onLongPress: _cards.onLongPress(context, setState, this, card),
             behavior: HitTestBehavior.translucent,
           ),
         ),
@@ -48,5 +47,6 @@ class _CardsState extends State<Cards> with TickerProviderStateMixin {
     );
   }
 
+  /// 卡片数据.
   data.Cards _cards = data.Cards();
 }

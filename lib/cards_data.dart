@@ -44,6 +44,14 @@ class Cards {
     _cards.sort();
     return _cards.build();
   }
+
+  Function onTap(SetState setState, TickerProvider tickerProvider, Card card) {
+    return card._onTap(setState, tickerProvider);
+  }
+
+  Function onLongPress(BuildContext context, SetState setState, TickerProvider tickerProvider, Card card) {
+    return card._onLongPress(context, setState, tickerProvider);
+  }
 }
 
 /// 整个游戏所有元素都由 [Card] 组成.
@@ -69,7 +77,7 @@ class Card implements Comparable<Card> {
   int get column => _column;
 
   /// 在 Stack 中的位置.
-  Rect position(BuildContext context) {
+  Rect rect(BuildContext context) {
     MediaQueryData mediaQueryData = MediaQuery.of(context);
     // 安全的屏幕宽高.
     Size screenSize = Size(
@@ -101,8 +109,6 @@ class Card implements Comparable<Card> {
   /// 如果不为 null 表示正在动画.
   double animationValue;
 
-  int get _zIndex => animationValue == null ? 0 : 1;
-
   double get rotateY {
     const double init = 0.0;
     const double increment = 2.0 * pi;
@@ -125,19 +131,59 @@ class Card implements Comparable<Card> {
     }
   }
 
-  final int _timestamp = DateTime.now().microsecondsSinceEpoch;
+  double get elevation {
+    const double init = 1.0;
+    const double increment = 2.0;
+    if (animationValue == null) {
+      return init;
+    }
+    if (animationValue < 0.5) {
+      return init + animationValue * increment * 2.0;
+    } else {
+      return init + (1.0 - animationValue) * increment * 2.0;
+    }
+  }
+
+  double get radius {
+    const double init = 4.0;
+    const double increment = 8.0;
+    if (animationValue == null) {
+      return init;
+    }
+    if (animationValue < 0.5) {
+      return init + animationValue * increment * 2.0;
+    } else {
+      return init + (1.0 - animationValue) * increment * 2.0;
+    }
+  }
+
+  int _timestamp = DateTime.now().microsecondsSinceEpoch;
 
   @override
   int compareTo(Card other) {
-    if (_zIndex == other._zIndex) {
+    if (elevation == other.elevation) {
       return _timestamp - other._timestamp;
     }
-    return _zIndex - other._zIndex;
+    return elevation > other.elevation ? 1 : -1;
   }
 
   @override
   String toString() {
     return '$_row,$_column:$data';
+  }
+
+  Function _onTap(SetState setState, TickerProvider tickerProvider) {
+    return animationValue == null ? () {
+      createAnimation(setState, tickerProvider,
+        duration: 1000,
+        curve: Curves.easeInOut,
+      );
+    } : null;
+  }
+
+  Function _onLongPress(BuildContext context, SetState setState, TickerProvider tickerProvider) {
+    return animationValue == null ? Feedback.wrapForLongPress(() {
+    }, context) : null;
   }
 
   void createAnimation(SetState setState, TickerProvider tickerProvider, {
@@ -168,18 +214,21 @@ class Card implements Comparable<Card> {
           case AnimationStatus.reverse:
             break;
           case AnimationStatus.completed:
+            _timestamp = DateTime.now().microsecondsSinceEpoch;
             animationValue = null;
-            setState();
+            setState(() {
+            });
             animationController.dispose();
             break;
         }
       })
       ..addListener(() {
         animationValue = curvedAnimation.value;
-        setState();
+        setState(() {
+        });
       });
     animationController.forward();
   }
 }
 
-typedef SetState = void Function();
+typedef SetState = void Function(VoidCallback);
