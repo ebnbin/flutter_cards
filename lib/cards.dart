@@ -1,4 +1,4 @@
-import 'package:cards/cards_data.dart';
+import 'package:cards/cards_data.dart' as data;
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -13,7 +13,7 @@ class _CardsState extends State<Cards> with TickerProviderStateMixin {
     return Scaffold(
       body: SafeArea(
         child: Stack(
-          children: _data.cards.map<Widget>((card) {
+          children: _cards.cards.map<Widget>((card) {
             return Positioned.fromRect(
               rect: card.position(context),
               child: Transform(
@@ -24,7 +24,7 @@ class _CardsState extends State<Cards> with TickerProviderStateMixin {
                 alignment: Alignment.center,
                 child: Card(
                   clipBehavior: Clip.antiAliasWithSaveLayer,
-                  child: InkWell(
+                  child: GestureDetector(
                     child: Center(
                       child: Text('$card'),
                     ),
@@ -63,6 +63,7 @@ class _CardsState extends State<Cards> with TickerProviderStateMixin {
                         });
                       animationController.forward();
                     } : null,
+                    behavior: HitTestBehavior.translucent,
                   ),
                 ),
               ),
@@ -73,5 +74,5 @@ class _CardsState extends State<Cards> with TickerProviderStateMixin {
     );
   }
 
-  CardsData _data = CardsData();
+  data.Cards _cards = data.Cards();
 }

@@ -3,9 +3,9 @@ import 'dart:math';
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/cupertino.dart';
 
-/// 卡片数据. 管理 [BaseCard].
-class CardsData {
-  CardsData() {
+/// 卡片数据. 管理 [Card].
+class Cards {
+  Cards() {
     for (int row = 0; row < rows; row++) {
       for (int column = 0; column < columns; column++) {
         String data;
@@ -23,13 +23,13 @@ class CardsData {
             data = '__';
             break;
         }
-        BaseCard baseCard = BaseCard(
+        Card card = Card(
           this,
           row: row,
           column: column,
         );
-        baseCard.data = data;
-        _cards.add(baseCard);
+        card.data = data;
+        _cards.add(card);
       }
     }
   }
@@ -39,23 +39,26 @@ class CardsData {
   /// 列数.
   int get columns => 4;
 
-  List<BaseCard> _cards = [];
-  BuiltList<BaseCard> get cards => _cards.build();
+  List<Card> _cards = [];
+  BuiltList<Card> get cards {
+    _cards.sort();
+    return _cards.build();
+  }
 }
 
-/// 整个游戏所有元素都由 [BaseCard] 组成.
-class BaseCard {
-  BaseCard(this.cardsData, {
+/// 整个游戏所有元素都由 [Card] 组成.
+class Card implements Comparable<Card> {
+  Card(this.cards, {
     int row = 0,
     int column = 0,
-  }) : assert(cardsData != null),
-        assert(row != null && row >= 0 && row < cardsData.rows),
-        assert(column != null && column >= 0 && column < cardsData.columns) {
+  }) : assert(cards != null),
+        assert(row != null && row >= 0 && row < cards.rows),
+        assert(column != null && column >= 0 && column < cards.columns) {
     _row = row;
     _column = column;
   }
 
-  final CardsData cardsData;
+  final Cards cards;
 
   /// 所在行.
   int _row;
@@ -74,11 +77,11 @@ class BaseCard {
       mediaQueryData.size.height - mediaQueryData.padding.vertical,
     );
     // 卡片宽高.
-    double size = min(screenSize.width / cardsData.columns, screenSize.height / cardsData.rows);
+    double size = min(screenSize.width / cards.columns, screenSize.height / cards.rows);
     // 水平边距.
-    double horizontal = (screenSize.width - size * cardsData.columns) / 2.0;
+    double horizontal = (screenSize.width - size * cards.columns) / 2.0;
     // 垂直边距.
-    double vertical = (screenSize.height - size * cardsData.rows) / 2.0;
+    double vertical = (screenSize.height - size * cards.rows) / 2.0;
     return Rect.fromLTWH(
       horizontal + size * _column,
       vertical + size * _row,
@@ -93,6 +96,8 @@ class BaseCard {
   /// 如果不为 null 表示正在动画.
   double animationValue;
 
+  int get _zIndex => animationValue == null ? 0 : 1;
+
   double get rotateY {
     const double init = 0.0;
     const double increment = 2.0 * pi;
@@ -104,7 +109,7 @@ class BaseCard {
 
   double get scale {
     const double init = 1.0;
-    const double increment = -0.2;
+    const double increment = 1.0;
     if (animationValue == null) {
       return init;
     }
@@ -113,6 +118,16 @@ class BaseCard {
     } else {
       return init + (1.0 - animationValue) * increment * 2.0;
     }
+  }
+
+  final int _timestamp = DateTime.now().microsecondsSinceEpoch;
+
+  @override
+  int compareTo(Card other) {
+    if (_zIndex == other._zIndex) {
+      return _timestamp - other._timestamp;
+    }
+    return _zIndex - other._zIndex;
   }
 
   @override
