@@ -23,6 +23,11 @@ class _CardsState extends State<Cards> with TickerProviderStateMixin {
 
   /// 每一个卡片.
   Widget _buildCard(data.Card card) {
+    return card.visible ? _buildVisibleCard(card) : _buildInvisibleCard();
+  }
+
+  /// 一个可见的卡片.
+  Widget _buildVisibleCard(data.Card card) {
     return Positioned.fromRect(
       rect: card.rect(context),
       child: Transform(
@@ -44,6 +49,13 @@ class _CardsState extends State<Cards> with TickerProviderStateMixin {
           ),
         ),
       ),
+    );
+  }
+
+  /// 一个不可见的卡片.
+  Widget _buildInvisibleCard() {
+    return Positioned.fill(
+      child: SizedBox.shrink(),
     );
   }
 

@@ -76,6 +76,8 @@ class Card implements Comparable<Card> {
   int _column;
   int get column => _column;
 
+  bool visible = true;
+
   /// 在 Stack 中的位置.
   Rect rect(BuildContext context) {
     MediaQueryData mediaQueryData = MediaQuery.of(context);
