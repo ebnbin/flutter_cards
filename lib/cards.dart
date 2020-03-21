@@ -34,9 +34,9 @@ class _CardsState extends State<Cards> with TickerProviderStateMixin {
         transform: card.transform,
         alignment: Alignment.center,
         child: Card(
-          elevation: card.elevation,
+          elevation: card.property.elevation,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(card.radius),
+            borderRadius: BorderRadius.circular(card.property.radius),
           ),
           clipBehavior: Clip.antiAlias,
           child: GestureDetector(

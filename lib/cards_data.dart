@@ -3,33 +3,19 @@ import 'dart:math';
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 
+/// State.setState(VoidCallback).
+typedef SetState = void Function(VoidCallback);
+
 /// 卡片数据. 管理 [Card].
 class Cards {
   Cards() {
     for (int row = 0; row < rows; row++) {
       for (int column = 0; column < columns; column++) {
-        String data;
-        switch (row * 10 + column) {
-          case 10:
-            data = '_C';
-            break;
-          case 11:
-            data = 'ar';
-            break;
-          case 12:
-            data = 'ds';
-            break;
-          default:
-            data = '__';
-            break;
-        }
-        Card card = Card(
+        _cards.add(Card(
           this,
           row: row,
           column: column,
-        );
-        card.data = data;
-        _cards.add(card);
+        ));
       }
     }
   }
@@ -100,82 +86,31 @@ class Card implements Comparable<Card> {
     );
   }
 
+  Property _property = defaultProperty;
+  Property get property => _property;
+
   Matrix4 get transform => Matrix4.identity()
     ..setEntry(3, 2, 0.005)
-    ..rotateY(rotateY)
-    ..scale(scale);
-
-  // 临时数据.
-  String data;
-
-  /// 如果不为 null 表示正在动画.
-  double animationValue;
-
-  double get rotateY {
-    const double init = 0.0;
-    const double increment = 2.0 * pi;
-    if (animationValue == null) {
-      return init;
-    }
-    return init + animationValue * increment;
-  }
-
-  double get scale {
-    const double init = 1.0;
-    const double increment = 1.0;
-    if (animationValue == null) {
-      return init;
-    }
-    if (animationValue < 0.5) {
-      return init + animationValue * increment * 2.0;
-    } else {
-      return init + (1.0 - animationValue) * increment * 2.0;
-    }
-  }
-
-  double get elevation {
-    const double init = 1.0;
-    const double increment = 2.0;
-    if (animationValue == null) {
-      return init;
-    }
-    if (animationValue < 0.5) {
-      return init + animationValue * increment * 2.0;
-    } else {
-      return init + (1.0 - animationValue) * increment * 2.0;
-    }
-  }
-
-  double get radius {
-    const double init = 4.0;
-    const double increment = 8.0;
-    if (animationValue == null) {
-      return init;
-    }
-    if (animationValue < 0.5) {
-      return init + animationValue * increment * 2.0;
-    } else {
-      return init + (1.0 - animationValue) * increment * 2.0;
-    }
-  }
+    ..rotateY(_property.rotateY)
+    ..scale(_property.scale);
 
   int _timestamp = DateTime.now().microsecondsSinceEpoch;
 
   @override
   int compareTo(Card other) {
-    if (elevation == other.elevation) {
+    if (_property.elevation == other._property.elevation) {
       return _timestamp - other._timestamp;
     }
-    return elevation > other.elevation ? 1 : -1;
+    return _property.elevation > other._property.elevation ? 1 : -1;
   }
 
   @override
   String toString() {
-    return '$_row,$_column:$data';
+    return '$_row,$_column';
   }
 
   Function _onTap(SetState setState, TickerProvider tickerProvider) {
-    return animationValue == null ? () {
+    return _property == defaultProperty ? () {
       createAnimation(setState, tickerProvider,
         duration: 1000,
         curve: Curves.easeInOut,
@@ -184,7 +119,7 @@ class Card implements Comparable<Card> {
   }
 
   Function _onLongPress(BuildContext context, SetState setState, TickerProvider tickerProvider) {
-    return animationValue == null ? Feedback.wrapForLongPress(() {
+    return _property == defaultProperty ? Feedback.wrapForLongPress(() {
     }, context) : null;
   }
 
@@ -217,7 +152,7 @@ class Card implements Comparable<Card> {
             break;
           case AnimationStatus.completed:
             _timestamp = DateTime.now().microsecondsSinceEpoch;
-            animationValue = null;
+            _property = defaultProperty;
             setState(() {
             });
             animationController.dispose();
@@ -225,7 +160,7 @@ class Card implements Comparable<Card> {
         }
       })
       ..addListener(() {
-        animationValue = curvedAnimation.value;
+        _property = AnimationProperty(curvedAnimation.value);
         setState(() {
         });
       });
@@ -233,4 +168,90 @@ class Card implements Comparable<Card> {
   }
 }
 
-typedef SetState = void Function(VoidCallback);
+abstract class Property {
+  const Property(this.value);
+
+  final double value;
+
+  double get rotateY;
+
+  double get scale;
+
+  double get elevation;
+
+  double get radius;
+}
+
+class DefaultProperty extends Property {
+  const DefaultProperty() : super(0.0);
+
+  @override
+  double get rotateY => 0.0;
+
+  @override
+  double get scale => 1.0;
+
+  @override
+  double get elevation => 1.0;
+
+  @override
+  double get radius => 4.0;
+}
+
+final Property defaultProperty = DefaultProperty();
+
+class AnimationProperty extends Property {
+  const AnimationProperty(double value) : super(value);
+
+  @override
+  double get rotateY {
+    const double init = 0.0;
+    const double increment = 2.0 * pi;
+//    if (value == null) {
+//      return init;
+//    }
+    return init + value * increment;
+  }
+
+  @override
+  double get scale {
+    const double init = 1.0;
+    const double increment = 1.0;
+//    if (value == null) {
+//      return init;
+//    }
+    if (value < 0.5) {
+      return init + value * increment * 2.0;
+    } else {
+      return init + (1.0 - value) * increment * 2.0;
+    }
+  }
+
+  @override
+  double get elevation {
+    const double init = 1.0;
+    const double increment = 2.0;
+//    if (value == null) {
+//      return init;
+//    }
+    if (value < 0.5) {
+      return init + value * increment * 2.0;
+    } else {
+      return init + (1.0 - value) * increment * 2.0;
+    }
+  }
+
+  @override
+  double get radius {
+    const double init = 4.0;
+    const double increment = 8.0;
+//    if (value == null) {
+//      return init;
+//    }
+    if (value < 0.5) {
+      return init + value * increment * 2.0;
+    } else {
+      return init + (1.0 - value) * increment * 2.0;
+    }
+  }
+}
