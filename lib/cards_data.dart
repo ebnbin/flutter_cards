@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:built_collection/built_collection.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 /// 卡片数据. 管理 [Card].
 class Cards {
@@ -90,6 +90,11 @@ class Card implements Comparable<Card> {
     );
   }
 
+  Matrix4 get transform => Matrix4.identity()
+    ..setEntry(3, 2, 0.005)
+    ..rotateY(rotateY)
+    ..scale(scale);
+
   // 临时数据.
   String data;
 
@@ -134,4 +139,47 @@ class Card implements Comparable<Card> {
   String toString() {
     return '$_row,$_column:$data';
   }
+
+  void createAnimation(SetState setState, TickerProvider tickerProvider, {
+    int duration = 1000,
+    Curve curve = Curves.linear,
+  }) {
+    assert(setState != null);
+    assert(tickerProvider != null);
+    assert(duration != null && duration >= 0);
+    assert(curve != null);
+    AnimationController animationController = AnimationController(
+      duration: Duration(
+        milliseconds: duration,
+      ),
+      vsync: tickerProvider,
+    );
+    CurvedAnimation curvedAnimation = CurvedAnimation(
+      parent: animationController,
+      curve: curve,
+    );
+    curvedAnimation
+      ..addStatusListener((AnimationStatus status) {
+        switch (status) {
+          case AnimationStatus.dismissed:
+            break;
+          case AnimationStatus.forward:
+            break;
+          case AnimationStatus.reverse:
+            break;
+          case AnimationStatus.completed:
+            animationValue = null;
+            setState();
+            animationController.dispose();
+            break;
+        }
+      })
+      ..addListener(() {
+        animationValue = curvedAnimation.value;
+        setState();
+      });
+    animationController.forward();
+  }
 }
+
+typedef SetState = void Function();
