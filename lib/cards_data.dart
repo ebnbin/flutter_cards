@@ -37,7 +37,7 @@ class Cards {
 
   Function onTap(SetState setState, TickerProvider tickerProvider, Card card) {
     return () {
-      _postAction(RotateY360AnimationAction(this, setState, tickerProvider, card));
+      _postAction(_RotateY360AnimationAction(this, setState, tickerProvider, card));
     };
   }
 
@@ -49,13 +49,13 @@ class Cards {
   // 事件.
 
   /// 事件队列.
-  final Queue<Action> _actions = Queue();
+  final Queue<_Action> _actions = Queue();
 
   /// 是否正在处理事件.
   bool _isActing = false;
 
   /// 加入事件队列.
-  void _postAction(Action action) {
+  void _postAction(_Action action) {
     _actions.addLast(action);
     _handleAction();
   }
@@ -191,8 +191,8 @@ abstract class Property {
 }
 
 /// 无动画时的默认属性.
-class DefaultProperty extends Property {
-  const DefaultProperty() : super();
+class _DefaultProperty extends Property {
+  const _DefaultProperty() : super();
 
   @override
   double get matrix4Entry32 => 0.005;
@@ -217,10 +217,10 @@ class DefaultProperty extends Property {
 }
 
 /// 无动画时的默认属性.
-final Property defaultProperty = DefaultProperty();
+final Property defaultProperty = _DefaultProperty();
 
-class RotateY360Property extends Property {
-  const RotateY360Property({
+class _RotateY360Property extends Property {
+  const _RotateY360Property({
     double value,
   }) : super(value: value);
 
@@ -270,8 +270,8 @@ class RotateY360Property extends Property {
 // 事件.
 
 /// 事件.
-abstract class Action {
-  const Action(this.cards) : assert(cards != null);
+abstract class _Action {
+  const _Action(this.cards) : assert(cards != null);
 
   final Cards cards;
 
@@ -286,9 +286,10 @@ abstract class Action {
 }
 
 /// 动画事件.
-abstract class AnimationAction extends Action {
-  const AnimationAction(Cards cards, this.setState, this.tickerProvider, this.duration, {
+abstract class _AnimationAction extends _Action {
+  const _AnimationAction(Cards cards, this.setState, this.tickerProvider, this.duration, {
     this.curve = Curves.linear,
+    this.type = _AnimationType.forward,
   }) : assert(setState != null),
         assert(tickerProvider != null),
         assert(duration != null && duration >= 0),
@@ -299,6 +300,7 @@ abstract class AnimationAction extends Action {
   final TickerProvider tickerProvider;
   final int duration;
   final Curve curve;
+  final _AnimationType type;
   
   @override
   void begin() {
@@ -314,19 +316,41 @@ abstract class AnimationAction extends Action {
     );
     curvedAnimation
       ..addStatusListener((AnimationStatus status) {
-        switch (status) {
-          case AnimationStatus.dismissed:
+        switch (type) {
+          case _AnimationType.forward:
+            switch (status) {
+              case AnimationStatus.dismissed:
+                break;
+              case AnimationStatus.forward:
+                break;
+              case AnimationStatus.reverse:
+                break;
+              case AnimationStatus.completed:
+                animationController.dispose();
+                onCompleted();
+                end();
+                setState(() {
+                });
+                break;
+            }
             break;
-          case AnimationStatus.forward:
-            break;
-          case AnimationStatus.reverse:
-            break;
-          case AnimationStatus.completed:
-            animationController.dispose();
-            onCompleted();
-            end();
-            setState(() {
-            });
+          case _AnimationType.forwardReverse:
+            switch (status) {
+              case AnimationStatus.dismissed:
+                animationController.dispose();
+                onCompleted();
+                end();
+                setState(() {
+                });
+                break;
+              case AnimationStatus.forward:
+                break;
+              case AnimationStatus.reverse:
+                break;
+              case AnimationStatus.completed:
+                animationController.reverse();
+                break;
+            }
             break;
         }
       })
@@ -347,17 +371,20 @@ abstract class AnimationAction extends Action {
   }
 }
 
-class RotateY360AnimationAction extends AnimationAction {
-  const RotateY360AnimationAction(Cards cards, SetState setState, TickerProvider tickerProvider, this.card) :
+class _RotateY360AnimationAction extends _AnimationAction {
+  const _RotateY360AnimationAction(Cards cards, SetState setState, TickerProvider tickerProvider, this.card) :
         assert(card != null),
-        super(cards, setState, tickerProvider, 1000, curve: Curves.easeInOut);
+        super(cards, setState, tickerProvider, 1000,
+        curve: Curves.easeInOut,
+        type: _AnimationType.forward,
+      );
   
   final Card card;
   
   @override
   void onRunning(double value) {
     super.onRunning(value);
-    card._property = RotateY360Property(
+    card._property = _RotateY360Property(
       value: value,
     );
   }
@@ -368,4 +395,12 @@ class RotateY360AnimationAction extends AnimationAction {
     card._property = defaultProperty;
     super.onCompleted();
   }
+}
+
+/// 动画类型.
+enum _AnimationType {
+  /// 正序.
+  forward,
+  /// 正序逆序.
+  forwardReverse,
 }
