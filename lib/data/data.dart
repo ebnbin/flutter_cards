@@ -11,6 +11,8 @@ part 'data_property.dart';
 //*********************************************************************************************************************
 
 /// 游戏数据.
+///
+/// 有效行列范围: 2 ~ 6. Header footer 固定都是 2 * 6. 网格粒度 60. 2, 3, 4, 5, 6 都是 60 的约数.
 class GameData {
   GameData() {
     _initCardDataList();
@@ -19,7 +21,10 @@ class GameData {
   void _initCardDataList() {
     for (int rowIndex = 0; rowIndex < _rowCount; rowIndex++) {
       for (int columnIndex = 0; columnIndex < _columnCount; columnIndex++) {
-        _cardDataList.add(IndexedCardData(
+        if (rowIndex == 2 && (columnIndex == 1 || columnIndex == 2)) {
+          continue;
+        }
+        _cardDataList.add(IndexCardData(
           gameData: this,
           defaultProperty: defaultProperty,
           rowIndex: rowIndex,
@@ -29,6 +34,78 @@ class GameData {
         ));
       }
     }
+    _cardDataList.add(IndexCardData(
+      gameData: this,
+      defaultProperty: defaultProperty,
+      rowIndex: 2,
+      columnIndex: 1,
+      rowSpan: 1,
+      columnSpan: 2,
+    ));
+    _cardDataList.add(GridCardData(
+      gameData: this,
+      defaultProperty: defaultProperty,
+      rowGrid: (isVertical) => isVertical ? 0 : 0,
+      columnGrid: (isVertical) => isVertical ? 0 : 0,
+      rowGridSpan: (isVertical) => isVertical ? 10 : 10,
+      columnGridSpan: (isVertical) => isVertical ? 10 : 10,
+    ));
+    _cardDataList.add(GridCardData(
+      gameData: this,
+      defaultProperty: defaultProperty,
+      rowGrid: (isVertical) => isVertical ? 10 : 30,
+      columnGrid: (isVertical) => isVertical ? 20 : 0,
+      rowGridSpan: (isVertical) => isVertical ? 10 : 10,
+      columnGridSpan: (isVertical) => isVertical ? 20 : 20,
+    ));
+    _cardDataList.add(GridCardData(
+      gameData: this,
+      defaultProperty: defaultProperty,
+      rowGrid: (isVertical) => isVertical ? 80 : 0,
+      columnGrid: (isVertical) => isVertical ? 0 : 80,
+      rowGridSpan: (isVertical) => isVertical ? 10 : 10,
+      columnGridSpan: (isVertical) => isVertical ? 10 : 10,
+    ));
+    _cardDataList.add(GridCardData(
+      gameData: this,
+      defaultProperty: defaultProperty,
+      rowGrid: (isVertical) => isVertical ? 80 : 10,
+      columnGrid: (isVertical) => isVertical ? 10 : 80,
+      rowGridSpan: (isVertical) => isVertical ? 10 : 10,
+      columnGridSpan: (isVertical) => isVertical ? 10 : 10,
+    ));
+    _cardDataList.add(GridCardData(
+      gameData: this,
+      defaultProperty: defaultProperty,
+      rowGrid: (isVertical) => isVertical ? 80 : 20,
+      columnGrid: (isVertical) => isVertical ? 20 : 80,
+      rowGridSpan: (isVertical) => isVertical ? 10 : 10,
+      columnGridSpan: (isVertical) => isVertical ? 10 : 10,
+    ));
+    _cardDataList.add(GridCardData(
+      gameData: this,
+      defaultProperty: defaultProperty,
+      rowGrid: (isVertical) => isVertical ? 80 : 30,
+      columnGrid: (isVertical) => isVertical ? 30 : 80,
+      rowGridSpan: (isVertical) => isVertical ? 10 : 10,
+      columnGridSpan: (isVertical) => isVertical ? 10 : 10,
+    ));
+    _cardDataList.add(GridCardData(
+      gameData: this,
+      defaultProperty: defaultProperty,
+      rowGrid: (isVertical) => isVertical ? 80 : 40,
+      columnGrid: (isVertical) => isVertical ? 40 : 80,
+      rowGridSpan: (isVertical) => isVertical ? 10 : 10,
+      columnGridSpan: (isVertical) => isVertical ? 10 : 10,
+    ));
+    _cardDataList.add(GridCardData(
+      gameData: this,
+      defaultProperty: defaultProperty,
+      rowGrid: (isVertical) => isVertical ? 80 : 50,
+      columnGrid: (isVertical) => isVertical ? 50 : 80,
+      rowGridSpan: (isVertical) => isVertical ? 10 : 10,
+      columnGridSpan: (isVertical) => isVertical ? 10 : 10,
+    ));
   }
 
   //*******************************************************************************************************************

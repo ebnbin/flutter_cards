@@ -71,9 +71,9 @@ abstract class CardData implements Comparable<CardData> {
 
 //*********************************************************************************************************************
 
-/// 带索引的卡片.
-class IndexedCardData extends CardData {
-  IndexedCardData({
+/// 按照索引定位的卡片, 不能根据横竖屏控制不同的行列.
+class IndexCardData extends CardData {
+  IndexCardData({
     GameData gameData,
     Property defaultProperty,
     int rowIndex,
@@ -109,16 +109,35 @@ class IndexedCardData extends CardData {
   @override
   Rect rect(BuildContext context) {
     const double padding = 8.0;
+    // 默认网格数. 竖屏时水平方向的网格数, 或横屏时垂直方向的网格数.
+    const int defaultGridCount = 60;
+    // Header 和 footer 占用的网格数. 竖屏时占用高度, 横屏时占用宽度.
+    const int headerFooterGridCount = 40;
     Size safeSize = util.safeSize(context,
       padding: padding,
     );
-    if (safeSize.width < safeSize.height) {
+    // 水平方向网格数量.
+    int horizontalGridCount;
+    // 垂直方向网格数量.
+    int verticalGridCount;
+    // 每个卡片占用几个网格.
+    int gridPerCard;
+    bool isVertical = safeSize.width <= safeSize.height;
+    if (isVertical) {
       // 竖屏.
+      horizontalGridCount = defaultGridCount;
+      gridPerCard = defaultGridCount ~/ gameData._columnCount;
+      verticalGridCount = defaultGridCount ~/ gameData._columnCount * gameData._rowCount + headerFooterGridCount;
     } else {
       // 横屏.
+      verticalGridCount = defaultGridCount;
+      gridPerCard = defaultGridCount ~/ gameData._rowCount;
+      horizontalGridCount = defaultGridCount ~/ gameData._rowCount * gameData._columnCount + headerFooterGridCount;
     }
+    // 网格宽高.
+    double gridSize = min(safeSize.width / horizontalGridCount, safeSize.height / verticalGridCount);
     // 卡片宽高.
-    double cardSize = min(safeSize.width / gameData._columnCount, safeSize.height / gameData._rowCount);
+    double cardSize = gridSize * gridPerCard;
     // 左边距.
     double spaceLeft = (safeSize.width - cardSize * gameData._columnCount) / 2.0 + padding;
     // 上边距.
@@ -133,6 +152,84 @@ class IndexedCardData extends CardData {
 
   @override
   String toString() {
-    return '$_rowIndex,$_columnIndex';
+    return '$_rowIndex,$_columnIndex,$_rowSpan,$_columnSpan';
   }
 }
+
+//*********************************************************************************************************************
+
+/// 按照网格定位的卡片, 可以根据横竖屏控制不同的行列.
+class GridCardData extends CardData {
+  GridCardData({
+    GameData gameData,
+    Property defaultProperty,
+    GetGrid rowGrid,
+    GetGrid columnGrid,
+    GetGrid rowGridSpan,
+    GetGrid columnGridSpan,
+  }) : assert(rowGrid != null),
+        assert(columnGrid != null),
+        assert(rowGridSpan != null),
+        assert(columnGridSpan != null),
+        super(
+        gameData: gameData,
+        defaultProperty: defaultProperty,
+      ) {
+    _rowGrid = rowGrid;
+    _columnGrid = columnGrid;
+    _rowGridSpan = rowGridSpan;
+    _columnGridSpan = columnGridSpan;
+  }
+  
+  /// 所在网格行.
+  GetGrid _rowGrid;
+
+  /// 所在网格列.
+  GetGrid _columnGrid;
+  
+  /// 网格跨行.
+  GetGrid _rowGridSpan;
+
+  /// 网格跨列.
+  GetGrid _columnGridSpan;
+  
+  @override
+  Rect rect(BuildContext context) {
+    const double padding = 8.0;
+    // 默认网格数. 竖屏时水平方向的网格数, 或横屏时垂直方向的网格数.
+    const int defaultGridCount = 60;
+    // Header 和 footer 占用的网格数. 竖屏时占用高度, 横屏时占用宽度.
+    const int headerFooterGridCount = 40;
+    Size safeSize = util.safeSize(context,
+      padding: padding,
+    );
+    // 水平方向网格数量.
+    int horizontalGridCount;
+    // 垂直方向网格数量.
+    int verticalGridCount;
+    bool isVertical = safeSize.width <= safeSize.height;
+    if (isVertical) {
+      // 竖屏.
+      horizontalGridCount = defaultGridCount;
+      verticalGridCount = defaultGridCount ~/ gameData._columnCount * gameData._rowCount + headerFooterGridCount;
+    } else {
+      // 横屏.
+      verticalGridCount = defaultGridCount;
+      horizontalGridCount = defaultGridCount ~/ gameData._rowCount * gameData._columnCount + headerFooterGridCount;
+    }
+    // 网格宽高.
+    double gridSize = min(safeSize.width / horizontalGridCount, safeSize.height / verticalGridCount);
+    // 左边距.
+    double spaceLeft = (safeSize.width - gridSize * horizontalGridCount) / 2.0 + padding;
+    // 上边距.
+    double spaceTop = (safeSize.height - gridSize * verticalGridCount) / 2.0 + padding;
+    return Rect.fromLTWH(
+      spaceLeft + gridSize * _columnGrid(isVertical),
+      spaceTop + gridSize * _rowGrid(isVertical),
+      gridSize * _columnGridSpan(isVertical),
+      gridSize * _rowGridSpan(isVertical),
+    );
+  }
+}
+
+typedef GetGrid = int Function(bool isVertical);
