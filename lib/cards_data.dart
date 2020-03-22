@@ -168,15 +168,15 @@ typedef SetState = void Function(VoidCallback);
 
 /// 根据 Animation.value 计算属性.
 class Property {
-  const Property({
-    this.value = 0.0,
-    this.matrix4Entry32Data,
-    this.rotateXData,
-    this.rotateYData,
-    this.scaleXData,
-    this.scaleYData,
-    this.elevationData,
-    this.radiusData,
+  Property({
+    double value = 0.0,
+    _PropertyData<double> matrix4Entry32Data,
+    _PropertyData<double> rotateXData,
+    _PropertyData<double> rotateYData,
+    _PropertyData<double> scaleXData,
+    _PropertyData<double> scaleYData,
+    _PropertyData<double> elevationData,
+    _PropertyData<double> radiusData,
   }) : assert(value != null),
         assert(matrix4Entry32Data != null),
         assert(rotateXData != null),
@@ -184,91 +184,68 @@ class Property {
         assert(scaleXData != null),
         assert(scaleYData != null),
         assert(elevationData != null),
-        assert(radiusData != null);
-
-  /// Animation.value.
-  final double value;
+        assert(radiusData != null),
+        matrix4Entry32 = matrix4Entry32Data.calc(value),
+        rotateX = rotateXData.calc(value),
+        rotateY = rotateYData.calc(value),
+        scaleX = scaleXData.calc(value),
+        scaleY = scaleYData.calc(value),
+        elevation = elevationData.calc(value),
+        radius = radiusData.calc(value);
 
   /// Matrix4.setEntry(3, 2, value).
-  final _PropertyData<double> matrix4Entry32Data;
-  double get matrix4Entry32 => _calcData(matrix4Entry32Data);
+  final double matrix4Entry32;
 
-  final _PropertyData<double> rotateXData;
-  double get rotateX => _calcData(rotateXData);
+  final double rotateX;
 
-  final _PropertyData<double> rotateYData;
-  double get rotateY => _calcData(rotateYData);
+  final double rotateY;
 
-  final _PropertyData<double> scaleXData;
-  double get scaleX => _calcData(scaleXData);
+  final double scaleX;
 
-  final _PropertyData<double> scaleYData;
-  double get scaleY => _calcData(scaleYData);
+  final double scaleY;
 
   /// Transform.
   Matrix4 get transform => Matrix4.identity()
-      ..setEntry(3, 2, matrix4Entry32)
-      ..rotateX(rotateX)
-      ..rotateY(rotateY)
-      ..scale(scaleX, scaleY);
+    ..setEntry(3, 2, matrix4Entry32)
+    ..rotateX(rotateX)
+    ..rotateY(rotateY)
+    ..scale(scaleX, scaleY);
 
-  final _PropertyData<double> elevationData;
-  double get elevation => _calcData(elevationData);
+  final double elevation;
 
-  final _PropertyData<double> radiusData;
-  double get radius => _calcData(radiusData);
-
-  double _calcData(_PropertyData<double> data) {
-    switch (data.type) {
-      case _PropertyType.type0:
-        return data.from;
-      case _PropertyType.type01:
-        return data.from + value * (data.to - data.from);
-      case _PropertyType.type010:
-        return data.from + (0.5 - (value - 0.5).abs()) * (data.to - data.from) * 2.0;
-      default:
-        return data.from;
-    }
-  }
+  final double radius;
 }
 
 /// 无动画时的默认属性.
 class _DefaultProperty extends Property {
   _DefaultProperty() : super(
-    matrix4Entry32Data: _PropertyData<double>(
-      from: 0.005,
-      to: 0.005,
-      type: _PropertyType.type0,
+    matrix4Entry32Data: _PropertyData(
+      keys: [0.005],
+      propertyCalc: _propertyDataCalc0,
     ),
-    rotateXData: _PropertyData<double>(
-      from: 0.0,
-      to: 0.0,
-      type: _PropertyType.type0,
+    rotateXData: _PropertyData(
+      keys: [0.0],
+      propertyCalc: _propertyDataCalc0,
     ),
-    rotateYData: _PropertyData<double>(
-      from: 0.0,
-      to: 0.0,
-      type: _PropertyType.type0,
+    rotateYData: _PropertyData(
+      keys: [0.0],
+      propertyCalc: _propertyDataCalc0,
     ),
-    scaleXData: _PropertyData<double>(
-      from: 1.0,
-      to: 1.0,
-      type: _PropertyType.type0,
+    scaleXData: _PropertyData(
+      keys: [1.0],
+      propertyCalc: _propertyDataCalc0,
     ),
-    scaleYData: _PropertyData<double>(
-      from: 1.0,
-      to: 1.0,
-      type: _PropertyType.type0,
+    scaleYData: _PropertyData(
+      keys: [1.0],
+      propertyCalc: _propertyDataCalc0,
     ),
-    elevationData: _PropertyData<double>(
-      from: 1.0,
-      to: 1.0,
-      type: _PropertyType.type0,
+    elevationData: _PropertyData(
+      keys: [1.0],
+      propertyCalc: _propertyDataCalc0,
     ),
-    radiusData: _PropertyData<double>(
-      from: 4.0,
-      to: 4.0,
-      type: _PropertyType.type0,
+    radiusData: _PropertyData(
+      keys: [4.0],
+      propertyCalc: _propertyDataCalc0,
     ),
   );
 }
@@ -276,31 +253,38 @@ class _DefaultProperty extends Property {
 /// 无动画时的默认属性.
 final Property defaultProperty = _DefaultProperty();
 
-/// 属性变化类型.
-enum _PropertyType {
-  /// 不变.
-  type0,
-  /// 增加.
-  type01,
-  /// 先增加再减小.
-  type010,
-}
-
 /// 属性数据, 用于计算.
 class _PropertyData<T> {
   const _PropertyData({
-    this.from,
-    this.to,
-    this.type
-  }) : assert(from != null),
-        assert(to != null),
-        assert(type != null);
-
-  final T from;
-  final T to;
-
-  final _PropertyType type;
+    this.keys,
+    this.propertyCalc,
+  });
+  
+  final List<T> keys;
+  final _PropertyCalc<T> propertyCalc;
+  
+  T calc(double value) {
+    return propertyCalc(keys, value);
+  }
 }
+
+/// 属性数据计算.
+typedef _PropertyCalc<T> = T Function(List<T> keys, double value);
+
+final _PropertyCalc<double> _propertyDataCalc0 = (List<double> keys, double value) {
+  assert(keys.length >= 1);
+  return keys[0];
+};
+
+final _PropertyCalc<double> _propertyDataCalc01 = (List<double> keys, double value) {
+  assert(keys.length >= 2);
+  return keys[0] + value * (keys[1] - keys[0]);
+};
+
+final _PropertyCalc<double> _propertyDataCalc010 = (List<double> keys, double value) {
+  assert(keys.length >= 2);
+  return keys[0] + (0.5 - (value - 0.5).abs()) * (keys[1] - keys[0]) * 2.0;
+};
 
 class _RotateY360Property extends Property {
   _RotateY360Property({
@@ -308,39 +292,32 @@ class _RotateY360Property extends Property {
   }) : super(
     value: value,
     matrix4Entry32Data: _PropertyData<double>(
-      from: 0.005,
-      to: 0.005,
-      type: _PropertyType.type0,
+      keys: [0.005],
+      propertyCalc: _propertyDataCalc0,
     ),
     rotateXData: _PropertyData<double>(
-      from: 0.0,
-      to: 0.0,
-      type: _PropertyType.type0,
+      keys: [0.0],
+      propertyCalc: _propertyDataCalc0,
     ),
     rotateYData: _PropertyData<double>(
-      from: 0.0,
-      to: 2.0 * pi,
-      type: _PropertyType.type01,
+      keys: [0.0, 2.0 * pi],
+      propertyCalc: _propertyDataCalc01,
     ),
     scaleXData: _PropertyData<double>(
-      from: 1.0,
-      to: 2.0,
-      type: _PropertyType.type010,
+      keys: [1.0, 2.0],
+      propertyCalc: _propertyDataCalc010,
     ),
     scaleYData: _PropertyData<double>(
-      from: 1.0,
-      to: 2.0,
-      type: _PropertyType.type010,
+      keys: [1.0, 2.0],
+      propertyCalc: _propertyDataCalc010,
     ),
     elevationData: _PropertyData<double>(
-      from: 1.0,
-      to: 2.0,
-      type: _PropertyType.type010,
+      keys: [1.0, 2.0],
+      propertyCalc: _propertyDataCalc010,
     ),
     radiusData: _PropertyData<double>(
-      from: 4.0,
-      to: 8.0,
-      type: _PropertyType.type010,
+      keys: [4.0, 8.0],
+      propertyCalc: _propertyDataCalc010,
     ),
   );
 }
