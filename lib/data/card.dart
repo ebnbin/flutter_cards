@@ -68,3 +68,54 @@ abstract class CardData implements Comparable<CardData> {
     return (_property.elevation - other._property.elevation).sign.toInt();
   }
 }
+
+//*********************************************************************************************************************
+
+/// 带索引的卡片.
+class IndexedCardData extends CardData {
+  IndexedCardData({
+    GameData gameData,
+    Property defaultProperty,
+    int rowIndex,
+    int columnIndex,
+  }) : assert(rowIndex != null && rowIndex >= 0 && rowIndex < gameData._rowCount),
+        assert(columnIndex != null && columnIndex >= 0 && columnIndex < gameData._columnCount),
+        super(
+        gameData: gameData,
+        defaultProperty: defaultProperty,
+      ) {
+    _rowIndex = rowIndex;
+    _columnIndex = columnIndex;
+  }
+
+  /// 所在行.
+  int _rowIndex;
+
+  /// 所在列.
+  int _columnIndex;
+
+  @override
+  Rect rect(BuildContext context) {
+    const double padding = 8.0;
+    Size safeSize = util.safeSize(context,
+      padding: padding,
+    );
+    // 卡片宽高.
+    double cardSize = min(safeSize.width / gameData._columnCount, safeSize.height / gameData._rowCount);
+    // 左边距.
+    double spaceLeft = (safeSize.width - cardSize * gameData._columnCount) / 2.0 + padding;
+    // 上边距.
+    double spaceTop = (safeSize.height - cardSize * gameData._rowCount) / 2.0 + padding;
+    return Rect.fromLTWH(
+      spaceLeft + cardSize * _columnIndex,
+      spaceTop + cardSize * _rowIndex,
+      cardSize,
+      cardSize,
+    );
+  }
+
+  @override
+  String toString() {
+    return '$_rowIndex,$_columnIndex';
+  }
+}

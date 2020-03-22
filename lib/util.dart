@@ -96,3 +96,16 @@ abstract class Action {
   void onEnd() {
   }
 }
+
+//*********************************************************************************************************************
+
+/// 返回安全的屏幕宽高. [padding] 用于裁剪.
+Size safeSize(BuildContext context, {
+  double padding = 0.0,
+}) {
+  MediaQueryData mediaQueryData = MediaQuery.of(context);
+  return Size(
+    mediaQueryData.size.width - mediaQueryData.padding.horizontal - padding * 2.0,
+    mediaQueryData.size.height - mediaQueryData.padding.vertical - padding * 2.0,
+  );
+}
