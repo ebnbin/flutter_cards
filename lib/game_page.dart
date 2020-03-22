@@ -2,6 +2,8 @@ import 'package:cards/game_data.dart';
 import 'package:flutter/material.dart';
 
 /// 游戏页面.
+///
+/// 整个游戏只有单个页面. 游戏中所有元素都由卡片组成, 页面控制各种卡片的展示逻辑.
 class GamePage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _GamePageState();
@@ -21,12 +23,12 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
     );
   }
 
-  /// 每一个卡片.
+  /// 构建一个卡片.
   Widget _buildCard(CardData cardData) {
     return cardData.visible ? _buildVisibleCard(cardData) : _buildInvisibleCard();
   }
 
-  /// 一个可见的卡片.
+  /// 构建一个可见的卡片.
   Widget _buildVisibleCard(CardData cardData) {
     return Positioned.fromRect(
       rect: cardData.rect(context),
@@ -52,7 +54,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
     );
   }
 
-  /// 一个不可见的卡片.
+  /// 构建一个不可见的卡片.
   Widget _buildInvisibleCard() {
     return Positioned.fill(
       child: SizedBox.shrink(),
