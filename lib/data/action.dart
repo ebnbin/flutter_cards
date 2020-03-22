@@ -81,8 +81,7 @@ class _AnimationAction extends util.Action {
       cardData._updateAnimationTimestamp();
       animationController.dispose();
       end();
-      setState(() {
-      });
+      setState();
     }
 
     CurvedAnimation curvedAnimation = CurvedAnimation(
@@ -123,8 +122,7 @@ class _AnimationAction extends util.Action {
       })
       ..addListener(() {
         cardData._property = createProperty(curvedAnimation.value);
-        setState(() {
-        });
+        setState();
       });
     animationController.forward();
   }

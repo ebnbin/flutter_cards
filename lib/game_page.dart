@@ -45,8 +45,23 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
             child: Center(
               child: Text('$cardData'),
             ),
-            onTap: _gameData.onTap(cardData, setState, this),
-            onLongPress: _gameData.onLongPress(cardData, context, setState, this),
+            onTap: _gameData.onTap(
+              cardData: cardData,
+              setState: () {
+                this.setState(() {
+                });
+              },
+              tickerProvider: this,
+            ),
+            onLongPress: _gameData.onLongPress(
+              cardData: cardData,
+              context: context,
+              setState: () {
+                this.setState(() {
+                });
+              },
+              tickerProvider: this,
+            ),
             behavior: HitTestBehavior.translucent,
           ),
         ),
