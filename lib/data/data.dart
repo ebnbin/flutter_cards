@@ -14,9 +14,9 @@ class GameData {
   }
 
   /// 行数.
-  int get rows => 4;
+  int get rowCount => 4;
   /// 列数.
-  int get columns => 4;
+  int get columnCount => 4;
 
   /// 卡片列表.
   List<CardData> _cardDataList = [];
@@ -27,8 +27,8 @@ class GameData {
   }
 
   void _initCards() {
-    for (int row = 0; row < rows; row++) {
-      for (int column = 0; column < columns; column++) {
+    for (int row = 0; row < rowCount; row++) {
+      for (int column = 0; column < columnCount; column++) {
         _cardDataList.add(CardData(
           this,
           row: row,
@@ -68,21 +68,21 @@ class CardData implements Comparable<CardData> {
     int row = 0,
     int column = 0,
   }) : assert(gameData != null),
-        assert(row != null && row >= 0 && row < gameData.rows),
-        assert(column != null && column >= 0 && column < gameData.columns) {
-    _row = row;
-    _column = column;
+        assert(row != null && row >= 0 && row < gameData.rowCount),
+        assert(column != null && column >= 0 && column < gameData.columnCount) {
+    _rowIndex = row;
+    _columnIndex = column;
   }
 
   final GameData gameData;
 
   /// 所在行.
-  int _row;
-  int get row => _row;
+  int _rowIndex;
+  int get rowIndex => _rowIndex;
 
   /// 所在列.
-  int _column;
-  int get column => _column;
+  int _columnIndex;
+  int get columnIndex => _columnIndex;
 
   /// 是否可见.
   bool _visible = true;
@@ -97,14 +97,14 @@ class CardData implements Comparable<CardData> {
       mediaQueryData.size.height - mediaQueryData.padding.vertical,
     );
     // 卡片宽高.
-    double size = min(screenSize.width / gameData.columns, screenSize.height / gameData.rows);
+    double size = min(screenSize.width / gameData.columnCount, screenSize.height / gameData.rowCount);
     // 水平边距.
-    double horizontal = (screenSize.width - size * gameData.columns) / 2.0;
+    double horizontal = (screenSize.width - size * gameData.columnCount) / 2.0;
     // 垂直边距.
-    double vertical = (screenSize.height - size * gameData.rows) / 2.0;
+    double vertical = (screenSize.height - size * gameData.rowCount) / 2.0;
     return Rect.fromLTWH(
-      horizontal + size * _column,
-      vertical + size * _row,
+      horizontal + size * _columnIndex,
+      vertical + size * _rowIndex,
       size,
       size,
     );
@@ -130,23 +130,23 @@ class CardData implements Comparable<CardData> {
   //*******************************************************************************************************************
 
   /// 时间戳, 用于 compareTo.
-  int _updatedTimestamp = DateTime.now().microsecondsSinceEpoch;
+  int _animationTimestamp = DateTime.now().microsecondsSinceEpoch;
 
-  void _updateTimestamp() {
-    _updatedTimestamp = DateTime.now().microsecondsSinceEpoch;
+  void _updateAnimationTimestamp() {
+    _animationTimestamp = DateTime.now().microsecondsSinceEpoch;
   }
 
   @override
   int compareTo(CardData other) {
     if (_property.elevation == other._property.elevation) {
-      return (_updatedTimestamp - other._updatedTimestamp).sign;
+      return (_animationTimestamp - other._animationTimestamp).sign;
     }
     return (_property.elevation - other._property.elevation).sign.toInt();
   }
 
   @override
   String toString() {
-    return '$_row,$_column';
+    return '$_rowIndex,$_columnIndex';
   }
 }
 

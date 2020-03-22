@@ -78,7 +78,7 @@ class _AnimationAction extends util.Action {
 
     void completed() {
       cardData._resetProperty();
-      cardData._updateTimestamp();
+      cardData._updateAnimationTimestamp();
       animationController.dispose();
       end();
       setState(() {
