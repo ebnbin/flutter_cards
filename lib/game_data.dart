@@ -4,9 +4,9 @@ import 'dart:math';
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 
-/// 卡片数据. 管理 [Card].
-class Cards {
-  Cards() {
+/// 卡片数据. 管理 [CardData].
+class GameData {
+  GameData() {
     _initCards();
   }
 
@@ -16,17 +16,17 @@ class Cards {
   int get columns => 4;
 
   /// 卡片列表.
-  List<Card> _cards = [];
-  BuiltList<Card> get cards {
+  List<CardData> _cardDataList = [];
+  BuiltList<CardData> get cardDataList {
     // 每次 build 时排序.
-    _cards.sort();
-    return _cards.build();
+    _cardDataList.sort();
+    return _cardDataList.build();
   }
 
   void _initCards() {
     for (int row = 0; row < rows; row++) {
       for (int column = 0; column < columns; column++) {
-        _cards.add(Card(
+        _cardDataList.add(CardData(
           this,
           row: row,
           column: column,
@@ -35,7 +35,7 @@ class Cards {
     }
   }
 
-  Function onTap(Card card, SetState setState, TickerProvider tickerProvider) {
+  Function onTap(CardData card, SetState setState, TickerProvider tickerProvider) {
     return () {
       _postAction(_AnimationAction(this, card, setState, tickerProvider, 1000,
         curve: Curves.easeInOut,
@@ -49,7 +49,7 @@ class Cards {
     };
   }
 
-  Function onLongPress(Card card, BuildContext context, SetState setState, TickerProvider tickerProvider) {
+  Function onLongPress(CardData card, BuildContext context, SetState setState, TickerProvider tickerProvider) {
     return card._onLongPress(context, setState, tickerProvider);
   }
 
@@ -80,19 +80,19 @@ class Cards {
 
 //*********************************************************************************************************************
 
-/// 整个游戏所有元素都由 [Card] 组成.
-class Card implements Comparable<Card> {
-  Card(this.cards, {
+/// 整个游戏所有元素都由 [CardData] 组成.
+class CardData implements Comparable<CardData> {
+  CardData(this.gameData, {
     int row = 0,
     int column = 0,
-  }) : assert(cards != null),
-        assert(row != null && row >= 0 && row < cards.rows),
-        assert(column != null && column >= 0 && column < cards.columns) {
+  }) : assert(gameData != null),
+        assert(row != null && row >= 0 && row < gameData.rows),
+        assert(column != null && column >= 0 && column < gameData.columns) {
     _row = row;
     _column = column;
   }
 
-  final Cards cards;
+  final GameData gameData;
 
   /// 所在行.
   int _row;
@@ -115,11 +115,11 @@ class Card implements Comparable<Card> {
       mediaQueryData.size.height - mediaQueryData.padding.vertical,
     );
     // 卡片宽高.
-    double size = min(screenSize.width / cards.columns, screenSize.height / cards.rows);
+    double size = min(screenSize.width / gameData.columns, screenSize.height / gameData.rows);
     // 水平边距.
-    double horizontal = (screenSize.width - size * cards.columns) / 2.0;
+    double horizontal = (screenSize.width - size * gameData.columns) / 2.0;
     // 垂直边距.
-    double vertical = (screenSize.height - size * cards.rows) / 2.0;
+    double vertical = (screenSize.height - size * gameData.rows) / 2.0;
     return Rect.fromLTWH(
       horizontal + size * _column,
       vertical + size * _row,
@@ -145,7 +145,7 @@ class Card implements Comparable<Card> {
   int _updatedTimestamp = DateTime.now().microsecondsSinceEpoch;
 
   @override
-  int compareTo(Card other) {
+  int compareTo(CardData other) {
     if (_property.elevation == other._property.elevation) {
       return (_updatedTimestamp - other._updatedTimestamp).sign;
     }
@@ -327,37 +327,37 @@ class _RotateY360Property extends Property {
 
 /// 事件.
 abstract class _Action {
-  const _Action(this.cards) : assert(cards != null);
+  const _Action(this.gameData) : assert(gameData != null);
 
-  final Cards cards;
+  final GameData gameData;
 
   /// 开始执行事件.
   void begin();
 
   /// 结束执行事件.
   void end() {
-    cards._isActing = false;
-    cards._handleAction();
+    gameData._isActing = false;
+    gameData._handleAction();
   }
 }
 
 /// 动画事件.
 class _AnimationAction extends _Action {
-  const _AnimationAction(Cards cards, this.card, this.setState, this.tickerProvider, this.duration, {
+  const _AnimationAction(GameData gameData, this.cardData, this.setState, this.tickerProvider, this.duration, {
     this.curve = Curves.linear,
     this.type = _AnimationType.forward,
     @required
     this.createProperty,
-  }) : assert(card != null),
+  }) : assert(cardData != null),
         assert(setState != null),
         assert(tickerProvider != null),
         assert(duration != null && duration >= 0),
         assert(curve != null),
         assert(type != null),
         assert(createProperty != null),
-        super(cards);
+        super(gameData);
   
-  final Card card;
+  final CardData cardData;
   final SetState setState;
   final TickerProvider tickerProvider;
   final int duration;
@@ -410,7 +410,7 @@ class _AnimationAction extends _Action {
         }
       })
       ..addListener(() {
-        card._property = createProperty(curvedAnimation.value);
+        cardData._property = createProperty(curvedAnimation.value);
         setState(() {
         });
       });
@@ -419,8 +419,8 @@ class _AnimationAction extends _Action {
   
   void _completed(AnimationController animationController) {
     animationController.dispose();
-    card._updatedTimestamp = DateTime.now().microsecondsSinceEpoch;
-    card._property = defaultProperty;
+    cardData._updatedTimestamp = DateTime.now().microsecondsSinceEpoch;
+    cardData._property = defaultProperty;
     end();
     setState(() {
     });
