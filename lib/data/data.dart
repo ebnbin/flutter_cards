@@ -5,9 +5,10 @@ import 'package:cards/util.dart' as util;
 import 'package:flutter/material.dart';
 
 part 'action.dart';
+part 'card.dart';
 part 'property.dart';
 
-/// 卡片数据. 管理 [CardData].
+/// 卡片数据. 管理 [CardData2].
 class GameData {
   GameData() {
     _initCards();
@@ -19,8 +20,8 @@ class GameData {
   int get columnCount => 4;
 
   /// 卡片列表.
-  List<CardData> _cardDataList = [];
-  BuiltList<CardData> get cardDataList {
+  List<CardData2> _cardDataList = [];
+  BuiltList<CardData2> get cardDataList {
     // 每次 build 时排序.
     _cardDataList.sort();
     return _cardDataList.build();
@@ -29,8 +30,9 @@ class GameData {
   void _initCards() {
     for (int row = 0; row < rowCount; row++) {
       for (int column = 0; column < columnCount; column++) {
-        _cardDataList.add(CardData(
-          this,
+        _cardDataList.add(CardData2(
+          gameData: this,
+          defaultProperty: defaultProperty,
           row: row,
           column: column,
         ));
@@ -38,7 +40,7 @@ class GameData {
     }
   }
 
-  Function onTap(CardData cardData, SetState setState, TickerProvider tickerProvider) {
+  Function onTap(CardData2 cardData, SetState setState, TickerProvider tickerProvider) {
     return () {
       _actionManager.add(_AnimationAction.sample(
         cardData: cardData,
@@ -48,8 +50,8 @@ class GameData {
     };
   }
 
-  Function onLongPress(CardData card, BuildContext context, SetState setState, TickerProvider tickerProvider) {
-    return card._onLongPress(context, setState, tickerProvider);
+  Function onLongPress(CardData2 card, BuildContext context, SetState setState, TickerProvider tickerProvider) {
+    return null;
   }
 
   //*******************************************************************************************************************
@@ -62,19 +64,20 @@ class GameData {
 
 //*********************************************************************************************************************
 
-/// 整个游戏所有元素都由 [CardData] 组成.
-class CardData implements Comparable<CardData> {
-  CardData(this.gameData, {
+/// 整个游戏所有元素都由 [CardData2] 组成.
+class CardData2 extends CardData {
+  CardData2({
+    GameData gameData,
+    Property defaultProperty,
     int row = 0,
     int column = 0,
   }) : assert(gameData != null),
         assert(row != null && row >= 0 && row < gameData.rowCount),
-        assert(column != null && column >= 0 && column < gameData.columnCount) {
+        assert(column != null && column >= 0 && column < gameData.columnCount),
+        super(gameData: gameData, defaultProperty: defaultProperty) {
     _rowIndex = row;
     _columnIndex = column;
   }
-
-  final GameData gameData;
 
   /// 所在行.
   int _rowIndex;
@@ -83,10 +86,6 @@ class CardData implements Comparable<CardData> {
   /// 所在列.
   int _columnIndex;
   int get columnIndex => _columnIndex;
-
-  /// 是否可见.
-  bool _visible = true;
-  bool get visible => _visible;
 
   /// 在 Stack 中的位置.
   Rect rect(BuildContext context) {
@@ -108,40 +107,6 @@ class CardData implements Comparable<CardData> {
       size,
       size,
     );
-  }
-
-  Function _onLongPress(BuildContext context, SetState setState, TickerProvider tickerProvider) {
-    return _property == _defaultProperty ? Feedback.wrapForLongPress(() {
-    }, context) : null;
-  }
-
-  //*******************************************************************************************************************
-  // 属性.
-
-  Property _defaultProperty = defaultProperty;
-
-  Property _property = defaultProperty;
-  Property get property => _property;
-
-  void _resetProperty() {
-    _property = _defaultProperty;
-  }
-
-  //*******************************************************************************************************************
-
-  /// 时间戳, 用于 compareTo.
-  int _animationTimestamp = DateTime.now().microsecondsSinceEpoch;
-
-  void _updateAnimationTimestamp() {
-    _animationTimestamp = DateTime.now().microsecondsSinceEpoch;
-  }
-
-  @override
-  int compareTo(CardData other) {
-    if (_property.elevation == other._property.elevation) {
-      return (_animationTimestamp - other._animationTimestamp).sign;
-    }
-    return (_property.elevation - other._property.elevation).sign.toInt();
   }
 
   @override
