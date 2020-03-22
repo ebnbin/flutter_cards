@@ -61,48 +61,48 @@ class GameData {
     _cardDataList.add(GridCardData(
       gameData: this,
       defaultProperty: defaultProperty,
-      rowGrid: (isVertical) => isVertical ? 80 : 0,
-      columnGrid: (isVertical) => isVertical ? 0 : 80,
+      rowGrid: (isVertical) => isVertical ? 88 : 0,
+      columnGrid: (isVertical) => isVertical ? 0 : 88,
       rowGridSpan: (isVertical) => isVertical ? 10 : 10,
       columnGridSpan: (isVertical) => isVertical ? 10 : 10,
     ));
     _cardDataList.add(GridCardData(
       gameData: this,
       defaultProperty: defaultProperty,
-      rowGrid: (isVertical) => isVertical ? 80 : 10,
-      columnGrid: (isVertical) => isVertical ? 10 : 80,
+      rowGrid: (isVertical) => isVertical ? 88 : 10,
+      columnGrid: (isVertical) => isVertical ? 10 : 88,
       rowGridSpan: (isVertical) => isVertical ? 10 : 10,
       columnGridSpan: (isVertical) => isVertical ? 10 : 10,
     ));
     _cardDataList.add(GridCardData(
       gameData: this,
       defaultProperty: defaultProperty,
-      rowGrid: (isVertical) => isVertical ? 80 : 20,
-      columnGrid: (isVertical) => isVertical ? 20 : 80,
+      rowGrid: (isVertical) => isVertical ? 88 : 20,
+      columnGrid: (isVertical) => isVertical ? 20 : 88,
       rowGridSpan: (isVertical) => isVertical ? 10 : 10,
       columnGridSpan: (isVertical) => isVertical ? 10 : 10,
     ));
     _cardDataList.add(GridCardData(
       gameData: this,
       defaultProperty: defaultProperty,
-      rowGrid: (isVertical) => isVertical ? 80 : 30,
-      columnGrid: (isVertical) => isVertical ? 30 : 80,
+      rowGrid: (isVertical) => isVertical ? 88 : 30,
+      columnGrid: (isVertical) => isVertical ? 30 : 88,
       rowGridSpan: (isVertical) => isVertical ? 10 : 10,
       columnGridSpan: (isVertical) => isVertical ? 10 : 10,
     ));
     _cardDataList.add(GridCardData(
       gameData: this,
       defaultProperty: defaultProperty,
-      rowGrid: (isVertical) => isVertical ? 80 : 40,
-      columnGrid: (isVertical) => isVertical ? 40 : 80,
+      rowGrid: (isVertical) => isVertical ? 88 : 40,
+      columnGrid: (isVertical) => isVertical ? 40 : 88,
       rowGridSpan: (isVertical) => isVertical ? 10 : 10,
       columnGridSpan: (isVertical) => isVertical ? 10 : 10,
     ));
     _cardDataList.add(GridCardData(
       gameData: this,
       defaultProperty: defaultProperty,
-      rowGrid: (isVertical) => isVertical ? 80 : 50,
-      columnGrid: (isVertical) => isVertical ? 50 : 80,
+      rowGrid: (isVertical) => isVertical ? 88 : 50,
+      columnGrid: (isVertical) => isVertical ? 50 : 88,
       rowGridSpan: (isVertical) => isVertical ? 10 : 10,
       columnGridSpan: (isVertical) => isVertical ? 10 : 10,
     ));
