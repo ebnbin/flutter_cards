@@ -1,4 +1,6 @@
-part of 'data.dart';
+import 'dart:collection';
+
+import 'package:flutter/material.dart';
 
 /// 事件管理类.
 /// 

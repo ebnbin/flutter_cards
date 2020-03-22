@@ -1,10 +1,8 @@
-import 'dart:collection';
 import 'dart:math';
 
 import 'package:built_collection/built_collection.dart';
+import 'package:cards/util.dart' as util;
 import 'package:flutter/material.dart';
-
-part 'utils.dart';
 
 /// 卡片数据. 管理 [CardData].
 class GameData {
@@ -58,7 +56,7 @@ class GameData {
   //*******************************************************************************************************************
   // 事件.
 
-  final ActionManager _actionManager = ActionManager(
+  final util.ActionManager _actionManager = util.ActionManager(
     max: 1,
   );
 }
@@ -311,7 +309,7 @@ class _RotateY360Property extends Property {
 // 事件. 添加一个动画或一个操作到事件队列.
 
 /// 动画事件.
-class _AnimationAction extends Action {
+class _AnimationAction extends util.Action {
   _AnimationAction(this.gameData, this.cardData, this.setState, this.tickerProvider, this.duration, {
     this.curve = Curves.linear,
     this.type = _AnimationType.forward,
