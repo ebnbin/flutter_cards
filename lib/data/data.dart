@@ -43,7 +43,7 @@ class GameData {
         curve: Curves.easeInOut,
         type: _AnimationType.forward,
         createProperty: ((value) {
-          return _RotateY360Property(
+          return _SampleProperty(
             value: value,
           );
         }),
@@ -147,44 +147,6 @@ class CardData implements Comparable<CardData> {
 
 /// State.setState(VoidCallback).
 typedef SetState = void Function(VoidCallback);
-
-//*********************************************************************************************************************
-
-class _RotateY360Property extends Property {
-  _RotateY360Property({
-    double value,
-  }) : super(
-    value: value,
-    matrix4Entry32Data: _PropertyData(
-      doubles: [0.005],
-      propertyCalc: _propertyCalc0,
-    ),
-    rotateXData: _PropertyData(
-      doubles: [0.0],
-      propertyCalc: _propertyCalc0,
-    ),
-    rotateYData: _PropertyData(
-      doubles: [0.0, 2.0 * pi],
-      propertyCalc: _propertyCalc01,
-    ),
-    scaleXData: _PropertyData(
-      doubles: [1.0, 2.0],
-      propertyCalc: _propertyCalc010,
-    ),
-    scaleYData: _PropertyData(
-      doubles: [1.0, 2.0],
-      propertyCalc: _propertyCalc010,
-    ),
-    elevationData: _PropertyData(
-      doubles: [1.0, 2.0],
-      propertyCalc: _propertyCalc010,
-    ),
-    radiusData: _PropertyData(
-      doubles: [4.0, 8.0],
-      propertyCalc: _propertyCalc010,
-    ),
-  );
-}
 
 //*********************************************************************************************************************
 // 事件. 添加一个动画或一个操作到事件队列.

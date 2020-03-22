@@ -43,7 +43,7 @@ class _PropertyData {
 /// 根据 Animation.value 计算属性.
 class Property {
   Property({
-    double value = 0.0,
+    double value,
     _PropertyData matrix4Entry32Data,
     _PropertyData rotateXData,
     _PropertyData rotateYData,
@@ -69,11 +69,17 @@ class Property {
 
   /// Matrix4.setEntry(3, 2, value).
   final double matrix4Entry32;
+
   final double rotateX;
+
   final double rotateY;
+
   final double scaleX;
+
   final double scaleY;
+
   final double elevation;
+
   final double radius;
 
   /// Transform.
@@ -84,35 +90,93 @@ class Property {
     ..scale(scaleX, scaleY);
 }
 
+/// 属性不变化.
+class StaticProperty extends Property {
+  StaticProperty({
+    double matrix4Entry32Double,
+    double rotateXDouble,
+    double rotateYDouble,
+    double scaleXDouble,
+    double scaleYDouble,
+    double elevationDouble,
+    double radiusDouble,
+  }) : super(
+    value: 0.0,
+    matrix4Entry32Data: _PropertyData(
+      doubles: [matrix4Entry32Double],
+      propertyCalc: _propertyCalc0,
+    ),
+    rotateXData: _PropertyData(
+      doubles: [rotateXDouble],
+      propertyCalc: _propertyCalc0,
+    ),
+    rotateYData: _PropertyData(
+      doubles: [rotateYDouble],
+      propertyCalc: _propertyCalc0,
+    ),
+    scaleXData: _PropertyData(
+      doubles: [scaleXDouble],
+      propertyCalc: _propertyCalc0,
+    ),
+    scaleYData: _PropertyData(
+      doubles: [scaleYDouble],
+      propertyCalc: _propertyCalc0,
+    ),
+    elevationData: _PropertyData(
+      doubles: [elevationDouble],
+      propertyCalc: _propertyCalc0,
+    ),
+    radiusData: _PropertyData(
+      doubles: [radiusDouble],
+      propertyCalc: _propertyCalc0,
+    ),
+  );
+}
+
 /// 无动画时的默认属性.
-final Property defaultProperty = Property(
-  value: 0.0,
-  matrix4Entry32Data: _PropertyData(
-    doubles: [0.005],
-    propertyCalc: _propertyCalc0,
-  ),
-  rotateXData: _PropertyData(
-    doubles: [0.0],
-    propertyCalc: _propertyCalc0,
-  ),
-  rotateYData: _PropertyData(
-    doubles: [0.0],
-    propertyCalc: _propertyCalc0,
-  ),
-  scaleXData: _PropertyData(
-    doubles: [1.0],
-    propertyCalc: _propertyCalc0,
-  ),
-  scaleYData: _PropertyData(
-    doubles: [1.0],
-    propertyCalc: _propertyCalc0,
-  ),
-  elevationData: _PropertyData(
-    doubles: [1.0],
-    propertyCalc: _propertyCalc0,
-  ),
-  radiusData: _PropertyData(
-    doubles: [4.0],
-    propertyCalc: _propertyCalc0,
-  ),
+final Property defaultProperty = StaticProperty(
+  matrix4Entry32Double: 0.005,
+  rotateXDouble: 0.0,
+  rotateYDouble: 0.0,
+  scaleXDouble: 1.0,
+  scaleYDouble: 1.0,
+  elevationDouble: 1.0,
+  radiusDouble: 4.0,
 );
+
+/// 用于演示.
+class _SampleProperty extends Property {
+  _SampleProperty({
+    double value,
+  }) : super(
+    value: value,
+    matrix4Entry32Data: _PropertyData(
+      doubles: [0.005],
+      propertyCalc: _propertyCalc0,
+    ),
+    rotateXData: _PropertyData(
+      doubles: [0.0],
+      propertyCalc: _propertyCalc0,
+    ),
+    rotateYData: _PropertyData(
+      doubles: [0.0, 2.0 * pi],
+      propertyCalc: _propertyCalc01,
+    ),
+    scaleXData: _PropertyData(
+      doubles: [1.0, 2.0],
+      propertyCalc: _propertyCalc010,
+    ),
+    scaleYData: _PropertyData(
+      doubles: [1.0, 2.0],
+      propertyCalc: _propertyCalc010,
+    ),
+    elevationData: _PropertyData(
+      doubles: [1.0, 4.0],
+      propertyCalc: _propertyCalc010,
+    ),
+    radiusData: _PropertyData(
+      doubles: [4.0, 16.0],
+      propertyCalc: _propertyCalc010,
+    ),
+  );
+}
