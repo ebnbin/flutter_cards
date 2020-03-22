@@ -69,17 +69,11 @@ class Property {
 
   /// Matrix4.setEntry(3, 2, value).
   final double matrix4Entry32;
-
   final double rotateX;
-
   final double rotateY;
-
   final double scaleX;
-
   final double scaleY;
-
   final double elevation;
-
   final double radius;
 
   /// Transform.
@@ -91,8 +85,8 @@ class Property {
 }
 
 /// 属性不变化.
-class StaticProperty extends Property {
-  StaticProperty({
+class _StaticProperty extends Property {
+  _StaticProperty({
     double matrix4Entry32Double,
     double rotateXDouble,
     double rotateYDouble,
@@ -134,7 +128,7 @@ class StaticProperty extends Property {
 }
 
 /// 无动画时的默认属性.
-final Property defaultProperty = StaticProperty(
+final Property defaultProperty = _StaticProperty(
   matrix4Entry32Double: 0.005,
   rotateXDouble: 0.0,
   rotateYDouble: 0.0,

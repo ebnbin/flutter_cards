@@ -4,6 +4,7 @@ import 'package:built_collection/built_collection.dart';
 import 'package:cards/util.dart' as util;
 import 'package:flutter/material.dart';
 
+part 'action.dart';
 part 'property.dart';
 
 /// 卡片数据. 管理 [CardData].
@@ -37,16 +38,12 @@ class GameData {
     }
   }
 
-  Function onTap(CardData card, SetState setState, TickerProvider tickerProvider) {
+  Function onTap(CardData cardData, SetState setState, TickerProvider tickerProvider) {
     return () {
-      _actionManager.add(_AnimationAction(this, card, setState, tickerProvider, 1000,
-        curve: Curves.easeInOut,
-        type: _AnimationType.forward,
-        createProperty: ((value) {
-          return _SampleProperty(
-            value: value,
-          );
-        }),
+      _actionManager.add(_AnimationAction.sample(
+        cardData: cardData,
+        setState: setState,
+        tickerProvider: tickerProvider,
       ));
     };
   }
@@ -114,20 +111,30 @@ class CardData implements Comparable<CardData> {
   }
 
   Function _onLongPress(BuildContext context, SetState setState, TickerProvider tickerProvider) {
-    return _property == defaultProperty ? Feedback.wrapForLongPress(() {
+    return _property == _defaultProperty ? Feedback.wrapForLongPress(() {
     }, context) : null;
   }
 
   //*******************************************************************************************************************
   // 属性.
 
+  Property _defaultProperty = defaultProperty;
+
   Property _property = defaultProperty;
   Property get property => _property;
+
+  void _resetProperty() {
+    _property = _defaultProperty;
+  }
 
   //*******************************************************************************************************************
 
   /// 时间戳, 用于 compareTo.
   int _updatedTimestamp = DateTime.now().microsecondsSinceEpoch;
+
+  void _updateTimestamp() {
+    _updatedTimestamp = DateTime.now().microsecondsSinceEpoch;
+  }
 
   @override
   int compareTo(CardData other) {
@@ -147,106 +154,3 @@ class CardData implements Comparable<CardData> {
 
 /// State.setState(VoidCallback).
 typedef SetState = void Function(VoidCallback);
-
-//*********************************************************************************************************************
-// 事件. 添加一个动画或一个操作到事件队列.
-
-/// 动画事件.
-class _AnimationAction extends util.Action {
-  _AnimationAction(this.gameData, this.cardData, this.setState, this.tickerProvider, this.duration, {
-    this.curve = Curves.linear,
-    this.type = _AnimationType.forward,
-    @required
-    this.createProperty,
-  }) : assert(gameData != null),
-        assert(cardData != null),
-        assert(setState != null),
-        assert(tickerProvider != null),
-        assert(duration != null && duration >= 0),
-        assert(curve != null),
-        assert(type != null),
-        assert(createProperty != null),
-        super();
-
-  final GameData gameData;
-  final CardData cardData;
-  final SetState setState;
-  final TickerProvider tickerProvider;
-  final int duration;
-  final Curve curve;
-  final _AnimationType type;
-  final CreateProperty createProperty;
-  
-  @override
-  void onBegin() {
-    super.onBegin();
-    AnimationController animationController = AnimationController(
-      duration: Duration(
-        milliseconds: duration,
-      ),
-      vsync: tickerProvider,
-    );
-    CurvedAnimation curvedAnimation = CurvedAnimation(
-      parent: animationController,
-      curve: curve,
-    );
-    curvedAnimation
-      ..addStatusListener((AnimationStatus status) {
-        switch (type) {
-          case _AnimationType.forward:
-            switch (status) {
-              case AnimationStatus.dismissed:
-                break;
-              case AnimationStatus.forward:
-                break;
-              case AnimationStatus.reverse:
-                break;
-              case AnimationStatus.completed:
-                _completed(animationController);
-                break;
-            }
-            break;
-          case _AnimationType.forwardReverse:
-            switch (status) {
-              case AnimationStatus.dismissed:
-                _completed(animationController);
-                break;
-              case AnimationStatus.forward:
-                break;
-              case AnimationStatus.reverse:
-                break;
-              case AnimationStatus.completed:
-                animationController.reverse();
-                break;
-            }
-            break;
-        }
-      })
-      ..addListener(() {
-        cardData._property = createProperty(curvedAnimation.value);
-        setState(() {
-        });
-      });
-    animationController.forward();
-  }
-  
-  void _completed(AnimationController animationController) {
-    animationController.dispose();
-    cardData._updatedTimestamp = DateTime.now().microsecondsSinceEpoch;
-    cardData._property = defaultProperty;
-    end();
-    setState(() {
-    });
-  }
-}
-
-/// 动画类型.
-enum _AnimationType {
-  /// 正序.
-  forward,
-  /// 正序逆序.
-  forwardReverse,
-}
-
-/// 根据 Animation.value 创建 Property.
-typedef CreateProperty = Property Function(double value);
