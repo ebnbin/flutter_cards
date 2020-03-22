@@ -52,34 +52,37 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
       child: Transform(
         transform: cardData.property.transform,
         alignment: Alignment.center,
-        child: Card(
-          elevation: cardData.property.elevation,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(cardData.property.radius),
-          ),
-          clipBehavior: Clip.antiAlias,
-          child: GestureDetector(
-            child: Center(
-              child: Text('$cardData'),
+        child: Opacity(
+          opacity: cardData.property.opacity,
+          child: Card(
+            elevation: cardData.property.elevation,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(cardData.property.radius),
             ),
-            onTap: _gameData.onTap(
-              cardData: cardData,
-              setState: () {
-                this.setState(() {
-                });
-              },
-              tickerProvider: this,
+            clipBehavior: Clip.antiAlias,
+            child: GestureDetector(
+              child: Center(
+                child: Text('$cardData'),
+              ),
+              onTap: _gameData.onTap(
+                cardData: cardData,
+                setState: () {
+                  this.setState(() {
+                  });
+                },
+                tickerProvider: this,
+              ),
+              onLongPress: _gameData.onLongPress(
+                cardData: cardData,
+                context: context,
+                setState: () {
+                  this.setState(() {
+                  });
+                },
+                tickerProvider: this,
+              ),
+              behavior: HitTestBehavior.translucent,
             ),
-            onLongPress: _gameData.onLongPress(
-              cardData: cardData,
-              context: context,
-              setState: () {
-                this.setState(() {
-                });
-              },
-              tickerProvider: this,
-            ),
-            behavior: HitTestBehavior.translucent,
           ),
         ),
       ),

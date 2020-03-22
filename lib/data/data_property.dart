@@ -49,6 +49,7 @@ class Property {
     _PropertyData rotateZData,
     _PropertyData scaleXData,
     _PropertyData scaleYData,
+    _PropertyData opacityData,
     _PropertyData elevationData,
     _PropertyData radiusData,
   }) : assert(value != null),
@@ -57,6 +58,7 @@ class Property {
         assert(rotateZData != null),
         assert(scaleXData != null),
         assert(scaleYData != null),
+        assert(opacityData != null),
         assert(elevationData != null),
         assert(radiusData != null),
         rotateX = rotateXData.calc(value),
@@ -64,6 +66,7 @@ class Property {
         rotateZ = rotateZData.calc(value),
         scaleX = scaleXData.calc(value),
         scaleY = scaleYData.calc(value),
+        opacity = opacityData.calc(value),
         elevation = elevationData.calc(value),
         radius = radiusData.calc(value);
 
@@ -76,6 +79,7 @@ class Property {
     double rotateXDegree = 0.0,
     double rotateYDegree = 0.0,
     double scale0 = 0.5,
+    double opacity0 = 1.0,
     double elevation0 = 0.5,
   }) : assert(rotateXDegree == 0.0 || rotateXDegree == 90.0 || rotateXDegree == 270.0 || rotateXDegree == -90 ||
       rotateXDegree == -270),
@@ -98,6 +102,10 @@ class Property {
           doubles: [scale0, 1.0],
           propertyCalc: _propertyCalc01,
         ).calc(value),
+        opacity = _PropertyData(
+          doubles: [opacity0, 1.0],
+          propertyCalc: _propertyCalc01,
+        ).calc(value),
         elevation = _PropertyData(
           doubles: [elevation0, 1.0],
           propertyCalc: _propertyCalc01,
@@ -112,6 +120,7 @@ class Property {
   final double rotateZ;
   final double scaleX;
   final double scaleY;
+  final double opacity;
   final double elevation;
   final double radius;
 
@@ -132,6 +141,7 @@ class _StaticProperty extends Property {
     double rotateZDouble,
     double scaleXDouble,
     double scaleYDouble,
+    double opacityDouble,
     double elevationDouble,
     double radiusDouble,
   }) : super(
@@ -156,6 +166,10 @@ class _StaticProperty extends Property {
       doubles: [scaleYDouble],
       propertyCalc: _propertyCalc0,
     ),
+    opacityData: _PropertyData(
+      doubles: [opacityDouble],
+      propertyCalc: _propertyCalc0,
+    ),
     elevationData: _PropertyData(
       doubles: [elevationDouble],
       propertyCalc: _propertyCalc0,
@@ -174,6 +188,7 @@ final Property defaultProperty = _StaticProperty(
   rotateZDouble: 0.0,
   scaleXDouble: 1.0,
   scaleYDouble: 1.0,
+  opacityDouble: 1.0,
   elevationDouble: 1.0,
   radiusDouble: 4.0,
 );
@@ -203,6 +218,10 @@ class _SampleProperty extends Property {
     scaleYData: _PropertyData(
       doubles: [1.0, 2.0],
       propertyCalc: _propertyCalc010,
+    ),
+    opacityData: _PropertyData(
+      doubles: [1.0],
+      propertyCalc: _propertyCalc0,
     ),
     elevationData: _PropertyData(
       doubles: [1.0, 4.0],
