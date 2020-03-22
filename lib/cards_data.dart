@@ -87,14 +87,6 @@ class Card implements Comparable<Card> {
     );
   }
 
-  Property _property = defaultProperty;
-  Property get property => _property;
-
-  Matrix4 get transform => Matrix4.identity()
-    ..setEntry(3, 2, 0.005)
-    ..rotateY(_property.rotateY)
-    ..scale(_property.scale);
-
   int _timestamp = DateTime.now().microsecondsSinceEpoch;
 
   @override
@@ -138,138 +130,14 @@ class Card implements Comparable<Card> {
     }, context) : null;
   }
 
-  void createAnimation(SetState setState, TickerProvider tickerProvider, {
-    int duration = 1000,
-    Curve curve = Curves.linear,
-  }) {
-    assert(setState != null);
-    assert(tickerProvider != null);
-    assert(duration != null && duration >= 0);
-    assert(curve != null);
-    AnimationController animationController = AnimationController(
-      duration: Duration(
-        milliseconds: duration,
-      ),
-      vsync: tickerProvider,
-    );
-    CurvedAnimation curvedAnimation = CurvedAnimation(
-      parent: animationController,
-      curve: curve,
-    );
-    curvedAnimation
-      ..addStatusListener((AnimationStatus status) {
-        switch (status) {
-          case AnimationStatus.dismissed:
-            break;
-          case AnimationStatus.forward:
-            break;
-          case AnimationStatus.reverse:
-            break;
-          case AnimationStatus.completed:
-            _timestamp = DateTime.now().microsecondsSinceEpoch;
-            _property = defaultProperty;
-            setState(() {
-            });
-            animationController.dispose();
-            break;
-        }
-      })
-      ..addListener(() {
-        _property = AnimationProperty(curvedAnimation.value);
-        setState(() {
-        });
-      });
-    animationController.forward();
-  }
+  //*******************************************************************************************************************
+  // 属性.
+
+  Property _property = defaultProperty;
+  Property get property => _property;
 }
 
-abstract class Property {
-  const Property(this.value);
-
-  final double value;
-
-  double get rotateY;
-
-  double get scale;
-
-  double get elevation;
-
-  double get radius;
-}
-
-class DefaultProperty extends Property {
-  const DefaultProperty() : super(0.0);
-
-  @override
-  double get rotateY => 0.0;
-
-  @override
-  double get scale => 1.0;
-
-  @override
-  double get elevation => 1.0;
-
-  @override
-  double get radius => 4.0;
-}
-
-final Property defaultProperty = DefaultProperty();
-
-class AnimationProperty extends Property {
-  const AnimationProperty(double value) : super(value);
-
-  @override
-  double get rotateY {
-    const double init = 0.0;
-    const double increment = 2.0 * pi;
-//    if (value == null) {
-//      return init;
-//    }
-    return init + value * increment;
-  }
-
-  @override
-  double get scale {
-    const double init = 1.0;
-    const double increment = 1.0;
-//    if (value == null) {
-//      return init;
-//    }
-    if (value < 0.5) {
-      return init + value * increment * 2.0;
-    } else {
-      return init + (1.0 - value) * increment * 2.0;
-    }
-  }
-
-  @override
-  double get elevation {
-    const double init = 1.0;
-    const double increment = 2.0;
-//    if (value == null) {
-//      return init;
-//    }
-    if (value < 0.5) {
-      return init + value * increment * 2.0;
-    } else {
-      return init + (1.0 - value) * increment * 2.0;
-    }
-  }
-
-  @override
-  double get radius {
-    const double init = 4.0;
-    const double increment = 8.0;
-//    if (value == null) {
-//      return init;
-//    }
-    if (value < 0.5) {
-      return init + value * increment * 2.0;
-    } else {
-      return init + (1.0 - value) * increment * 2.0;
-    }
-  }
-}
+//*********************************************************************************************************************
 
 abstract class Action {
   const Action(this.card, this.actionCompletedCallback);
@@ -333,10 +201,123 @@ class AnimationAction extends Action {
         }
       })
       ..addListener(() {
-        card._property = AnimationProperty(curvedAnimation.value);
+        card._property = RotateY360Property(
+          value: curvedAnimation.value,
+        );
         setState(() {
         });
       });
     animationController.forward();
+  }
+}
+
+//*********************************************************************************************************************
+// 属性.
+
+/// 根据 Animation.value 计算属性.
+abstract class Property {
+  const Property({
+    this.value = 0.0,
+  }) : assert(value != null);
+
+  /// Animation.value.
+  final double value;
+
+  /// Matrix4.setEntry(3, 2, value).
+  double get matrix4Entry32;
+
+  double get rotateX;
+
+  double get rotateY;
+
+  double get scaleX;
+
+  double get scaleY;
+
+  /// Transform.
+  Matrix4 get transform => Matrix4.identity()
+      ..setEntry(3, 2, matrix4Entry32)
+      ..rotateX(rotateX)
+      ..rotateY(rotateY)
+      ..scale(scaleX, scaleY);
+
+  double get elevation;
+
+  double get radius;
+}
+
+/// 无动画时的默认属性.
+class DefaultProperty extends Property {
+  const DefaultProperty() : super();
+
+  @override
+  double get matrix4Entry32 => 0.005;
+
+  @override
+  double get rotateX => 0.0;
+
+  @override
+  double get rotateY => 0.0;
+
+  @override
+  double get scaleX => 1.0;
+
+  @override
+  double get scaleY => 1.0;
+
+  @override
+  double get elevation => 1.0;
+
+  @override
+  double get radius => 4.0;
+}
+
+/// 无动画时的默认属性.
+final Property defaultProperty = DefaultProperty();
+
+class RotateY360Property extends Property {
+  const RotateY360Property({
+    double value,
+  }) : super(value: value);
+
+  @override
+  double get matrix4Entry32 => 0.005;
+
+  @override
+  double get rotateX => 0.0;
+
+  @override
+  double get rotateY {
+    const double init = 0.0;
+    const double increment = 2.0 * pi;
+    return init + value * increment;
+  }
+
+  @override
+  double get scaleX {
+    const double init = 1.0;
+    const double increment = 1.0;
+    return init + (0.5 - (value - 0.5).abs()) * increment * 2.0;
+  }
+
+  @override
+  double get scaleY {
+    const double init = 1.0;
+    const double increment = 1.0;
+    return init + (0.5 - (value - 0.5).abs()) * increment * 2.0;
+  }
+
+  @override
+  double get elevation {
+    const double init = 1.0;
+    const double increment = 1.0;
+    return init + (0.5 - (value - 0.5).abs()) * increment * 2.0;
+  }
+
+  @override
+  double get radius {
+    const double init = 4.0;
+    const double increment = 4.0;
+    return init + (0.5 - (value - 0.5).abs()) * increment * 2.0;
   }
 }

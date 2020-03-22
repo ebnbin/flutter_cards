@@ -31,7 +31,7 @@ class _CardsState extends State<Cards> with TickerProviderStateMixin {
     return Positioned.fromRect(
       rect: card.rect(context),
       child: Transform(
-        transform: card.transform,
+        transform: card.property.transform,
         alignment: Alignment.center,
         child: Card(
           elevation: card.property.elevation,
