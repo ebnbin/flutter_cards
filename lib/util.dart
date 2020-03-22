@@ -36,7 +36,7 @@ class ActionManager {
   /// 
   /// 返回是否成功的添加到队列. 可能因为队列最大数量而无法添加.
   /// 
-  ///  * [addFirst] 是否添加到队列头部, 默认为 false 添加到队列尾部.
+  /// [addFirst] 是否添加到队列头部, 默认为 false 添加到队列尾部.
   bool add(Action action, {
     bool addFirst = false,
   }) {

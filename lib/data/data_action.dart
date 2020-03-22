@@ -50,11 +50,15 @@ class _AnimationAction extends util.Action {
   }) : cardData = cardData,
         setState = setState,
         tickerProvider = tickerProvider,
-        duration = 1000,
+        duration = 2000,
         curve = Curves.easeInOut,
         type = _AnimationType.forward,
         createProperty = ((double value) {
-          return _SampleProperty(value: value);
+//          return _SampleProperty(value: value);
+            return Property._rotateXYIn(
+              value: value,
+              rotateYDegree: 270.0,
+            );
         }),
         super();
 

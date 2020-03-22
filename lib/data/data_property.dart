@@ -23,9 +23,9 @@ final _PropertyCalc _propertyCalc010 = (List<double> doubles, double value) {
 
 /// 属性数据.
 ///
-///  * [doubles] 关键帧数据.
+/// [doubles] 关键帧数据.
 ///
-///  * [propertyCalc] 属性计算.
+/// [propertyCalc] 属性计算.
 class _PropertyData {
   const _PropertyData({
     this.doubles,
@@ -44,33 +44,72 @@ class _PropertyData {
 class Property {
   Property({
     double value,
-    _PropertyData matrix4Entry32Data,
     _PropertyData rotateXData,
     _PropertyData rotateYData,
+    _PropertyData rotateZData,
     _PropertyData scaleXData,
     _PropertyData scaleYData,
     _PropertyData elevationData,
     _PropertyData radiusData,
   }) : assert(value != null),
-        assert(matrix4Entry32Data != null),
         assert(rotateXData != null),
         assert(rotateYData != null),
+        assert(rotateZData != null),
         assert(scaleXData != null),
         assert(scaleYData != null),
         assert(elevationData != null),
         assert(radiusData != null),
-        matrix4Entry32 = matrix4Entry32Data.calc(value),
         rotateX = rotateXData.calc(value),
         rotateY = rotateYData.calc(value),
+        rotateZ = rotateZData.calc(value),
         scaleX = scaleXData.calc(value),
         scaleY = scaleYData.calc(value),
         elevation = elevationData.calc(value),
         radius = radiusData.calc(value);
 
+  /// 通过 [rotateX], [rotateY] 进场.
+  ///
+  /// [rotateXDegree], [rotateYDegree] 表示视觉上的进场效果旋转角度. 只能是 -270, -90, 0, 90, 270 之一.
+  Property._rotateXYIn({
+    @required
+    double value,
+    double rotateXDegree = 0.0,
+    double rotateYDegree = 0.0,
+    double scale0 = 0.5,
+    double elevation0 = 0.5,
+  }) : assert(rotateXDegree == 0.0 || rotateXDegree == 90.0 || rotateXDegree == 270.0 || rotateXDegree == -90 ||
+      rotateXDegree == -270),
+        assert(rotateYDegree == 0.0 || rotateYDegree == 90.0 || rotateYDegree == 270.0 || rotateYDegree == -90 ||
+            rotateYDegree == -270),
+        rotateX = _PropertyData(
+          doubles: [-rotateXDegree / 180.0 * pi, 0.0],
+          propertyCalc: _propertyCalc01,
+        ).calc(value),
+        rotateY = _PropertyData(
+          doubles: [-rotateYDegree / 180.0 * pi, 0.0],
+          propertyCalc: _propertyCalc01,
+        ).calc(value),
+        rotateZ = 0.0,
+        scaleX = _PropertyData(
+          doubles: [scale0, 1.0],
+          propertyCalc: _propertyCalc01,
+        ).calc(value),
+        scaleY = _PropertyData(
+          doubles: [scale0, 1.0],
+          propertyCalc: _propertyCalc01,
+        ).calc(value),
+        elevation = _PropertyData(
+          doubles: [elevation0, 1.0],
+          propertyCalc: _propertyCalc01,
+        ).calc(value),
+        radius = 4.0;
+
   /// Matrix4.setEntry(3, 2, value).
-  final double matrix4Entry32;
+  static final double matrix4Entry32 = 0.005;
+
   final double rotateX;
   final double rotateY;
+  final double rotateZ;
   final double scaleX;
   final double scaleY;
   final double elevation;
@@ -81,31 +120,32 @@ class Property {
     ..setEntry(3, 2, matrix4Entry32)
     ..rotateX(rotateX)
     ..rotateY(rotateY)
+    ..rotateZ(rotateZ)
     ..scale(scaleX, scaleY);
 }
 
 /// 属性不变化.
 class _StaticProperty extends Property {
   _StaticProperty({
-    double matrix4Entry32Double,
     double rotateXDouble,
     double rotateYDouble,
+    double rotateZDouble,
     double scaleXDouble,
     double scaleYDouble,
     double elevationDouble,
     double radiusDouble,
   }) : super(
     value: 0.0,
-    matrix4Entry32Data: _PropertyData(
-      doubles: [matrix4Entry32Double],
-      propertyCalc: _propertyCalc0,
-    ),
     rotateXData: _PropertyData(
       doubles: [rotateXDouble],
       propertyCalc: _propertyCalc0,
     ),
     rotateYData: _PropertyData(
       doubles: [rotateYDouble],
+      propertyCalc: _propertyCalc0,
+    ),
+    rotateZData: _PropertyData(
+      doubles: [rotateZDouble],
       propertyCalc: _propertyCalc0,
     ),
     scaleXData: _PropertyData(
@@ -129,9 +169,9 @@ class _StaticProperty extends Property {
 
 /// 无动画时的默认属性.
 final Property defaultProperty = _StaticProperty(
-  matrix4Entry32Double: 0.005,
   rotateXDouble: 0.0,
   rotateYDouble: 0.0,
+  rotateZDouble: 0.0,
   scaleXDouble: 1.0,
   scaleYDouble: 1.0,
   elevationDouble: 1.0,
@@ -144,10 +184,6 @@ class _SampleProperty extends Property {
     double value,
   }) : super(
     value: value,
-    matrix4Entry32Data: _PropertyData(
-      doubles: [0.005],
-      propertyCalc: _propertyCalc0,
-    ),
     rotateXData: _PropertyData(
       doubles: [0.0],
       propertyCalc: _propertyCalc0,
@@ -155,6 +191,10 @@ class _SampleProperty extends Property {
     rotateYData: _PropertyData(
       doubles: [0.0, 2.0 * pi],
       propertyCalc: _propertyCalc01,
+    ),
+    rotateZData: _PropertyData(
+      doubles: [0.0],
+      propertyCalc: _propertyCalc0,
     ),
     scaleXData: _PropertyData(
       doubles: [1.0, 2.0],

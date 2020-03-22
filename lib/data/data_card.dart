@@ -46,6 +46,7 @@ abstract class CardData implements Comparable<CardData> {
 
   //*******************************************************************************************************************
 
+  // TODO 仍然有 bug, 之后尝试每次动画结束后根据卡片 index 重新排序的方式.
   int _animationTimestamp;
 
   /// 每次动画结束后调用.
