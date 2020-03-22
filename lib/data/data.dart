@@ -4,9 +4,9 @@ import 'package:built_collection/built_collection.dart';
 import 'package:cards/util.dart' as util;
 import 'package:flutter/material.dart';
 
-part 'action.dart';
-part 'card.dart';
-part 'property.dart';
+part 'data_action.dart';
+part 'data_card.dart';
+part 'data_property.dart';
 
 //*********************************************************************************************************************
 
