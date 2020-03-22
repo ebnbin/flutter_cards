@@ -15,11 +15,28 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
     return Scaffold(
       body: SafeArea(
         child: Stack(
-          children: _gameData.cardDataList.map<Widget>((CardData cardData) {
-            return _buildCard(cardData);
-          }).toList(),
-        ),
+          children: <Widget>[
+            Positioned.fromRect(
+              rect: _gameData.safeRect(context),
+              child: Container(
+                color: Colors.red,
+              ),
+            ),
+            Positioned.fromRect(
+              rect: _gameData.boardRect(context),
+              child: Container(
+                color: Colors.yellow,
+              ),
+            ),
+            Stack(
+              children: _gameData.cardDataList.map<Widget>((CardData cardData) {
+                return _buildCard(cardData);
+              }).toList(),
+            )
+          ],
+        )
       ),
+      backgroundColor: Colors.blue,
     );
   }
 

@@ -127,6 +127,84 @@ class GameData {
 
   //*******************************************************************************************************************
 
+  /// 安全矩形.
+  Rect safeRect(BuildContext context) {
+    const double padding = 8.0;
+    // 默认网格数. 竖屏时水平方向的网格数, 或横屏时垂直方向的网格数.
+    const int defaultGridCount = 60;
+    // Header 和 footer 占用的网格数. 竖屏时占用高度, 横屏时占用宽度. 其中 8 格是 header footer 和 body 的间距.
+    const int headerFooterGridCount = 48;
+    Size safeSize = util.safeSize(context,
+      padding: padding,
+    );
+    // 水平方向网格数量.
+    int horizontalGridCount;
+    // 垂直方向网格数量.
+    int verticalGridCount;
+    bool isVertical = safeSize.width <= safeSize.height;
+    if (isVertical) {
+      // 竖屏.
+      horizontalGridCount = defaultGridCount;
+      verticalGridCount = defaultGridCount ~/ _columnCount * _rowCount + headerFooterGridCount;
+    } else {
+      // 横屏.
+      verticalGridCount = defaultGridCount;
+      horizontalGridCount = defaultGridCount ~/ _rowCount * _columnCount + headerFooterGridCount;
+    }
+    // 网格宽高.
+    double gridSize = min(safeSize.width / horizontalGridCount, safeSize.height / verticalGridCount);
+    return Rect.fromLTWH(
+      (safeSize.width - gridSize * horizontalGridCount) / 2.0,
+      (safeSize.height - gridSize * verticalGridCount) / 2.0,
+      gridSize * horizontalGridCount + padding * 2.0,
+      gridSize * verticalGridCount + padding * 2.0,
+    );
+  }
+
+  /// 游戏面板矩形.
+  Rect boardRect(BuildContext context) {
+    const double padding = 8.0;
+    // 默认网格数. 竖屏时水平方向的网格数, 或横屏时垂直方向的网格数.
+    const int defaultGridCount = 60;
+    // Header 和 footer 占用的网格数. 竖屏时占用高度, 横屏时占用宽度. 其中 8 格是 header footer 和 body 的间距.
+    const int headerFooterGridCount = 48;
+    Size safeSize = util.safeSize(context,
+      padding: padding,
+    );
+    // 水平方向网格数量.
+    int horizontalGridCount;
+    // 垂直方向网格数量.
+    int verticalGridCount;
+    // 游戏面板水平方向网格数量.
+    int boardHorizontalGridCount;
+    // 游戏面板垂直方向网格数量.
+    int boardVerticalGridCount;
+    bool isVertical = safeSize.width <= safeSize.height;
+    if (isVertical) {
+      // 竖屏.
+      horizontalGridCount = defaultGridCount;
+      verticalGridCount = defaultGridCount ~/ _columnCount * _rowCount + headerFooterGridCount;
+      boardHorizontalGridCount = horizontalGridCount;
+      boardVerticalGridCount = verticalGridCount - headerFooterGridCount;
+    } else {
+      // 横屏.
+      verticalGridCount = defaultGridCount;
+      horizontalGridCount = defaultGridCount ~/ _rowCount * _columnCount + headerFooterGridCount;
+      boardHorizontalGridCount = horizontalGridCount - headerFooterGridCount;
+      boardVerticalGridCount = verticalGridCount;
+    }
+    // 网格宽高.
+    double gridSize = min(safeSize.width / horizontalGridCount, safeSize.height / verticalGridCount);
+    return Rect.fromLTWH(
+      (safeSize.width - gridSize * boardHorizontalGridCount) / 2.0,
+      (safeSize.height - gridSize * boardVerticalGridCount) / 2.0,
+      gridSize * boardHorizontalGridCount + padding * 2.0,
+      gridSize * boardVerticalGridCount + padding * 2.0,
+    );
+  }
+
+  //*******************************************************************************************************************
+
   /// 事件管理.
   final util.ActionManager _actionManager = util.ActionManager(
     max: 1,
