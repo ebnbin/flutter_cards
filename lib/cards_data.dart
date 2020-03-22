@@ -164,7 +164,7 @@ class Card implements Comparable<Card> {
 typedef SetState = void Function(VoidCallback);
 
 //*********************************************************************************************************************
-// 属性.
+// 属性. 描述 Widget 属性在动画时如何变化.
 
 /// 根据 Animation.value 计算属性.
 class Property {
@@ -346,7 +346,7 @@ class _RotateY360Property extends Property {
 }
 
 //*********************************************************************************************************************
-// 事件.
+// 事件. 添加一个动画或一个操作到事件队列.
 
 /// 事件.
 abstract class _Action {
