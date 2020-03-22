@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:math';
 
 import 'package:built_collection/built_collection.dart';
@@ -109,13 +110,27 @@ class Card implements Comparable<Card> {
     return '$_row,$_column';
   }
 
+  Queue<Action> _actions = Queue();
+  bool _isActing = false;
+
+  void postAction(Action action) {
+    _actions.addLast(action);
+    _handleAction();
+  }
+
+  void _handleAction() {
+    if (_isActing || _actions.isEmpty) {
+      return;
+    }
+    Action action = _actions.removeFirst();
+    _isActing = true;
+    action.start();
+  }
+
   Function _onTap(SetState setState, TickerProvider tickerProvider) {
-    return _property == defaultProperty ? () {
-      createAnimation(setState, tickerProvider,
-        duration: 1000,
-        curve: Curves.easeInOut,
-      );
-    } : null;
+    return () {
+      postAction(AnimationAction(this, null, setState, tickerProvider, 1000, Curves.easeInOut));
+    };
   }
 
   Function _onLongPress(BuildContext context, SetState setState, TickerProvider tickerProvider) {
@@ -253,5 +268,75 @@ class AnimationProperty extends Property {
     } else {
       return init + (1.0 - value) * increment * 2.0;
     }
+  }
+}
+
+abstract class Action {
+  const Action(this.card, this.actionCompletedCallback);
+
+  final Card card;
+  final ActionCompletedCallback actionCompletedCallback;
+
+  void start();
+  
+  void end() {
+    actionCompletedCallback?.call();
+    card._isActing = false;
+    card._handleAction();
+  }
+}
+
+typedef ActionCompletedCallback = void Function();
+
+class AnimationAction extends Action {
+  AnimationAction(Card card, ActionCompletedCallback actionCompletedCallback,
+      this.setState, this.tickerProvider, this.duration, this.curve,) : super(card, actionCompletedCallback);
+
+  final SetState setState;
+  final TickerProvider tickerProvider;
+  final int duration;
+  final Curve curve;
+
+  @override
+  void start() {
+    assert(setState != null);
+    assert(tickerProvider != null);
+    assert(duration != null && duration >= 0);
+    assert(curve != null);
+    AnimationController animationController = AnimationController(
+      duration: Duration(
+        milliseconds: duration,
+      ),
+      vsync: tickerProvider,
+    );
+    CurvedAnimation curvedAnimation = CurvedAnimation(
+      parent: animationController,
+      curve: curve,
+    );
+    curvedAnimation
+      ..addStatusListener((AnimationStatus status) {
+        switch (status) {
+          case AnimationStatus.dismissed:
+            break;
+          case AnimationStatus.forward:
+            break;
+          case AnimationStatus.reverse:
+            break;
+          case AnimationStatus.completed:
+            card._timestamp = DateTime.now().microsecondsSinceEpoch;
+            card._property = defaultProperty;
+            end();
+            setState(() {
+            });
+            animationController.dispose();
+            break;
+        }
+      })
+      ..addListener(() {
+        card._property = AnimationProperty(curvedAnimation.value);
+        setState(() {
+        });
+      });
+    animationController.forward();
   }
 }
