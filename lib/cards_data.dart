@@ -7,6 +7,23 @@ import 'package:flutter/material.dart';
 /// 卡片数据. 管理 [Card].
 class Cards {
   Cards() {
+    _initCards();
+  }
+
+  /// 行数.
+  int get rows => 4;
+  /// 列数.
+  int get columns => 4;
+
+  /// 卡片列表.
+  List<Card> _cards = [];
+  BuiltList<Card> get cards {
+    // 每次 build 时排序.
+    _cards.sort();
+    return _cards.build();
+  }
+
+  void _initCards() {
     for (int row = 0; row < rows; row++) {
       for (int column = 0; column < columns; column++) {
         _cards.add(Card(
@@ -16,17 +33,6 @@ class Cards {
         ));
       }
     }
-  }
-
-  /// 行数.
-  int get rows => 4;
-  /// 列数.
-  int get columns => 4;
-
-  List<Card> _cards = [];
-  BuiltList<Card> get cards {
-    _cards.sort();
-    return _cards.build();
   }
 
   Function onTap(SetState setState, TickerProvider tickerProvider, Card card) {
@@ -88,7 +94,9 @@ class Card implements Comparable<Card> {
   int _column;
   int get column => _column;
 
-  bool visible = true;
+  /// 是否可见.
+  bool _visible = true;
+  bool get visible => _visible;
 
   /// 在 Stack 中的位置.
   Rect rect(BuildContext context) {
