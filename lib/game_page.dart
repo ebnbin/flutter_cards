@@ -1,4 +1,4 @@
-import 'package:cards/game_data.dart';
+import 'package:cards/data/data.dart';
 import 'package:flutter/material.dart';
 
 /// 游戏页面.

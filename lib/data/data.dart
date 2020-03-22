@@ -4,6 +4,8 @@ import 'dart:math';
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 
+part 'utils.dart';
+
 /// 卡片数据. 管理 [CardData].
 class GameData {
   GameData() {
@@ -37,7 +39,7 @@ class GameData {
 
   Function onTap(CardData card, SetState setState, TickerProvider tickerProvider) {
     return () {
-      _postAction(_AnimationAction(this, card, setState, tickerProvider, 1000,
+      _actionManager.add(_AnimationAction(this, card, setState, tickerProvider, 1000,
         curve: Curves.easeInOut,
         type: _AnimationType.forward,
         createProperty: ((value) {
@@ -56,26 +58,9 @@ class GameData {
   //*******************************************************************************************************************
   // 事件.
 
-  /// 事件队列.
-  final Queue<_Action> _actions = Queue();
-
-  /// 是否正在处理事件.
-  bool _isActing = false;
-
-  /// 加入事件队列.
-  void _postAction(_Action action) {
-    _actions.addLast(action);
-    _handleAction();
-  }
-
-  /// 处理事件队列.
-  void _handleAction() {
-    if (_isActing || _actions.isEmpty) {
-      return;
-    }
-    _isActing = true;
-    _actions.removeFirst().begin();
-  }
+  final ActionManager _actionManager = ActionManager(
+    max: 1,
+  );
 }
 
 //*********************************************************************************************************************
@@ -325,38 +310,24 @@ class _RotateY360Property extends Property {
 //*********************************************************************************************************************
 // 事件. 添加一个动画或一个操作到事件队列.
 
-/// 事件.
-abstract class _Action {
-  const _Action(this.gameData) : assert(gameData != null);
-
-  final GameData gameData;
-
-  /// 开始执行事件.
-  void begin();
-
-  /// 结束执行事件.
-  void end() {
-    gameData._isActing = false;
-    gameData._handleAction();
-  }
-}
-
 /// 动画事件.
-class _AnimationAction extends _Action {
-  const _AnimationAction(GameData gameData, this.cardData, this.setState, this.tickerProvider, this.duration, {
+class _AnimationAction extends Action {
+  _AnimationAction(this.gameData, this.cardData, this.setState, this.tickerProvider, this.duration, {
     this.curve = Curves.linear,
     this.type = _AnimationType.forward,
     @required
     this.createProperty,
-  }) : assert(cardData != null),
+  }) : assert(gameData != null),
+        assert(cardData != null),
         assert(setState != null),
         assert(tickerProvider != null),
         assert(duration != null && duration >= 0),
         assert(curve != null),
         assert(type != null),
         assert(createProperty != null),
-        super(gameData);
-  
+        super();
+
+  final GameData gameData;
   final CardData cardData;
   final SetState setState;
   final TickerProvider tickerProvider;
@@ -366,7 +337,8 @@ class _AnimationAction extends _Action {
   final CreateProperty createProperty;
   
   @override
-  void begin() {
+  void onBegin() {
+    super.onBegin();
     AnimationController animationController = AnimationController(
       duration: Duration(
         milliseconds: duration,
