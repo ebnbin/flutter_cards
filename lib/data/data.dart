@@ -4,6 +4,8 @@ import 'package:built_collection/built_collection.dart';
 import 'package:cards/util.dart' as util;
 import 'package:flutter/material.dart';
 
+part 'property.dart';
+
 /// 卡片数据. 管理 [CardData].
 class GameData {
   GameData() {
@@ -147,160 +149,39 @@ class CardData implements Comparable<CardData> {
 typedef SetState = void Function(VoidCallback);
 
 //*********************************************************************************************************************
-// 属性. 描述 Widget 属性在动画时如何变化.
-
-/// 根据 Animation.value 计算属性.
-class Property {
-  Property({
-    double value = 0.0,
-    _PropertyData<double> matrix4Entry32Data,
-    _PropertyData<double> rotateXData,
-    _PropertyData<double> rotateYData,
-    _PropertyData<double> scaleXData,
-    _PropertyData<double> scaleYData,
-    _PropertyData<double> elevationData,
-    _PropertyData<double> radiusData,
-  }) : assert(value != null),
-        assert(matrix4Entry32Data != null),
-        assert(rotateXData != null),
-        assert(rotateYData != null),
-        assert(scaleXData != null),
-        assert(scaleYData != null),
-        assert(elevationData != null),
-        assert(radiusData != null),
-        matrix4Entry32 = matrix4Entry32Data.calc(value),
-        rotateX = rotateXData.calc(value),
-        rotateY = rotateYData.calc(value),
-        scaleX = scaleXData.calc(value),
-        scaleY = scaleYData.calc(value),
-        elevation = elevationData.calc(value),
-        radius = radiusData.calc(value);
-
-  /// Matrix4.setEntry(3, 2, value).
-  final double matrix4Entry32;
-
-  final double rotateX;
-
-  final double rotateY;
-
-  final double scaleX;
-
-  final double scaleY;
-
-  /// Transform.
-  Matrix4 get transform => Matrix4.identity()
-    ..setEntry(3, 2, matrix4Entry32)
-    ..rotateX(rotateX)
-    ..rotateY(rotateY)
-    ..scale(scaleX, scaleY);
-
-  final double elevation;
-
-  final double radius;
-}
-
-/// 无动画时的默认属性.
-class _DefaultProperty extends Property {
-  _DefaultProperty() : super(
-    matrix4Entry32Data: _PropertyData(
-      keys: [0.005],
-      propertyCalc: _propertyDataCalc0,
-    ),
-    rotateXData: _PropertyData(
-      keys: [0.0],
-      propertyCalc: _propertyDataCalc0,
-    ),
-    rotateYData: _PropertyData(
-      keys: [0.0],
-      propertyCalc: _propertyDataCalc0,
-    ),
-    scaleXData: _PropertyData(
-      keys: [1.0],
-      propertyCalc: _propertyDataCalc0,
-    ),
-    scaleYData: _PropertyData(
-      keys: [1.0],
-      propertyCalc: _propertyDataCalc0,
-    ),
-    elevationData: _PropertyData(
-      keys: [1.0],
-      propertyCalc: _propertyDataCalc0,
-    ),
-    radiusData: _PropertyData(
-      keys: [4.0],
-      propertyCalc: _propertyDataCalc0,
-    ),
-  );
-}
-
-/// 无动画时的默认属性.
-final Property defaultProperty = _DefaultProperty();
-
-/// 属性数据, 用于计算.
-class _PropertyData<T> {
-  const _PropertyData({
-    this.keys,
-    this.propertyCalc,
-  });
-  
-  final List<T> keys;
-  final _PropertyCalc<T> propertyCalc;
-  
-  T calc(double value) {
-    return propertyCalc(keys, value);
-  }
-}
-
-/// 属性数据计算.
-typedef _PropertyCalc<T> = T Function(List<T> keys, double value);
-
-final _PropertyCalc<double> _propertyDataCalc0 = (List<double> keys, double value) {
-  assert(keys.length >= 1);
-  return keys[0];
-};
-
-final _PropertyCalc<double> _propertyDataCalc01 = (List<double> keys, double value) {
-  assert(keys.length >= 2);
-  return keys[0] + value * (keys[1] - keys[0]);
-};
-
-final _PropertyCalc<double> _propertyDataCalc010 = (List<double> keys, double value) {
-  assert(keys.length >= 2);
-  return keys[0] + (0.5 - (value - 0.5).abs()) * (keys[1] - keys[0]) * 2.0;
-};
 
 class _RotateY360Property extends Property {
   _RotateY360Property({
     double value,
   }) : super(
     value: value,
-    matrix4Entry32Data: _PropertyData<double>(
-      keys: [0.005],
-      propertyCalc: _propertyDataCalc0,
+    matrix4Entry32Data: _PropertyData(
+      doubles: [0.005],
+      propertyCalc: _propertyCalc0,
     ),
-    rotateXData: _PropertyData<double>(
-      keys: [0.0],
-      propertyCalc: _propertyDataCalc0,
+    rotateXData: _PropertyData(
+      doubles: [0.0],
+      propertyCalc: _propertyCalc0,
     ),
-    rotateYData: _PropertyData<double>(
-      keys: [0.0, 2.0 * pi],
-      propertyCalc: _propertyDataCalc01,
+    rotateYData: _PropertyData(
+      doubles: [0.0, 2.0 * pi],
+      propertyCalc: _propertyCalc01,
     ),
-    scaleXData: _PropertyData<double>(
-      keys: [1.0, 2.0],
-      propertyCalc: _propertyDataCalc010,
+    scaleXData: _PropertyData(
+      doubles: [1.0, 2.0],
+      propertyCalc: _propertyCalc010,
     ),
-    scaleYData: _PropertyData<double>(
-      keys: [1.0, 2.0],
-      propertyCalc: _propertyDataCalc010,
+    scaleYData: _PropertyData(
+      doubles: [1.0, 2.0],
+      propertyCalc: _propertyCalc010,
     ),
-    elevationData: _PropertyData<double>(
-      keys: [1.0, 2.0],
-      propertyCalc: _propertyDataCalc010,
+    elevationData: _PropertyData(
+      doubles: [1.0, 2.0],
+      propertyCalc: _propertyCalc010,
     ),
-    radiusData: _PropertyData<double>(
-      keys: [4.0, 8.0],
-      propertyCalc: _propertyDataCalc010,
+    radiusData: _PropertyData(
+      doubles: [4.0, 8.0],
+      propertyCalc: _propertyCalc010,
     ),
   );
 }
