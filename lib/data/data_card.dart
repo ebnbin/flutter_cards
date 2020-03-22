@@ -78,14 +78,20 @@ class IndexedCardData extends CardData {
     Property defaultProperty,
     int rowIndex,
     int columnIndex,
-  }) : assert(rowIndex != null && rowIndex >= 0 && rowIndex < gameData._rowCount),
-        assert(columnIndex != null && columnIndex >= 0 && columnIndex < gameData._columnCount),
+    int rowSpan = 1,
+    int columnSpan = 1,
+  }) : assert(rowIndex != null),
+        assert(columnIndex != null),
+        assert(rowSpan != null),
+        assert(columnSpan != null),
         super(
         gameData: gameData,
         defaultProperty: defaultProperty,
       ) {
     _rowIndex = rowIndex;
     _columnIndex = columnIndex;
+    _rowSpan = rowSpan;
+    _columnSpan = columnSpan;
   }
 
   /// 所在行.
@@ -94,12 +100,23 @@ class IndexedCardData extends CardData {
   /// 所在列.
   int _columnIndex;
 
+  /// 跨行.
+  int _rowSpan;
+
+  /// 跨列.
+  int _columnSpan;
+
   @override
   Rect rect(BuildContext context) {
     const double padding = 8.0;
     Size safeSize = util.safeSize(context,
       padding: padding,
     );
+    if (safeSize.width < safeSize.height) {
+      // 竖屏.
+    } else {
+      // 横屏.
+    }
     // 卡片宽高.
     double cardSize = min(safeSize.width / gameData._columnCount, safeSize.height / gameData._rowCount);
     // 左边距.
@@ -109,8 +126,8 @@ class IndexedCardData extends CardData {
     return Rect.fromLTWH(
       spaceLeft + cardSize * _columnIndex,
       spaceTop + cardSize * _rowIndex,
-      cardSize,
-      cardSize,
+      cardSize * _columnSpan,
+      cardSize * _rowSpan,
     );
   }
 

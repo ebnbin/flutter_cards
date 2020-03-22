@@ -24,6 +24,8 @@ class GameData {
           defaultProperty: defaultProperty,
           rowIndex: rowIndex,
           columnIndex: columnIndex,
+          rowSpan: 1,
+          columnSpan: 1,
         ));
       }
     }
