@@ -4,9 +4,6 @@ import 'dart:math';
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 
-/// State.setState(VoidCallback).
-typedef SetState = void Function(VoidCallback);
-
 /// 卡片数据. 管理 [Card].
 class Cards {
   Cards() {
@@ -33,13 +30,41 @@ class Cards {
   }
 
   Function onTap(SetState setState, TickerProvider tickerProvider, Card card) {
-    return card._onTap(setState, tickerProvider);
+    return () {
+      _postAction(RotateY360AnimationAction(this, setState, tickerProvider, card));
+    };
   }
 
   Function onLongPress(BuildContext context, SetState setState, TickerProvider tickerProvider, Card card) {
     return card._onLongPress(context, setState, tickerProvider);
   }
+
+  //*******************************************************************************************************************
+  // 事件.
+
+  /// 事件队列.
+  final Queue<Action> _actions = Queue();
+
+  /// 是否正在处理事件.
+  bool _isActing = false;
+
+  /// 加入事件队列.
+  void _postAction(Action action) {
+    _actions.addLast(action);
+    _handleAction();
+  }
+
+  /// 处理事件队列.
+  void _handleAction() {
+    if (_isActing || _actions.isEmpty) {
+      return;
+    }
+    _isActing = true;
+    _actions.removeFirst().begin();
+  }
 }
+
+//*********************************************************************************************************************
 
 /// 整个游戏所有元素都由 [Card] 组成.
 class Card implements Comparable<Card> {
@@ -87,44 +112,6 @@ class Card implements Comparable<Card> {
     );
   }
 
-  int _timestamp = DateTime.now().microsecondsSinceEpoch;
-
-  @override
-  int compareTo(Card other) {
-    if (_property.elevation == other._property.elevation) {
-      return _timestamp - other._timestamp;
-    }
-    return _property.elevation > other._property.elevation ? 1 : -1;
-  }
-
-  @override
-  String toString() {
-    return '$_row,$_column';
-  }
-
-  Queue<Action> _actions = Queue();
-  bool _isActing = false;
-
-  void postAction(Action action) {
-    _actions.addLast(action);
-    _handleAction();
-  }
-
-  void _handleAction() {
-    if (_isActing || _actions.isEmpty) {
-      return;
-    }
-    Action action = _actions.removeFirst();
-    _isActing = true;
-    action.start();
-  }
-
-  Function _onTap(SetState setState, TickerProvider tickerProvider) {
-    return () {
-      postAction(AnimationAction(this, null, setState, tickerProvider, 1000, Curves.easeInOut));
-    };
-  }
-
   Function _onLongPress(BuildContext context, SetState setState, TickerProvider tickerProvider) {
     return _property == defaultProperty ? Feedback.wrapForLongPress(() {
     }, context) : null;
@@ -135,81 +122,30 @@ class Card implements Comparable<Card> {
 
   Property _property = defaultProperty;
   Property get property => _property;
+
+  //*******************************************************************************************************************
+
+  /// 时间戳, 用于 compareTo.
+  int _updatedTimestamp = DateTime.now().microsecondsSinceEpoch;
+
+  @override
+  int compareTo(Card other) {
+    if (_property.elevation == other._property.elevation) {
+      return (_updatedTimestamp - other._updatedTimestamp).sign;
+    }
+    return (_property.elevation - other._property.elevation).sign.toInt();
+  }
+
+  @override
+  String toString() {
+    return '$_row,$_column';
+  }
 }
 
 //*********************************************************************************************************************
 
-abstract class Action {
-  const Action(this.card, this.actionCompletedCallback);
-
-  final Card card;
-  final ActionCompletedCallback actionCompletedCallback;
-
-  void start();
-  
-  void end() {
-    actionCompletedCallback?.call();
-    card._isActing = false;
-    card._handleAction();
-  }
-}
-
-typedef ActionCompletedCallback = void Function();
-
-class AnimationAction extends Action {
-  AnimationAction(Card card, ActionCompletedCallback actionCompletedCallback,
-      this.setState, this.tickerProvider, this.duration, this.curve,) : super(card, actionCompletedCallback);
-
-  final SetState setState;
-  final TickerProvider tickerProvider;
-  final int duration;
-  final Curve curve;
-
-  @override
-  void start() {
-    assert(setState != null);
-    assert(tickerProvider != null);
-    assert(duration != null && duration >= 0);
-    assert(curve != null);
-    AnimationController animationController = AnimationController(
-      duration: Duration(
-        milliseconds: duration,
-      ),
-      vsync: tickerProvider,
-    );
-    CurvedAnimation curvedAnimation = CurvedAnimation(
-      parent: animationController,
-      curve: curve,
-    );
-    curvedAnimation
-      ..addStatusListener((AnimationStatus status) {
-        switch (status) {
-          case AnimationStatus.dismissed:
-            break;
-          case AnimationStatus.forward:
-            break;
-          case AnimationStatus.reverse:
-            break;
-          case AnimationStatus.completed:
-            card._timestamp = DateTime.now().microsecondsSinceEpoch;
-            card._property = defaultProperty;
-            end();
-            setState(() {
-            });
-            animationController.dispose();
-            break;
-        }
-      })
-      ..addListener(() {
-        card._property = RotateY360Property(
-          value: curvedAnimation.value,
-        );
-        setState(() {
-        });
-      });
-    animationController.forward();
-  }
-}
+/// State.setState(VoidCallback).
+typedef SetState = void Function(VoidCallback);
 
 //*********************************************************************************************************************
 // 属性.
@@ -319,5 +255,109 @@ class RotateY360Property extends Property {
     const double init = 4.0;
     const double increment = 4.0;
     return init + (0.5 - (value - 0.5).abs()) * increment * 2.0;
+  }
+}
+
+//*********************************************************************************************************************
+// 事件.
+
+/// 事件.
+abstract class Action {
+  const Action(this.cards) : assert(cards != null);
+
+  final Cards cards;
+
+  /// 开始执行事件.
+  void begin();
+
+  /// 结束执行事件.
+  void end() {
+    cards._isActing = false;
+    cards._handleAction();
+  }
+}
+
+/// 动画事件.
+abstract class AnimationAction extends Action {
+  const AnimationAction(Cards cards, this.setState, this.tickerProvider, this.duration, {
+    this.curve = Curves.linear,
+  }) : assert(setState != null),
+        assert(tickerProvider != null),
+        assert(duration != null && duration >= 0),
+        assert(curve != null),
+        super(cards);
+  
+  final SetState setState;
+  final TickerProvider tickerProvider;
+  final int duration;
+  final Curve curve;
+  
+  @override
+  void begin() {
+    AnimationController animationController = AnimationController(
+      duration: Duration(
+        milliseconds: duration,
+      ),
+      vsync: tickerProvider,
+    );
+    CurvedAnimation curvedAnimation = CurvedAnimation(
+      parent: animationController,
+      curve: curve,
+    );
+    curvedAnimation
+      ..addStatusListener((AnimationStatus status) {
+        switch (status) {
+          case AnimationStatus.dismissed:
+            break;
+          case AnimationStatus.forward:
+            break;
+          case AnimationStatus.reverse:
+            break;
+          case AnimationStatus.completed:
+            animationController.dispose();
+            onCompleted();
+            end();
+            setState(() {
+            });
+            break;
+        }
+      })
+      ..addListener(() {
+        onRunning(curvedAnimation.value);
+        setState(() {
+        });
+      });
+    animationController.forward();
+  }
+  
+  @protected
+  void onRunning(double value) {
+  }
+
+  @protected
+  void onCompleted() {
+  }
+}
+
+class RotateY360AnimationAction extends AnimationAction {
+  const RotateY360AnimationAction(Cards cards, SetState setState, TickerProvider tickerProvider, this.card) :
+        assert(card != null),
+        super(cards, setState, tickerProvider, 1000, curve: Curves.easeInOut);
+  
+  final Card card;
+  
+  @override
+  void onRunning(double value) {
+    super.onRunning(value);
+    card._property = RotateY360Property(
+      value: value,
+    );
+  }
+  
+  @override
+  void onCompleted() {
+    card._updatedTimestamp = DateTime.now().microsecondsSinceEpoch;
+    card._property = defaultProperty;
+    super.onCompleted();
   }
 }
