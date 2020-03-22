@@ -43,8 +43,8 @@ class _CardsState extends State<Cards> with TickerProviderStateMixin {
             child: Center(
               child: Text('$card'),
             ),
-            onTap: _cards.onTap(setState, this, card),
-            onLongPress: _cards.onLongPress(context, setState, this, card),
+            onTap: _cards.onTap(card, setState, this),
+            onLongPress: _cards.onLongPress(card, context, setState, this),
             behavior: HitTestBehavior.translucent,
           ),
         ),

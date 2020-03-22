@@ -35,13 +35,21 @@ class Cards {
     }
   }
 
-  Function onTap(SetState setState, TickerProvider tickerProvider, Card card) {
+  Function onTap(Card card, SetState setState, TickerProvider tickerProvider) {
     return () {
-      _postAction(_RotateY360AnimationAction(this, setState, tickerProvider, card));
+      _postAction(_AnimationAction(this, card, setState, tickerProvider, 1000,
+        curve: Curves.easeInOut,
+        type: _AnimationType.forward,
+        createProperty: ((value) {
+          return _RotateY360Property(
+            value: value,
+          );
+        }),
+      ));
     };
   }
 
-  Function onLongPress(BuildContext context, SetState setState, TickerProvider tickerProvider, Card card) {
+  Function onLongPress(Card card, BuildContext context, SetState setState, TickerProvider tickerProvider) {
     return card._onLongPress(context, setState, tickerProvider);
   }
 
@@ -286,21 +294,28 @@ abstract class _Action {
 }
 
 /// 动画事件.
-abstract class _AnimationAction extends _Action {
-  const _AnimationAction(Cards cards, this.setState, this.tickerProvider, this.duration, {
+class _AnimationAction extends _Action {
+  const _AnimationAction(Cards cards, this.card, this.setState, this.tickerProvider, this.duration, {
     this.curve = Curves.linear,
     this.type = _AnimationType.forward,
-  }) : assert(setState != null),
+    @required
+    this.createProperty,
+  }) : assert(card != null),
+        assert(setState != null),
         assert(tickerProvider != null),
         assert(duration != null && duration >= 0),
         assert(curve != null),
+        assert(type != null),
+        assert(createProperty != null),
         super(cards);
   
+  final Card card;
   final SetState setState;
   final TickerProvider tickerProvider;
   final int duration;
   final Curve curve;
   final _AnimationType type;
+  final CreateProperty createProperty;
   
   @override
   void begin() {
@@ -326,22 +341,14 @@ abstract class _AnimationAction extends _Action {
               case AnimationStatus.reverse:
                 break;
               case AnimationStatus.completed:
-                animationController.dispose();
-                onCompleted();
-                end();
-                setState(() {
-                });
+                _completed(animationController);
                 break;
             }
             break;
           case _AnimationType.forwardReverse:
             switch (status) {
               case AnimationStatus.dismissed:
-                animationController.dispose();
-                onCompleted();
-                end();
-                setState(() {
-                });
+                _completed(animationController);
                 break;
               case AnimationStatus.forward:
                 break;
@@ -355,45 +362,20 @@ abstract class _AnimationAction extends _Action {
         }
       })
       ..addListener(() {
-        onRunning(curvedAnimation.value);
+        card._property = createProperty(curvedAnimation.value);
         setState(() {
         });
       });
     animationController.forward();
   }
   
-  @protected
-  void onRunning(double value) {
-  }
-
-  @protected
-  void onCompleted() {
-  }
-}
-
-class _RotateY360AnimationAction extends _AnimationAction {
-  const _RotateY360AnimationAction(Cards cards, SetState setState, TickerProvider tickerProvider, this.card) :
-        assert(card != null),
-        super(cards, setState, tickerProvider, 1000,
-        curve: Curves.easeInOut,
-        type: _AnimationType.forward,
-      );
-  
-  final Card card;
-  
-  @override
-  void onRunning(double value) {
-    super.onRunning(value);
-    card._property = _RotateY360Property(
-      value: value,
-    );
-  }
-  
-  @override
-  void onCompleted() {
+  void _completed(AnimationController animationController) {
+    animationController.dispose();
     card._updatedTimestamp = DateTime.now().microsecondsSinceEpoch;
     card._property = defaultProperty;
-    super.onCompleted();
+    end();
+    setState(() {
+    });
   }
 }
 
@@ -404,3 +386,6 @@ enum _AnimationType {
   /// 正序逆序.
   forwardReverse,
 }
+
+/// 根据 Animation.value 创建 Property.
+typedef CreateProperty = Property Function(double value);
