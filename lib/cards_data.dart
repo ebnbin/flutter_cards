@@ -167,24 +167,43 @@ typedef SetState = void Function(VoidCallback);
 // 属性.
 
 /// 根据 Animation.value 计算属性.
-abstract class Property {
+class Property {
   const Property({
     this.value = 0.0,
-  }) : assert(value != null);
+    this.matrix4Entry32Data,
+    this.rotateXData,
+    this.rotateYData,
+    this.scaleXData,
+    this.scaleYData,
+    this.elevationData,
+    this.radiusData,
+  }) : assert(value != null),
+        assert(matrix4Entry32Data != null),
+        assert(rotateXData != null),
+        assert(rotateYData != null),
+        assert(scaleXData != null),
+        assert(scaleYData != null),
+        assert(elevationData != null),
+        assert(radiusData != null);
 
   /// Animation.value.
   final double value;
 
   /// Matrix4.setEntry(3, 2, value).
-  double get matrix4Entry32;
+  final _PropertyData<double> matrix4Entry32Data;
+  double get matrix4Entry32 => _calcData(matrix4Entry32Data);
 
-  double get rotateX;
+  final _PropertyData<double> rotateXData;
+  double get rotateX => _calcData(rotateXData);
 
-  double get rotateY;
+  final _PropertyData<double> rotateYData;
+  double get rotateY => _calcData(rotateYData);
 
-  double get scaleX;
+  final _PropertyData<double> scaleXData;
+  double get scaleX => _calcData(scaleXData);
 
-  double get scaleY;
+  final _PropertyData<double> scaleYData;
+  double get scaleY => _calcData(scaleYData);
 
   /// Transform.
   Matrix4 get transform => Matrix4.identity()
@@ -193,85 +212,137 @@ abstract class Property {
       ..rotateY(rotateY)
       ..scale(scaleX, scaleY);
 
-  double get elevation;
+  final _PropertyData<double> elevationData;
+  double get elevation => _calcData(elevationData);
 
-  double get radius;
+  final _PropertyData<double> radiusData;
+  double get radius => _calcData(radiusData);
+
+  double _calcData(_PropertyData<double> data) {
+    switch (data.type) {
+      case _PropertyType.type0:
+        return data.from;
+      case _PropertyType.type01:
+        return data.from + value * (data.to - data.from);
+      case _PropertyType.type010:
+        return data.from + (0.5 - (value - 0.5).abs()) * (data.to - data.from) * 2.0;
+      default:
+        return data.from;
+    }
+  }
 }
 
 /// 无动画时的默认属性.
 class _DefaultProperty extends Property {
-  const _DefaultProperty() : super();
-
-  @override
-  double get matrix4Entry32 => 0.005;
-
-  @override
-  double get rotateX => 0.0;
-
-  @override
-  double get rotateY => 0.0;
-
-  @override
-  double get scaleX => 1.0;
-
-  @override
-  double get scaleY => 1.0;
-
-  @override
-  double get elevation => 1.0;
-
-  @override
-  double get radius => 4.0;
+  _DefaultProperty() : super(
+    matrix4Entry32Data: _PropertyData<double>(
+      from: 0.005,
+      to: 0.005,
+      type: _PropertyType.type0,
+    ),
+    rotateXData: _PropertyData<double>(
+      from: 0.0,
+      to: 0.0,
+      type: _PropertyType.type0,
+    ),
+    rotateYData: _PropertyData<double>(
+      from: 0.0,
+      to: 0.0,
+      type: _PropertyType.type0,
+    ),
+    scaleXData: _PropertyData<double>(
+      from: 1.0,
+      to: 1.0,
+      type: _PropertyType.type0,
+    ),
+    scaleYData: _PropertyData<double>(
+      from: 1.0,
+      to: 1.0,
+      type: _PropertyType.type0,
+    ),
+    elevationData: _PropertyData<double>(
+      from: 1.0,
+      to: 1.0,
+      type: _PropertyType.type0,
+    ),
+    radiusData: _PropertyData<double>(
+      from: 4.0,
+      to: 4.0,
+      type: _PropertyType.type0,
+    ),
+  );
 }
 
 /// 无动画时的默认属性.
 final Property defaultProperty = _DefaultProperty();
 
+/// 属性变化类型.
+enum _PropertyType {
+  /// 不变.
+  type0,
+  /// 增加.
+  type01,
+  /// 先增加再减小.
+  type010,
+}
+
+/// 属性数据, 用于计算.
+class _PropertyData<T> {
+  const _PropertyData({
+    this.from,
+    this.to,
+    this.type
+  }) : assert(from != null),
+        assert(to != null),
+        assert(type != null);
+
+  final T from;
+  final T to;
+
+  final _PropertyType type;
+}
+
 class _RotateY360Property extends Property {
-  const _RotateY360Property({
+  _RotateY360Property({
     double value,
-  }) : super(value: value);
-
-  @override
-  double get matrix4Entry32 => 0.005;
-
-  @override
-  double get rotateX => 0.0;
-
-  @override
-  double get rotateY {
-    const double init = 0.0;
-    const double increment = 2.0 * pi;
-    return init + value * increment;
-  }
-
-  @override
-  double get scaleX {
-    const double init = 1.0;
-    const double increment = 1.0;
-    return init + (0.5 - (value - 0.5).abs()) * increment * 2.0;
-  }
-
-  @override
-  double get scaleY {
-    const double init = 1.0;
-    const double increment = 1.0;
-    return init + (0.5 - (value - 0.5).abs()) * increment * 2.0;
-  }
-
-  @override
-  double get elevation {
-    const double init = 1.0;
-    const double increment = 1.0;
-    return init + (0.5 - (value - 0.5).abs()) * increment * 2.0;
-  }
-
-  @override
-  double get radius {
-    const double init = 4.0;
-    const double increment = 4.0;
-    return init + (0.5 - (value - 0.5).abs()) * increment * 2.0;
-  }
+  }) : super(
+    value: value,
+    matrix4Entry32Data: _PropertyData<double>(
+      from: 0.005,
+      to: 0.005,
+      type: _PropertyType.type0,
+    ),
+    rotateXData: _PropertyData<double>(
+      from: 0.0,
+      to: 0.0,
+      type: _PropertyType.type0,
+    ),
+    rotateYData: _PropertyData<double>(
+      from: 0.0,
+      to: 2.0 * pi,
+      type: _PropertyType.type01,
+    ),
+    scaleXData: _PropertyData<double>(
+      from: 1.0,
+      to: 2.0,
+      type: _PropertyType.type010,
+    ),
+    scaleYData: _PropertyData<double>(
+      from: 1.0,
+      to: 2.0,
+      type: _PropertyType.type010,
+    ),
+    elevationData: _PropertyData<double>(
+      from: 1.0,
+      to: 2.0,
+      type: _PropertyType.type010,
+    ),
+    radiusData: _PropertyData<double>(
+      from: 4.0,
+      to: 8.0,
+      type: _PropertyType.type010,
+    ),
+  );
 }
 
 //*********************************************************************************************************************
