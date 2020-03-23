@@ -10,13 +10,25 @@ part 'data_property.dart';
 
 //*********************************************************************************************************************
 
+abstract class GameCallback implements TickerProvider {
+  BuildContext get context;
+
+  void setState(VoidCallback fn);
+}
+
+//*********************************************************************************************************************
+
 /// 游戏数据.
 ///
 /// 有效行列范围: 2 ~ 6. Header footer 固定都是 2 * 6. 网格粒度 60. 2, 3, 4, 5, 6 都是 60 的约数.
 class GameData {
-  GameData() {
+  GameData({
+    this.callback,
+  }) {
     _initCardDataList();
   }
+
+  final GameCallback callback;
 
   void _initCardDataList() {
     for (int rowIndex = 0; rowIndex < _rowCount; rowIndex++) {
@@ -206,19 +218,11 @@ class GameData {
   Function onTap({
     @required
     CardData cardData,
-    @required
-    SetState setState,
-    @required
-    TickerProvider tickerProvider,
   }) {
     assert(cardData != null);
-    assert(setState != null);
-    assert(tickerProvider != null);
     return () {
       _actionManager.add(_AnimationAction.sample(
         cardData: cardData,
-        setState: setState,
-        tickerProvider: tickerProvider,
       ));
     };
   }
@@ -226,24 +230,8 @@ class GameData {
   Function onLongPress({
     @required
     CardData cardData,
-    @required
-    BuildContext context,
-    @required
-    SetState setState,
-    @required
-    TickerProvider tickerProvider,
   }) {
     assert(cardData != null);
-    assert(context != null);
-    assert(setState != null);
-    assert(tickerProvider != null);
     return null;
   }
 }
-
-//*********************************************************************************************************************
-
-/// () { State.setState(VoidCallback) }.
-///
-/// 调用 setState() 即可更新状态, 在调用前改变需要更新的数据的值.
-typedef SetState = void Function();

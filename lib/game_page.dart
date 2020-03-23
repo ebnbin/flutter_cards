@@ -9,7 +9,7 @@ class GamePage extends StatefulWidget {
   State<StatefulWidget> createState() => _GamePageState();
 }
 
-class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
+class _GamePageState extends State<GamePage> with TickerProviderStateMixin implements GameCallback {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,20 +66,9 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
               ),
               onTap: _gameData.onTap(
                 cardData: cardData,
-                setState: () {
-                  this.setState(() {
-                  });
-                },
-                tickerProvider: this,
               ),
               onLongPress: _gameData.onLongPress(
                 cardData: cardData,
-                context: context,
-                setState: () {
-                  this.setState(() {
-                  });
-                },
-                tickerProvider: this,
               ),
               behavior: HitTestBehavior.translucent,
             ),
@@ -96,6 +85,13 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
     );
   }
 
+
+  @override
+  void initState() {
+    super.initState();
+    _gameData = GameData(callback: this);
+  }
+
   /// 游戏数据.
-  GameData _gameData = GameData();
+  GameData _gameData;
 }

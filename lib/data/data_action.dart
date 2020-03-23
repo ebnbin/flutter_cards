@@ -20,10 +20,6 @@ class _AnimationAction extends util.Action {
     @required
     this.cardData,
     @required
-    this.setState,
-    @required
-    this.tickerProvider,
-    @required
     this.duration,
     @required
     this.curve,
@@ -32,8 +28,6 @@ class _AnimationAction extends util.Action {
     @required
     this.createProperty,
   }) : assert(cardData != null),
-        assert(setState != null),
-        assert(tickerProvider != null),
         assert(duration != null),
         assert(curve != null),
         assert(type != null),
@@ -43,13 +37,7 @@ class _AnimationAction extends util.Action {
   _AnimationAction.sample({
     @required
     CardData cardData,
-    @required
-    SetState setState,
-    @required
-    TickerProvider tickerProvider,
   }) : cardData = cardData,
-        setState = setState,
-        tickerProvider = tickerProvider,
         duration = 2000,
         curve = Curves.easeInOut,
         type = _AnimationType.forward,
@@ -63,8 +51,6 @@ class _AnimationAction extends util.Action {
         super();
 
   final CardData cardData;
-  final SetState setState;
-  final TickerProvider tickerProvider;
   final int duration;
   final Curve curve;
   final _AnimationType type;
@@ -77,7 +63,7 @@ class _AnimationAction extends util.Action {
       duration: Duration(
         milliseconds: duration,
       ),
-      vsync: tickerProvider,
+      vsync: cardData.gameData.callback,
     );
 
     void completed() {
@@ -85,7 +71,8 @@ class _AnimationAction extends util.Action {
       cardData._updateAnimationTimestamp();
       animationController.dispose();
       end();
-      setState();
+      cardData.gameData.callback.setState(() {
+      });
     }
 
     CurvedAnimation curvedAnimation = CurvedAnimation(
@@ -126,7 +113,8 @@ class _AnimationAction extends util.Action {
       })
       ..addListener(() {
         cardData._property = createProperty(curvedAnimation.value);
-        setState();
+        cardData.gameData.callback.setState(() {
+        });
       });
     animationController.forward();
   }

@@ -39,10 +39,10 @@ class _PropertyData {
   );
 
   _PropertyData.calc010({
-    double double0,
-    double double1,
+    double double0 = 0.0,
+    double double1 = 0.0,
   }) : this(
-    doubles: [],
+    doubles: [double0, double1],
     propertyCalc: (List<double> doubles, double value) {
       assert(doubles.length >= 2);
       return doubles[0] + (doubles[1] - doubles[0]) * (1.0 - (2.0 * value - 1.0).abs());
