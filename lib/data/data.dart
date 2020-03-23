@@ -1,12 +1,13 @@
+import 'dart:collection';
 import 'dart:math';
 
 import 'package:built_collection/built_collection.dart';
-import 'package:cards/util.dart' as util;
 import 'package:flutter/material.dart';
 
 part 'data_action.dart';
 part 'data_card.dart';
 part 'data_property.dart';
+part 'data_util.dart';
 
 //*********************************************************************************************************************
 
@@ -136,7 +137,7 @@ class GameData {
     const int defaultGridCount = 60;
     // Header 和 footer 占用的网格数. 竖屏时占用高度, 横屏时占用宽度. 其中 8 格是 header footer 和 body 的间距.
     const int headerFooterGridCount = 48;
-    Size safeSize = util.safeSize(context,
+    Size safeSize = _safeSize(context,
       padding: padding,
     );
     // 水平方向网格数量.
@@ -170,7 +171,7 @@ class GameData {
     const int defaultGridCount = 60;
     // Header 和 footer 占用的网格数. 竖屏时占用高度, 横屏时占用宽度. 其中 8 格是 header footer 和 body 的间距.
     const int headerFooterGridCount = 48;
-    Size safeSize = util.safeSize(context,
+    Size safeSize = _safeSize(context,
       padding: padding,
     );
     // 水平方向网格数量.
@@ -208,7 +209,7 @@ class GameData {
   //*******************************************************************************************************************
 
   /// 事件管理.
-  final util.ActionManager _actionManager = util.ActionManager(
+  final _ActionManager _actionManager = _ActionManager(
     max: 1,
   );
 

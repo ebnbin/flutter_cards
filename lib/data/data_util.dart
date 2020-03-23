@@ -1,12 +1,10 @@
-import 'dart:collection';
-
-import 'package:flutter/material.dart';
+part of 'data.dart';
 
 /// 事件管理类.
 /// 
 /// 事件队列管理事件. 通过 [add] 添加事件到事件队列, 每个事件结束后从事件队列头部取出事件并处理.
-class ActionManager {
-  ActionManager({
+class _ActionManager {
+  _ActionManager({
     this.max = -1,
   });
 
@@ -18,18 +16,18 @@ class ActionManager {
   int max;
 
   /// 事件队列.
-  final Queue<Action> _actions = Queue();
+  final Queue<_Action> actions = Queue();
 
   /// 是否正在处理事件.
-  bool _isActing = false;
+  bool isActing = false;
 
   /// 尝试从事件队列头部取出事件并处理.
-  void _handle() {
-    if (_isActing || _actions.isEmpty) {
+  void handle() {
+    if (isActing || actions.isEmpty) {
       return;
     }
-    _isActing = true;
-    _actions.removeFirst()._begin(this);
+    isActing = true;
+    actions.removeFirst().begin(this);
   }
 
   /// 添加事件到事件队列, 并触发一次尝试处理.
@@ -37,19 +35,19 @@ class ActionManager {
   /// 返回是否成功的添加到队列. 可能因为队列最大数量而无法添加.
   /// 
   /// [addFirst] 是否添加到队列头部, 默认为 false 添加到队列尾部.
-  bool add(Action action, {
+  bool add(_Action action, {
     bool addFirst = false,
   }) {
     assert(action != null);
-    if (max >= 0 && _actions.length >= max) {
+    if (max >= 0 && actions.length >= max) {
       return false;
     }
     if (addFirst) {
-      _actions.addFirst(action);
+      actions.addFirst(action);
     } else {
-      _actions.addLast(action);
+      actions.addLast(action);
     }
-    _handle();
+    handle();
     return true;
   }
 
@@ -59,8 +57,8 @@ class ActionManager {
   ///
   /// 返回被清除的事件数量.
   int clear() {
-    int length = _actions.length;
-    _actions.clear();
+    int length = actions.length;
+    actions.clear();
     return length;
   }
 }
@@ -68,11 +66,11 @@ class ActionManager {
 /// 事件.
 ///
 /// 事件执行结束时必须调用 [end].
-abstract class Action {
-  ActionManager _actionManager;
+abstract class _Action {
+  _ActionManager _actionManager;
 
   /// 开始执行事件.
-  void _begin(ActionManager actionManager) {
+  void begin(_ActionManager actionManager) {
     assert(_actionManager == null);
     assert(actionManager != null);
     _actionManager = actionManager;
@@ -83,8 +81,8 @@ abstract class Action {
   void end() {
     assert(_actionManager != null);
     onEnd();
-    _actionManager._isActing = false;
-    _actionManager._handle();
+    _actionManager.isActing = false;
+    _actionManager.handle();
     _actionManager = null;
   }
 
@@ -100,7 +98,7 @@ abstract class Action {
 //*********************************************************************************************************************
 
 /// 返回安全的屏幕宽高. [padding] 用于裁剪.
-Size safeSize(BuildContext context, {
+Size _safeSize(BuildContext context, {
   double padding = 0.0,
 }) {
   MediaQueryData mediaQueryData = MediaQuery.of(context);

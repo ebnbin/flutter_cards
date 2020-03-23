@@ -15,7 +15,7 @@ enum _AnimationType {
 }
 
 /// 动画事件.
-class _AnimationAction extends util.Action {
+class _AnimationAction extends _Action {
   _AnimationAction({
     @required
     this.cardData,

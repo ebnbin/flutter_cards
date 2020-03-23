@@ -114,7 +114,7 @@ class IndexCardData extends CardData {
     const int defaultGridCount = 60;
     // Header 和 footer 占用的网格数. 竖屏时占用高度, 横屏时占用宽度. 其中 8 格是 header footer 和 body 的间距.
     const int headerFooterGridCount = 48;
-    Size safeSize = util.safeSize(context,
+    Size safeSize = _safeSize(context,
       padding: padding,
     );
     // 水平方向网格数量.
@@ -201,7 +201,7 @@ class GridCardData extends CardData {
     const int defaultGridCount = 60;
     // Header 和 footer 占用的网格数. 竖屏时占用高度, 横屏时占用宽度. 其中 8 格是 header footer 和 body 的间距.
     const int headerFooterGridCount = 48;
-    Size safeSize = util.safeSize(context,
+    Size safeSize = _safeSize(context,
       padding: padding,
     );
     // 水平方向网格数量.
