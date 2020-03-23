@@ -17,13 +17,13 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin imple
         child: Stack(
           children: <Widget>[
             Positioned.fromRect(
-              rect: _gameData.safeRect(context),
+              rect: _gameData.safeRect,
               child: Container(
                 color: Colors.red,
               ),
             ),
             Positioned.fromRect(
-              rect: _gameData.boardRect(context),
+              rect: _gameData.boardRect,
               child: Container(
                 color: Colors.yellow,
               ),
@@ -48,7 +48,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin imple
   /// 构建一个可见的卡片.
   Widget _buildVisibleCard(CardData cardData) {
     return Positioned.fromRect(
-      rect: cardData.rect(context),
+      rect: cardData.rect,
       child: Transform(
         transform: cardData.property.transform,
         alignment: Alignment.center,

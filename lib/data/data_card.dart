@@ -27,7 +27,7 @@ abstract class CardData implements Comparable<CardData> {
   // 位置.
 
   /// 在 Stack 中的位置. Positioned.fromRect().
-  Rect rect(BuildContext context);
+  Rect get rect;
 
   //*******************************************************************************************************************
   // 属性.
@@ -108,14 +108,16 @@ class IndexCardData extends CardData {
   int _columnSpan;
 
   @override
-  Rect rect(BuildContext context) {
+  Rect get rect {
     const double padding = 8.0;
     // 默认网格数. 竖屏时水平方向的网格数, 或横屏时垂直方向的网格数.
     const int defaultGridCount = 60;
     // Header 和 footer 占用的网格数. 竖屏时占用高度, 横屏时占用宽度. 其中 8 格是 header footer 和 body 的间距.
     const int headerFooterGridCount = 48;
-    Size safeSize = _safeSize(context,
-      padding: padding,
+    MediaQueryData mediaQueryData = MediaQuery.of(gameData.callback.context);
+    Size safeSize = Size(
+      mediaQueryData.size.width - mediaQueryData.padding.horizontal - padding * 2.0,
+      mediaQueryData.size.height - mediaQueryData.padding.vertical - padding * 2.0,
     );
     // 水平方向网格数量.
     int horizontalGridCount;
@@ -195,14 +197,16 @@ class GridCardData extends CardData {
   GetGrid _columnGridSpan;
   
   @override
-  Rect rect(BuildContext context) {
+  Rect get rect {
     const double padding = 8.0;
     // 默认网格数. 竖屏时水平方向的网格数, 或横屏时垂直方向的网格数.
     const int defaultGridCount = 60;
     // Header 和 footer 占用的网格数. 竖屏时占用高度, 横屏时占用宽度. 其中 8 格是 header footer 和 body 的间距.
     const int headerFooterGridCount = 48;
-    Size safeSize = _safeSize(context,
-      padding: padding,
+    MediaQueryData mediaQueryData = MediaQuery.of(gameData.callback.context);
+    Size safeSize = Size(
+      mediaQueryData.size.width - mediaQueryData.padding.horizontal - padding * 2.0,
+      mediaQueryData.size.height - mediaQueryData.padding.vertical - padding * 2.0,
     );
     // 水平方向网格数量.
     int horizontalGridCount;

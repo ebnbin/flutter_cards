@@ -122,14 +122,16 @@ class GameData {
   //*******************************************************************************************************************
 
   /// 安全矩形.
-  Rect safeRect(BuildContext context) {
+  Rect get safeRect {
     const double padding = 8.0;
     // 默认网格数. 竖屏时水平方向的网格数, 或横屏时垂直方向的网格数.
     const int defaultGridCount = 60;
     // Header 和 footer 占用的网格数. 竖屏时占用高度, 横屏时占用宽度. 其中 8 格是 header footer 和 body 的间距.
     const int headerFooterGridCount = 48;
-    Size safeSize = _safeSize(context,
-      padding: padding,
+    MediaQueryData mediaQueryData = MediaQuery.of(callback.context);
+    Size safeSize = Size(
+      mediaQueryData.size.width - mediaQueryData.padding.horizontal - padding * 2.0,
+      mediaQueryData.size.height - mediaQueryData.padding.vertical - padding * 2.0,
     );
     // 水平方向网格数量.
     int horizontalGridCount;
@@ -156,14 +158,16 @@ class GameData {
   }
 
   /// 游戏面板矩形.
-  Rect boardRect(BuildContext context) {
+  Rect get boardRect {
     const double padding = 8.0;
     // 默认网格数. 竖屏时水平方向的网格数, 或横屏时垂直方向的网格数.
     const int defaultGridCount = 60;
     // Header 和 footer 占用的网格数. 竖屏时占用高度, 横屏时占用宽度. 其中 8 格是 header footer 和 body 的间距.
     const int headerFooterGridCount = 48;
-    Size safeSize = _safeSize(context,
-      padding: padding,
+    MediaQueryData mediaQueryData = MediaQuery.of(callback.context);
+    Size safeSize = Size(
+      mediaQueryData.size.width - mediaQueryData.padding.horizontal - padding * 2.0,
+      mediaQueryData.size.height - mediaQueryData.padding.vertical - padding * 2.0,
     );
     // 水平方向网格数量.
     int horizontalGridCount;
