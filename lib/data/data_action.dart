@@ -54,11 +54,11 @@ class _AnimationAction extends util.Action {
         curve = Curves.easeInOut,
         type = _AnimationType.forward,
         createProperty = ((double value) {
-//          return _SampleProperty(value: value);
-            return Property._rotateXYIn(
-              value: value,
-              rotateYDegree: 270.0,
-            );
+          return Property._sample(value: value);
+//            return Property._rotateXYIn(
+//              value: value,
+//              rotateYDegree: 270.0,
+//            );
         }),
         super();
 

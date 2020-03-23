@@ -6,7 +6,7 @@ part of 'data.dart';
 abstract class CardData implements Comparable<CardData> {
   CardData({
     this.gameData,
-    this.defaultProperty,
+    this.defaultProperty = const Property._(),
   }) : assert(gameData != null),
         assert(defaultProperty != null) {
     _resetProperty();
@@ -76,7 +76,7 @@ abstract class CardData implements Comparable<CardData> {
 class IndexCardData extends CardData {
   IndexCardData({
     GameData gameData,
-    Property defaultProperty,
+    Property defaultProperty = const Property._(),
     int rowIndex,
     int columnIndex,
     int rowSpan = 1,
@@ -163,7 +163,7 @@ class IndexCardData extends CardData {
 class GridCardData extends CardData {
   GridCardData({
     GameData gameData,
-    Property defaultProperty,
+    Property defaultProperty = const Property._(),
     GetGrid rowGrid,
     GetGrid columnGrid,
     GetGrid rowGridSpan,
