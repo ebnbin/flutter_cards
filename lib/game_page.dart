@@ -60,7 +60,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin imple
               borderRadius: BorderRadius.circular(cardData.property.radius),
             ),
             clipBehavior: Clip.antiAlias,
-            child: GestureDetector(
+            child: InkWell(
               child: Center(
                 child: Text('$cardData'),
               ),
@@ -70,7 +70,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin imple
               onLongPress: _gameData.onLongPress(
                 cardData: cardData,
               ),
-              behavior: HitTestBehavior.translucent,
+//              behavior: HitTestBehavior.translucent,
             ),
           ),
         ),

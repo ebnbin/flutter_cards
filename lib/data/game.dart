@@ -17,9 +17,9 @@ class _GameData implements GameData {
   void initCardDataList() {
     for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
       for (int columnIndex = 0; columnIndex < columnCount; columnIndex++) {
-        if (rowIndex == 2 && (columnIndex == 1 || columnIndex == 2)) {
-          continue;
-        }
+//        if (rowIndex == 2 && (columnIndex == 1 || columnIndex == 2)) {
+//          continue;
+//        }
         _cardDataList.add(_IndexCardData(
           gameData: this,
           rowIndex: rowIndex,
@@ -29,77 +29,77 @@ class _GameData implements GameData {
         ));
       }
     }
-    _cardDataList.add(_IndexCardData(
-      gameData: this,
-      rowIndex: 2,
-      columnIndex: 1,
-      rowSpan: 1,
-      columnSpan: 2,
-    ));
-    _cardDataList.add(_GridCardData(
-      gameData: this,
-      rowGrid: (isVertical) => isVertical ? 0 : 0,
-      columnGrid: (isVertical) => isVertical ? 0 : 0,
-      rowGridSpan: (isVertical) => isVertical ? 10 : 10,
-      columnGridSpan: (isVertical) => isVertical ? 10 : 10,
-    ));
-    _cardDataList.add(_GridCardData(
-      gameData: this,
-      rowGrid: (isVertical) => isVertical ? 10 : 30,
-      columnGrid: (isVertical) => isVertical ? 20 : 0,
-      rowGridSpan: (isVertical) => isVertical ? 10 : 10,
-      columnGridSpan: (isVertical) => isVertical ? 20 : 20,
-    ));
-    _cardDataList.add(_GridCardData(
-      gameData: this,
-      rowGrid: (isVertical) => isVertical ? 88 : 0,
-      columnGrid: (isVertical) => isVertical ? 0 : 88,
-      rowGridSpan: (isVertical) => isVertical ? 10 : 10,
-      columnGridSpan: (isVertical) => isVertical ? 10 : 10,
-    ));
-    _cardDataList.add(_GridCardData(
-      gameData: this,
-      rowGrid: (isVertical) => isVertical ? 88 : 10,
-      columnGrid: (isVertical) => isVertical ? 10 : 88,
-      rowGridSpan: (isVertical) => isVertical ? 10 : 10,
-      columnGridSpan: (isVertical) => isVertical ? 10 : 10,
-    ));
-    _cardDataList.add(_GridCardData(
-      gameData: this,
-      rowGrid: (isVertical) => isVertical ? 88 : 20,
-      columnGrid: (isVertical) => isVertical ? 20 : 88,
-      rowGridSpan: (isVertical) => isVertical ? 10 : 10,
-      columnGridSpan: (isVertical) => isVertical ? 10 : 10,
-    ));
-    _cardDataList.add(_GridCardData(
-      gameData: this,
-      rowGrid: (isVertical) => isVertical ? 88 : 30,
-      columnGrid: (isVertical) => isVertical ? 30 : 88,
-      rowGridSpan: (isVertical) => isVertical ? 10 : 10,
-      columnGridSpan: (isVertical) => isVertical ? 10 : 10,
-    ));
-    _cardDataList.add(_GridCardData(
-      gameData: this,
-      rowGrid: (isVertical) => isVertical ? 88 : 40,
-      columnGrid: (isVertical) => isVertical ? 40 : 88,
-      rowGridSpan: (isVertical) => isVertical ? 10 : 10,
-      columnGridSpan: (isVertical) => isVertical ? 10 : 10,
-    ));
-    _cardDataList.add(_GridCardData(
-      gameData: this,
-      rowGrid: (isVertical) => isVertical ? 88 : 50,
-      columnGrid: (isVertical) => isVertical ? 50 : 88,
-      rowGridSpan: (isVertical) => isVertical ? 10 : 10,
-      columnGridSpan: (isVertical) => isVertical ? 10 : 10,
-    ));
+//    _cardDataList.add(_IndexCardData(
+//      gameData: this,
+//      rowIndex: 2,
+//      columnIndex: 1,
+//      rowSpan: 1,
+//      columnSpan: 2,
+//    ));
+//    _cardDataList.add(_GridCardData(
+//      gameData: this,
+//      rowGrid: (isVertical) => isVertical ? 0 : 0,
+//      columnGrid: (isVertical) => isVertical ? 0 : 0,
+//      rowGridSpan: (isVertical) => isVertical ? 10 : 10,
+//      columnGridSpan: (isVertical) => isVertical ? 10 : 10,
+//    ));
+//    _cardDataList.add(_GridCardData(
+//      gameData: this,
+//      rowGrid: (isVertical) => isVertical ? 10 : 10,
+//      columnGrid: (isVertical) => isVertical ? 0 : 0,
+//      rowGridSpan: (isVertical) => isVertical ? 10 : 10,
+//      columnGridSpan: (isVertical) => isVertical ? 20 : 20,
+//    ));
+//    _cardDataList.add(_GridCardData(
+//      gameData: this,
+//      rowGrid: (isVertical) => isVertical ? 88 : 0,
+//      columnGrid: (isVertical) => isVertical ? 0 : 88,
+//      rowGridSpan: (isVertical) => isVertical ? 10 : 10,
+//      columnGridSpan: (isVertical) => isVertical ? 10 : 10,
+//    ));
+//    _cardDataList.add(_GridCardData(
+//      gameData: this,
+//      rowGrid: (isVertical) => isVertical ? 88 : 10,
+//      columnGrid: (isVertical) => isVertical ? 10 : 88,
+//      rowGridSpan: (isVertical) => isVertical ? 10 : 10,
+//      columnGridSpan: (isVertical) => isVertical ? 10 : 10,
+//    ));
+//    _cardDataList.add(_GridCardData(
+//      gameData: this,
+//      rowGrid: (isVertical) => isVertical ? 88 : 20,
+//      columnGrid: (isVertical) => isVertical ? 20 : 88,
+//      rowGridSpan: (isVertical) => isVertical ? 10 : 10,
+//      columnGridSpan: (isVertical) => isVertical ? 10 : 10,
+//    ));
+//    _cardDataList.add(_GridCardData(
+//      gameData: this,
+//      rowGrid: (isVertical) => isVertical ? 88 : 30,
+//      columnGrid: (isVertical) => isVertical ? 30 : 88,
+//      rowGridSpan: (isVertical) => isVertical ? 10 : 10,
+//      columnGridSpan: (isVertical) => isVertical ? 10 : 10,
+//    ));
+//    _cardDataList.add(_GridCardData(
+//      gameData: this,
+//      rowGrid: (isVertical) => isVertical ? 88 : 40,
+//      columnGrid: (isVertical) => isVertical ? 40 : 88,
+//      rowGridSpan: (isVertical) => isVertical ? 10 : 10,
+//      columnGridSpan: (isVertical) => isVertical ? 10 : 10,
+//    ));
+//    _cardDataList.add(_GridCardData(
+//      gameData: this,
+//      rowGrid: (isVertical) => isVertical ? 88 : 50,
+//      columnGrid: (isVertical) => isVertical ? 50 : 88,
+//      rowGridSpan: (isVertical) => isVertical ? 10 : 10,
+//      columnGridSpan: (isVertical) => isVertical ? 10 : 10,
+//    ));
   }
 
   //*******************************************************************************************************************
 
   /// 行数. 不包括 header footer.
-  int rowCount = 4;
+  int rowCount = 3;
   /// 列数. 不包括 header footer.
-  int columnCount = 4;
+  int columnCount = 3;
 
   //*******************************************************************************************************************
 

@@ -145,7 +145,7 @@ class _IndexCardData extends _CardData {
 
   @override
   String toString() {
-    return '$rowIndex,$columnIndex,$rowSpan,$columnSpan';
+    return '$rowIndex,$columnIndex,$rowSpan,$columnSpan\n${gameData._cardDataList.indexOf(this)}';
   }
 }
 

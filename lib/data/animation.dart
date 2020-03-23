@@ -71,7 +71,7 @@ class _PropertyAnimation {
 
     void completed() {
       cardData._property = endProperty(curvedAnimation.value);
-      cardData.updateAnimationTimestamp();
+//      cardData.updateAnimationTimestamp();
       animationController.dispose();
       onEnd();
       cardData.gameData.callback.setState(() {

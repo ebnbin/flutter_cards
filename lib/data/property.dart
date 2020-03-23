@@ -111,11 +111,11 @@ class _Property implements Property {
     opacityData: _PropertyData.calc0(double0: 1.0),
     elevationData: _PropertyData.calc010(
       double0: 1.0,
-      double1: 4.0,
+      double1: 40.0,
     ),
     radiusData: _PropertyData.calc010(
       double0: 4.0,
-      double1: 16.0,
+      double1: 160.0,
     ),
   );
 
