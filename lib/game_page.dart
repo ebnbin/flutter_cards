@@ -89,7 +89,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin imple
   @override
   void initState() {
     super.initState();
-    _gameData = GameData(callback: this);
+    _gameData = GameData.create(this);
   }
 
   /// 游戏数据.

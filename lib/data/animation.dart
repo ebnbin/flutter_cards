@@ -3,7 +3,7 @@ part of '../data.dart';
 //*********************************************************************************************************************
 
 /// 根据 Animation.value 创建 Property.
-typedef _CreateProperty = Property Function(double value);
+typedef _CreateProperty = _Property Function(double value);
 
 /// 动画类型.
 enum _AnimationType {
@@ -31,10 +31,10 @@ class _PropertyAnimation {
         curve = Curves.easeInOut,
         type = _AnimationType.forward,
         runningProperty = ((double value) {
-          return Property._sample(value: value);
+          return _Property.sample(value: value);
         }),
         endProperty = ((double value) {
-          return Property._();
+          return _Property();
         });
 
   _PropertyAnimation.rotateXYIn() :
@@ -42,13 +42,13 @@ class _PropertyAnimation {
         curve = Curves.easeInOut,
         type = _AnimationType.forward,
         runningProperty = ((double value) {
-          return Property._rotateXYIn(
+          return _Property.rotateXYIn(
             value: value,
             rotateYDegree: 270.0,
           );
         }),
         endProperty = ((double value) {
-          return Property._();
+          return _Property();
         });
 
   final int duration;
@@ -57,7 +57,7 @@ class _PropertyAnimation {
   final _CreateProperty runningProperty;
   final _CreateProperty endProperty;
 
-  void begin(CardData cardData, VoidCallback onEnd) {
+  void begin(_CardData cardData, VoidCallback onEnd) {
     AnimationController animationController = AnimationController(
       duration: Duration(
         milliseconds: duration,
@@ -71,7 +71,7 @@ class _PropertyAnimation {
 
     void completed() {
       cardData._property = endProperty(curvedAnimation.value);
-      cardData._updateAnimationTimestamp();
+      cardData.updateAnimationTimestamp();
       animationController.dispose();
       onEnd();
       cardData.gameData.callback.setState(() {
@@ -116,5 +116,12 @@ class _PropertyAnimation {
         });
       });
     animationController.forward();
+  }
+
+  _AnimationAction action(_CardData cardData) {
+    return _AnimationAction(
+      cardData: cardData,
+      animation: this,
+    );
   }
 }

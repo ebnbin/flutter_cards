@@ -2,33 +2,25 @@ part of '../data.dart';
 
 //*********************************************************************************************************************
 
-abstract class GameCallback implements TickerProvider {
-  BuildContext get context;
-
-  void setState(VoidCallback fn);
-}
-
-//*********************************************************************************************************************
-
 /// 游戏数据.
 ///
 /// 有效行列范围: 2 ~ 6. Header footer 固定都是 2 * 6. 网格粒度 60. 2, 3, 4, 5, 6 都是 60 的约数.
-class GameData {
-  GameData({
+class _GameData implements GameData {
+  _GameData({
     this.callback,
   }) {
-    _initCardDataList();
+    initCardDataList();
   }
 
   final GameCallback callback;
 
-  void _initCardDataList() {
-    for (int rowIndex = 0; rowIndex < _rowCount; rowIndex++) {
-      for (int columnIndex = 0; columnIndex < _columnCount; columnIndex++) {
+  void initCardDataList() {
+    for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
+      for (int columnIndex = 0; columnIndex < columnCount; columnIndex++) {
         if (rowIndex == 2 && (columnIndex == 1 || columnIndex == 2)) {
           continue;
         }
-        _cardDataList.add(IndexCardData(
+        _cardDataList.add(_IndexCardData(
           gameData: this,
           rowIndex: rowIndex,
           columnIndex: columnIndex,
@@ -37,63 +29,63 @@ class GameData {
         ));
       }
     }
-    _cardDataList.add(IndexCardData(
+    _cardDataList.add(_IndexCardData(
       gameData: this,
       rowIndex: 2,
       columnIndex: 1,
       rowSpan: 1,
       columnSpan: 2,
     ));
-    _cardDataList.add(GridCardData(
+    _cardDataList.add(_GridCardData(
       gameData: this,
       rowGrid: (isVertical) => isVertical ? 0 : 0,
       columnGrid: (isVertical) => isVertical ? 0 : 0,
       rowGridSpan: (isVertical) => isVertical ? 10 : 10,
       columnGridSpan: (isVertical) => isVertical ? 10 : 10,
     ));
-    _cardDataList.add(GridCardData(
+    _cardDataList.add(_GridCardData(
       gameData: this,
       rowGrid: (isVertical) => isVertical ? 10 : 30,
       columnGrid: (isVertical) => isVertical ? 20 : 0,
       rowGridSpan: (isVertical) => isVertical ? 10 : 10,
       columnGridSpan: (isVertical) => isVertical ? 20 : 20,
     ));
-    _cardDataList.add(GridCardData(
+    _cardDataList.add(_GridCardData(
       gameData: this,
       rowGrid: (isVertical) => isVertical ? 88 : 0,
       columnGrid: (isVertical) => isVertical ? 0 : 88,
       rowGridSpan: (isVertical) => isVertical ? 10 : 10,
       columnGridSpan: (isVertical) => isVertical ? 10 : 10,
     ));
-    _cardDataList.add(GridCardData(
+    _cardDataList.add(_GridCardData(
       gameData: this,
       rowGrid: (isVertical) => isVertical ? 88 : 10,
       columnGrid: (isVertical) => isVertical ? 10 : 88,
       rowGridSpan: (isVertical) => isVertical ? 10 : 10,
       columnGridSpan: (isVertical) => isVertical ? 10 : 10,
     ));
-    _cardDataList.add(GridCardData(
+    _cardDataList.add(_GridCardData(
       gameData: this,
       rowGrid: (isVertical) => isVertical ? 88 : 20,
       columnGrid: (isVertical) => isVertical ? 20 : 88,
       rowGridSpan: (isVertical) => isVertical ? 10 : 10,
       columnGridSpan: (isVertical) => isVertical ? 10 : 10,
     ));
-    _cardDataList.add(GridCardData(
+    _cardDataList.add(_GridCardData(
       gameData: this,
       rowGrid: (isVertical) => isVertical ? 88 : 30,
       columnGrid: (isVertical) => isVertical ? 30 : 88,
       rowGridSpan: (isVertical) => isVertical ? 10 : 10,
       columnGridSpan: (isVertical) => isVertical ? 10 : 10,
     ));
-    _cardDataList.add(GridCardData(
+    _cardDataList.add(_GridCardData(
       gameData: this,
       rowGrid: (isVertical) => isVertical ? 88 : 40,
       columnGrid: (isVertical) => isVertical ? 40 : 88,
       rowGridSpan: (isVertical) => isVertical ? 10 : 10,
       columnGridSpan: (isVertical) => isVertical ? 10 : 10,
     ));
-    _cardDataList.add(GridCardData(
+    _cardDataList.add(_GridCardData(
       gameData: this,
       rowGrid: (isVertical) => isVertical ? 88 : 50,
       columnGrid: (isVertical) => isVertical ? 50 : 88,
@@ -105,14 +97,15 @@ class GameData {
   //*******************************************************************************************************************
 
   /// 行数. 不包括 header footer.
-  int _rowCount = 4;
+  int rowCount = 4;
   /// 列数. 不包括 header footer.
-  int _columnCount = 4;
+  int columnCount = 4;
 
   //*******************************************************************************************************************
 
   /// 存储所有卡片.
-  List<CardData> _cardDataList = [];
+  List<_CardData> _cardDataList = [];
+  @override
   BuiltList<CardData> get cardDataList {
     // 每次 build 时排序.
     _cardDataList.sort();
@@ -122,6 +115,7 @@ class GameData {
   //*******************************************************************************************************************
 
   /// 安全矩形.
+  @override
   Rect get safeRect {
     const double padding = 8.0;
     // 默认网格数. 竖屏时水平方向的网格数, 或横屏时垂直方向的网格数.
@@ -141,11 +135,11 @@ class GameData {
     if (isVertical) {
       // 竖屏.
       horizontalGridCount = defaultGridCount;
-      verticalGridCount = defaultGridCount ~/ _columnCount * _rowCount + headerFooterGridCount;
+      verticalGridCount = defaultGridCount ~/ columnCount * rowCount + headerFooterGridCount;
     } else {
       // 横屏.
       verticalGridCount = defaultGridCount;
-      horizontalGridCount = defaultGridCount ~/ _rowCount * _columnCount + headerFooterGridCount;
+      horizontalGridCount = defaultGridCount ~/ rowCount * columnCount + headerFooterGridCount;
     }
     // 网格宽高.
     double gridSize = min(safeSize.width / horizontalGridCount, safeSize.height / verticalGridCount);
@@ -158,6 +152,7 @@ class GameData {
   }
 
   /// 游戏面板矩形.
+  @override
   Rect get boardRect {
     const double padding = 8.0;
     // 默认网格数. 竖屏时水平方向的网格数, 或横屏时垂直方向的网格数.
@@ -181,13 +176,13 @@ class GameData {
     if (isVertical) {
       // 竖屏.
       horizontalGridCount = defaultGridCount;
-      verticalGridCount = defaultGridCount ~/ _columnCount * _rowCount + headerFooterGridCount;
+      verticalGridCount = defaultGridCount ~/ columnCount * rowCount + headerFooterGridCount;
       boardHorizontalGridCount = horizontalGridCount;
       boardVerticalGridCount = verticalGridCount - headerFooterGridCount;
     } else {
       // 横屏.
       verticalGridCount = defaultGridCount;
-      horizontalGridCount = defaultGridCount ~/ _rowCount * _columnCount + headerFooterGridCount;
+      horizontalGridCount = defaultGridCount ~/ rowCount * columnCount + headerFooterGridCount;
       boardHorizontalGridCount = horizontalGridCount - headerFooterGridCount;
       boardVerticalGridCount = verticalGridCount;
     }
@@ -204,25 +199,25 @@ class GameData {
   //*******************************************************************************************************************
 
   /// 事件管理.
-  final _ActionManager _actionManager = _ActionManager(
+  final _ActionManager actionManager = _ActionManager(
     max: 1,
   );
 
   //*******************************************************************************************************************
   // 用户操作.
 
+  @override
   Function onTap({
     @required
     CardData cardData,
   }) {
     assert(cardData != null);
     return () {
-      _actionManager.add(_AnimationAction.sample(
-        cardData: cardData,
-      ));
+      actionManager.add(_PropertyAnimation.sample().action(cardData));
     };
   }
 
+  @override
   Function onLongPress({
     @required
     CardData cardData,

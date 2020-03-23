@@ -70,23 +70,23 @@ class _ActionManager {
 ///
 /// 事件执行结束时必须调用 [end].
 abstract class _Action {
-  _ActionManager _actionManager;
+  _ActionManager actionManager;
 
   /// 开始执行事件.
   void begin(_ActionManager actionManager) {
-    assert(_actionManager == null);
+    assert(this.actionManager == null);
     assert(actionManager != null);
-    _actionManager = actionManager;
+    this.actionManager = actionManager;
     onBegin();
   }
 
   /// 结束执行事件.
   void end() {
-    assert(_actionManager != null);
+    assert(actionManager != null);
     onEnd();
-    _actionManager.isActing = false;
-    _actionManager.handle();
-    _actionManager = null;
+    actionManager.isActing = false;
+    actionManager.handle();
+    actionManager = null;
   }
 
   @protected
@@ -111,21 +111,7 @@ class _AnimationAction extends _Action {
         assert(animation != null),
         super();
 
-  _AnimationAction.sample({
-    @required
-    CardData cardData,
-  }) : cardData = cardData,
-        animation = _PropertyAnimation.sample(),
-        super();
-
-  _AnimationAction.rotateXYIn({
-    @required
-    CardData cardData,
-  }) : cardData = cardData,
-        animation = _PropertyAnimation.rotateXYIn(),
-        super();
-
-  final CardData cardData;
+  final _CardData cardData;
   final _PropertyAnimation animation;
 
   @override

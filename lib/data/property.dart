@@ -58,8 +58,8 @@ class _PropertyData {
 }
 
 /// 根据 Animation.value 计算属性.
-class Property {
-  const Property._({
+class _Property implements Property {
+  const _Property({
     this.rotateX = 0.0,
     this.rotateY = 0.0,
     this.rotateZ = 0.0,
@@ -71,7 +71,7 @@ class Property {
   });
 
   /// 通过 _PropertyData 初始化.
-  Property._data({
+  _Property.data({
     double value,
     _PropertyData rotateXData,
     _PropertyData rotateYData,
@@ -81,7 +81,7 @@ class Property {
     _PropertyData opacityData,
     _PropertyData elevationData,
     _PropertyData radiusData,
-  }) : this._(
+  }) : this(
     rotateX: rotateXData.calc(value),
     rotateY: rotateYData.calc(value),
     rotateZ: rotateZData.calc(value),
@@ -93,9 +93,9 @@ class Property {
   );
 
   /// 用于演示.
-  Property._sample({
+  _Property.sample({
     double value,
-  }) : this._data(
+  }) : this.data(
     value: value,
     rotateXData: _PropertyData.calc0(double0: 0.0),
     rotateYData: _PropertyData.calc01(double0: 0.0, double1: 2.0 * pi),
@@ -122,7 +122,7 @@ class Property {
   /// 通过 [rotateX], [rotateY] 进场.
   ///
   /// [rotateXDegree], [rotateYDegree] 表示视觉上的进场效果旋转角度. 只能是 -270, -90, 0, 90, 270 之一.
-  Property._rotateXYIn({
+  _Property.rotateXYIn({
     @required
     double value,
     double rotateXDegree = 0.0,
@@ -164,16 +164,25 @@ class Property {
   /// Matrix4.setEntry(3, 2, value).
   static final double matrix4Entry32 = 0.005;
 
+  @override
   final double rotateX;
+  @override
   final double rotateY;
+  @override
   final double rotateZ;
+  @override
   final double scaleX;
+  @override
   final double scaleY;
+  @override
   final double opacity;
+  @override
   final double elevation;
+  @override
   final double radius;
 
   /// Transform.
+  @override
   Matrix4 get transform => Matrix4.identity()
     ..setEntry(3, 2, matrix4Entry32)
     ..rotateX(rotateX)
