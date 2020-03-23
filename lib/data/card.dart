@@ -41,6 +41,14 @@ abstract class _CardData implements CardData, Comparable<_CardData> {
 
   //*******************************************************************************************************************
 
+  @override
+  GestureTapCallback get onTap => gameData.onTap(cardData: this);
+
+  @override
+  GestureLongPressCallback get onLongPress => gameData.onLongPress(cardData: this);
+
+  //*******************************************************************************************************************
+
   // TODO 仍然有 bug, 之后尝试每次动画结束后根据卡片 index 重新排序的方式.
   int animationTimestamp;
 

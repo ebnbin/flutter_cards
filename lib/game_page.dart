@@ -1,5 +1,9 @@
+import 'dart:math';
+
 import 'package:cards/data.dart';
 import 'package:flutter/material.dart';
+
+part 'widget.dart';
 
 /// 游戏页面.
 ///
@@ -47,33 +51,10 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin imple
 
   /// 构建一个可见的卡片.
   Widget _buildVisibleCard(CardData cardData) {
-    return Positioned.fromRect(
-      rect: cardData.rect,
-      child: Transform(
-        transform: cardData.property.transform,
-        alignment: Alignment.center,
-        child: Opacity(
-          opacity: cardData.property.opacity,
-          child: Card(
-            elevation: cardData.property.elevation,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(cardData.property.radius),
-            ),
-            clipBehavior: Clip.antiAlias,
-            child: InkWell(
-              child: Center(
-                child: Text('$cardData'),
-              ),
-              onTap: _gameData.onTap(
-                cardData: cardData,
-              ),
-              onLongPress: _gameData.onLongPress(
-                cardData: cardData,
-              ),
-//              behavior: HitTestBehavior.translucent,
-            ),
-          ),
-        ),
+    return Card(
+      cardData: cardData,
+      child: Center(
+        child: Text('$cardData'),
       ),
     );
   }

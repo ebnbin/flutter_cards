@@ -95,29 +95,29 @@ class _Property implements Property {
   /// 用于演示.
   _Property.sample({
     double value,
-  }) : this.data(
-    value: value,
-    rotateXData: _PropertyData.calc0(double0: 0.0),
-    rotateYData: _PropertyData.calc01(double0: 0.0, double1: 2.0 * pi),
-    rotateZData: _PropertyData.calc0(double0: 0.0),
-    scaleXData: _PropertyData.calc010(
-      double0: 1.0,
-      double1: 2.0,
-    ),
-    scaleYData: _PropertyData.calc010(
-      double0: 1.0,
-      double1: 2.0
-    ),
-    opacityData: _PropertyData.calc0(double0: 1.0),
-    elevationData: _PropertyData.calc010(
-      double0: 1.0,
-      double1: 40.0,
-    ),
-    radiusData: _PropertyData.calc010(
-      double0: 4.0,
-      double1: 160.0,
-    ),
-  );
+  }) : rotateX = 0.0,
+        rotateY = _PropertyData.calc01(
+          double0: 0.0,
+          double1: 2.0 * pi,
+        ).calc(value),
+        rotateZ = 0.0,
+        scaleX = _PropertyData.calc010(
+          double0: 1.0,
+          double1: 2.0,
+        ).calc(value),
+        scaleY = _PropertyData.calc010(
+          double0: 1.0,
+          double1: 2.0,
+        ).calc(value),
+        opacity = 1.0,
+        elevation = _PropertyData.calc010(
+          double0: 1.0,
+          double1: 4.0,
+        ).calc(value),
+        radius = _PropertyData.calc010(
+          double0: 4.0,
+          double1: 16.0,
+        ).calc(value);
 
   /// 通过 [rotateX], [rotateY] 进场.
   ///

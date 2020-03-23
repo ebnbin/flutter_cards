@@ -54,6 +54,10 @@ abstract class CardData {
   Rect get rect;
 
   Property get property;
+
+  GestureTapCallback get onTap;
+
+  GestureLongPressCallback get onLongPress;
 }
 
 //*********************************************************************************************************************
