@@ -194,6 +194,58 @@ class _IndexCardData extends _GridCardData {
     columnGridSpan = columnSpanToColumnGridSpan(gameData, columnSpan);
   }
 
+  _CardData get leftCard {
+    return gameData._cardDataList.firstWhere((element) {
+      if (element is! _IndexCardData) {
+        return false;
+      }
+      int r = rowIndex;
+      int c = columnIndex;
+      int r2 = (element as _IndexCardData).rowIndex;
+      int c2 = (element as _IndexCardData).columnIndex;
+      return r == r2 && c - 1 == c2;
+    }, orElse: () => null);
+  }
+
+  _CardData get rightCard {
+    return gameData._cardDataList.firstWhere((element) {
+      if (element is! _IndexCardData) {
+        return false;
+      }
+      int r = rowIndex;
+      int c = columnIndex;
+      int r2 = (element as _IndexCardData).rowIndex;
+      int c2 = (element as _IndexCardData).columnIndex;
+      return r == r2 && c + 1 == c2;
+    }, orElse: () => null);
+  }
+
+  _CardData get topCard {
+    return gameData._cardDataList.firstWhere((element) {
+      if (element is! _IndexCardData) {
+        return false;
+      }
+      int r = rowIndex;
+      int c = columnIndex;
+      int r2 = (element as _IndexCardData).rowIndex;
+      int c2 = (element as _IndexCardData).columnIndex;
+      return r - 1 == r2 && c == c2;
+    }, orElse: () => null);
+  }
+
+  _CardData get bottomCard {
+    return gameData._cardDataList.firstWhere((element) {
+      if (element is! _IndexCardData) {
+        return false;
+      }
+      int r = rowIndex;
+      int c = columnIndex;
+      int r2 = (element as _IndexCardData).rowIndex;
+      int c2 = (element as _IndexCardData).columnIndex;
+      return r + 1 == r2 && c == c2;
+    }, orElse: () => null);
+  }
+
   @override
   String toString() {
     return '${super.toString()}\n$rowIndex,$columnIndex,$rowSpan,$columnSpan';

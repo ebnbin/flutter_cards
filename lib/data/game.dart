@@ -146,6 +146,10 @@ class _GameData implements GameData {
   }) {
     assert(cardData != null);
     return () {
+      if (cardData is _IndexCardData) {
+      } else {
+      }
+
       List<_Action> actions = <_Action>[
         _PropertyAnimation.rotateXYOut().action(cardData),
         _PropertyAnimation.translateXY(calcMap).action(_cardDataList[_cardDataList.indexOf(cardData) - 1]),
