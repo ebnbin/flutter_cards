@@ -65,14 +65,14 @@ abstract class _CardData implements CardData {
 //*********************************************************************************************************************
 
 /// 按照索引定位的卡片, 不能根据横竖屏控制不同的行列.
-class _IndexCardData extends _CardData {
+class _IndexCardData extends _GridCardData {
   _IndexCardData({
     _GameData gameData,
     _Property initProperty = const _Property(),
-    this.rowIndex,
-    this.columnIndex,
-    this.rowSpan = 1,
-    this.columnSpan = 1,
+    int rowIndex,
+    int columnIndex,
+    int rowSpan = 1,
+    int columnSpan = 1,
   }) : assert(rowIndex != null),
         assert(columnIndex != null),
         assert(rowSpan != null),
@@ -80,34 +80,43 @@ class _IndexCardData extends _CardData {
         super(
         gameData: gameData,
         initProperty: initProperty,
+        rowGrid: (isVertical) => isVertical
+            ? (rowIndex * gameData.calcMap['gridPerCard']) + 24
+            : (rowIndex * gameData.calcMap['gridPerCard']) + 0,
+        columnGrid: (isVertical) => isVertical
+            ? (columnIndex * gameData.calcMap['gridPerCard']) + 0
+            : (columnIndex * gameData.calcMap['gridPerCard']) + 24,
+        rowGridSpan: (isVertical) => isVertical
+            ? rowSpan * gameData.calcMap['gridPerCard']
+            : rowSpan * gameData.calcMap['gridPerCard'],
+        columnGridSpan: (isVertical) => isVertical
+            ? columnSpan * gameData.calcMap['gridPerCard']
+            : columnSpan * gameData.calcMap['gridPerCard'],
       );
 
   /// 所在行.
-  int rowIndex;
+  int get rowIndex => gameData.calcMap['isVertical']
+      ? (rowGrid(true) - 24) ~/ gameData.calcMap['gridPerCard']
+      : (rowGrid(false) - 0) ~/ gameData.calcMap['gridPerCard'];
 
   /// 所在列.
-  int columnIndex;
+  int get columnIndex => gameData.calcMap['isVertical']
+      ? (columnGrid(true) - 0) ~/ gameData.calcMap['gridPerCard']
+      : (columnGrid(false) - 24) ~/ gameData.calcMap['gridPerCard'];
 
   /// 跨行.
-  int rowSpan;
+  int get rowSpan => gameData.calcMap['isVertical']
+      ? rowGridSpan(true) ~/ gameData.calcMap['gridPerCard']
+      : rowGridSpan(false) ~/ gameData.calcMap['gridPerCard'];
 
   /// 跨列.
-  int columnSpan;
-
-  @override
-  Rect get rect {
-    Map<String, dynamic> map = gameData.calc();
-    return Rect.fromLTWH(
-      map['indexCardSpaceLeft'] + map['cardSize'] * columnIndex,
-      map['indexCardSpaceTop'] + map['cardSize'] * rowIndex,
-      map['cardSize'] * columnSpan,
-      map['cardSize'] * rowSpan,
-    );
-  }
+  int get columnSpan => gameData.calcMap['isVertical']
+      ? columnGridSpan(true) ~/ gameData.calcMap['gridPerCard']
+      : columnGridSpan(false) ~/ gameData.calcMap['gridPerCard'];
 
   @override
   String toString() {
-    return '$rowIndex,$columnIndex,$rowSpan,$columnSpan\n${gameData._cardDataList.indexOf(this)}';
+    return '${super.toString()}\n$rowIndex,$columnIndex,$rowSpan,$columnSpan';
   }
 }
 
@@ -145,7 +154,7 @@ class _GridCardData extends _CardData {
   
   @override
   Rect get rect {
-    Map<String, dynamic> map = gameData.calc();
+    Map<String, dynamic> map = gameData.calcMap;
     return Rect.fromLTWH(
       map['gridCardSpaceLeft'] + map['gridSize'] * columnGrid(map['isVertical']),
       map['gridCardSpaceTop'] + map['gridSize'] * rowGrid(map['isVertical']),
@@ -156,7 +165,7 @@ class _GridCardData extends _CardData {
 
   @override
   String toString() {
-    Map<String, dynamic> map = gameData.calc();
+    Map<String, dynamic> map = gameData.calcMap;
     return '${rowGrid(map['isVertical'])},${columnGrid(map['isVertical'])},${rowGridSpan(map['isVertical'])},${columnGridSpan(map['isVertical'])}\n${gameData._cardDataList.indexOf(this)}';
   }
 }

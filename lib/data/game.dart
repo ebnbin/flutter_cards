@@ -9,12 +9,23 @@ class _GameData implements GameData {
   _GameData({
     this.callback,
   }) {
+//    build();
     initCardDataList();
   }
 
   final GameCallback callback;
 
+  //*******************************************************************************************************************
+
+  /// 行数. 不包括 header footer.
+  int rowCount = 4;
+  /// 列数. 不包括 header footer.
+  int columnCount = 4;
+
+  //*******************************************************************************************************************
+
   void initCardDataList() {
+//    print(calcMap['gridPerCard']);
     for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
       for (int columnIndex = 0; columnIndex < columnCount; columnIndex++) {
 //        if (rowIndex == 2 && (columnIndex == 1 || columnIndex == 2)) {
@@ -97,13 +108,6 @@ class _GameData implements GameData {
 
   //*******************************************************************************************************************
 
-  /// 行数. 不包括 header footer.
-  int rowCount = 4;
-  /// 列数. 不包括 header footer.
-  int columnCount = 4;
-
-  //*******************************************************************************************************************
-
   /// 存储所有卡片.
   List<_CardData> _cardDataList = [];
   @override
@@ -116,13 +120,13 @@ class _GameData implements GameData {
   /// 安全矩形.
   @override
   Rect get safeRect {
-    return calc()['safeRect'];
+    return calcMap['safeRect'];
   }
 
   /// 游戏面板矩形.
   @override
   Rect get boardRect {
-    return calc()['boardRect'];
+    return calcMap['boardRect'];
   }
 
   //*******************************************************************************************************************
@@ -228,12 +232,7 @@ class _GameData implements GameData {
     // 上边距.
     double gridCardSpaceTop = ((safeHeight - padding * 2.0) - gridSize * verticalGridCount) / 2.0 + padding;
 
-    // 卡片宽高.
-    double cardSize = gridSize * gridPerCard;
-    // 左边距.
-    double indexCardSpaceLeft = ((safeWidth - padding * 2.0) - cardSize * columnCount) / 2.0 + padding;
-    // 上边距.
-    double indexCardSpaceTop = ((safeHeight - padding * 2.0) - cardSize * rowCount) / 2.0 + padding;
+    print(++i);
 
     return {
       'safeRect': safeRect,
@@ -242,10 +241,16 @@ class _GameData implements GameData {
       'gridCardSpaceTop': gridCardSpaceTop,
       'gridSize': gridSize,
       'isVertical': isVertical,
-      'cardSize': cardSize,
-      'indexCardSpaceLeft': indexCardSpaceLeft,
-      'indexCardSpaceTop': indexCardSpaceTop,
       'gridPerCard': gridPerCard,
     };
   }
+  
+  Map<String, dynamic> calcMap;
+
+  @override
+  void build() {
+    calcMap = calc();
+  }
+
+  static int i = 0;
 }

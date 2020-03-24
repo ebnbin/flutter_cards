@@ -16,6 +16,7 @@ class GamePage extends StatefulWidget {
 class _GamePageState extends State<GamePage> with TickerProviderStateMixin implements GameCallback {
   @override
   Widget build(BuildContext context) {
+    _gameData.build();
     return Scaffold(
       body: SafeArea(
         child: Stack(
