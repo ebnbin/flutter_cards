@@ -20,13 +20,14 @@ class _GameData implements GameData {
 //        if (rowIndex == 2 && (columnIndex == 1 || columnIndex == 2)) {
 //          continue;
 //        }
-        _cardDataList.add(_IndexCardData(
+        _IndexCardData cardData = _IndexCardData(
           gameData: this,
           rowIndex: rowIndex,
           columnIndex: columnIndex,
           rowSpan: 1,
           columnSpan: 1,
-        ));
+        );
+        _cardDataList.add(cardData);
       }
     }
 //    _cardDataList.add(_IndexCardData(
@@ -107,8 +108,6 @@ class _GameData implements GameData {
   List<_CardData> _cardDataList = [];
   @override
   BuiltList<CardData> get cardDataList {
-    // 每次 build 时排序.
-    _cardDataList.sort();
     return _cardDataList.build();
   }
 

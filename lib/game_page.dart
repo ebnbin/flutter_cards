@@ -42,6 +42,26 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin imple
                 return _buildCard(cardData, 1);
               }).toList(),
             ),
+            Stack(
+              children: _gameData.cardDataList.map<Widget>((CardData cardData) {
+                return _buildCard(cardData, 2);
+              }).toList(),
+            ),
+            Stack(
+              children: _gameData.cardDataList.map<Widget>((CardData cardData) {
+                return _buildCard(cardData, 3);
+              }).toList(),
+            ),
+            Stack(
+              children: _gameData.cardDataList.map<Widget>((CardData cardData) {
+                return _buildCard(cardData, 4);
+              }).toList(),
+            ),
+            Stack(
+              children: _gameData.cardDataList.map<Widget>((CardData cardData) {
+                return _buildCard(cardData, 5);
+              }).toList(),
+            ),
           ],
         )
       ),
@@ -50,35 +70,13 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin imple
   }
 
   /// 构建一个卡片.
-  Widget _buildCard(CardData cardData, int index) {
-    bool visible = cardData.visible;
-    if (index == 0) {
-      if (cardData.property.elevation == 1.0) {
-      } else {
-        visible = false;
-      }
-    } else {
-      if (cardData.property.elevation == 1.0) {
-        visible = false;
-      }
-    }
-    return visible ? _buildVisibleCard(cardData) : _buildInvisibleCard();
-  }
-
-  /// 构建一个可见的卡片.
-  Widget _buildVisibleCard(CardData cardData) {
+  Widget _buildCard(CardData cardData, int zIndex) {
     return Card(
       cardData: cardData,
+      zIndex: zIndex,
       child: Center(
         child: Text('$cardData'),
       ),
-    );
-  }
-
-  /// 构建一个不可见的卡片.
-  Widget _buildInvisibleCard() {
-    return Positioned.fill(
-      child: SizedBox.shrink(),
     );
   }
 

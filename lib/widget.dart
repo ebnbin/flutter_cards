@@ -3,15 +3,26 @@ part of 'game_page.dart';
 class Card extends StatelessWidget {
   const Card({
     this.cardData,
+    this.zIndex,
     this.child,
   });
 
   final CardData cardData;
 
+  final int zIndex;
+
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
+    if (cardData.zIndexVisible(zIndex)) {
+      return _buildVisible();
+    } else {
+      return _buildInvisible();
+    }
+  }
+
+  Widget _buildVisible() {
     return Positioned.fromRect(
       rect: cardData.rect,
       child: Transform(
@@ -46,6 +57,12 @@ class Card extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildInvisible() {
+    return Positioned.fill(
+      child: SizedBox.shrink(),
     );
   }
 }

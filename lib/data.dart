@@ -49,7 +49,7 @@ abstract class GameData {
 abstract class CardData {
   CardData._();
 
-  bool get visible;
+  bool zIndexVisible(int zIndex);
 
   Rect get rect;
 
