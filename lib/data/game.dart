@@ -133,7 +133,7 @@ class _GameData implements GameData {
 
   /// 事件管理.
   final _ActionManager actionManager = _ActionManager(
-    max: 1,
+//    max: 1,
   );
 
   //*******************************************************************************************************************
@@ -147,12 +147,20 @@ class _GameData implements GameData {
     assert(cardData != null);
     return () {
       List<_Action> actions = <_Action>[
-        _PropertyAnimation.sample().action(cardData),
-        _PropertyAnimation.rotateXYIn().action(cardData),
         _PropertyAnimation.rotateXYOut().action(cardData),
-        _PropertyAnimation.translateXY().action(cardData),
+        _PropertyAnimation.translateXY(calcMap).action(_cardDataList[_cardDataList.indexOf(cardData) - 1]),
+        _PropertyAnimation.rotateXYIn().action(cardData),
+
+//        _PropertyAnimation.sample().action(cardData),
+//        _PropertyAnimation.rotateXYIn().action(cardData),
+//        _PropertyAnimation.rotateXYOut().action(cardData),
+//        _PropertyAnimation.translateXY(calcMap).action(cardData),
       ];
-      actionManager.add(actions[Random().nextInt(actions.length)]);
+//      actionManager.add(actions[Random().nextInt(actions.length)]);
+
+      actionManager.add(actions[0]);
+      actionManager.add(actions[1]);
+      actionManager.add(actions[2]);
     };
   }
 
@@ -232,6 +240,9 @@ class _GameData implements GameData {
     // 上边距.
     double gridCardSpaceTop = ((safeHeight - padding * 2.0) - gridSize * verticalGridCount) / 2.0 + padding;
 
+    // 卡片宽高.
+    double cardSize = gridSize * gridPerCard;
+
     print(++i);
 
     return {
@@ -242,6 +253,7 @@ class _GameData implements GameData {
       'gridSize': gridSize,
       'isVertical': isVertical,
       'gridPerCard': gridPerCard,
+      'cardSize': cardSize,
     };
   }
   

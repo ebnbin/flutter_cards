@@ -69,7 +69,28 @@ class _ActionManager {
 /// 事件.
 ///
 /// 事件执行结束时必须调用 [end].
-abstract class _Action {
+class _Action {
+  _Action({
+    this.onBegin,
+    this.onEnd,
+  });
+
+  /// 动画事件.
+  _Action.animation({
+    @required
+    _CardData cardData,
+    @required
+    _PropertyAnimation animation,
+  }) : this(onBegin: (_Action action) {
+    animation.begin(cardData, () {
+      action.end();
+    });
+  },
+  );
+
+  final _ActionRunnable onBegin;
+  final _ActionRunnable onEnd;
+
   _ActionManager actionManager;
 
   /// 开始执行事件.
@@ -77,48 +98,17 @@ abstract class _Action {
     assert(this.actionManager == null);
     assert(actionManager != null);
     this.actionManager = actionManager;
-    onBegin();
+    onBegin?.call(this);
   }
 
   /// 结束执行事件.
   void end() {
     assert(actionManager != null);
-    onEnd();
+    onEnd?.call(this);
     actionManager.isActing = false;
     actionManager.handle();
     actionManager = null;
   }
-
-  @protected
-  void onBegin() {
-  }
-
-  @protected
-  void onEnd() {
-  }
 }
 
-//*********************************************************************************************************************
-
-/// 动画事件.
-class _AnimationAction extends _Action {
-  _AnimationAction({
-    @required
-    this.cardData,
-    @required
-    this.animation,
-  }) : assert(cardData != null),
-        assert(animation != null),
-        super();
-
-  final _CardData cardData;
-  final _PropertyAnimation animation;
-
-  @override
-  void onBegin() {
-    super.onBegin();
-    animation.begin(cardData, () {
-      end();
-    });
-  }
-}
+typedef _ActionRunnable = void Function(_Action action);

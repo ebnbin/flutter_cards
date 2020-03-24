@@ -273,15 +273,15 @@ class _PropertyAnimation {
           return _Property();
         });
 
-  _PropertyAnimation.translateXY() :
+  _PropertyAnimation.translateXY(Map<String, dynamic> unit) :
         duration = 2000,
         curve = Curves.easeInOut,
         type = _AnimationType.forward,
         runningProperty = ((double value) {
           return _Property.translateXY(
             value: value,
-            translateX1: 100.0,
-            translateY1: 0.0,
+            translateX1: -unit['cardSize'],
+            translateY1: unit['cardSize'],
           );
         }),
         endProperty = ((double value) {
@@ -355,10 +355,7 @@ class _PropertyAnimation {
     animationController.forward();
   }
 
-  _AnimationAction action(_CardData cardData) {
-    return _AnimationAction(
-      cardData: cardData,
-      animation: this,
-    );
+  _Action action(_CardData cardData) {
+    return _Action.animation(cardData: cardData, animation: this);
   }
 }
