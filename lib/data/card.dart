@@ -66,10 +66,10 @@ abstract class _CardData implements CardData, Comparable<_CardData> {
   /// 始终不返回 0, 每次动画后需要更新时间戳, 具体参见 [updateAnimationTimestamp].
   @override
   int compareTo(_CardData other) {
-    if (_property.elevation == other._property.elevation) {
+//    if (_property.elevation == other._property.elevation) {
       return (animationTimestamp - other.animationTimestamp).sign;
-    }
-    return (_property.elevation - other._property.elevation).sign.toInt();
+//    }
+//    return (_property.elevation - other._property.elevation).sign.toInt();
   }
 }
 
