@@ -111,7 +111,7 @@ class _PropertyAnimation {
 
   /// 用于演示.
   _PropertyAnimation.sample() :
-        duration = 500,
+        duration = 1000,
         curve = Curves.easeInOut,
         type = _AnimationType.forward,
         runningProperty = ((double value) {
@@ -149,7 +149,7 @@ class _PropertyAnimation {
     double opacity0 = 1.0,
     double elevation0 = 0.5,
   }) :
-        duration = 500,
+        duration = 1000,
         curve = Curves.easeInOut,
         type = _AnimationType.forward,
         runningProperty = ((double value) {
@@ -192,7 +192,7 @@ class _PropertyAnimation {
     double opacity1 = 1.0,
     double elevation1 = 0.5,
   }) :
-        duration = 500,
+        duration = 1000,
         curve = Curves.easeInOut,
         type = _AnimationType.forward,
         runningProperty = ((double value) {
@@ -232,7 +232,7 @@ class _PropertyAnimation {
     double translateX1,
     double translateY1,
   }) :
-        duration = 500,
+        duration = 1000,
         curve = Curves.easeInOut,
         type = _AnimationType.forward,
         runningProperty = ((double value) {

@@ -54,6 +54,8 @@ abstract class CardData {
 
   Rect get rect;
 
+  Color get color;
+
   Property get property;
 
   GestureTapCallback get onTap;

@@ -18,6 +18,12 @@ abstract class _CardData implements CardData {
 
   //*******************************************************************************************************************
 
+  Color _color = Colors.white;
+  @override
+  Color get color => _color;
+
+  //*******************************************************************************************************************
+
   /// 是否可见.
   @override
   bool zIndexVisible(int zIndex) {

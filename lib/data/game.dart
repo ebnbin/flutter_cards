@@ -147,6 +147,14 @@ class _GameData implements GameData {
     assert(cardData != null);
     return () {
       if (cardData is _IndexCardData) {
+        cardData._color = Colors.grey;
+        callback.setState(() {
+        });
+        actionManager.add(_Action.run(runnable: (_Action action) {
+          cardData._color = Colors.green;
+          callback.setState(() {
+          });
+        }));
         actionManager.add(
             _PropertyAnimation.rotateXYOut(
                 rotateYDegree: -90.0

@@ -47,7 +47,7 @@ class Card extends StatelessWidget {
               borderRadius: BorderRadius.circular(cardData.property.radius),
               child: GestureDetector(
                 child: Container(
-                  color: Colors.white,
+                  color: cardData.color,
                   child: child,
                 ),
                 onTap: cardData.onTap,
