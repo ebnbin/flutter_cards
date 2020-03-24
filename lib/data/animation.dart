@@ -53,109 +53,6 @@ class _Property implements Property {
     this.radius = 4.0,
   });
 
-  /// 通过 [rotateX], [rotateY] 进场.
-  ///
-  /// [rotateXDegree], [rotateYDegree] 表示视觉上的进场效果旋转角度. 只能是 -270, -90, 0, 90, 270 之一.
-  _Property.rotateXYIn({
-    @required
-    double value,
-    double rotateXDegree = 0.0,
-    double rotateYDegree = 0.0,
-    double scale0 = 0.5,
-    double opacity0 = 1.0,
-    double elevation0 = 0.5,
-  }) :
-//        assert(rotateXDegree == 0.0 || rotateXDegree == 90.0 || rotateXDegree == 270.0 || rotateXDegree == -90 ||
-//      rotateXDegree == -270),
-//        assert(rotateYDegree == 0.0 || rotateYDegree == 90.0 || rotateYDegree == 270.0 || rotateYDegree == -90 ||
-//            rotateYDegree == -270),
-        this(
-        rotateX: _PropertyData.calc01(
-          double0: -rotateXDegree / 180.0 * pi,
-          double1: 0.0,
-        ).propertyCalc(value),
-        rotateY: _PropertyData.calc01(
-          double0: -rotateYDegree / 180.0 * pi,
-          double1: 0.0,
-        ).propertyCalc(value),
-        scaleX: _PropertyData.calc01(
-          double0: scale0,
-          double1: 1.0,
-        ).propertyCalc(value),
-        scaleY: _PropertyData.calc01(
-          double0: scale0,
-          double1: 1.0,
-        ).propertyCalc(value),
-        opacity: _PropertyData.calc01(
-          double0: opacity0,
-          double1: 1.0,
-        ).propertyCalc(value),
-        elevation: _PropertyData.calc01(
-          double0: elevation0,
-          double1: 1.0,
-        ).propertyCalc(value),
-      );
-
-  /// 通过 [rotateX], [rotateY] 退场.
-  ///
-  /// [rotateXDegree], [rotateYDegree] 表示视觉上的进场效果旋转角度. 只能是 -270, -90, 0, 90, 270 之一.
-  _Property.rotateXYOut({
-    @required
-    double value,
-    double rotateXDegree = 0.0,
-    double rotateYDegree = 0.0,
-    double scale1 = 0.5,
-    double opacity1 = 1.0,
-    double elevation1 = 0.5,
-  }) :
-//        assert(rotateXDegree == 0.0 || rotateXDegree == 90.0 || rotateXDegree == 270.0 || rotateXDegree == -90 ||
-//      rotateXDegree == -270),
-//        assert(rotateYDegree == 0.0 || rotateYDegree == 90.0 || rotateYDegree == 270.0 || rotateYDegree == -90 ||
-//            rotateYDegree == -270),
-        this(
-        rotateX: _PropertyData.calc01(
-          double0: 0.0,
-          double1: rotateXDegree / 180.0 * pi,
-        ).propertyCalc(value),
-        rotateY: _PropertyData.calc01(
-          double0: 0.0,
-          double1: rotateYDegree / 180.0 * pi,
-        ).propertyCalc(value),
-        scaleX: _PropertyData.calc01(
-          double0: 1.0,
-          double1: scale1,
-        ).propertyCalc(value),
-        scaleY: _PropertyData.calc01(
-          double0: 1.0,
-          double1: scale1,
-        ).propertyCalc(value),
-        opacity: _PropertyData.calc01(
-          double0: 1.0,
-          double1: opacity1,
-        ).propertyCalc(value),
-        elevation: _PropertyData.calc01(
-          double0: 1.0,
-          double1: elevation1,
-        ).propertyCalc(value),
-      );
-
-  /// 移动.
-  _Property.translateXY({
-    @required
-    double value,
-    double translateX1,
-    double translateY1,
-  }) : this(
-    translateX: _PropertyData.calc01(
-      double0: 0,
-      double1: translateX1,
-    ).propertyCalc(value),
-    translateY: _PropertyData.calc01(
-      double0: 0,
-      double1: translateY1,
-    ).propertyCalc(value),
-  );
-
   /// Matrix4.setEntry(3, 2, value).
   static final double matrix4Entry32 = 0.005;
 
@@ -214,7 +111,7 @@ class _PropertyAnimation {
 
   /// 用于演示.
   _PropertyAnimation.sample() :
-        duration = 2000,
+        duration = 500,
         curve = Curves.easeInOut,
         type = _AnimationType.forward,
         runningProperty = ((double value) {
@@ -245,48 +142,152 @@ class _PropertyAnimation {
           return _Property();
         });
 
-  _PropertyAnimation.rotateXYIn() :
-        duration = 2000,
+  _PropertyAnimation.rotateXYIn({
+    double rotateXDegree = 0.0,
+    double rotateYDegree = 0.0,
+    double scale0 = 0.5,
+    double opacity0 = 1.0,
+    double elevation0 = 0.5,
+  }) :
+        duration = 500,
         curve = Curves.easeInOut,
         type = _AnimationType.forward,
         runningProperty = ((double value) {
-          return _Property.rotateXYIn(
-            value: value,
-            rotateYDegree: 270.0,
+          return _Property(
+            rotateX: _PropertyData.calc01(
+              double0: -rotateXDegree / 180.0 * pi,
+              double1: 0.0,
+            ).propertyCalc(value),
+            rotateY: _PropertyData.calc01(
+              double0: -rotateYDegree / 180.0 * pi,
+              double1: 0.0,
+            ).propertyCalc(value),
+            scaleX: _PropertyData.calc01(
+              double0: scale0,
+              double1: 1.0,
+            ).propertyCalc(value),
+            scaleY: _PropertyData.calc01(
+              double0: scale0,
+              double1: 1.0,
+            ).propertyCalc(value),
+            opacity: _PropertyData.calc01(
+              double0: opacity0,
+              double1: 1.0,
+            ).propertyCalc(value),
+            elevation: _PropertyData.calc01(
+              double0: elevation0,
+              double1: 1.0,
+            ).propertyCalc(value),
           );
         }),
-        endProperty = ((double value) {
-          return _Property();
-        });
+        endProperty = null;
+//        endProperty = ((double value) {
+//          return _Property();
+//        });
 
-  _PropertyAnimation.rotateXYOut() :
-        duration = 2000,
+  _PropertyAnimation.rotateXYOut({
+    double rotateXDegree = 0.0,
+    double rotateYDegree = 0.0,
+    double scale1 = 0.5,
+    double opacity1 = 1.0,
+    double elevation1 = 0.5,
+  }) :
+        duration = 500,
         curve = Curves.easeInOut,
         type = _AnimationType.forward,
         runningProperty = ((double value) {
-          return _Property.rotateXYOut(
-            value: value,
-            rotateXDegree: 270.0,
+          return _Property(
+            rotateX: _PropertyData.calc01(
+              double0: 0.0,
+              double1: rotateXDegree / 180.0 * pi,
+            ).propertyCalc(value),
+            rotateY: _PropertyData.calc01(
+              double0: 0.0,
+              double1: rotateYDegree / 180.0 * pi,
+            ).propertyCalc(value),
+            scaleX: _PropertyData.calc01(
+              double0: 1.0,
+              double1: scale1,
+            ).propertyCalc(value),
+            scaleY: _PropertyData.calc01(
+              double0: 1.0,
+              double1: scale1,
+            ).propertyCalc(value),
+            opacity: _PropertyData.calc01(
+              double0: 1.0,
+              double1: opacity1,
+            ).propertyCalc(value),
+            elevation: _PropertyData.calc01(
+              double0: 1.0,
+              double1: elevation1,
+            ).propertyCalc(value),
           );
         }),
-        endProperty = ((double value) {
-          return _Property();
-        });
+        endProperty = null;
+//        endProperty = ((double value) {
+//          return _Property();
+//        });
 
-  _PropertyAnimation.translateXY(Map<String, dynamic> unit) :
-        duration = 2000,
+  _PropertyAnimation.translateXY({
+    double translateX1,
+    double translateY1,
+  }) :
+        duration = 500,
         curve = Curves.easeInOut,
         type = _AnimationType.forward,
         runningProperty = ((double value) {
-          return _Property.translateXY(
-            value: value,
-            translateX1: -unit['cardSize'],
-            translateY1: unit['cardSize'],
+          return _Property(
+            translateX: _PropertyData.calc01(
+              double0: 0,
+              double1: translateX1,
+            ).propertyCalc(value),
+            translateY: _PropertyData.calc01(
+              double0: 0,
+              double1: translateY1,
+            ).propertyCalc(value),
           );
         }),
-        endProperty = ((double value) {
-          return _Property();
-        });
+        endProperty = null;
+//        endProperty = ((double value) {
+//          return _Property();
+//        });
+
+  _PropertyAnimation.translateXYIndex({
+    Map<String, dynamic> unit,
+    int indexX = 0,
+    int indexY = 0,
+  }) : this.translateXY(
+    translateX1: unit['cardSize'] * indexX,
+    translateY1: unit['cardSize'] * indexY,
+  );
+
+  _PropertyAnimation.translateLeft({
+    Map<String, dynamic> unit,
+  }) : this.translateXYIndex(
+    unit: unit,
+    indexX: -1,
+  );
+
+  _PropertyAnimation.translateRight({
+    Map<String, dynamic> unit,
+  }) : this.translateXYIndex(
+    unit: unit,
+    indexX: 1,
+  );
+
+  _PropertyAnimation.translateTop({
+    Map<String, dynamic> unit,
+  }) : this.translateXYIndex(
+    unit: unit,
+    indexY: -1,
+  );
+
+  _PropertyAnimation.translateBottom({
+    Map<String, dynamic> unit,
+  }) : this.translateXYIndex(
+    unit: unit,
+    indexY: 1,
+  );
 
   final int duration;
   final Curve curve;
@@ -307,10 +308,12 @@ class _PropertyAnimation {
     );
 
     void completed() {
-      cardData._property = endProperty(curvedAnimation.value);
+      if (endProperty != null) {
+        cardData._property = endProperty.call(curvedAnimation.value);
+      }
 //      cardData.updateAnimationTimestamp();
       animationController.dispose();
-      onEnd();
+      onEnd?.call();
       cardData.gameData.callback.setState(() {
       });
     }
@@ -357,5 +360,11 @@ class _PropertyAnimation {
 
   _Action action(_CardData cardData) {
     return _Action.animation(cardData: cardData, animation: this);
+  }
+
+  void act(_CardData cardData, {
+    VoidCallback onEnd,
+  }) {
+    begin(cardData, onEnd);
   }
 }

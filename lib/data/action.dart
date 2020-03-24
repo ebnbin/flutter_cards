@@ -88,6 +88,15 @@ class _Action {
   },
   );
 
+  _Action.run({
+    _ActionRunnable runnable,
+  }) : this(
+    onBegin: (_Action action) {
+      action.end();
+    },
+    onEnd: runnable,
+  );
+
   final _ActionRunnable onBegin;
   final _ActionRunnable onEnd;
 

@@ -39,6 +39,10 @@ abstract class _CardData implements CardData {
   bool _visible = true;
 
   //*******************************************************************************************************************
+
+  int get index => gameData._cardDataList.indexOf(this);
+
+  //*******************************************************************************************************************
   // 位置.
 
   /// 在 Stack 中的位置. Positioned.fromRect().
@@ -192,6 +196,30 @@ class _IndexCardData extends _GridCardData {
       : columnGridSpan(false) ~/ gameData.calcMap['gridPerCard'];
   set columnSpan(int columnSpan) {
     columnGridSpan = columnSpanToColumnGridSpan(gameData, columnSpan);
+  }
+
+  void left() {
+    if (columnIndex > 0) {
+      columnIndex--;
+    }
+  }
+
+  void right() {
+    if (columnIndex < gameData.columnCount - 1) {
+      columnIndex++;
+    }
+  }
+
+  void top() {
+    if (rowIndex > 0) {
+      rowIndex--;
+    }
+  }
+
+  void bottom() {
+    if (rowIndex < gameData.rowCount - 1) {
+      rowIndex++;
+    }
   }
 
   _CardData get leftCard {

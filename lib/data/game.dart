@@ -147,24 +147,64 @@ class _GameData implements GameData {
     assert(cardData != null);
     return () {
       if (cardData is _IndexCardData) {
+        actionManager.add(
+            _PropertyAnimation.rotateXYOut(
+                rotateYDegree: -90.0
+            ).action(cardData)
+        );
+        if (cardData.rightCard != null && cardData.rightCard is _IndexCardData) {
+          _IndexCardData rightCard = cardData.rightCard;
+          _IndexCardData newCardData = _IndexCardData(
+            gameData: this,
+            rowIndex: rightCard.rowIndex,
+            columnIndex: rightCard.columnIndex,
+            rowSpan: 1,
+            columnSpan: 1,
+            initProperty: _Property(
+              opacity: 0.0,
+            ),
+          );
+
+          actionManager.add(
+              _PropertyAnimation.translateLeft(
+                unit: calcMap,
+              ).action(rightCard)
+          );
+          actionManager.add(_Action.run(
+            runnable: (_Action action) {
+              rightCard.left();
+              rightCard._property = _Property();
+
+              _cardDataList[cardData.index] = newCardData;
+
+              callback.setState(() {
+              });
+            },
+          )
+          );
+          actionManager.add(
+              _PropertyAnimation.rotateXYIn(
+                rotateYDegree: -90,
+              ).action(newCardData)
+          );
+        }
       } else {
+        List<_PropertyAnimation> animations = <_PropertyAnimation>[
+          _PropertyAnimation.sample(),
+//          _PropertyAnimation.rotateXYIn(
+//            rotateYDegree: 270.0,
+//          ),
+//          _PropertyAnimation.rotateXYOut(
+//              rotateXDegree: 270.0
+//          ),
+//          _PropertyAnimation.translateXYIndex(
+//            unit: calcMap,
+//            indexX: -1,
+//            indexY: 1,
+//          ),
+        ];
+        animations[Random().nextInt(animations.length)].act(cardData);
       }
-
-      List<_Action> actions = <_Action>[
-        _PropertyAnimation.rotateXYOut().action(cardData),
-        _PropertyAnimation.translateXY(calcMap).action(_cardDataList[_cardDataList.indexOf(cardData) - 1]),
-        _PropertyAnimation.rotateXYIn().action(cardData),
-
-//        _PropertyAnimation.sample().action(cardData),
-//        _PropertyAnimation.rotateXYIn().action(cardData),
-//        _PropertyAnimation.rotateXYOut().action(cardData),
-//        _PropertyAnimation.translateXY(calcMap).action(cardData),
-      ];
-//      actionManager.add(actions[Random().nextInt(actions.length)]);
-
-      actionManager.add(actions[0]);
-      actionManager.add(actions[1]);
-      actionManager.add(actions[2]);
     };
   }
 
