@@ -96,47 +96,12 @@ class _IndexCardData extends _CardData {
 
   @override
   Rect get rect {
-    const double padding = 8.0;
-    // 默认网格数. 竖屏时水平方向的网格数, 或横屏时垂直方向的网格数.
-    const int defaultGridCount = 60;
-    // Header 和 footer 占用的网格数. 竖屏时占用高度, 横屏时占用宽度. 其中 8 格是 header footer 和 body 的间距.
-    const int headerFooterGridCount = 48;
-    MediaQueryData mediaQueryData = MediaQuery.of(gameData.callback.context);
-    Size safeSize = Size(
-      mediaQueryData.size.width - mediaQueryData.padding.horizontal - padding * 2.0,
-      mediaQueryData.size.height - mediaQueryData.padding.vertical - padding * 2.0,
-    );
-    // 水平方向网格数量.
-    int horizontalGridCount;
-    // 垂直方向网格数量.
-    int verticalGridCount;
-    // 每个卡片占用几个网格.
-    int gridPerCard;
-    bool isVertical = safeSize.width <= safeSize.height;
-    if (isVertical) {
-      // 竖屏.
-      horizontalGridCount = defaultGridCount;
-      gridPerCard = defaultGridCount ~/ gameData.columnCount;
-      verticalGridCount = defaultGridCount ~/ gameData.columnCount * gameData.rowCount + headerFooterGridCount;
-    } else {
-      // 横屏.
-      verticalGridCount = defaultGridCount;
-      gridPerCard = defaultGridCount ~/ gameData.rowCount;
-      horizontalGridCount = defaultGridCount ~/ gameData.rowCount * gameData.columnCount + headerFooterGridCount;
-    }
-    // 网格宽高.
-    double gridSize = min(safeSize.width / horizontalGridCount, safeSize.height / verticalGridCount);
-    // 卡片宽高.
-    double cardSize = gridSize * gridPerCard;
-    // 左边距.
-    double spaceLeft = (safeSize.width - cardSize * gameData.columnCount) / 2.0 + padding;
-    // 上边距.
-    double spaceTop = (safeSize.height - cardSize * gameData.rowCount) / 2.0 + padding;
+    Map<String, dynamic> map = gameData.calc();
     return Rect.fromLTWH(
-      spaceLeft + cardSize * columnIndex,
-      spaceTop + cardSize * rowIndex,
-      cardSize * columnSpan,
-      cardSize * rowSpan,
+      map['indexCardSpaceLeft'] + map['cardSize'] * columnIndex,
+      map['indexCardSpaceTop'] + map['cardSize'] * rowIndex,
+      map['cardSize'] * columnSpan,
+      map['cardSize'] * rowSpan,
     );
   }
 
@@ -180,42 +145,19 @@ class _GridCardData extends _CardData {
   
   @override
   Rect get rect {
-    const double padding = 8.0;
-    // 默认网格数. 竖屏时水平方向的网格数, 或横屏时垂直方向的网格数.
-    const int defaultGridCount = 60;
-    // Header 和 footer 占用的网格数. 竖屏时占用高度, 横屏时占用宽度. 其中 8 格是 header footer 和 body 的间距.
-    const int headerFooterGridCount = 48;
-    MediaQueryData mediaQueryData = MediaQuery.of(gameData.callback.context);
-    Size safeSize = Size(
-      mediaQueryData.size.width - mediaQueryData.padding.horizontal - padding * 2.0,
-      mediaQueryData.size.height - mediaQueryData.padding.vertical - padding * 2.0,
-    );
-    // 水平方向网格数量.
-    int horizontalGridCount;
-    // 垂直方向网格数量.
-    int verticalGridCount;
-    bool isVertical = safeSize.width <= safeSize.height;
-    if (isVertical) {
-      // 竖屏.
-      horizontalGridCount = defaultGridCount;
-      verticalGridCount = defaultGridCount ~/ gameData.columnCount * gameData.rowCount + headerFooterGridCount;
-    } else {
-      // 横屏.
-      verticalGridCount = defaultGridCount;
-      horizontalGridCount = defaultGridCount ~/ gameData.rowCount * gameData.columnCount + headerFooterGridCount;
-    }
-    // 网格宽高.
-    double gridSize = min(safeSize.width / horizontalGridCount, safeSize.height / verticalGridCount);
-    // 左边距.
-    double spaceLeft = (safeSize.width - gridSize * horizontalGridCount) / 2.0 + padding;
-    // 上边距.
-    double spaceTop = (safeSize.height - gridSize * verticalGridCount) / 2.0 + padding;
+    Map<String, dynamic> map = gameData.calc();
     return Rect.fromLTWH(
-      spaceLeft + gridSize * columnGrid(isVertical),
-      spaceTop + gridSize * rowGrid(isVertical),
-      gridSize * columnGridSpan(isVertical),
-      gridSize * rowGridSpan(isVertical),
+      map['gridCardSpaceLeft'] + map['gridSize'] * columnGrid(map['isVertical']),
+      map['gridCardSpaceTop'] + map['gridSize'] * rowGrid(map['isVertical']),
+      map['gridSize'] * columnGridSpan(map['isVertical']),
+      map['gridSize'] * rowGridSpan(map['isVertical']),
     );
+  }
+
+  @override
+  String toString() {
+    Map<String, dynamic> map = gameData.calc();
+    return '${rowGrid(map['isVertical'])},${columnGrid(map['isVertical'])},${rowGridSpan(map['isVertical'])},${columnGridSpan(map['isVertical'])}\n${gameData._cardDataList.indexOf(this)}';
   }
 }
 
