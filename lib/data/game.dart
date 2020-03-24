@@ -212,7 +212,13 @@ class _GameData implements GameData {
   }) {
     assert(cardData != null);
     return () {
-      actionManager.add(_PropertyAnimation.sample().action(cardData));
+      List<_Action> actions = <_Action>[
+        _PropertyAnimation.sample().action(cardData),
+        _PropertyAnimation.rotateXYIn().action(cardData),
+        _PropertyAnimation.rotateXYOut().action(cardData),
+        _PropertyAnimation.translateXY().action(cardData),
+      ];
+      actionManager.add(actions[Random().nextInt(actions.length)]);
     };
   }
 

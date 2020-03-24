@@ -65,11 +65,6 @@ abstract class CardData {
 abstract class Property {
   Property._();
 
-  double get rotateX;
-  double get rotateY;
-  double get rotateZ;
-  double get scaleX;
-  double get scaleY;
   double get opacity;
   double get elevation;
   double get radius;

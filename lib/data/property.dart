@@ -4,7 +4,7 @@ part of '../data.dart';
 // 属性. 描述 Widget 属性在动画时如何变化.
 
 /// 属性计算. 根据 [doubles] 中的多个数据和 Animation.value 计算当前值.
-typedef _PropertyCalc = double Function(List<double> doubles, double value);
+typedef _PropertyCalc = double Function(double value);
 
 /// 属性数据.
 ///
@@ -13,28 +13,15 @@ typedef _PropertyCalc = double Function(List<double> doubles, double value);
 /// [propertyCalc] 属性计算.
 class _PropertyData {
   const _PropertyData({
-    this.doubles,
     this.propertyCalc,
   });
-
-  _PropertyData.calc0({
-    double double0 = 0.0,
-  }) : this(
-    doubles: [double0],
-    propertyCalc: (List<double> doubles, double value) {
-      assert(doubles.length >= 1);
-      return doubles[0];
-    },
-  );
 
   _PropertyData.calc01({
     double double0 = 0.0,
     double double1 = 0.0,
   }) : this(
-    doubles: [double0, double1],
-    propertyCalc: (List<double> doubles, double value) {
-      assert(doubles.length >= 2);
-      return doubles[0] + (doubles[1] - doubles[0]) * value;
+    propertyCalc: (double value) {
+      return double0 + (double1 - double0) * value;
     },
   );
 
@@ -42,24 +29,20 @@ class _PropertyData {
     double double0 = 0.0,
     double double1 = 0.0,
   }) : this(
-    doubles: [double0, double1],
-    propertyCalc: (List<double> doubles, double value) {
-      assert(doubles.length >= 2);
-      return doubles[0] + (doubles[1] - doubles[0]) * (1.0 - (2.0 * value - 1.0).abs());
+    propertyCalc: (double value) {
+      return double0 + (double1 - double0) * (1.0 - (2.0 * value - 1.0).abs());
     },
   );
 
-  final List<double> doubles;
   final _PropertyCalc propertyCalc;
-
-  double calc(double value) {
-    return propertyCalc(doubles, value);
-  }
 }
 
 /// 根据 Animation.value 计算属性.
 class _Property implements Property {
   const _Property({
+    this.translateX = 0.0,
+    this.translateY = 0.0,
+    this.translateZ = 0.0,
     this.rotateX = 0.0,
     this.rotateY = 0.0,
     this.rotateZ = 0.0,
@@ -70,54 +53,31 @@ class _Property implements Property {
     this.radius = 4.0,
   });
 
-  /// 通过 _PropertyData 初始化.
-  _Property.data({
-    double value,
-    _PropertyData rotateXData,
-    _PropertyData rotateYData,
-    _PropertyData rotateZData,
-    _PropertyData scaleXData,
-    _PropertyData scaleYData,
-    _PropertyData opacityData,
-    _PropertyData elevationData,
-    _PropertyData radiusData,
-  }) : this(
-    rotateX: rotateXData.calc(value),
-    rotateY: rotateYData.calc(value),
-    rotateZ: rotateZData.calc(value),
-    scaleX: scaleXData.calc(value),
-    scaleY: scaleYData.calc(value),
-    opacity: opacityData.calc(value),
-    elevation: elevationData.calc(value),
-    radius: radiusData.calc(value),
-  );
-
   /// 用于演示.
   _Property.sample({
     double value,
-  }) : rotateX = 0.0,
-        rotateY = _PropertyData.calc01(
-          double0: 0.0,
-          double1: 2.0 * pi,
-        ).calc(value),
-        rotateZ = 0.0,
-        scaleX = _PropertyData.calc010(
-          double0: 1.0,
-          double1: 2.0,
-        ).calc(value),
-        scaleY = _PropertyData.calc010(
-          double0: 1.0,
-          double1: 2.0,
-        ).calc(value),
-        opacity = 1.0,
-        elevation = _PropertyData.calc010(
-          double0: 1.0,
-          double1: 4.0,
-        ).calc(value),
-        radius = _PropertyData.calc010(
-          double0: 4.0,
-          double1: 16.0,
-        ).calc(value);
+  }) : this(
+      rotateY: _PropertyData.calc01(
+        double0: 0.0,
+        double1: 2.0 * pi,
+      ).propertyCalc(value),
+      scaleX: _PropertyData.calc010(
+        double0: 1.0,
+        double1: 2.0,
+      ).propertyCalc(value),
+      scaleY: _PropertyData.calc010(
+        double0: 1.0,
+        double1: 2.0,
+      ).propertyCalc(value),
+      elevation: _PropertyData.calc010(
+        double0: 1.0,
+        double1: 4.0,
+      ).propertyCalc(value),
+      radius: _PropertyData.calc010(
+        double0: 4.0,
+        double1: 16.0,
+      ).propertyCalc(value)
+  );
 
   /// 通过 [rotateX], [rotateY] 进场.
   ///
@@ -130,50 +90,110 @@ class _Property implements Property {
     double scale0 = 0.5,
     double opacity0 = 1.0,
     double elevation0 = 0.5,
-  }) : assert(rotateXDegree == 0.0 || rotateXDegree == 90.0 || rotateXDegree == 270.0 || rotateXDegree == -90 ||
-      rotateXDegree == -270),
-        assert(rotateYDegree == 0.0 || rotateYDegree == 90.0 || rotateYDegree == 270.0 || rotateYDegree == -90 ||
-            rotateYDegree == -270),
-        rotateX = _PropertyData.calc01(
-          double0: -rotateXDegree / 180.0 * pi,
-          double1: 0.0,
-        ).calc(value),
-        rotateY = _PropertyData.calc01(
-          double0: -rotateYDegree / 180.0 * pi,
-          double1: 0.0,
-        ).calc(value),
-        rotateZ = 0.0,
-        scaleX = _PropertyData.calc01(
-          double0: scale0,
-          double1: 1.0,
-        ).calc(value),
-        scaleY = _PropertyData.calc01(
-          double0: scale0,
-          double1: 1.0,
-        ).calc(value),
-        opacity = _PropertyData.calc01(
-          double0: opacity0,
-          double1: 1.0,
-        ).calc(value),
-        elevation = _PropertyData.calc01(
-          double0: elevation0,
-          double1: 1.0,
-        ).calc(value),
-        radius = 4.0;
+  }) :
+//        assert(rotateXDegree == 0.0 || rotateXDegree == 90.0 || rotateXDegree == 270.0 || rotateXDegree == -90 ||
+//      rotateXDegree == -270),
+//        assert(rotateYDegree == 0.0 || rotateYDegree == 90.0 || rotateYDegree == 270.0 || rotateYDegree == -90 ||
+//            rotateYDegree == -270),
+        this(
+          rotateX: _PropertyData.calc01(
+            double0: -rotateXDegree / 180.0 * pi,
+            double1: 0.0,
+          ).propertyCalc(value),
+          rotateY: _PropertyData.calc01(
+            double0: -rotateYDegree / 180.0 * pi,
+            double1: 0.0,
+          ).propertyCalc(value),
+          scaleX: _PropertyData.calc01(
+            double0: scale0,
+            double1: 1.0,
+          ).propertyCalc(value),
+          scaleY: _PropertyData.calc01(
+            double0: scale0,
+            double1: 1.0,
+          ).propertyCalc(value),
+          opacity: _PropertyData.calc01(
+            double0: opacity0,
+            double1: 1.0,
+          ).propertyCalc(value),
+          elevation: _PropertyData.calc01(
+            double0: elevation0,
+            double1: 1.0,
+          ).propertyCalc(value),
+      );
+
+  /// 通过 [rotateX], [rotateY] 退场.
+  ///
+  /// [rotateXDegree], [rotateYDegree] 表示视觉上的进场效果旋转角度. 只能是 -270, -90, 0, 90, 270 之一.
+  _Property.rotateXYOut({
+    @required
+    double value,
+    double rotateXDegree = 0.0,
+    double rotateYDegree = 0.0,
+    double scale1 = 0.5,
+    double opacity1 = 1.0,
+    double elevation1 = 0.5,
+  }) :
+//        assert(rotateXDegree == 0.0 || rotateXDegree == 90.0 || rotateXDegree == 270.0 || rotateXDegree == -90 ||
+//      rotateXDegree == -270),
+//        assert(rotateYDegree == 0.0 || rotateYDegree == 90.0 || rotateYDegree == 270.0 || rotateYDegree == -90 ||
+//            rotateYDegree == -270),
+        this(
+          rotateX: _PropertyData.calc01(
+            double0: 0.0,
+            double1: rotateXDegree / 180.0 * pi,
+          ).propertyCalc(value),
+          rotateY: _PropertyData.calc01(
+            double0: 0.0,
+            double1: rotateYDegree / 180.0 * pi,
+          ).propertyCalc(value),
+          scaleX: _PropertyData.calc01(
+            double0: 1.0,
+            double1: scale1,
+          ).propertyCalc(value),
+          scaleY: _PropertyData.calc01(
+            double0: 1.0,
+            double1: scale1,
+          ).propertyCalc(value),
+          opacity: _PropertyData.calc01(
+            double0: 1.0,
+            double1: opacity1,
+          ).propertyCalc(value),
+          elevation: _PropertyData.calc01(
+            double0: 1.0,
+            double1: elevation1,
+          ).propertyCalc(value),
+      );
+
+  /// 移动.
+  _Property.translateXY({
+    @required
+    double value,
+    double translateX1,
+    double translateY1,
+  }) : this(
+    translateX: _PropertyData.calc01(
+      double0: 0,
+      double1: translateX1,
+    ).propertyCalc(value),
+    translateY: _PropertyData.calc01(
+      double0: 0,
+      double1: translateY1,
+    ).propertyCalc(value),
+  );
 
   /// Matrix4.setEntry(3, 2, value).
   static final double matrix4Entry32 = 0.005;
 
-  @override
+  final double translateX;
+  final double translateY;
+  final double translateZ;
   final double rotateX;
-  @override
   final double rotateY;
-  @override
   final double rotateZ;
-  @override
   final double scaleX;
-  @override
   final double scaleY;
+
   @override
   final double opacity;
   @override
@@ -185,6 +205,7 @@ class _Property implements Property {
   @override
   Matrix4 get transform => Matrix4.identity()
     ..setEntry(3, 2, matrix4Entry32)
+    ..translate(translateX, translateY, translateZ)
     ..rotateX(rotateX)
     ..rotateY(rotateY)
     ..rotateZ(rotateZ)

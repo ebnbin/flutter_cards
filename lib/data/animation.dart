@@ -51,6 +51,35 @@ class _PropertyAnimation {
           return _Property();
         });
 
+  _PropertyAnimation.rotateXYOut() :
+        duration = 2000,
+        curve = Curves.easeInOut,
+        type = _AnimationType.forward,
+        runningProperty = ((double value) {
+          return _Property.rotateXYOut(
+            value: value,
+            rotateXDegree: 270.0,
+          );
+        }),
+        endProperty = ((double value) {
+          return _Property();
+        });
+
+  _PropertyAnimation.translateXY() :
+        duration = 2000,
+        curve = Curves.easeInOut,
+        type = _AnimationType.forward,
+        runningProperty = ((double value) {
+          return _Property.translateXY(
+            value: value,
+            translateX1: 100.0,
+            translateY1: 0.0,
+          );
+        }),
+        endProperty = ((double value) {
+          return _Property();
+        });
+
   final int duration;
   final Curve curve;
   final _AnimationType type;
