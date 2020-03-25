@@ -6,7 +6,7 @@ part of '../data.dart';
 abstract class _CardData implements CardData {
   _CardData({
     this.gameData,
-    _Property initProperty = const _Property(),
+    _Property initProperty = const _Property.def(),
   }) : assert(gameData != null),
         assert(initProperty != null) {
     _property = initProperty;
@@ -78,7 +78,7 @@ abstract class _CardData implements CardData {
 class _GridCardData extends _CardData {
   _GridCardData({
     _GameData gameData,
-    _Property initProperty = const _Property(),
+    _Property initProperty = const _Property.def(),
     this.rowGrid,
     this.columnGrid,
     this.rowGridSpan,
@@ -130,7 +130,7 @@ typedef _GetGrid = int Function(bool isVertical);
 class _IndexCardData extends _GridCardData {
   _IndexCardData({
     _GameData gameData,
-    _Property initProperty = const _Property(),
+    _Property initProperty = const _Property.def(),
     int rowIndex,
     int columnIndex,
     int rowSpan = 1,

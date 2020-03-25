@@ -11,6 +11,20 @@ part 'data/game.dart';
 
 //*********************************************************************************************************************
 
+abstract class Property {
+  Property._();
+
+  Matrix4 get transform;
+
+  double get elevation;
+  double get radius;
+  double get opacity;
+}
+
+//*********************************************************************************************************************
+//*********************************************************************************************************************
+//*********************************************************************************************************************
+
 abstract class GameCallback implements TickerProvider {
   BuildContext get context;
 
@@ -61,16 +75,4 @@ abstract class CardData {
   GestureTapCallback get onTap;
 
   GestureLongPressCallback get onLongPress;
-}
-
-//*********************************************************************************************************************
-
-abstract class Property {
-  Property._();
-
-  double get opacity;
-  double get elevation;
-  double get radius;
-
-  Matrix4 get transform;
 }

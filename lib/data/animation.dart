@@ -1,64 +1,74 @@
 part of '../data.dart';
 
 //*********************************************************************************************************************
-// 属性. 描述 Widget 属性在动画时如何变化.
 
-/// 属性计算. 根据 [doubles] 中的多个数据和 Animation.value 计算当前值.
-typedef _PropertyCalc = double Function(double value);
+/// 接收 [Animation.value] 计算当前属性值.
+class _PropertyCalc {
+  const _PropertyCalc(this.calc) : assert(calc != null);
 
-/// 属性数据.
-///
-/// [doubles] 关键帧数据.
-///
-/// [propertyCalc] 属性计算.
-class _PropertyData {
-  const _PropertyData({
-    this.propertyCalc,
+  /// a -> b.
+  _PropertyCalc.ab(double a, double b) : this((double value) {
+    return a + (b - a) * value;
   });
 
-  _PropertyData.calc01({
-    double double0 = 0.0,
-    double double1 = 0.0,
-  }) : this(
-    propertyCalc: (double value) {
-      return double0 + (double1 - double0) * value;
-    },
-  );
+  /// a -> b -> a.
+  _PropertyCalc.aba(double a, double b) : this((double value) {
+    return a + (b - a) * (1.0 - (2.0 * value - 1.0).abs());
+  });
 
-  _PropertyData.calc010({
-    double double0 = 0.0,
-    double double1 = 0.0,
-  }) : this(
-    propertyCalc: (double value) {
-      return double0 + (double1 - double0) * (1.0 - (2.0 * value - 1.0).abs());
-    },
-  );
-
-  final _PropertyCalc propertyCalc;
+  final double Function(double value) calc;
 }
 
-/// 根据 Animation.value 计算属性.
+//*********************************************************************************************************************
+
+/// 属性.
 class _Property implements Property {
   const _Property({
-    this.translateX = 0.0,
-    this.translateY = 0.0,
-    this.translateZ = 0.0,
-    this.rotateX = 0.0,
-    this.rotateY = 0.0,
-    this.rotateZ = 0.0,
-    this.scaleX = 1.0,
-    this.scaleY = 1.0,
-    this.opacity = 1.0,
-    this.elevation = 1.0,
-    this.radius = 4.0,
+    this.matrix4Entry32,
+    this.translateX,
+    this.translateY,
+    this.rotateX,
+    this.rotateY,
+    this.rotateZ,
+    this.scaleX,
+    this.scaleY,
+    this.elevation,
+    this.radius,
+    this.opacity,
   });
 
-  /// Matrix4.setEntry(3, 2, value).
-  static final double matrix4Entry32 = 0.005;
+  /// 非 null 默认值.
+  const _Property.def({
+    double matrix4Entry32 = 0.004,
+    double translateX = 0.0,
+    double translateY = 0.0,
+    double rotateX = 0.0,
+    double rotateY = 0.0,
+    double rotateZ = 0.0,
+    double scaleX = 1.0,
+    double scaleY = 1.0,
+    double elevation = 1.0,
+    double radius = 4.0,
+    double opacity = 1.0,
+  }) : this(
+    matrix4Entry32: matrix4Entry32,
+    translateX: translateX,
+    translateY: translateY,
+    rotateX: rotateX,
+    rotateY: rotateY,
+    rotateZ: rotateZ,
+    scaleX: scaleX,
+    scaleY: scaleY,
+    elevation: elevation,
+    radius: radius,
+    opacity: opacity,
+  );
+
+  /// Matrix4.setEntry(3, 2, value);
+  final double matrix4Entry32;
 
   final double translateX;
   final double translateY;
-  final double translateZ;
   final double rotateX;
   final double rotateY;
   final double rotateZ;
@@ -66,23 +76,41 @@ class _Property implements Property {
   final double scaleY;
 
   @override
-  final double opacity;
+  Matrix4 get transform => Matrix4.identity()
+    ..setEntry(3, 2, matrix4Entry32 ?? 0.0)
+    ..translate(translateX ?? 0.0, translateY ?? 0.0)
+    ..rotateX(rotateX ?? 0.0)
+    ..rotateY(rotateY ?? 0.0)
+    ..rotateZ(rotateZ ?? 0.0)
+    ..scale(scaleX ?? 1.0, scaleY ?? 1.0);
+
   @override
   final double elevation;
   @override
   final double radius;
-
-  /// Transform.
   @override
-  Matrix4 get transform => Matrix4.identity()
-    ..setEntry(3, 2, matrix4Entry32)
-    ..translate(translateX, translateY, translateZ)
-    ..rotateX(rotateX)
-    ..rotateY(rotateY)
-    ..rotateZ(rotateZ)
-    ..scale(scaleX, scaleY);
+  final double opacity;
+
+  /// 使用 other 中不为 null 的属性值更新 this 中对应的属性值, 返回新的 _Property.
+  _Property update(_Property other) {
+    return _Property(
+      matrix4Entry32: other.matrix4Entry32 ?? matrix4Entry32,
+      translateX: other.translateX ?? translateX,
+      translateY: other.translateY ?? translateY,
+      rotateX: other.rotateX ?? rotateX,
+      rotateY: other.rotateY ?? rotateY,
+      rotateZ: other.rotateZ ?? rotateZ,
+      scaleX: other.scaleX ?? scaleX,
+      scaleY: other.scaleY ?? scaleY,
+      elevation: other.elevation ?? elevation,
+      radius: other.radius ?? radius,
+      opacity: other.opacity ?? opacity,
+    );
+  }
 }
 
+//*********************************************************************************************************************
+//*********************************************************************************************************************
 //*********************************************************************************************************************
 
 /// 根据 Animation.value 创建 Property.
@@ -116,31 +144,17 @@ class _PropertyAnimation {
         type = _AnimationType.forward,
         runningProperty = ((double value) {
           return _Property(
-              rotateY: _PropertyData.calc01(
-                double0: 0.0,
-                double1: 2.0 * pi,
-              ).propertyCalc(value),
-              scaleX: _PropertyData.calc010(
-                double0: 1.0,
-                double1: 2.0,
-              ).propertyCalc(value),
-              scaleY: _PropertyData.calc010(
-                double0: 1.0,
-                double1: 2.0,
-              ).propertyCalc(value),
-              elevation: _PropertyData.calc010(
-                double0: 1.0,
-                double1: 4.0,
-              ).propertyCalc(value),
-              radius: _PropertyData.calc010(
-                double0: 4.0,
-                double1: 16.0,
-              ).propertyCalc(value)
+            rotateY: _PropertyCalc.ab(0.0, 2.0 * pi).calc(value),
+            scaleX: _PropertyCalc.aba(1.0, 2.0).calc(value),
+            scaleY: _PropertyCalc.aba(1.0, 2.0).calc(value),
+            elevation: _PropertyCalc.aba(1.0, 4.0).calc(value),
+            radius: _PropertyCalc.aba(4.0, 16.0).calc(value)
           );
         }),
-        endProperty = ((double value) {
-          return _Property();
-        });
+        endProperty = null;
+//        endProperty = ((double value) {
+//          return _Property();
+//        });
 
   _PropertyAnimation.rotateXYIn({
     double rotateXDegree = 0.0,
@@ -154,30 +168,12 @@ class _PropertyAnimation {
         type = _AnimationType.forward,
         runningProperty = ((double value) {
           return _Property(
-            rotateX: _PropertyData.calc01(
-              double0: -rotateXDegree / 180.0 * pi,
-              double1: 0.0,
-            ).propertyCalc(value),
-            rotateY: _PropertyData.calc01(
-              double0: -rotateYDegree / 180.0 * pi,
-              double1: 0.0,
-            ).propertyCalc(value),
-            scaleX: _PropertyData.calc01(
-              double0: scale0,
-              double1: 1.0,
-            ).propertyCalc(value),
-            scaleY: _PropertyData.calc01(
-              double0: scale0,
-              double1: 1.0,
-            ).propertyCalc(value),
-            opacity: _PropertyData.calc01(
-              double0: opacity0,
-              double1: 1.0,
-            ).propertyCalc(value),
-            elevation: _PropertyData.calc01(
-              double0: elevation0,
-              double1: 1.0,
-            ).propertyCalc(value),
+            rotateX: _PropertyCalc.ab(-rotateXDegree / 180.0 * pi, 0.0).calc(value),
+            rotateY: _PropertyCalc.ab(-rotateYDegree / 180.0 * pi, 0.0).calc(value),
+            scaleX: _PropertyCalc.ab(scale0, 1.0).calc(value),
+            scaleY: _PropertyCalc.ab(scale0, 1.0).calc(value),
+            opacity: _PropertyCalc.ab(opacity0, 1.0).calc(value),
+            elevation: _PropertyCalc.ab(elevation0, 1.0).calc(value),
           );
         }),
         endProperty = null;
@@ -197,30 +193,12 @@ class _PropertyAnimation {
         type = _AnimationType.forward,
         runningProperty = ((double value) {
           return _Property(
-            rotateX: _PropertyData.calc01(
-              double0: 0.0,
-              double1: rotateXDegree / 180.0 * pi,
-            ).propertyCalc(value),
-            rotateY: _PropertyData.calc01(
-              double0: 0.0,
-              double1: rotateYDegree / 180.0 * pi,
-            ).propertyCalc(value),
-            scaleX: _PropertyData.calc01(
-              double0: 1.0,
-              double1: scale1,
-            ).propertyCalc(value),
-            scaleY: _PropertyData.calc01(
-              double0: 1.0,
-              double1: scale1,
-            ).propertyCalc(value),
-            opacity: _PropertyData.calc01(
-              double0: 1.0,
-              double1: opacity1,
-            ).propertyCalc(value),
-            elevation: _PropertyData.calc01(
-              double0: 1.0,
-              double1: elevation1,
-            ).propertyCalc(value),
+            rotateX: _PropertyCalc.ab(0.0, rotateXDegree / 180.0 * pi).calc(value),
+            rotateY: _PropertyCalc.ab(0.0, rotateYDegree / 180.0 * pi).calc(value),
+            scaleX: _PropertyCalc.ab(1.0, scale1).calc(value),
+            scaleY: _PropertyCalc.ab(1.0, scale1).calc(value),
+            opacity: _PropertyCalc.ab(1.0, opacity1).calc(value),
+            elevation: _PropertyCalc.ab(1.0, elevation1).calc(value),
           );
         }),
         endProperty = null;
@@ -237,14 +215,8 @@ class _PropertyAnimation {
         type = _AnimationType.forward,
         runningProperty = ((double value) {
           return _Property(
-            translateX: _PropertyData.calc01(
-              double0: 0,
-              double1: translateX1,
-            ).propertyCalc(value),
-            translateY: _PropertyData.calc01(
-              double0: 0,
-              double1: translateY1,
-            ).propertyCalc(value),
+            translateX: _PropertyCalc.ab(0, translateX1).calc(value),
+            translateY: _PropertyCalc.ab(0, translateY1).calc(value),
           );
         }),
         endProperty = null;
@@ -309,7 +281,7 @@ class _PropertyAnimation {
 
     void completed() {
       if (endProperty != null) {
-        cardData._property = endProperty.call(curvedAnimation.value);
+        cardData._property = cardData._property.update(endProperty.call(curvedAnimation.value));
       }
 //      cardData.updateAnimationTimestamp();
       animationController.dispose();
@@ -351,7 +323,7 @@ class _PropertyAnimation {
         }
       })
       ..addListener(() {
-        cardData._property = runningProperty(curvedAnimation.value);
+        cardData._property = cardData._property.update(runningProperty(curvedAnimation.value));
         cardData.gameData.callback.setState(() {
         });
       });

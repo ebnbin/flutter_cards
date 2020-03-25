@@ -168,9 +168,7 @@ class _GameData implements GameData {
             columnIndex: rightCard.columnIndex,
             rowSpan: 1,
             columnSpan: 1,
-            initProperty: _Property(
-              opacity: 0.0,
-            ),
+            initProperty: _Property.def(opacity: 0.0),
           );
 
           actionManager.add(
@@ -181,7 +179,7 @@ class _GameData implements GameData {
           actionManager.add(_Action.run(
             runnable: (_Action action) {
               rightCard.left();
-              rightCard._property = _Property();
+              rightCard._property = _Property.def();
 
               _cardDataList[cardData.index] = newCardData;
 
@@ -295,8 +293,6 @@ class _GameData implements GameData {
     // 卡片宽高.
     double cardSize = gridSize * gridPerCard;
 
-    print(++i);
-
     return {
       'safeRect': safeRect,
       'boardRect': boardRect,
@@ -315,6 +311,4 @@ class _GameData implements GameData {
   void build() {
     calcMap = calc();
   }
-
-  static int i = 0;
 }
