@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:cards/data.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Card;
 
 part 'widget.dart';
 
@@ -16,51 +16,51 @@ class GamePage extends StatefulWidget {
 class _GamePageState extends State<GamePage> with TickerProviderStateMixin implements GameCallback {
   @override
   Widget build(BuildContext context) {
-    _gameData.build();
+    _game.build();
     return Scaffold(
       body: SafeArea(
         child: Stack(
           children: <Widget>[
             Positioned.fromRect(
-              rect: _gameData.safeRect,
+              rect: _game.safeRect,
               child: Container(
                 color: Colors.red,
               ),
             ),
             Positioned.fromRect(
-              rect: _gameData.boardRect,
+              rect: _game.boardRect,
               child: Container(
                 color: Colors.yellow,
               ),
             ),
             Stack(
-              children: _gameData.cardDataList.map<Widget>((CardData cardData) {
-                return _buildCard(cardData, 0);
+              children: _game.cards.map<Widget>((Card card) {
+                return _buildCard(card, 0);
               }).toList(),
             ),
             Stack(
-              children: _gameData.cardDataList.map<Widget>((CardData cardData) {
-                return _buildCard(cardData, 1);
+              children: _game.cards.map<Widget>((Card card) {
+                return _buildCard(card, 1);
               }).toList(),
             ),
             Stack(
-              children: _gameData.cardDataList.map<Widget>((CardData cardData) {
-                return _buildCard(cardData, 2);
+              children: _game.cards.map<Widget>((Card card) {
+                return _buildCard(card, 2);
               }).toList(),
             ),
             Stack(
-              children: _gameData.cardDataList.map<Widget>((CardData cardData) {
-                return _buildCard(cardData, 3);
+              children: _game.cards.map<Widget>((Card card) {
+                return _buildCard(card, 3);
               }).toList(),
             ),
             Stack(
-              children: _gameData.cardDataList.map<Widget>((CardData cardData) {
-                return _buildCard(cardData, 4);
+              children: _game.cards.map<Widget>((Card card) {
+                return _buildCard(card, 4);
               }).toList(),
             ),
             Stack(
-              children: _gameData.cardDataList.map<Widget>((CardData cardData) {
-                return _buildCard(cardData, 5);
+              children: _game.cards.map<Widget>((Card card) {
+                return _buildCard(card, 5);
               }).toList(),
             ),
           ],
@@ -71,12 +71,12 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin imple
   }
 
   /// 构建一个卡片.
-  Widget _buildCard(CardData cardData, int zIndex) {
-    return Card(
-      cardData: cardData,
+  Widget _buildCard(Card card, int zIndex) {
+    return CardWidget(
+      card: card,
       zIndex: zIndex,
       child: Center(
-        child: Text('$cardData'),
+        child: Text('$card'),
       ),
     );
   }
@@ -85,9 +85,9 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin imple
   @override
   void initState() {
     super.initState();
-    _gameData = GameData.create(this);
+    _game = Game.create(this);
   }
 
   /// 游戏数据.
-  GameData _gameData;
+  Game _game;
 }

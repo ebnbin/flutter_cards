@@ -5,12 +5,12 @@ part of '../data.dart';
 /// 游戏数据.
 ///
 /// 有效行列范围: 2 ~ 6. Header footer 固定都是 2 * 6. 网格粒度 60. 2, 3, 4, 5, 6 都是 60 的约数.
-class _GameData implements GameData {
-  _GameData({
+class _Game implements Game {
+  _Game({
     this.callback,
   }) {
 //    build();
-    initCardDataList();
+    initCards();
   }
 
   final GameCallback callback;
@@ -24,81 +24,81 @@ class _GameData implements GameData {
 
   //*******************************************************************************************************************
 
-  void initCardDataList() {
+  void initCards() {
 //    print(calcMap['gridPerCard']);
     for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
       for (int columnIndex = 0; columnIndex < columnCount; columnIndex++) {
 //        if (rowIndex == 2 && (columnIndex == 1 || columnIndex == 2)) {
 //          continue;
 //        }
-        _IndexCardData cardData = _IndexCardData(
-          gameData: this,
+        _IndexCard card = _IndexCard(
+          game: this,
           rowIndex: rowIndex,
           columnIndex: columnIndex,
           rowSpan: 1,
           columnSpan: 1,
         );
-        _cardDataList.add(cardData);
+        _cards.add(card);
       }
     }
-//    _cardDataList.add(_IndexCardData(
-//      gameData: this,
+//    _cards.add(_IndexCard(
+//      game: this,
 //      rowIndex: 2,
 //      columnIndex: 1,
 //      rowSpan: 1,
 //      columnSpan: 2,
 //    ));
-    _cardDataList.add(_GridCardData(
-      gameData: this,
+    _cards.add(_GridCard(
+      game: this,
       rowGrid: (isVertical) => isVertical ? 0 : 0,
       columnGrid: (isVertical) => isVertical ? 0 : 0,
       rowGridSpan: (isVertical) => isVertical ? 10 : 10,
       columnGridSpan: (isVertical) => isVertical ? 10 : 10,
     ));
-    _cardDataList.add(_GridCardData(
-      gameData: this,
+    _cards.add(_GridCard(
+      game: this,
       rowGrid: (isVertical) => isVertical ? 10 : 10,
       columnGrid: (isVertical) => isVertical ? 0 : 0,
       rowGridSpan: (isVertical) => isVertical ? 10 : 10,
       columnGridSpan: (isVertical) => isVertical ? 20 : 20,
     ));
-    _cardDataList.add(_GridCardData(
-      gameData: this,
+    _cards.add(_GridCard(
+      game: this,
       rowGrid: (isVertical) => isVertical ? 88 : 0,
       columnGrid: (isVertical) => isVertical ? 0 : 88,
       rowGridSpan: (isVertical) => isVertical ? 10 : 10,
       columnGridSpan: (isVertical) => isVertical ? 10 : 10,
     ));
-    _cardDataList.add(_GridCardData(
-      gameData: this,
+    _cards.add(_GridCard(
+      game: this,
       rowGrid: (isVertical) => isVertical ? 88 : 10,
       columnGrid: (isVertical) => isVertical ? 10 : 88,
       rowGridSpan: (isVertical) => isVertical ? 10 : 10,
       columnGridSpan: (isVertical) => isVertical ? 10 : 10,
     ));
-    _cardDataList.add(_GridCardData(
-      gameData: this,
+    _cards.add(_GridCard(
+      game: this,
       rowGrid: (isVertical) => isVertical ? 88 : 20,
       columnGrid: (isVertical) => isVertical ? 20 : 88,
       rowGridSpan: (isVertical) => isVertical ? 10 : 10,
       columnGridSpan: (isVertical) => isVertical ? 10 : 10,
     ));
-    _cardDataList.add(_GridCardData(
-      gameData: this,
+    _cards.add(_GridCard(
+      game: this,
       rowGrid: (isVertical) => isVertical ? 88 : 30,
       columnGrid: (isVertical) => isVertical ? 30 : 88,
       rowGridSpan: (isVertical) => isVertical ? 10 : 10,
       columnGridSpan: (isVertical) => isVertical ? 10 : 10,
     ));
-    _cardDataList.add(_GridCardData(
-      gameData: this,
+    _cards.add(_GridCard(
+      game: this,
       rowGrid: (isVertical) => isVertical ? 88 : 40,
       columnGrid: (isVertical) => isVertical ? 40 : 88,
       rowGridSpan: (isVertical) => isVertical ? 10 : 10,
       columnGridSpan: (isVertical) => isVertical ? 10 : 10,
     ));
-    _cardDataList.add(_GridCardData(
-      gameData: this,
+    _cards.add(_GridCard(
+      game: this,
       rowGrid: (isVertical) => isVertical ? 88 : 50,
       columnGrid: (isVertical) => isVertical ? 50 : 88,
       rowGridSpan: (isVertical) => isVertical ? 10 : 10,
@@ -109,10 +109,10 @@ class _GameData implements GameData {
   //*******************************************************************************************************************
 
   /// 存储所有卡片.
-  List<_CardData> _cardDataList = [];
+  List<_Card> _cards = [];
   @override
-  BuiltList<CardData> get cardDataList {
-    return _cardDataList.build();
+  BuiltList<Card> get cards {
+    return _cards.build();
   }
 
   //*******************************************************************************************************************
@@ -142,28 +142,28 @@ class _GameData implements GameData {
   @override
   Function onTap({
     @required
-    CardData cardData,
+    Card card,
   }) {
-    assert(cardData != null);
+    assert(card != null);
     return () {
-      if (cardData is _IndexCardData) {
-        cardData._color = Colors.grey;
+      if (card is _IndexCard) {
+        card._color = Colors.grey;
         callback.setState(() {
         });
         actionManager.add(_Action.run(runnable: (_Action action) {
-          cardData._color = Colors.green;
+          card._color = Colors.green;
           callback.setState(() {
           });
         }));
         actionManager.add(
             _PropertyAnimation.rotateXYOut(
                 rotateYDegree: -90.0
-            ).action(cardData)
+            ).action(card)
         );
-        if (cardData.rightCard != null && cardData.rightCard is _IndexCardData) {
-          _IndexCardData rightCard = cardData.rightCard;
-          _IndexCardData newCardData = _IndexCardData(
-            gameData: this,
+        if (card.rightCard != null && card.rightCard is _IndexCard) {
+          _IndexCard rightCard = card.rightCard;
+          _IndexCard newCard = _IndexCard(
+            game: this,
             rowIndex: rightCard.rowIndex,
             columnIndex: rightCard.columnIndex,
             rowSpan: 1,
@@ -181,7 +181,7 @@ class _GameData implements GameData {
               rightCard.left();
               rightCard._property = _Property.def();
 
-              _cardDataList[cardData.index] = newCardData;
+              _cards[card.index] = newCard;
 
               callback.setState(() {
               });
@@ -191,7 +191,7 @@ class _GameData implements GameData {
           actionManager.add(
               _PropertyAnimation.rotateXYIn(
                 rotateYDegree: -90,
-              ).action(newCardData)
+              ).action(newCard)
           );
         }
       } else {
@@ -209,7 +209,7 @@ class _GameData implements GameData {
 //            indexY: 1,
 //          ),
         ];
-        animations[Random().nextInt(animations.length)].act(cardData);
+        animations[Random().nextInt(animations.length)].act(card);
       }
     };
   }
@@ -217,9 +217,9 @@ class _GameData implements GameData {
   @override
   Function onLongPress({
     @required
-    CardData cardData,
+    Card card,
   }) {
-    assert(cardData != null);
+    assert(card != null);
     return null;
   }
 

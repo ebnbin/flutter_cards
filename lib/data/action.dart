@@ -78,11 +78,11 @@ class _Action {
   /// 动画事件.
   _Action.animation({
     @required
-    _CardData cardData,
+    _Card card,
     @required
     _PropertyAnimation animation,
   }) : this(onBegin: (_Action action) {
-    animation.begin(cardData, () {
+    animation.begin(card, () {
       action.end();
     });
   },

@@ -267,76 +267,78 @@ class _PropertyAnimation {
   final _CreateProperty runningProperty;
   final _CreateProperty endProperty;
 
-  void begin(_CardData cardData, VoidCallback onEnd) {
-    AnimationController animationController = AnimationController(
-      duration: Duration(
-        milliseconds: duration,
-      ),
-      vsync: cardData.gameData.callback,
-    );
-    CurvedAnimation curvedAnimation = CurvedAnimation(
-      parent: animationController,
-      curve: curve,
-    );
+  void begin(_Card card, VoidCallback onEnd) {
+    Future.delayed(Duration(milliseconds: 0), () {
+      AnimationController animationController = AnimationController(
+        duration: Duration(
+          milliseconds: duration,
+        ),
+        vsync: card.game.callback,
+      );
+      CurvedAnimation curvedAnimation = CurvedAnimation(
+        parent: animationController,
+        curve: curve,
+      );
 
-    void completed() {
-      if (endProperty != null) {
-        cardData._property = cardData._property.update(endProperty.call(curvedAnimation.value));
-      }
-//      cardData.updateAnimationTimestamp();
-      animationController.dispose();
-      onEnd?.call();
-      cardData.gameData.callback.setState(() {
-      });
-    }
-
-    curvedAnimation
-      ..addStatusListener((AnimationStatus status) {
-        switch (type) {
-          case _AnimationType.forward:
-            switch (status) {
-              case AnimationStatus.dismissed:
-                break;
-              case AnimationStatus.forward:
-                break;
-              case AnimationStatus.reverse:
-                break;
-              case AnimationStatus.completed:
-                completed();
-                break;
-            }
-            break;
-          case _AnimationType.forwardReverse:
-            switch (status) {
-              case AnimationStatus.dismissed:
-                completed();
-                break;
-              case AnimationStatus.forward:
-                break;
-              case AnimationStatus.reverse:
-                break;
-              case AnimationStatus.completed:
-                animationController.reverse();
-                break;
-            }
-            break;
+      void completed() {
+        if (endProperty != null) {
+          card._property = card._property.update(endProperty.call(curvedAnimation.value));
         }
-      })
-      ..addListener(() {
-        cardData._property = cardData._property.update(runningProperty(curvedAnimation.value));
-        cardData.gameData.callback.setState(() {
+//      card.updateAnimationTimestamp();
+        animationController.dispose();
+        onEnd?.call();
+        card.game.callback.setState(() {
         });
-      });
-    animationController.forward();
+      }
+
+      curvedAnimation
+        ..addStatusListener((AnimationStatus status) {
+          switch (type) {
+            case _AnimationType.forward:
+              switch (status) {
+                case AnimationStatus.dismissed:
+                  break;
+                case AnimationStatus.forward:
+                  break;
+                case AnimationStatus.reverse:
+                  break;
+                case AnimationStatus.completed:
+                  completed();
+                  break;
+              }
+              break;
+            case _AnimationType.forwardReverse:
+              switch (status) {
+                case AnimationStatus.dismissed:
+                  completed();
+                  break;
+                case AnimationStatus.forward:
+                  break;
+                case AnimationStatus.reverse:
+                  break;
+                case AnimationStatus.completed:
+                  animationController.reverse();
+                  break;
+              }
+              break;
+          }
+        })
+        ..addListener(() {
+          card._property = card._property.update(runningProperty(curvedAnimation.value));
+          card.game.callback.setState(() {
+          });
+        });
+      animationController.forward();
+    });
   }
 
-  _Action action(_CardData cardData) {
-    return _Action.animation(cardData: cardData, animation: this);
+  _Action action(_Card card) {
+    return _Action.animation(card: card, animation: this);
   }
 
-  void act(_CardData cardData, {
+  void act(_Card card, {
     VoidCallback onEnd,
   }) {
-    begin(cardData, onEnd);
+    begin(card, onEnd);
   }
 }

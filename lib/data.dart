@@ -2,7 +2,7 @@ import 'dart:collection';
 import 'dart:math';
 
 import 'package:built_collection/built_collection.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Card;
 
 part 'data/action.dart';
 part 'data/animation.dart';
@@ -33,27 +33,27 @@ abstract class GameCallback implements TickerProvider {
 
 //*********************************************************************************************************************
 
-abstract class GameData {
-  GameData._();
+abstract class Game {
+  Game._();
 
-  static GameData create(GameCallback callback) {
-    return _GameData(callback: callback);
+  static Game create(GameCallback callback) {
+    return _Game(callback: callback);
   }
 
   Rect get safeRect;
 
   Rect get boardRect;
 
-  BuiltList<CardData> get cardDataList;
+  BuiltList<Card> get cards;
 
   Function onTap({
     @required
-    CardData cardData,
+    Card card,
   });
 
   Function onLongPress({
     @required
-    CardData cardData,
+    Card card,
   });
 
   void build();
@@ -61,8 +61,8 @@ abstract class GameData {
 
 //*********************************************************************************************************************
 
-abstract class CardData {
-  CardData._();
+abstract class Card {
+  Card._();
 
   bool zIndexVisible(int zIndex);
 
