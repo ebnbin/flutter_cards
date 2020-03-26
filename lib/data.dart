@@ -19,6 +19,13 @@ abstract class Property {
   double get elevation;
   double get radius;
   double get opacity;
+
+  /// 根据 [zIndex] 计算是否可见.
+  ///
+  /// [zIndex] 范围 0 ~ 5.
+  bool Function(int zIndex) get zIndexVisible;
+
+  double get margin;
 }
 
 //*********************************************************************************************************************
@@ -63,8 +70,6 @@ abstract class Game {
 
 abstract class Card {
   Card._();
-
-  bool zIndexVisible(int zIndex);
 
   Rect get rect;
 

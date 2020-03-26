@@ -35,6 +35,8 @@ class _Property implements Property {
     this.elevation,
     this.radius,
     this.opacity,
+    this.visible,
+    this.margin,
   });
 
   /// 非 null 默认值.
@@ -50,6 +52,8 @@ class _Property implements Property {
     double elevation = 1.0,
     double radius = 4.0,
     double opacity = 1.0,
+    bool visible = true,
+    double margin = 4,
   }) : this(
     matrix4Entry32: matrix4Entry32,
     translateX: translateX,
@@ -62,6 +66,8 @@ class _Property implements Property {
     elevation: elevation,
     radius: radius,
     opacity: opacity,
+    visible: visible,
+    margin: margin,
   );
 
   /// Matrix4.setEntry(3, 2, value);
@@ -86,10 +92,37 @@ class _Property implements Property {
 
   @override
   final double elevation;
+
+  /// 范围 0 ~ 5.
+  int get zIndex {
+    if (elevation < 1.0) {
+      return 0;
+    }
+    if (elevation == 1.0) {
+      return 1;
+    }
+    if (elevation > 4.0) {
+      return 5;
+    }
+    return elevation.ceil();
+  }
+
   @override
   final double radius;
   @override
   final double opacity;
+
+  final bool visible;
+
+  @override
+  bool Function(int zIndex) get zIndexVisible {
+    assert(zIndex >= 0 && zIndex <= 5);
+    return (zIndex) {
+      return visible && this.zIndex == zIndex;
+    };
+  }
+
+  final double margin;
 
   /// 使用 other 中不为 null 的属性值更新 this 中对应的属性值, 返回新的 _Property.
   _Property update(_Property other) {
@@ -105,6 +138,8 @@ class _Property implements Property {
       elevation: other?.elevation ?? elevation,
       radius: other?.radius ?? radius,
       opacity: other?.opacity ?? opacity,
+      visible: other?.visible ?? visible,
+      margin: other?.margin ?? margin,
     );
   }
 }

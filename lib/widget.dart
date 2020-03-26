@@ -15,7 +15,7 @@ class CardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (card.zIndexVisible(zIndex)) {
+    if (card.property.zIndexVisible(zIndex)) {
       return _buildVisible();
     } else {
       return _buildInvisible();
@@ -31,7 +31,7 @@ class CardWidget extends StatelessWidget {
         child: Opacity(
           opacity: card.property.opacity,
           child: Container(
-            margin: const EdgeInsets.all(4.0),
+            margin: EdgeInsets.all(card.property.margin),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(card.property.radius),
               boxShadow: <BoxShadow>[

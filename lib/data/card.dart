@@ -24,28 +24,6 @@ abstract class _Card implements Card {
 
   //*******************************************************************************************************************
 
-  /// 是否可见.
-  @override
-  bool zIndexVisible(int zIndex) {
-    if (!_visible) {
-      return false;
-    }
-    int elevationInt;
-    if (property.elevation < 1.0) {
-      elevationInt = 0;
-    } else if (property.elevation == 1.0) {
-      elevationInt = 1;
-    } else if (property.elevation > 4.0) {
-      elevationInt = 5;
-    } else {
-      elevationInt = property.elevation.ceil();
-    }
-    return elevationInt == zIndex;
-  }
-  bool _visible = true;
-
-  //*******************************************************************************************************************
-
   int get index => game._cards.indexOf(this);
 
   //*******************************************************************************************************************
