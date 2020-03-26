@@ -156,9 +156,9 @@ class _Game implements Game {
           });
         }));
         actionManager.add(
-            _PropertyAnimation.rotateXYOut(
-                rotateYDegree: -90.0
-            ).action(card)
+          _Action.animation(card: card, animation: _PropertyAnimation.flipOut(
+            angleY: _InvisibleAngle.counterClockwise90,
+          ),)
         );
         if (card.rightCard != null && card.rightCard is _IndexCard) {
           _IndexCard rightCard = card.rightCard;
@@ -168,13 +168,14 @@ class _Game implements Game {
             columnIndex: rightCard.columnIndex,
             rowSpan: 1,
             columnSpan: 1,
-            initProperty: _Property.def(opacity: 0.0),
+            initProperty: _Property.def(/*opacity: 0.0*/),
           );
 
           actionManager.add(
-              _PropertyAnimation.translateLeft(
-                unit: calcMap,
-              ).action(rightCard)
+            _Action.animation(card: rightCard, animation: _PropertyAnimation.moveCoreCard(
+              metrics: metrics,
+              x: -1,
+            ),)
           );
           actionManager.add(_Action.run(
             runnable: (_Action action) {
@@ -189,27 +190,30 @@ class _Game implements Game {
           )
           );
           actionManager.add(
-              _PropertyAnimation.rotateXYIn(
-                rotateYDegree: -90,
-              ).action(newCard)
+            _Action.animation(card: newCard, animation: _PropertyAnimation.flipIn(
+              angleY: _InvisibleAngle.counterClockwise90,
+            ),)
           );
         }
       } else {
         List<_PropertyAnimation> animations = <_PropertyAnimation>[
           _PropertyAnimation.sample(),
 //          _PropertyAnimation.rotateXYIn(
-//            rotateYDegree: 270.0,
+//            invisibleRotateY: _InvisibleRotate.clockwise270,
 //          ),
 //          _PropertyAnimation.rotateXYOut(
-//              rotateXDegree: 270.0
+//            invisibleRotateX: _InvisibleRotate.counterClockwise90,
 //          ),
-//          _PropertyAnimation.translateXYIndex(
-//            unit: calcMap,
+//          _PropertyAnimation.translate(
+//            translateX: -metrics[Metric.cardSize],
+//            translateY: metrics[Metric.cardSize],
+//          ),
+//          _PropertyAnimation.translateIndex(
+//            metrics: metrics,
 //            indexX: -1,
-//            indexY: 1,
 //          ),
         ];
-        animations[Random().nextInt(animations.length)].act(card);
+        animations[Random().nextInt(animations.length)].begin(card);
       }
     };
   }
@@ -292,6 +296,13 @@ class _Game implements Game {
 
     // 卡片宽高.
     double cardSize = gridSize * gridPerCard;
+    double headerFooterCardSize = gridSize * 10;
+
+    metrics = {
+      Metric.gridSize: gridSize,
+      Metric.coreCardSize: cardSize,
+      Metric.headerFooterCardSize: headerFooterCardSize,
+    };
 
     return {
       'safeRect': safeRect,
@@ -307,8 +318,18 @@ class _Game implements Game {
   
   Map<String, dynamic> calcMap;
 
+  Map<Metric, dynamic> metrics;
+
   @override
   void build() {
     calcMap = calc();
   }
+
+  //*******************************************************************************************************************
+}
+
+enum Metric {
+  gridSize,
+  coreCardSize,
+  headerFooterCardSize,
 }

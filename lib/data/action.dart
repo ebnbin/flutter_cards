@@ -82,7 +82,7 @@ class _Action {
     @required
     _PropertyAnimation animation,
   }) : this(onBegin: (_Action action) {
-    animation.begin(card, () {
+    animation.begin(card, endCallback: () {
       action.end();
     });
   },
