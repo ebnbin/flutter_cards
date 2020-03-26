@@ -59,15 +59,15 @@ class _Card implements Card {
 
   @override
   String toString() {
-    return '${grid(game._metric.isVertical)}\n$index}';
+    return '${grid(game._metric.isVertical)}\n$index';
   }
 }
 
 //*********************************************************************************************************************
 
 /// 按照索引定位的卡片, 不能根据横竖屏控制不同的行列.
-class _IndexCard extends _Card {
-  _IndexCard({
+class _CoreCard extends _Card {
+  _CoreCard({
     _Game game,
     _Property initProperty = const _Property.def(),
     _Grid coreCardGrid,
@@ -86,85 +86,69 @@ class _IndexCard extends _Card {
   }
 
   void left() {
-    if (coreCardGrid.columnIndex > 0) {
-      coreCardGrid = coreCardGrid.offset(
-        columnIndex: -1,
-      );
-    }
+    coreCardGrid = coreCardGrid.left();
   }
 
   void right() {
-    if (coreCardGrid.columnIndex < game.size - 1) {
-      coreCardGrid = coreCardGrid.offset(
-        columnIndex: 1,
-      );
-    }
+    coreCardGrid = coreCardGrid.right();
   }
 
   void top() {
-    if (coreCardGrid.rowIndex > 0) {
-      coreCardGrid = coreCardGrid.offset(
-        rowIndex: -1,
-      );
-    }
+    coreCardGrid = coreCardGrid.top();
   }
 
   void bottom() {
-    if (coreCardGrid.rowIndex < game.size - 1) {
-      coreCardGrid = coreCardGrid.offset(
-        rowIndex: 1,
-      );
-    }
+    coreCardGrid = coreCardGrid.bottom();
   }
 
   _Card get leftCard {
     return game._cards.firstWhere((element) {
-      if (element is! _IndexCard) {
+      if (element is! _CoreCard) {
         return false;
       }
       int r = coreCardGrid.rowIndex;
       int c = coreCardGrid.columnIndex;
-      int r2 = (element as _IndexCard).coreCardGrid.rowIndex;
-      int c2 = (element as _IndexCard).coreCardGrid.columnIndex;
+      int r2 = (element as _CoreCard).coreCardGrid.rowIndex;
+      int c2 = (element as _CoreCard).coreCardGrid.columnIndex;
       return r == r2 && c - 1 == c2;
     }, orElse: () => null);
   }
 
   _Card get rightCard {
     return game._cards.firstWhere((element) {
-      if (element is! _IndexCard) {
+      if (element is! _CoreCard) {
         return false;
       }
       int r = coreCardGrid.rowIndex;
       int c = coreCardGrid.columnIndex;
-      int r2 = (element as _IndexCard).coreCardGrid.rowIndex;
-      int c2 = (element as _IndexCard).coreCardGrid.columnIndex;
+      int r2 = (element as _CoreCard).coreCardGrid.rowIndex;
+      int c2 = (element as _CoreCard).coreCardGrid.columnIndex;
       return r == r2 && c + 1 == c2;
     }, orElse: () => null);
   }
 
   _Card get topCard {
     return game._cards.firstWhere((element) {
-      if (element is! _IndexCard) {
+      if (element is! _CoreCard) {
         return false;
       }
       int r = coreCardGrid.rowIndex;
       int c = coreCardGrid.columnIndex;
-      int r2 = (element as _IndexCard).coreCardGrid.rowIndex;
-      int c2 = (element as _IndexCard).coreCardGrid.columnIndex;
+      int r2 = (element as _CoreCard).coreCardGrid.rowIndex;
+      int c2 = (element as _CoreCard).coreCardGrid.columnIndex;
       return r - 1 == r2 && c == c2;
     }, orElse: () => null);
   }
 
   _Card get bottomCard {
     return game._cards.firstWhere((element) {
-      if (element is! _IndexCard) {
+      if (element is! _CoreCard) {
         return false;
       }
       int r = coreCardGrid.rowIndex;
       int c = coreCardGrid.columnIndex;
-      int r2 = (element as _IndexCard).coreCardGrid.rowIndex;
-      int c2 = (element as _IndexCard).coreCardGrid.columnIndex;
+      int r2 = (element as _CoreCard).coreCardGrid.rowIndex;
+      int c2 = (element as _CoreCard).coreCardGrid.columnIndex;
       return r + 1 == r2 && c == c2;
     }, orElse: () => null);
   }

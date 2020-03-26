@@ -26,7 +26,7 @@ class _Game implements Game {
 //        if (rowIndex == 2 && (columnIndex == 1 || columnIndex == 2)) {
 //          continue;
 //        }
-        _IndexCard card = _IndexCard(
+        _CoreCard card = _CoreCard(
           game: this,
           coreCardGrid: _Grid(rowIndex: rowIndex, columnIndex: columnIndex, rowSpan: 1, columnSpan: 1),
         );
@@ -43,50 +43,50 @@ class _Game implements Game {
     _cards.add(_Card(
       game: this,
       grid: (isVertical) => isVertical
-          ? _Grid(rowIndex: 2, columnIndex: 2, rowSpan: 10, columnSpan: 10)
-          : _Grid(rowIndex: 2, columnIndex: 2, rowSpan: 10, columnSpan: 10),
+          ? _Grid(rowIndex: 2, columnIndex: 2, rowSpan: 15, columnSpan: 15)
+          : _Grid(rowIndex: 2, columnIndex: 2, rowSpan: 15, columnSpan: 15),
     ));
     _cards.add(_Card(
       game: this,
       grid: (isVertical) => isVertical
-          ? _Grid(rowIndex: 12, columnIndex: 2, rowSpan: 10, columnSpan: 20)
-          : _Grid(rowIndex: 12, columnIndex: 2, rowSpan: 10, columnSpan: 20),
+          ? _Grid(rowIndex: 17, columnIndex: 2, rowSpan: 15, columnSpan: 30)
+          : _Grid(rowIndex: 17, columnIndex: 2, rowSpan: 15, columnSpan: 30),
     ));
     _cards.add(_Card(
       game: this,
       grid: (isVertical) => isVertical
-          ? _Grid(rowIndex: 90, columnIndex: 2, rowSpan: 10, columnSpan: 10)
-          : _Grid(rowIndex: 2, columnIndex: 90, rowSpan: 10, columnSpan: 10),
+          ? _Grid(rowIndex: 160, columnIndex: 2, rowSpan: 20, columnSpan: 20)
+          : _Grid(rowIndex: 2, columnIndex: 160, rowSpan: 20, columnSpan: 20),
     ));
     _cards.add(_Card(
       game: this,
       grid: (isVertical) => isVertical
-          ? _Grid(rowIndex: 90, columnIndex: 12, rowSpan: 10, columnSpan: 10)
-          : _Grid(rowIndex: 12, columnIndex: 90, rowSpan: 10, columnSpan: 10),
+          ? _Grid(rowIndex: 160, columnIndex: 22, rowSpan: 20, columnSpan: 20)
+          : _Grid(rowIndex: 22, columnIndex: 160, rowSpan: 20, columnSpan: 20),
     ));
     _cards.add(_Card(
       game: this,
       grid: (isVertical) => isVertical
-          ? _Grid(rowIndex: 90, columnIndex: 22, rowSpan: 10, columnSpan: 10)
-          : _Grid(rowIndex: 22, columnIndex: 90, rowSpan: 10, columnSpan: 10),
+          ? _Grid(rowIndex: 160, columnIndex: 42, rowSpan: 20, columnSpan: 20)
+          : _Grid(rowIndex: 42, columnIndex: 160, rowSpan: 20, columnSpan: 20),
     ));
     _cards.add(_Card(
       game: this,
       grid: (isVertical) => isVertical
-          ? _Grid(rowIndex: 90, columnIndex: 32, rowSpan: 10, columnSpan: 10)
-          : _Grid(rowIndex: 32, columnIndex: 90, rowSpan: 10, columnSpan: 10),
+          ? _Grid(rowIndex: 160, columnIndex: 62, rowSpan: 20, columnSpan: 20)
+          : _Grid(rowIndex: 62, columnIndex: 160, rowSpan: 20, columnSpan: 20),
     ));
     _cards.add(_Card(
       game: this,
       grid: (isVertical) => isVertical
-          ? _Grid(rowIndex: 90, columnIndex: 42, rowSpan: 10, columnSpan: 10)
-          : _Grid(rowIndex: 42, columnIndex: 90, rowSpan: 10, columnSpan: 10),
+          ? _Grid(rowIndex: 160, columnIndex: 82, rowSpan: 20, columnSpan: 20)
+          : _Grid(rowIndex: 82, columnIndex: 160, rowSpan: 20, columnSpan: 20),
     ));
     _cards.add(_Card(
       game: this,
       grid: (isVertical) => isVertical
-          ? _Grid(rowIndex: 90, columnIndex: 52, rowSpan: 10, columnSpan: 10)
-          : _Grid(rowIndex: 52, columnIndex: 90, rowSpan: 10, columnSpan: 10),
+          ? _Grid(rowIndex: 160, columnIndex: 102, rowSpan: 20, columnSpan: 20)
+          : _Grid(rowIndex: 102, columnIndex: 160, rowSpan: 20, columnSpan: 20),
     ));
   }
 
@@ -116,7 +116,7 @@ class _Game implements Game {
   }) {
     assert(card != null);
     return () {
-      if (card is _IndexCard) {
+      if (card is _CoreCard) {
         card.updateProperty(_Property(
           color: Colors.grey,
         ));
@@ -134,9 +134,9 @@ class _Game implements Game {
             angleY: _InvisibleAngle.counterClockwise90,
           ).action(card)
         );
-        if (card.rightCard != null && card.rightCard is _IndexCard) {
-          _IndexCard rightCard = card.rightCard;
-          _IndexCard newCard = _IndexCard(
+        if (card.rightCard != null && card.rightCard is _CoreCard) {
+          _CoreCard rightCard = card.rightCard;
+          _CoreCard newCard = _CoreCard(
             game: this,
             coreCardGrid: _Grid(rowIndex: rightCard.coreCardGrid.rowIndex, columnIndex: rightCard.coreCardGrid.columnIndex, rowSpan: 1, columnSpan: 1),
             initProperty: _Property.def(/*opacity: 0.0*/),
@@ -414,16 +414,16 @@ class _Metric implements Metric {
   /// 边距网格总数.
   static const int paddingGridCount = 2;
   /// 核心面板网格总数 (不包括 padding).
-  static const int coreBoardNoPaddingGridCount = 60;
+  static const int coreBoardNoPaddingGridCount = 120;
   /// Header footer 面板网格总数 (不包括 padding).
-  static const int headerFooterBoardNoPaddingGridCount = 20;
+  static const int headerFooterBoardNoPaddingGridCount = 30;
   /// 核心面板网格总数 (包括 padding).
   static const int coreBoardGridCount = coreBoardNoPaddingGridCount + paddingGridCount * 2;
   /// Header footer 面板网格总数 (包括 padding).
   static const int headerFooterBoardGridCount = headerFooterBoardNoPaddingGridCount + paddingGridCount * 2;
   /// 安全面板网格总数.
   static const int safeBoardGridCount = coreBoardGridCount + headerFooterBoardGridCount * 2;
-  static const int gridPerHeaderFooterCard = 10;
+  static const int gridPerHeaderFooterCard = 20;
 
   _Metric({
     @required
@@ -507,6 +507,15 @@ class _Grid {
         assert(columnIndex != null),
         assert(rowSpan != null),
         assert(columnSpan != null);
+  
+  /// 行.
+  final int rowIndex;
+  /// 列.
+  final int columnIndex;
+  /// 跨行.
+  final int rowSpan;
+  /// 跨列.
+  final int columnSpan;
 
   _Grid update({
     int rowIndex,
@@ -536,14 +545,29 @@ class _Grid {
     );
   }
   
-  /// 行.
-  final int rowIndex;
-  /// 列.
-  final int columnIndex;
-  /// 跨行.
-  final int rowSpan;
-  /// 跨列.
-  final int columnSpan;
+  _Grid left() {
+    return offset(
+      columnIndex: -1,
+    );
+  }
+  
+  _Grid right() {
+    return offset(
+      columnIndex: 1,
+    );
+  }
+  
+  _Grid top() {
+    return offset(
+      rowIndex: -1,
+    );
+  }
+  
+  _Grid bottom() {
+    return offset(
+      rowIndex: 1,
+    );
+  }
 
   @override
   String toString() {
