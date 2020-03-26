@@ -22,13 +22,13 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin imple
         child: Stack(
           children: <Widget>[
             Positioned.fromRect(
-              rect: _game.safeRect,
+              rect: _game.metric.safeBoardRect,
               child: Container(
                 color: Colors.red,
               ),
             ),
             Positioned.fromRect(
-              rect: _game.boardRect,
+              rect: _game.metric.coreBoardRect,
               child: Container(
                 color: Colors.yellow,
               ),

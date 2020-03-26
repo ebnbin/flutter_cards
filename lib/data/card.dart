@@ -61,46 +61,40 @@ class _GridCard extends _Card {
   _GridCard({
     _Game game,
     _Property initProperty = const _Property.def(),
-    this.rowGrid,
-    this.columnGrid,
-    this.rowGridSpan,
-    this.columnGridSpan,
-  }) : assert(rowGrid != null),
-        assert(columnGrid != null),
-        assert(rowGridSpan != null),
-        assert(columnGridSpan != null),
+    this.gridColumnIndex,
+    this.gridRowIndex,
+    this.gridColumnSpan,
+    this.gridRowSpan,
+  }) : assert(gridColumnIndex != null),
+        assert(gridRowIndex != null),
+        assert(gridColumnSpan != null),
+        assert(gridRowSpan != null),
         super(
         game: game,
         initProperty: initProperty,
       );
 
-  /// 所在网格行.
-  _GetGrid rowGrid;
-
   /// 所在网格列.
-  _GetGrid columnGrid;
+  _OrientationGrid gridColumnIndex;
 
-  /// 网格跨行.
-  _GetGrid rowGridSpan;
+  /// 所在网格行.
+  _OrientationGrid gridRowIndex;
 
   /// 网格跨列.
-  _GetGrid columnGridSpan;
+  _OrientationGrid gridColumnSpan;
+
+  /// 网格跨行.
+  _OrientationGrid gridRowSpan;
 
   @override
   Rect get rect {
-    Map<String, dynamic> map = game.calcMap;
-    return Rect.fromLTWH(
-      map['gridCardSpaceLeft'] + map['gridSize'] * columnGrid(map['isVertical']),
-      map['gridCardSpaceTop'] + map['gridSize'] * rowGrid(map['isVertical']),
-      map['gridSize'] * columnGridSpan(map['isVertical']),
-      map['gridSize'] * rowGridSpan(map['isVertical']),
-    );
+    return game._metric.gridRect(gridColumnIndex, gridRowIndex, gridColumnSpan, gridRowSpan);
   }
 
   @override
   String toString() {
-    Map<String, dynamic> map = game.calcMap;
-    return '${rowGrid(map['isVertical'])},${columnGrid(map['isVertical'])},${rowGridSpan(map['isVertical'])},${columnGridSpan(map['isVertical'])}\n${game._cards.indexOf(this)}';
+//    return '${rowGrid(map['isVertical'])},${columnGrid(map['isVertical'])},${rowGridSpan(map['isVertical'])},${columnGridSpan(map['isVertical'])}\n${game._cards.indexOf(this)}';
+    return super.toString();
   }
 }
 
@@ -124,66 +118,42 @@ class _IndexCard extends _GridCard {
         super(
         game: game,
         initProperty: initProperty,
-        rowGrid: rowIndexToRowGrid(game, rowIndex),
-        columnGrid: columnIndexToColumnGrid(game, columnIndex),
-        rowGridSpan: rowSpanToRowGridSpan(game, rowSpan),
-        columnGridSpan: columnSpanToColumnGridSpan(game, columnSpan),
+        gridColumnIndex: game._metric.columnIndexToGridColumnIndex(columnIndex),
+        gridRowIndex: game._metric.rowIndexToGridRowIndex(rowIndex),
+        gridColumnSpan: game._metric.columnSpanToGridColumnSpan(columnSpan),
+        gridRowSpan: game._metric.rowSpanToGridRowSpan(rowSpan),
       );
 
-  static _GetGrid rowIndexToRowGrid(_Game game, int rowIndex) {
-    return (isVertical) => isVertical
-        ? (rowIndex * game.calcMap['gridPerCard']) + 24
-        : (rowIndex * game.calcMap['gridPerCard']) + 0;
+  /// 所在列.
+  int get columnIndex {
+    return game._metric.gridColumnIndexToColumnIndex(gridColumnIndex);
   }
-
-  static _GetGrid columnIndexToColumnGrid(_Game game, int columnIndex) {
-    return (isVertical) => isVertical
-        ? (columnIndex * game.calcMap['gridPerCard']) + 0
-        : (columnIndex * game.calcMap['gridPerCard']) + 24;
-  }
-
-  static _GetGrid rowSpanToRowGridSpan(_Game game, int rowSpan) {
-    return (isVertical) => isVertical
-        ? rowSpan * game.calcMap['gridPerCard']
-        : rowSpan * game.calcMap['gridPerCard'];
-  }
-
-  static _GetGrid columnSpanToColumnGridSpan(_Game game, int columnSpan) {
-    return (isVertical) => isVertical
-        ? columnSpan * game.calcMap['gridPerCard']
-        : columnSpan * game.calcMap['gridPerCard'];
+  set columnIndex(int columnIndex) {
+    gridColumnIndex = game._metric.columnIndexToGridColumnIndex(columnIndex);
   }
 
   /// 所在行.
-  int get rowIndex => game.calcMap['isVertical']
-      ? (rowGrid(true) - 24) ~/ game.calcMap['gridPerCard']
-      : (rowGrid(false) - 0) ~/ game.calcMap['gridPerCard'];
+  int get rowIndex {
+    return game._metric.gridRowIndexToRowIndex(gridRowIndex);
+  }
   set rowIndex(int rowIndex) {
-    rowGrid = rowIndexToRowGrid(game, rowIndex);
-  }
-
-  /// 所在列.
-  int get columnIndex => game.calcMap['isVertical']
-      ? (columnGrid(true) - 0) ~/ game.calcMap['gridPerCard']
-      : (columnGrid(false) - 24) ~/ game.calcMap['gridPerCard'];
-  set columnIndex(int columnIndex) {
-    columnGrid = columnIndexToColumnGrid(game, columnIndex);
-  }
-
-  /// 跨行.
-  int get rowSpan => game.calcMap['isVertical']
-      ? rowGridSpan(true) ~/ game.calcMap['gridPerCard']
-      : rowGridSpan(false) ~/ game.calcMap['gridPerCard'];
-  set rowSpan(int rowSpan) {
-    rowGridSpan = rowSpanToRowGridSpan(game, rowSpan);
+    gridRowIndex = game._metric.rowIndexToGridRowIndex(rowIndex);
   }
 
   /// 跨列.
-  int get columnSpan => game.calcMap['isVertical']
-      ? columnGridSpan(true) ~/ game.calcMap['gridPerCard']
-      : columnGridSpan(false) ~/ game.calcMap['gridPerCard'];
+  int get columnSpan {
+    return game._metric.gridColumnSpanToColumnSpan(gridColumnSpan);
+  }
   set columnSpan(int columnSpan) {
-    columnGridSpan = columnSpanToColumnGridSpan(game, columnSpan);
+    gridColumnSpan = game._metric.columnSpanToGridColumnSpan(columnSpan);
+  }
+
+  /// 跨行.
+  int get rowSpan {
+    return game._metric.gridRowSpanToRowSpan(gridRowSpan);
+  }
+  set rowSpan(int rowSpan) {
+    gridRowSpan = game._metric.rowSpanToGridRowSpan(rowSpan);
   }
 
   void left() {
@@ -193,7 +163,7 @@ class _IndexCard extends _GridCard {
   }
 
   void right() {
-    if (columnIndex < game.columnCount - 1) {
+    if (columnIndex < game.size - 1) {
       columnIndex++;
     }
   }
@@ -205,7 +175,7 @@ class _IndexCard extends _GridCard {
   }
 
   void bottom() {
-    if (rowIndex < game.rowCount - 1) {
+    if (rowIndex < game.size - 1) {
       rowIndex++;
     }
   }

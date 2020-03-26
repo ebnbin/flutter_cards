@@ -38,6 +38,11 @@ abstract class GameCallback implements TickerProvider {
   void setState(VoidCallback fn);
 }
 
+abstract class Metric {
+  Rect get safeBoardRect;
+  Rect get coreBoardRect;
+}
+
 //*********************************************************************************************************************
 
 abstract class Game {
@@ -46,10 +51,6 @@ abstract class Game {
   static Game create(GameCallback callback) {
     return _Game(callback: callback);
   }
-
-  Rect get safeRect;
-
-  Rect get boardRect;
 
   BuiltList<Card> get cards;
 
@@ -64,6 +65,8 @@ abstract class Game {
   });
 
   void build();
+
+  Metric get metric;
 }
 
 //*********************************************************************************************************************

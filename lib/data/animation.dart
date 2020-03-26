@@ -253,15 +253,15 @@ class _PropertyAnimation {
     int endDelay,
     int duration = 1000,
     @required
-    Map<Metric, dynamic> metrics,
+    _Metric metric,
     int x,
     int y,
   }) : this.move(
     beginDelay: beginDelay,
     endDelay: endDelay,
     duration: duration,
-    x: metrics[Metric.gridSize] * (x ?? 0),
-    y: metrics[Metric.gridSize] * (y ?? 0),
+    x: metric.gridSize * (x ?? 0),
+    y: metric.gridSize * (y ?? 0),
   );
 
   /// 移动核心卡片.
@@ -270,15 +270,15 @@ class _PropertyAnimation {
     int endDelay,
     int duration = 1000,
     @required
-    Map<Metric, dynamic> metrics,
+    _Metric metric,
     int x,
     int y,
   }) : this.move(
     beginDelay: beginDelay,
     endDelay: endDelay,
     duration: duration,
-    x: metrics[Metric.coreCardSize] * (x ?? 0),
-    y: metrics[Metric.coreCardSize] * (y ?? 0),
+    x: metric.coreCardSize * (x ?? 0),
+    y: metric.coreCardSize * (y ?? 0),
   );
 
   /// 移动 header footer 卡片.
@@ -287,15 +287,15 @@ class _PropertyAnimation {
     int endDelay,
     int duration = 1000,
     @required
-    Map<Metric, dynamic> metrics,
+    _Metric metric,
     int x,
     int y,
   }) : this.move(
     beginDelay: beginDelay,
     endDelay: endDelay,
     duration: duration,
-    x: metrics[Metric.headerFooterCardSize] * (x ?? 0),
-    y: metrics[Metric.headerFooterCardSize] * (y ?? 0),
+    x: metric.headerFooterCardSize * (x ?? 0),
+    y: metric.headerFooterCardSize * (y ?? 0),
   );
 
   /// 翻转进入.

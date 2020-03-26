@@ -8,26 +8,21 @@ part of '../data.dart';
 class _Game implements Game {
   _Game({
     this.callback,
-  }) {
-//    build();
-    initCards();
-  }
+  });
 
   final GameCallback callback;
 
   //*******************************************************************************************************************
 
-  /// 行数. 不包括 header footer.
-  int rowCount = 6;
-  /// 列数. 不包括 header footer.
-  int columnCount = 6;
+  /// 行列数. 不包括 header footer.
+  int size = 4;
 
   //*******************************************************************************************************************
 
   void initCards() {
 //    print(calcMap['gridPerCard']);
-    for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
-      for (int columnIndex = 0; columnIndex < columnCount; columnIndex++) {
+    for (int rowIndex = 0; rowIndex < size; rowIndex++) {
+      for (int columnIndex = 0; columnIndex < size; columnIndex++) {
 //        if (rowIndex == 2 && (columnIndex == 1 || columnIndex == 2)) {
 //          continue;
 //        }
@@ -50,59 +45,59 @@ class _Game implements Game {
 //    ));
     _cards.add(_GridCard(
       game: this,
-      rowGrid: (isVertical) => isVertical ? 0 : 0,
-      columnGrid: (isVertical) => isVertical ? 0 : 0,
-      rowGridSpan: (isVertical) => isVertical ? 10 : 10,
-      columnGridSpan: (isVertical) => isVertical ? 10 : 10,
+      gridColumnIndex: (isVertical) => isVertical ? 2 : 2,
+      gridRowIndex: (isVertical) => isVertical ? 2 : 2,
+      gridColumnSpan: (isVertical) => isVertical ? 10 : 10,
+      gridRowSpan: (isVertical) => isVertical ? 10 : 10,
     ));
     _cards.add(_GridCard(
       game: this,
-      rowGrid: (isVertical) => isVertical ? 10 : 10,
-      columnGrid: (isVertical) => isVertical ? 0 : 0,
-      rowGridSpan: (isVertical) => isVertical ? 10 : 10,
-      columnGridSpan: (isVertical) => isVertical ? 20 : 20,
+      gridColumnIndex: (isVertical) => isVertical ? 2 : 2,
+      gridRowIndex: (isVertical) => isVertical ? 12 : 12,
+      gridColumnSpan: (isVertical) => isVertical ? 20 : 20,
+      gridRowSpan: (isVertical) => isVertical ? 10 : 10,
     ));
     _cards.add(_GridCard(
       game: this,
-      rowGrid: (isVertical) => isVertical ? 88 : 0,
-      columnGrid: (isVertical) => isVertical ? 0 : 88,
-      rowGridSpan: (isVertical) => isVertical ? 10 : 10,
-      columnGridSpan: (isVertical) => isVertical ? 10 : 10,
+      gridColumnIndex: (isVertical) => isVertical ? 2 : 90,
+      gridRowIndex: (isVertical) => isVertical ? 90 : 2,
+      gridColumnSpan: (isVertical) => isVertical ? 10 : 10,
+      gridRowSpan: (isVertical) => isVertical ? 10 : 10,
     ));
     _cards.add(_GridCard(
       game: this,
-      rowGrid: (isVertical) => isVertical ? 88 : 10,
-      columnGrid: (isVertical) => isVertical ? 10 : 88,
-      rowGridSpan: (isVertical) => isVertical ? 10 : 10,
-      columnGridSpan: (isVertical) => isVertical ? 10 : 10,
+      gridColumnIndex: (isVertical) => isVertical ? 12 : 90,
+      gridRowIndex: (isVertical) => isVertical ? 90 : 12,
+      gridColumnSpan: (isVertical) => isVertical ? 10 : 10,
+      gridRowSpan: (isVertical) => isVertical ? 10 : 10,
     ));
     _cards.add(_GridCard(
       game: this,
-      rowGrid: (isVertical) => isVertical ? 88 : 20,
-      columnGrid: (isVertical) => isVertical ? 20 : 88,
-      rowGridSpan: (isVertical) => isVertical ? 10 : 10,
-      columnGridSpan: (isVertical) => isVertical ? 10 : 10,
+      gridColumnIndex: (isVertical) => isVertical ? 22 : 90,
+      gridRowIndex: (isVertical) => isVertical ? 90 : 22,
+      gridColumnSpan: (isVertical) => isVertical ? 10 : 10,
+      gridRowSpan: (isVertical) => isVertical ? 10 : 10,
     ));
     _cards.add(_GridCard(
       game: this,
-      rowGrid: (isVertical) => isVertical ? 88 : 30,
-      columnGrid: (isVertical) => isVertical ? 30 : 88,
-      rowGridSpan: (isVertical) => isVertical ? 10 : 10,
-      columnGridSpan: (isVertical) => isVertical ? 10 : 10,
+      gridColumnIndex: (isVertical) => isVertical ? 32 : 90,
+      gridRowIndex: (isVertical) => isVertical ? 90 : 32,
+      gridColumnSpan: (isVertical) => isVertical ? 10 : 10,
+      gridRowSpan: (isVertical) => isVertical ? 10 : 10,
     ));
     _cards.add(_GridCard(
       game: this,
-      rowGrid: (isVertical) => isVertical ? 88 : 40,
-      columnGrid: (isVertical) => isVertical ? 40 : 88,
-      rowGridSpan: (isVertical) => isVertical ? 10 : 10,
-      columnGridSpan: (isVertical) => isVertical ? 10 : 10,
+      gridColumnIndex: (isVertical) => isVertical ? 42 : 90,
+      gridRowIndex: (isVertical) => isVertical ? 90 : 42,
+      gridColumnSpan: (isVertical) => isVertical ? 10 : 10,
+      gridRowSpan: (isVertical) => isVertical ? 10 : 10,
     ));
     _cards.add(_GridCard(
       game: this,
-      rowGrid: (isVertical) => isVertical ? 88 : 50,
-      columnGrid: (isVertical) => isVertical ? 50 : 88,
-      rowGridSpan: (isVertical) => isVertical ? 10 : 10,
-      columnGridSpan: (isVertical) => isVertical ? 10 : 10,
+      gridColumnIndex: (isVertical) => isVertical ? 52 : 90,
+      gridRowIndex: (isVertical) => isVertical ? 90 : 52,
+      gridColumnSpan: (isVertical) => isVertical ? 10 : 10,
+      gridRowSpan: (isVertical) => isVertical ? 10 : 10,
     ));
   }
 
@@ -113,20 +108,6 @@ class _Game implements Game {
   @override
   BuiltList<Card> get cards {
     return _cards.build();
-  }
-
-  //*******************************************************************************************************************
-
-  /// 安全矩形.
-  @override
-  Rect get safeRect {
-    return calcMap['safeRect'];
-  }
-
-  /// 游戏面板矩形.
-  @override
-  Rect get boardRect {
-    return calcMap['boardRect'];
   }
 
   //*******************************************************************************************************************
@@ -173,7 +154,7 @@ class _Game implements Game {
 
           actionQueue.add(
             _PropertyAnimation.moveCoreCard(
-              metrics: metrics,
+              metric: _metric,
               x: -1,
             ).action(rightCard)
           );
@@ -228,107 +209,348 @@ class _Game implements Game {
 
   //*******************************************************************************************************************
 
-  Map<String, dynamic> calc() {
-    const double padding = 8.0;
-    // 默认网格数. 竖屏时水平方向的网格数, 或横屏时垂直方向的网格数.
-    const int defaultGridCount = 60;
-    // Header 和 footer 占用的网格数. 竖屏时占用高度, 横屏时占用宽度. 其中 8 格是 header footer 和 body 的间距.
-    const int headerFooterGridCount = 48;
-
-    MediaQueryData mediaQueryData = MediaQuery.of(callback.context);
-    double safeWidth = mediaQueryData.size.width - mediaQueryData.padding.horizontal;
-    double safeHeight = mediaQueryData.size.height - mediaQueryData.padding.vertical;
-    bool isVertical = safeWidth <= safeHeight;
-    // 水平方向网格数量.
-    int horizontalGridCount;
-    // 垂直方向网格数量.
-    int verticalGridCount;
-    // 游戏面板水平方向网格数量.
-    int boardHorizontalGridCount;
-    // 游戏面板垂直方向网格数量.
-    int boardVerticalGridCount;
-    // 每个卡片占用几个网格.
-    int gridPerCard;
-    if (isVertical) {
-      // 竖屏.
-      horizontalGridCount = defaultGridCount;
-      verticalGridCount = defaultGridCount ~/ columnCount * rowCount + headerFooterGridCount;
-      boardHorizontalGridCount = horizontalGridCount;
-      boardVerticalGridCount = verticalGridCount - headerFooterGridCount;
-      gridPerCard = defaultGridCount ~/ columnCount;
-    } else {
-      // 横屏.
-      verticalGridCount = defaultGridCount;
-      horizontalGridCount = defaultGridCount ~/ rowCount * columnCount + headerFooterGridCount;
-      boardHorizontalGridCount = horizontalGridCount - headerFooterGridCount;
-      boardVerticalGridCount = verticalGridCount;
-      gridPerCard = defaultGridCount ~/ rowCount;
-    }
-    // 网格宽高.
-    double gridSize = min(
-      (safeWidth - padding * 2.0) / horizontalGridCount,
-      (safeHeight - padding * 2.0) / verticalGridCount,
-    );
-
-    double safeRectWidth = gridSize * horizontalGridCount + padding * 2.0;
-    double safeRectHeight = gridSize * verticalGridCount + padding * 2.0;
-    Rect safeRect = Rect.fromLTWH(
-      (safeWidth - safeRectWidth) / 2.0,
-      (safeHeight - safeRectHeight) / 2.0,
-      safeRectWidth,
-      safeRectHeight,
-    );
-
-    double boardRectWidth = gridSize * boardHorizontalGridCount + padding * 2.0;
-    double boardRectHeight = gridSize * boardVerticalGridCount + padding * 2.0;
-    Rect boardRect = Rect.fromLTWH(
-      (safeWidth - boardRectWidth) / 2.0,
-      (safeHeight - boardRectHeight) / 2.0,
-      boardRectWidth,
-      boardRectHeight,
-    );
-
-    // 左边距.
-    double gridCardSpaceLeft = ((safeWidth - padding * 2.0) - gridSize * horizontalGridCount) / 2.0 + padding;
-    // 上边距.
-    double gridCardSpaceTop = ((safeHeight - padding * 2.0) - gridSize * verticalGridCount) / 2.0 + padding;
-
-    // 卡片宽高.
-    double cardSize = gridSize * gridPerCard;
-    double headerFooterCardSize = gridSize * 10;
-
-    metrics = {
-      Metric.gridSize: gridSize,
-      Metric.coreCardSize: cardSize,
-      Metric.headerFooterCardSize: headerFooterCardSize,
-    };
-
-    return {
-      'safeRect': safeRect,
-      'boardRect': boardRect,
-      'gridCardSpaceLeft': gridCardSpaceLeft,
-      'gridCardSpaceTop': gridCardSpaceTop,
-      'gridSize': gridSize,
-      'isVertical': isVertical,
-      'gridPerCard': gridPerCard,
-      'cardSize': cardSize,
-    };
-  }
-  
-  Map<String, dynamic> calcMap;
-
-  Map<Metric, dynamic> metrics;
+  @override
+  Metric get metric => _metric;
+  _Metric _metric;
+  _MetricCache metricCache;
 
   @override
   void build() {
-    calcMap = calc();
+    MediaQueryData mediaQueryData = MediaQuery.of(callback.context);
+    _MetricCache metricCache = _MetricCache(mediaQueryData, size);
+    if (this.metricCache != metricCache) {
+      this.metricCache = metricCache;
+      _metric = _buildMetric(mediaQueryData, size);
+    }
+
+    if (_cards.isEmpty) {
+      initCards();
+    }
   }
-
-  //*******************************************************************************************************************
 }
 
-enum Metric {
-  gridSize,
-  coreCardSize,
-  headerFooterCardSize,
+class _MetricCache {
+  const _MetricCache(this.mediaQueryData, this.size);
+
+  final MediaQueryData mediaQueryData;
+  final int size;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+          other is _MetricCache &&
+              runtimeType == other.runtimeType &&
+              mediaQueryData == other.mediaQueryData &&
+              size == other.size;
+
+  @override
+  int get hashCode =>
+      mediaQueryData.hashCode ^
+      size.hashCode;
 }
+
+//*********************************************************************************************************************
+
+Metric _buildMetric(MediaQueryData mediaQueryData, int size) {
+  /// 安全的屏幕矩形.
+  Rect safeScreenRect = Rect.fromLTWH(
+    0.0,
+    0.0,
+    mediaQueryData.size.width - mediaQueryData.padding.left - mediaQueryData.padding.right,
+    mediaQueryData.size.height - mediaQueryData.padding.top - mediaQueryData.padding.bottom,
+  );
+  /// 屏幕矩形.
+  Rect screenRect = Rect.fromLTRB(
+    safeScreenRect.left - mediaQueryData.padding.left,
+    safeScreenRect.top - mediaQueryData.padding.top,
+    safeScreenRect.right + mediaQueryData.padding.right,
+    safeScreenRect.bottom + mediaQueryData.padding.bottom,
+  );
+  /// 是否竖屏. [MediaQueryData.orientation].
+  bool isVertical = screenRect.width <= screenRect.height;
+  /// 水平方向网格总数.
+  int horizontalGridCount;
+  /// 垂直方向网格总数.
+  int verticalGridCount;
+  if (isVertical) {
+    horizontalGridCount = _Metric.coreBoardGridCount;
+    verticalGridCount = _Metric.safeBoardGridCount;
+  } else {
+    horizontalGridCount = _Metric.safeBoardGridCount;
+    verticalGridCount = _Metric.coreBoardGridCount;
+  }
+  /// 网格尺寸.
+  double gridSize = min(safeScreenRect.width / horizontalGridCount, safeScreenRect.height / verticalGridCount);
+  
+  double safeBoardWidth = horizontalGridCount * gridSize;
+  double safeBoardHeight = verticalGridCount * gridSize;
+  /// 安全面板矩形.
+  Rect safeBoardRect = Rect.fromLTWH(
+    (safeScreenRect.width - safeBoardWidth) / 2.0,
+    (safeScreenRect.height - safeBoardHeight) / 2.0,
+    safeBoardWidth,
+    safeBoardHeight,
+  );
+
+  /// 边距尺寸.
+  double paddingSize = _Metric.paddingGridCount * gridSize;
+
+  double coreBoardSize = _Metric.coreBoardGridCount * gridSize;
+  /// 核心面板矩形 (包括 padding).
+  Rect coreBoardRect = Rect.fromLTWH(
+    (safeScreenRect.width - coreBoardSize) / 2.0,
+    (safeScreenRect.height - coreBoardSize) / 2.0,
+    coreBoardSize,
+    coreBoardSize,
+  );
+  /// 核心面板矩形 (不包括 padding).
+  Rect coreBoardNoPaddingRect = Rect.fromLTRB(
+    coreBoardRect.left + paddingSize,
+    coreBoardRect.top + paddingSize,
+    coreBoardRect.right - paddingSize,
+    coreBoardRect.bottom - paddingSize,
+  );
+
+  /// Header 面板矩形 (包括 padding).
+  Rect headerBoardRect;
+  /// Footer 面板矩形 (包括 padding).
+  Rect footerBoardRect;
+  if (isVertical) {
+    headerBoardRect = Rect.fromLTWH(
+      safeBoardRect.left,
+      safeBoardRect.top,
+      safeBoardRect.width,
+      coreBoardRect.top,
+    );
+    footerBoardRect = Rect.fromLTWH(
+      headerBoardRect.left,
+      coreBoardRect.bottom,
+      headerBoardRect.width,
+      headerBoardRect.height,
+    );
+  } else {
+    headerBoardRect = Rect.fromLTWH(
+      safeBoardRect.left,
+      safeBoardRect.top,
+      coreBoardRect.left,
+      safeBoardRect.height,
+    );
+    footerBoardRect = Rect.fromLTWH(
+      coreBoardRect.right,
+      headerBoardRect.top,
+      headerBoardRect.width,
+      headerBoardRect.height,
+    );
+  }
+  /// Header 面板矩形 (不包括 padding).
+  Rect headerBoardNoPadding = Rect.fromLTRB(
+    headerBoardRect.left + paddingSize,
+    headerBoardRect.top + paddingSize,
+    headerBoardRect.right - paddingSize,
+    headerBoardRect.bottom - paddingSize,
+  );
+  /// Footer 面板矩形 (不包括 padding).
+  Rect footerBoardNoPadding = Rect.fromLTRB(
+    footerBoardRect.left + paddingSize,
+    footerBoardRect.top + paddingSize,
+    footerBoardRect.right - paddingSize,
+    footerBoardRect.bottom - paddingSize,
+  );
+
+  Rect Function(
+      _OrientationGrid gridColumnIndex,
+      _OrientationGrid gridRowIndex,
+      _OrientationGrid gridColumnSpan,
+      _OrientationGrid gridRowSpan) gridRect = (gridColumnIndex, gridRowIndex, gridColumnSpan, gridRowSpan) {
+    return Rect.fromLTWH(
+      safeBoardRect.left + gridColumnIndex(isVertical) * gridSize,
+      safeBoardRect.top + gridRowIndex(isVertical) * gridSize,
+      gridColumnSpan(isVertical) * gridSize,
+      gridRowSpan(isVertical) * gridSize,
+    );
+  };
+
+  /// 每个核心卡片占几个网格.
+  int gridPerCoreCard = _Metric.coreBoardNoPaddingGridCount ~/ size;
+
+  /// 核心卡片尺寸.
+  double coreCardSize = gridPerCoreCard * gridSize;
+  /// Header footer 卡片尺寸.
+  double headerFooterCardSize = _Metric.gridPerHeaderFooterCard * gridSize;
+
+  int Function(_OrientationGrid gridColumnIndex) gridColumnIndexToColumnIndex = (gridColumnIndex) {
+    return (gridColumnIndex(isVertical) - _Metric.paddingGridCount - (isVertical ? 0 : _Metric.headerFooterBoardGridCount)) ~/ gridPerCoreCard;
+  };
+
+  int Function(_OrientationGrid gridRowIndex) gridRowIndexToRowIndex = (gridRowIndex) {
+    return (gridRowIndex(isVertical) - _Metric.paddingGridCount - (isVertical ? _Metric.headerFooterBoardGridCount : 0)) ~/ gridPerCoreCard;
+  };
+
+  int Function(_OrientationGrid gridColumnSpan) gridColumnSpanToColumnSpan = (gridColumnSpan) {
+    return gridColumnSpan(isVertical) ~/ gridPerCoreCard;
+  };
+
+  int Function(_OrientationGrid gridRowSpan) gridRowSpanToRowSpan = (gridRowSpan) {
+    return gridRowSpan(isVertical) ~/ gridPerCoreCard;
+  };
+
+  _OrientationGrid Function(int columnIndex) columnIndexToGridColumnIndex = (columnIndex) {
+    return (isVertical) {
+      return gridPerCoreCard * columnIndex + _Metric.paddingGridCount + (isVertical ? 0 : _Metric.headerFooterBoardGridCount);
+    };
+  };
+
+  _OrientationGrid Function(int rowIndex) rowIndexToGridRowIndex = (rowIndex) {
+    return (isVertical) {
+      return gridPerCoreCard * rowIndex + _Metric.paddingGridCount + (isVertical ? _Metric.headerFooterBoardGridCount : 0);
+    };
+  };
+
+  _OrientationGrid Function(int columnSpan) columnSpanToGridColumnSpan = (columnSpan) {
+    return (isVertical) {
+      return gridPerCoreCard * columnSpan;
+    };
+  };
+
+  _OrientationGrid Function(int rowSpan) rowSpanToGridRowSpan = (rowSpan) {
+    return (isVertical) {
+      return gridPerCoreCard * rowSpan;
+    };
+  };
+
+  return _Metric(
+    size: size,
+    safeScreenRect: safeScreenRect,
+    screenRect: screenRect,
+    isVertical: isVertical,
+    horizontalGridCount: horizontalGridCount,
+    verticalGridCount: verticalGridCount,
+    gridSize: gridSize,
+    safeBoardRect: safeBoardRect,
+    coreBoardRect: coreBoardRect,
+    coreBoardNoPaddingRect: coreBoardNoPaddingRect,
+    headerBoardRect: headerBoardRect,
+    footerBoardRect: footerBoardRect,
+    headerBoardNoPadding: headerBoardNoPadding,
+    footerBoardNoPadding: footerBoardNoPadding,
+    gridRect: gridRect,
+    gridPerCoreCard: gridPerCoreCard,
+    coreCardSize: coreCardSize,
+    headerFooterCardSize: headerFooterCardSize,
+    gridColumnIndexToColumnIndex: gridColumnIndexToColumnIndex,
+    gridRowIndexToRowIndex: gridRowIndexToRowIndex,
+    gridColumnSpanToColumnSpan: gridColumnSpanToColumnSpan,
+    gridRowSpanToRowSpan: gridRowSpanToRowSpan,
+    columnIndexToGridColumnIndex: columnIndexToGridColumnIndex,
+    rowIndexToGridRowIndex: rowIndexToGridRowIndex,
+    columnSpanToGridColumnSpan: columnSpanToGridColumnSpan,
+    rowSpanToGridRowSpan: rowSpanToGridRowSpan,
+  );
+}
+
+class _Metric implements Metric {
+  /// 边距网格总数.
+  static const int paddingGridCount = 2;
+  /// 核心面板网格总数 (不包括 padding).
+  static const int coreBoardNoPaddingGridCount = 60;
+  /// Header footer 面板网格总数 (不包括 padding).
+  static const int headerFooterBoardNoPaddingGridCount = 20;
+  /// 核心面板网格总数 (包括 padding).
+  static const int coreBoardGridCount = coreBoardNoPaddingGridCount + paddingGridCount * 2;
+  /// Header footer 面板网格总数 (包括 padding).
+  static const int headerFooterBoardGridCount = headerFooterBoardNoPaddingGridCount + paddingGridCount * 2;
+  /// 安全面板网格总数.
+  static const int safeBoardGridCount = coreBoardGridCount + headerFooterBoardGridCount * 2;
+  static const int gridPerHeaderFooterCard = 10;
+
+  _Metric({
+    @required
+    this.size,
+    @required
+    this.safeScreenRect,
+    @required
+    this.screenRect,
+    @required
+    this.isVertical,
+    @required
+    this.horizontalGridCount,
+    @required
+    this.verticalGridCount,
+    @required
+    this.gridSize,
+    @required
+    this.safeBoardRect,
+    @required
+    this.coreBoardRect,
+    @required
+    this.coreBoardNoPaddingRect,
+    @required
+    this.headerBoardRect,
+    @required
+    this.footerBoardRect,
+    @required
+    this.headerBoardNoPadding,
+    @required
+    this.footerBoardNoPadding,
+    @required
+    this.gridRect,
+    @required
+    this.gridPerCoreCard,
+    @required
+    this.coreCardSize,
+    @required
+    this.headerFooterCardSize,
+    @required
+    this.gridColumnIndexToColumnIndex,
+    @required
+    this.gridRowIndexToRowIndex,
+    @required
+    this.gridColumnSpanToColumnSpan,
+    @required
+    this.gridRowSpanToRowSpan,
+    @required
+    this.columnIndexToGridColumnIndex,
+    @required
+    this.rowIndexToGridRowIndex,
+    @required
+    this.columnSpanToGridColumnSpan,
+    @required
+    this.rowSpanToGridRowSpan,
+  });
+
+  final int size;
+  final Rect safeScreenRect;
+  final Rect screenRect;
+  final bool isVertical;
+  final int horizontalGridCount;
+  final int verticalGridCount;
+  final double gridSize;
+  @override
+  final Rect safeBoardRect;
+  @override
+  final Rect coreBoardRect;
+  final Rect coreBoardNoPaddingRect;
+  final Rect headerBoardRect;
+  final Rect footerBoardRect;
+  final Rect headerBoardNoPadding;
+  final Rect footerBoardNoPadding;
+  final Rect Function(
+      _OrientationGrid gridColumnIndex,
+      _OrientationGrid gridRowIndex,
+      _OrientationGrid gridColumnSpan,
+      _OrientationGrid gridRowSpan) gridRect;
+  final int gridPerCoreCard;
+  final double coreCardSize;
+  final double headerFooterCardSize;
+  final int Function(_OrientationGrid gridColumnIndex) gridColumnIndexToColumnIndex;
+  final int Function(_OrientationGrid gridRowIndex) gridRowIndexToRowIndex;
+  final int Function(_OrientationGrid gridColumnSpan) gridColumnSpanToColumnSpan;
+  final int Function(_OrientationGrid gridRowSpan) gridRowSpanToRowSpan;
+  final _OrientationGrid Function(int columnIndex) columnIndexToGridColumnIndex;
+  final _OrientationGrid Function(int rowIndex) rowIndexToGridRowIndex;
+  final _OrientationGrid Function(int columnSpan) columnSpanToGridColumnSpan;
+  final _OrientationGrid Function(int rowSpan) rowSpanToGridRowSpan;
+}
+
+/// 根据屏幕方向返回网格值.
+typedef _OrientationGrid = int Function(bool isVertical);
