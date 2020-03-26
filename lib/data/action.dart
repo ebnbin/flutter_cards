@@ -1,123 +1,113 @@
 part of '../data.dart';
 
 //*********************************************************************************************************************
-// 事件. 添加一个动画或一个操作到事件队列.
 
-/// 事件管理类.
-///
-/// 事件队列管理事件. 通过 [add] 添加事件到事件队列, 每个事件结束后从事件队列头部取出事件并处理.
-class _ActionManager {
-  _ActionManager({
+/// 事件队列.
+class _ActionQueue {
+  _ActionQueue({
     this.max = -1,
   });
 
-  /// 队列最大数量, 默认为 -1 表示无限制.
-  ///
-  /// 正在处理的事件已经被移出队列因此不计数. 例如 max = 1 表示除了正在处理的事件外还可以再添加一个事件.
-  ///
-  /// 改变 max 不会导致已经加入队列的事件被移除. 例如队列中存在 3 个事件时 max = 1 不会移除已经存在的事件.
-  int max;
+  /// 队列最大数量. -1 表示不限制. 正在处理的事件已经被移出队列因此不计数.
+  final int max;
 
-  /// 事件队列.
-  final Queue<_Action> actions = Queue();
-
-  /// 是否正在处理事件.
-  bool isActing = false;
-
-  /// 尝试从事件队列头部取出事件并处理.
+  /// 事件队列. List 中的事件会被同时执行, list 中的最后一个结束的事件结束时整个 list 事件结束.
+  final Queue<List<_Action>> queue = Queue();
+  
+  /// 正在处理的事件.
+  List<_Action> actingActions;
+  
+  /// 从事件队列头部取出事件并处理.
   void handle() {
-    if (isActing || actions.isEmpty) {
+    if (actingActions != null || queue.isEmpty) {
       return;
     }
-    isActing = true;
-    actions.removeFirst().begin(this);
+    actingActions = queue.removeFirst();
+    actingActions.build().forEach((element) {
+      element.begin(this);
+    });
   }
 
-  /// 添加事件到事件队列, 并触发一次尝试处理.
+  /// 添加事件, 并尝试处理事件.
   ///
-  /// 返回是否成功的添加到队列. 可能因为队列最大数量而无法添加.
+  /// 返回是否成功的添加到队列, 如果事件为空或超过队列最大数量限制则添加失败.
   ///
-  /// [addFirst] 是否添加到队列头部, 默认为 false 添加到队列尾部.
-  bool add(_Action action, {
+  /// [addFirst] 添加到队列头部或尾部.
+  bool addList(List<_Action> actions, {
     bool addFirst = false,
   }) {
-    assert(action != null);
-    if (max >= 0 && actions.length >= max) {
+    if (actions == null || actions.isEmpty) {
+      return false;
+    }
+    if (max >= 0 && queue.length >= max) {
       return false;
     }
     if (addFirst) {
-      actions.addFirst(action);
+      queue.addFirst(actions);
     } else {
-      actions.addLast(action);
+      queue.addLast(actions);
     }
     handle();
     return true;
   }
 
-  /// 清除事件队列.
+  bool add(_Action action, {
+    bool addFirst = false,
+  }) {
+    return addList([action],
+      addFirst: addFirst,
+    );
+  }
+
+  /// 只能被 [_Action] 调用.
+  void end(_Action action) {
+    if (!actingActions.remove(action)) {
+      return;
+    }
+    if (actingActions.isEmpty) {
+      actingActions = null;
+      handle();
+    }
+  }
+
+  /// 清除事件队列. 正在执行的事件不会被终止.
   ///
-  /// 正在执行的事件不会被终止.
-  ///
-  /// 返回被清除的事件数量.
+  /// 返回被清除的 list 数量.
   int clear() {
-    int length = actions.length;
-    actions.clear();
+    int length = queue.length;
+    queue.clear();
     return length;
   }
 }
 
+//*********************************************************************************************************************
+
 /// 事件.
-///
-/// 事件执行结束时必须调用 [end].
 class _Action {
-  _Action({
-    this.onBegin,
-    this.onEnd,
+  _Action(this.beginCallback);
+
+  /// 执行 [runnable] 后立即结束事件.
+  _Action.run(void Function(_Action action) runnable) : this((action) {
+    runnable.call(action);
+    action.end();
   });
 
-  /// 动画事件.
-  _Action.animation({
-    @required
-    _Card card,
-    @required
-    _PropertyAnimation animation,
-  }) : this(onBegin: (_Action action) {
-    animation.begin(card, endCallback: () {
-      action.end();
-    });
-  },
-  );
+  /// 事件开始执行回调.
+  final void Function(_Action action) beginCallback;
 
-  _Action.run({
-    _ActionRunnable runnable,
-  }) : this(
-    onBegin: (_Action action) {
-      action.end();
-    },
-    onEnd: runnable,
-  );
+  _ActionQueue actionQueue;
 
-  final _ActionRunnable onBegin;
-  final _ActionRunnable onEnd;
-
-  _ActionManager actionManager;
-
-  /// 开始执行事件.
-  void begin(_ActionManager actionManager) {
-    assert(this.actionManager == null);
-    assert(actionManager != null);
-    this.actionManager = actionManager;
-    onBegin?.call(this);
+  /// 只能被 [_ActionQueue] 调用.
+  void begin(_ActionQueue actionQueue) {
+    assert(this.actionQueue == null && actionQueue != null);
+    this.actionQueue = actionQueue;
+    beginCallback?.call(this);
   }
 
-  /// 结束执行事件.
+  /// 事件结束时必需调用.
   void end() {
-    assert(actionManager != null);
-    onEnd?.call(this);
-    actionManager.isActing = false;
-    actionManager.handle();
-    actionManager = null;
+    assert(this.actionQueue != null);
+    actionQueue.end(this);
+    actionQueue = null;
   }
 }
-
-typedef _ActionRunnable = void Function(_Action action);

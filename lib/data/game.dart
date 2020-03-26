@@ -132,7 +132,7 @@ class _Game implements Game {
   //*******************************************************************************************************************
 
   /// 事件管理.
-  final _ActionManager actionManager = _ActionManager(
+  final _ActionQueue actionQueue = _ActionQueue(
 //    max: 1,
   );
 
@@ -150,15 +150,15 @@ class _Game implements Game {
         card._color = Colors.grey;
         callback.setState(() {
         });
-        actionManager.add(_Action.run(runnable: (_Action action) {
+        actionQueue.add(_Action.run((_Action action) {
           card._color = Colors.green;
           callback.setState(() {
           });
         }));
-        actionManager.add(
-          _Action.animation(card: card, animation: _PropertyAnimation.flipOut(
+        actionQueue.add(
+          _PropertyAnimation.flipOut(
             angleY: _InvisibleAngle.counterClockwise90,
-          ),)
+          ).action(card)
         );
         if (card.rightCard != null && card.rightCard is _IndexCard) {
           _IndexCard rightCard = card.rightCard;
@@ -171,28 +171,27 @@ class _Game implements Game {
             initProperty: _Property.def(/*opacity: 0.0*/),
           );
 
-          actionManager.add(
-            _Action.animation(card: rightCard, animation: _PropertyAnimation.moveCoreCard(
+          actionQueue.add(
+            _PropertyAnimation.moveCoreCard(
               metrics: metrics,
               x: -1,
-            ),)
+            ).action(rightCard)
           );
-          actionManager.add(_Action.run(
-            runnable: (_Action action) {
-              rightCard.left();
-              rightCard._property = _Property.def();
+          actionQueue.add(_Action.run((_Action action) {
+            rightCard.left();
+            rightCard._property = _Property.def();
 
-              _cards[card.index] = newCard;
+            _cards[card.index] = newCard;
 
-              callback.setState(() {
-              });
-            },
+            callback.setState(() {
+            });
+          },
           )
           );
-          actionManager.add(
-            _Action.animation(card: newCard, animation: _PropertyAnimation.flipIn(
+          actionQueue.add(
+            _PropertyAnimation.flipIn(
               angleY: _InvisibleAngle.counterClockwise90,
-            ),)
+            ).action(newCard)
           );
         }
       } else {

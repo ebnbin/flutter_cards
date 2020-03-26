@@ -372,4 +372,13 @@ class _PropertyAnimation {
       animationController.forward();
     });
   }
+
+  /// 转化为 [_Action].
+  _Action action(_Card card) {
+    return _Action((action) {
+      begin(card, endCallback: () {
+        action.end();
+      },);
+    });
+  }
 }
