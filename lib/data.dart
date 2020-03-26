@@ -26,6 +26,8 @@ abstract class Property {
   bool Function(int zIndex) get zIndexVisible;
 
   double get margin;
+
+  Color get color;
 }
 
 //*********************************************************************************************************************
@@ -75,8 +77,6 @@ abstract class Card {
   Card._();
 
   Rect get rect;
-
-  Color get color;
 
   Property get property;
 

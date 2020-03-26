@@ -37,6 +37,7 @@ class _Property implements Property {
     this.opacity,
     this.visible,
     this.margin,
+    this.color,
   });
 
   /// 非 null 默认值.
@@ -53,7 +54,8 @@ class _Property implements Property {
     double radius = 4.0,
     double opacity = 1.0,
     bool visible = true,
-    double margin = 4,
+    double margin = 4.0,
+    Color color = Colors.white,
   }) : this(
     matrix4Entry32: matrix4Entry32,
     translateX: translateX,
@@ -68,6 +70,7 @@ class _Property implements Property {
     opacity: opacity,
     visible: visible,
     margin: margin,
+    color: color,
   );
 
   /// Matrix4.setEntry(3, 2, value);
@@ -122,7 +125,11 @@ class _Property implements Property {
     };
   }
 
+  @override
   final double margin;
+
+  @override
+  final Color color;
 
   /// 使用 other 中不为 null 的属性值更新 this 中对应的属性值, 返回新的 _Property.
   _Property update(_Property other) {
@@ -140,6 +147,7 @@ class _Property implements Property {
       opacity: other?.opacity ?? opacity,
       visible: other?.visible ?? visible,
       margin: other?.margin ?? margin,
+      color: other?.color ?? color,
     );
   }
 }

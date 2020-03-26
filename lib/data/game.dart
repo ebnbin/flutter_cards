@@ -28,10 +28,7 @@ class _Game implements Game {
 //        }
         _IndexCard card = _IndexCard(
           game: this,
-          rowIndex: rowIndex,
-          columnIndex: columnIndex,
-          rowSpan: 1,
-          columnSpan: 1,
+          coreCardGrid: _Grid(rowIndex: rowIndex, columnIndex: columnIndex, rowSpan: 1, columnSpan: 1),
         );
         _cards.add(card);
       }
@@ -43,61 +40,53 @@ class _Game implements Game {
 //      rowSpan: 1,
 //      columnSpan: 2,
 //    ));
-    _cards.add(_GridCard(
+    _cards.add(_Card(
       game: this,
-      gridColumnIndex: (isVertical) => isVertical ? 2 : 2,
-      gridRowIndex: (isVertical) => isVertical ? 2 : 2,
-      gridColumnSpan: (isVertical) => isVertical ? 10 : 10,
-      gridRowSpan: (isVertical) => isVertical ? 10 : 10,
+      grid: (isVertical) => isVertical
+          ? _Grid(rowIndex: 2, columnIndex: 2, rowSpan: 10, columnSpan: 10)
+          : _Grid(rowIndex: 2, columnIndex: 2, rowSpan: 10, columnSpan: 10),
     ));
-    _cards.add(_GridCard(
+    _cards.add(_Card(
       game: this,
-      gridColumnIndex: (isVertical) => isVertical ? 2 : 2,
-      gridRowIndex: (isVertical) => isVertical ? 12 : 12,
-      gridColumnSpan: (isVertical) => isVertical ? 20 : 20,
-      gridRowSpan: (isVertical) => isVertical ? 10 : 10,
+      grid: (isVertical) => isVertical
+          ? _Grid(rowIndex: 12, columnIndex: 2, rowSpan: 10, columnSpan: 20)
+          : _Grid(rowIndex: 12, columnIndex: 2, rowSpan: 10, columnSpan: 20),
     ));
-    _cards.add(_GridCard(
+    _cards.add(_Card(
       game: this,
-      gridColumnIndex: (isVertical) => isVertical ? 2 : 90,
-      gridRowIndex: (isVertical) => isVertical ? 90 : 2,
-      gridColumnSpan: (isVertical) => isVertical ? 10 : 10,
-      gridRowSpan: (isVertical) => isVertical ? 10 : 10,
+      grid: (isVertical) => isVertical
+          ? _Grid(rowIndex: 90, columnIndex: 2, rowSpan: 10, columnSpan: 10)
+          : _Grid(rowIndex: 2, columnIndex: 90, rowSpan: 10, columnSpan: 10),
     ));
-    _cards.add(_GridCard(
+    _cards.add(_Card(
       game: this,
-      gridColumnIndex: (isVertical) => isVertical ? 12 : 90,
-      gridRowIndex: (isVertical) => isVertical ? 90 : 12,
-      gridColumnSpan: (isVertical) => isVertical ? 10 : 10,
-      gridRowSpan: (isVertical) => isVertical ? 10 : 10,
+      grid: (isVertical) => isVertical
+          ? _Grid(rowIndex: 90, columnIndex: 12, rowSpan: 10, columnSpan: 10)
+          : _Grid(rowIndex: 12, columnIndex: 90, rowSpan: 10, columnSpan: 10),
     ));
-    _cards.add(_GridCard(
+    _cards.add(_Card(
       game: this,
-      gridColumnIndex: (isVertical) => isVertical ? 22 : 90,
-      gridRowIndex: (isVertical) => isVertical ? 90 : 22,
-      gridColumnSpan: (isVertical) => isVertical ? 10 : 10,
-      gridRowSpan: (isVertical) => isVertical ? 10 : 10,
+      grid: (isVertical) => isVertical
+          ? _Grid(rowIndex: 90, columnIndex: 22, rowSpan: 10, columnSpan: 10)
+          : _Grid(rowIndex: 22, columnIndex: 90, rowSpan: 10, columnSpan: 10),
     ));
-    _cards.add(_GridCard(
+    _cards.add(_Card(
       game: this,
-      gridColumnIndex: (isVertical) => isVertical ? 32 : 90,
-      gridRowIndex: (isVertical) => isVertical ? 90 : 32,
-      gridColumnSpan: (isVertical) => isVertical ? 10 : 10,
-      gridRowSpan: (isVertical) => isVertical ? 10 : 10,
+      grid: (isVertical) => isVertical
+          ? _Grid(rowIndex: 90, columnIndex: 32, rowSpan: 10, columnSpan: 10)
+          : _Grid(rowIndex: 32, columnIndex: 90, rowSpan: 10, columnSpan: 10),
     ));
-    _cards.add(_GridCard(
+    _cards.add(_Card(
       game: this,
-      gridColumnIndex: (isVertical) => isVertical ? 42 : 90,
-      gridRowIndex: (isVertical) => isVertical ? 90 : 42,
-      gridColumnSpan: (isVertical) => isVertical ? 10 : 10,
-      gridRowSpan: (isVertical) => isVertical ? 10 : 10,
+      grid: (isVertical) => isVertical
+          ? _Grid(rowIndex: 90, columnIndex: 42, rowSpan: 10, columnSpan: 10)
+          : _Grid(rowIndex: 42, columnIndex: 90, rowSpan: 10, columnSpan: 10),
     ));
-    _cards.add(_GridCard(
+    _cards.add(_Card(
       game: this,
-      gridColumnIndex: (isVertical) => isVertical ? 52 : 90,
-      gridRowIndex: (isVertical) => isVertical ? 90 : 52,
-      gridColumnSpan: (isVertical) => isVertical ? 10 : 10,
-      gridRowSpan: (isVertical) => isVertical ? 10 : 10,
+      grid: (isVertical) => isVertical
+          ? _Grid(rowIndex: 90, columnIndex: 52, rowSpan: 10, columnSpan: 10)
+          : _Grid(rowIndex: 52, columnIndex: 90, rowSpan: 10, columnSpan: 10),
     ));
   }
 
@@ -128,11 +117,15 @@ class _Game implements Game {
     assert(card != null);
     return () {
       if (card is _IndexCard) {
-        card._color = Colors.grey;
+        card.updateProperty(_Property(
+          color: Colors.grey,
+        ));
         callback.setState(() {
         });
         actionQueue.add(_Action.run((_Action action) {
-          card._color = Colors.green;
+          card.updateProperty(_Property(
+            color: Colors.green,
+          ));
           callback.setState(() {
           });
         }));
@@ -145,10 +138,7 @@ class _Game implements Game {
           _IndexCard rightCard = card.rightCard;
           _IndexCard newCard = _IndexCard(
             game: this,
-            rowIndex: rightCard.rowIndex,
-            columnIndex: rightCard.columnIndex,
-            rowSpan: 1,
-            columnSpan: 1,
+            coreCardGrid: _Grid(rowIndex: rightCard.coreCardGrid.rowIndex, columnIndex: rightCard.coreCardGrid.columnIndex, rowSpan: 1, columnSpan: 1),
             initProperty: _Property.def(/*opacity: 0.0*/),
           );
 
@@ -357,16 +347,13 @@ Metric _buildMetric(MediaQueryData mediaQueryData, int size) {
     footerBoardRect.bottom - paddingSize,
   );
 
-  Rect Function(
-      _OrientationGrid gridColumnIndex,
-      _OrientationGrid gridRowIndex,
-      _OrientationGrid gridColumnSpan,
-      _OrientationGrid gridRowSpan) gridRect = (gridColumnIndex, gridRowIndex, gridColumnSpan, gridRowSpan) {
+  Rect Function(_OrientationGrid orientationGrid) gridRect = (orientationGrid) {
+    _Grid grid = orientationGrid(isVertical);
     return Rect.fromLTWH(
-      safeBoardRect.left + gridColumnIndex(isVertical) * gridSize,
-      safeBoardRect.top + gridRowIndex(isVertical) * gridSize,
-      gridColumnSpan(isVertical) * gridSize,
-      gridRowSpan(isVertical) * gridSize,
+      safeBoardRect.left + grid.columnIndex * gridSize,
+      safeBoardRect.top + grid.rowIndex * gridSize,
+      grid.columnSpan * gridSize,
+      grid.rowSpan * gridSize,
     );
   };
 
@@ -378,43 +365,24 @@ Metric _buildMetric(MediaQueryData mediaQueryData, int size) {
   /// Header footer 卡片尺寸.
   double headerFooterCardSize = _Metric.gridPerHeaderFooterCard * gridSize;
 
-  int Function(_OrientationGrid gridColumnIndex) gridColumnIndexToColumnIndex = (gridColumnIndex) {
-    return (gridColumnIndex(isVertical) - _Metric.paddingGridCount - (isVertical ? 0 : _Metric.headerFooterBoardGridCount)) ~/ gridPerCoreCard;
+  _Grid Function(_OrientationGrid orientationGrid) gridToCoreCardGrid = (orientationGrid) {
+    _Grid grid = orientationGrid(isVertical);
+    return _Grid(
+      rowIndex: (grid.rowIndex - _Metric.paddingGridCount - (isVertical ? _Metric.headerFooterBoardGridCount : 0)) ~/ gridPerCoreCard,
+      columnIndex: (grid.columnIndex - _Metric.paddingGridCount - (isVertical ? 0 : _Metric.headerFooterBoardGridCount)) ~/ gridPerCoreCard,
+      rowSpan: grid.rowSpan ~/ gridPerCoreCard,
+      columnSpan: grid.columnSpan ~/ gridPerCoreCard,
+    );
   };
 
-  int Function(_OrientationGrid gridRowIndex) gridRowIndexToRowIndex = (gridRowIndex) {
-    return (gridRowIndex(isVertical) - _Metric.paddingGridCount - (isVertical ? _Metric.headerFooterBoardGridCount : 0)) ~/ gridPerCoreCard;
-  };
-
-  int Function(_OrientationGrid gridColumnSpan) gridColumnSpanToColumnSpan = (gridColumnSpan) {
-    return gridColumnSpan(isVertical) ~/ gridPerCoreCard;
-  };
-
-  int Function(_OrientationGrid gridRowSpan) gridRowSpanToRowSpan = (gridRowSpan) {
-    return gridRowSpan(isVertical) ~/ gridPerCoreCard;
-  };
-
-  _OrientationGrid Function(int columnIndex) columnIndexToGridColumnIndex = (columnIndex) {
+  _OrientationGrid Function(_Grid coreCardGrid) coreCardGridToGrid = (coreCardGrid) {
     return (isVertical) {
-      return gridPerCoreCard * columnIndex + _Metric.paddingGridCount + (isVertical ? 0 : _Metric.headerFooterBoardGridCount);
-    };
-  };
-
-  _OrientationGrid Function(int rowIndex) rowIndexToGridRowIndex = (rowIndex) {
-    return (isVertical) {
-      return gridPerCoreCard * rowIndex + _Metric.paddingGridCount + (isVertical ? _Metric.headerFooterBoardGridCount : 0);
-    };
-  };
-
-  _OrientationGrid Function(int columnSpan) columnSpanToGridColumnSpan = (columnSpan) {
-    return (isVertical) {
-      return gridPerCoreCard * columnSpan;
-    };
-  };
-
-  _OrientationGrid Function(int rowSpan) rowSpanToGridRowSpan = (rowSpan) {
-    return (isVertical) {
-      return gridPerCoreCard * rowSpan;
+      return _Grid(
+        rowIndex: gridPerCoreCard * coreCardGrid.rowIndex + _Metric.paddingGridCount + (isVertical ? _Metric.headerFooterBoardGridCount : 0),
+        columnIndex: gridPerCoreCard * coreCardGrid.columnIndex + _Metric.paddingGridCount + (isVertical ? 0 : _Metric.headerFooterBoardGridCount),
+        rowSpan: gridPerCoreCard * coreCardGrid.rowSpan,
+        columnSpan: gridPerCoreCard * coreCardGrid.columnSpan,
+      );
     };
   };
 
@@ -437,14 +405,8 @@ Metric _buildMetric(MediaQueryData mediaQueryData, int size) {
     gridPerCoreCard: gridPerCoreCard,
     coreCardSize: coreCardSize,
     headerFooterCardSize: headerFooterCardSize,
-    gridColumnIndexToColumnIndex: gridColumnIndexToColumnIndex,
-    gridRowIndexToRowIndex: gridRowIndexToRowIndex,
-    gridColumnSpanToColumnSpan: gridColumnSpanToColumnSpan,
-    gridRowSpanToRowSpan: gridRowSpanToRowSpan,
-    columnIndexToGridColumnIndex: columnIndexToGridColumnIndex,
-    rowIndexToGridRowIndex: rowIndexToGridRowIndex,
-    columnSpanToGridColumnSpan: columnSpanToGridColumnSpan,
-    rowSpanToGridRowSpan: rowSpanToGridRowSpan,
+    gridToCoreCardGrid: gridToCoreCardGrid,
+    coreCardGridToGrid: coreCardGridToGrid,
   );
 }
 
@@ -501,21 +463,9 @@ class _Metric implements Metric {
     @required
     this.headerFooterCardSize,
     @required
-    this.gridColumnIndexToColumnIndex,
+    this.gridToCoreCardGrid,
     @required
-    this.gridRowIndexToRowIndex,
-    @required
-    this.gridColumnSpanToColumnSpan,
-    @required
-    this.gridRowSpanToRowSpan,
-    @required
-    this.columnIndexToGridColumnIndex,
-    @required
-    this.rowIndexToGridRowIndex,
-    @required
-    this.columnSpanToGridColumnSpan,
-    @required
-    this.rowSpanToGridRowSpan,
+    this.coreCardGridToGrid,
   });
 
   final int size;
@@ -534,23 +484,72 @@ class _Metric implements Metric {
   final Rect footerBoardRect;
   final Rect headerBoardNoPadding;
   final Rect footerBoardNoPadding;
-  final Rect Function(
-      _OrientationGrid gridColumnIndex,
-      _OrientationGrid gridRowIndex,
-      _OrientationGrid gridColumnSpan,
-      _OrientationGrid gridRowSpan) gridRect;
+  final Rect Function(_OrientationGrid orientationGrid) gridRect;
   final int gridPerCoreCard;
   final double coreCardSize;
   final double headerFooterCardSize;
-  final int Function(_OrientationGrid gridColumnIndex) gridColumnIndexToColumnIndex;
-  final int Function(_OrientationGrid gridRowIndex) gridRowIndexToRowIndex;
-  final int Function(_OrientationGrid gridColumnSpan) gridColumnSpanToColumnSpan;
-  final int Function(_OrientationGrid gridRowSpan) gridRowSpanToRowSpan;
-  final _OrientationGrid Function(int columnIndex) columnIndexToGridColumnIndex;
-  final _OrientationGrid Function(int rowIndex) rowIndexToGridRowIndex;
-  final _OrientationGrid Function(int columnSpan) columnSpanToGridColumnSpan;
-  final _OrientationGrid Function(int rowSpan) rowSpanToGridRowSpan;
+  final _Grid Function(_OrientationGrid orientationGrid) gridToCoreCardGrid;
+  final _OrientationGrid Function(_Grid coreCardGrid) coreCardGridToGrid;
 }
 
-/// 根据屏幕方向返回网格值.
-typedef _OrientationGrid = int Function(bool isVertical);
+/// 网格.
+class _Grid {
+  const _Grid({
+    @required
+    this.rowIndex,
+    @required
+    this.columnIndex,
+    @required
+    this.rowSpan,
+    @required
+    this.columnSpan,
+  }) : assert(rowIndex != null),
+        assert(columnIndex != null),
+        assert(rowSpan != null),
+        assert(columnSpan != null);
+
+  _Grid update({
+    int rowIndex,
+    int columnIndex,
+    int rowSpan,
+    int columnSpan,
+  }) {
+    return _Grid(
+      rowIndex: rowIndex ?? this.rowIndex,
+      columnIndex: columnIndex ?? this.columnIndex,
+      rowSpan: rowSpan ?? this.rowSpan,
+      columnSpan: columnSpan ?? this.columnSpan,
+    );
+  }
+
+  _Grid offset({
+    int rowIndex,
+    int columnIndex,
+    int rowSpan,
+    int columnSpan,
+  }) {
+    return _Grid(
+      rowIndex: this.rowIndex + (rowIndex ?? 0),
+      columnIndex: this.columnIndex + (columnIndex ?? 0),
+      rowSpan: this.rowSpan + (rowSpan ?? 0),
+      columnSpan: this.columnSpan + (columnSpan ?? 0),
+    );
+  }
+  
+  /// 行.
+  final int rowIndex;
+  /// 列.
+  final int columnIndex;
+  /// 跨行.
+  final int rowSpan;
+  /// 跨列.
+  final int columnSpan;
+
+  @override
+  String toString() {
+    return '$rowIndex,$columnIndex,$rowSpan,$columnSpan';
+  }
+}
+
+/// 根据屏幕方向返回网格.
+typedef _OrientationGrid = _Grid Function(bool isVertical);
