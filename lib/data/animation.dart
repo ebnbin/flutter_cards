@@ -23,66 +23,33 @@ class _PropertyCalc {
 
 /// 属性.
 class _Property implements Property {
-  const _Property({
-    this.matrix4Entry32,
-    this.translateX,
-    this.translateY,
-    this.rotateX,
-    this.rotateY,
-    this.rotateZ,
-    this.scaleX,
-    this.scaleY,
-    this.elevation,
-    this.radius,
-    this.opacity,
-    this.visible,
-    this.margin,
-    this.color,
+  _Property({
+    this.matrix4Entry32 = 0.004,
+    this.translateX = 0.0,
+    this.translateY = 0.0,
+    this.rotateX = 0.0,
+    this.rotateY = 0.0,
+    this.rotateZ = 0.0,
+    this.scaleX = 1.0,
+    this.scaleY = 1.0,
+    this.elevation = 1.0,
+    this.radius = 4.0,
+    this.opacity = 1.0,
+    this.visible = true,
+    this.margin = 4.0,
+    this.color = Colors.white,
   });
 
-  /// 非 null 默认值.
-  const _Property.def({
-    double matrix4Entry32 = 0.004,
-    double translateX = 0.0,
-    double translateY = 0.0,
-    double rotateX = 0.0,
-    double rotateY = 0.0,
-    double rotateZ = 0.0,
-    double scaleX = 1.0,
-    double scaleY = 1.0,
-    double elevation = 1.0,
-    double radius = 4.0,
-    double opacity = 1.0,
-    bool visible = true,
-    double margin = 4.0,
-    Color color = Colors.white,
-  }) : this(
-    matrix4Entry32: matrix4Entry32,
-    translateX: translateX,
-    translateY: translateY,
-    rotateX: rotateX,
-    rotateY: rotateY,
-    rotateZ: rotateZ,
-    scaleX: scaleX,
-    scaleY: scaleY,
-    elevation: elevation,
-    radius: radius,
-    opacity: opacity,
-    visible: visible,
-    margin: margin,
-    color: color,
-  );
-
   /// Matrix4.setEntry(3, 2, value);
-  final double matrix4Entry32;
+  double matrix4Entry32;
 
-  final double translateX;
-  final double translateY;
-  final double rotateX;
-  final double rotateY;
-  final double rotateZ;
-  final double scaleX;
-  final double scaleY;
+  double translateX;
+  double translateY;
+  double rotateX;
+  double rotateY;
+  double rotateZ;
+  double scaleX;
+  double scaleY;
 
   @override
   Matrix4 get transform => Matrix4.identity()
@@ -94,7 +61,7 @@ class _Property implements Property {
     ..scale(scaleX ?? 1.0, scaleY ?? 1.0);
 
   @override
-  final double elevation;
+  double elevation;
 
   /// 范围 0 ~ 5.
   int get zIndex {
@@ -111,11 +78,11 @@ class _Property implements Property {
   }
 
   @override
-  final double radius;
+  double radius;
   @override
-  final double opacity;
+  double opacity;
 
-  final bool visible;
+  bool visible;
 
   @override
   bool Function(int zIndex) get zIndexVisible {
@@ -126,30 +93,10 @@ class _Property implements Property {
   }
 
   @override
-  final double margin;
+  double margin;
 
   @override
-  final Color color;
-
-  /// 使用 other 中不为 null 的属性值更新 this 中对应的属性值, 返回新的 _Property.
-  _Property update(_Property other) {
-    return _Property(
-      matrix4Entry32: other?.matrix4Entry32 ?? matrix4Entry32,
-      translateX: other?.translateX ?? translateX,
-      translateY: other?.translateY ?? translateY,
-      rotateX: other?.rotateX ?? rotateX,
-      rotateY: other?.rotateY ?? rotateY,
-      rotateZ: other?.rotateZ ?? rotateZ,
-      scaleX: other?.scaleX ?? scaleX,
-      scaleY: other?.scaleY ?? scaleY,
-      elevation: other?.elevation ?? elevation,
-      radius: other?.radius ?? radius,
-      opacity: other?.opacity ?? opacity,
-      visible: other?.visible ?? visible,
-      margin: other?.margin ?? margin,
-      color: other?.color ?? color,
-    );
-  }
+  Color color;
 }
 
 //*********************************************************************************************************************
@@ -218,18 +165,16 @@ class _PropertyAnimation {
   _PropertyAnimation.sample() : this(
     duration: 1000,
     curve: Curves.easeInOut,
-    animatingProperty: (value) {
-      return _Property(
-        rotateY: _PropertyCalc.ab(0.0, 2.0 * pi).calc(value),
-        scaleX: _PropertyCalc.aba(1.0, 2.0).calc(value),
-        scaleY: _PropertyCalc.aba(1.0, 2.0).calc(value),
-        elevation: _PropertyCalc.aba(1.0, 4.0).calc(value),
-        radius: _PropertyCalc.aba(4.0, 16.0).calc(value),
-      );
+    animatingProperty: (property, value) {
+      property.rotateY = _PropertyCalc.ab(0.0, 2.0 * pi).calc(value);
+      property.scaleX = _PropertyCalc.aba(1.0, 2.0).calc(value);
+      property.scaleY = _PropertyCalc.aba(1.0, 2.0).calc(value);
+      property.elevation = _PropertyCalc.aba(1.0, 4.0).calc(value);
+      property.radius = _PropertyCalc.aba(4.0, 16.0).calc(value);
     },
-    endProperty: (value) {
-      return _Property.def();
-    },
+//    endProperty: (value) {
+//      return _Property.def();
+//    },
   );
 
   /// 移动.
@@ -247,11 +192,9 @@ class _PropertyAnimation {
     endDelay: endDelay,
     duration: duration,
     curve: Curves.easeInOut,
-    animatingProperty: (value) {
-      return _Property(
-        translateX: _PropertyCalc.ab(0.0, x ?? 0.0).calc(value),
-        translateY: _PropertyCalc.ab(0.0, y ?? 0.0).calc(value),
-      );
+    animatingProperty: (property, value) {
+      property.translateX = _PropertyCalc.ab(0.0, x ?? 0.0).calc(value);
+      property.translateY = _PropertyCalc.ab(0.0, y ?? 0.0).calc(value);
     },
   );
 
@@ -321,14 +264,12 @@ class _PropertyAnimation {
     endDelay: endDelay,
     duration: duration,
     curve: Curves.easeOut,
-    animatingProperty: (value) {
-      return _Property(
-        rotateX: _PropertyCalc.ab(-_invisibleAngle(angleX), 0.0).calc(value),
-        rotateY: _PropertyCalc.ab(-_invisibleAngle(angleY), 0.0).calc(value),
-        scaleX: _PropertyCalc.ab(0.5, 1.0).calc(value),
-        scaleY: _PropertyCalc.ab(0.5, 1.0).calc(value),
-        elevation: _PropertyCalc.ab(0.5, 1.0).calc(value),
-      );
+    animatingProperty: (property, value) {
+      property.rotateX = _PropertyCalc.ab(-_invisibleAngle(angleX), 0.0).calc(value);
+      property.rotateY = _PropertyCalc.ab(-_invisibleAngle(angleY), 0.0).calc(value);
+      property.scaleX = _PropertyCalc.ab(0.5, 1.0).calc(value);
+      property.scaleY = _PropertyCalc.ab(0.5, 1.0).calc(value);
+      property.elevation = _PropertyCalc.ab(0.5, 1.0).calc(value);
     },
   );
 
@@ -344,14 +285,13 @@ class _PropertyAnimation {
     endDelay: endDelay,
     duration: duration,
     curve: Curves.easeIn,
-    animatingProperty: (value) {
-      return _Property(
-        rotateX: _PropertyCalc.ab(0.0, _invisibleAngle(angleX)).calc(value),
-        rotateY: _PropertyCalc.ab(0.0, _invisibleAngle(angleY)).calc(value),
-        scaleX: _PropertyCalc.ab(1.0, 0.5).calc(value),
-        scaleY: _PropertyCalc.ab(1.0, 0.5).calc(value),
-        elevation: _PropertyCalc.ab(1.0, 0.5).calc(value),
-      );
+    animatingProperty: (property, value) {
+      property.rotateX = _PropertyCalc.ab(0.0, _invisibleAngle(angleX)).calc(value);
+      property.rotateX = _PropertyCalc.ab(0.0, _invisibleAngle(angleX)).calc(value);
+      property.rotateY = _PropertyCalc.ab(0.0, _invisibleAngle(angleY)).calc(value);
+      property.scaleX = _PropertyCalc.ab(1.0, 0.5).calc(value);
+      property.scaleY = _PropertyCalc.ab(1.0, 0.5).calc(value);
+      property.elevation = _PropertyCalc.ab(1.0, 0.5).calc(value);
     },
   );
 
@@ -363,9 +303,9 @@ class _PropertyAnimation {
   final int duration;
   final Curve curve;
   /// 动画过程中设置属性.
-  final _Property Function(double value) animatingProperty;
+  final void Function(_Property property, double value) animatingProperty;
   /// 动画结束时设置属性.
-  final _Property Function(double value) endProperty;
+  final void Function(_Property property, double value) endProperty;
 
   /// 开始动画.
   void begin(_Card card, {
@@ -395,7 +335,7 @@ class _PropertyAnimation {
             case AnimationStatus.reverse:
               break;
             case AnimationStatus.completed:
-              card.updateProperty(endProperty?.call(curvedAnimation.value));
+              endProperty?.call(card._property, curvedAnimation.value);
               card.game.callback.setState(() {
               });
               animationController.dispose();
@@ -408,7 +348,7 @@ class _PropertyAnimation {
           }
         })
         ..addListener(() {
-          card.updateProperty(animatingProperty?.call(curvedAnimation.value));
+          animatingProperty?.call(card._property, curvedAnimation.value);
           card.game.callback.setState(() {
           });
         });

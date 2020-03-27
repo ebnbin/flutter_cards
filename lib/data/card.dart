@@ -7,7 +7,8 @@ part of '../data.dart';
 class _Card implements Card {
   _Card({
     this.game,
-    _Property initProperty = const _Property.def(),
+    @required
+    _Property initProperty,
     this.grid,
   }) : assert(game != null),
         assert(initProperty != null) {
@@ -43,10 +44,6 @@ class _Card implements Card {
   Property get property => _property;
   _Property _property;
 
-  void updateProperty(_Property property) {
-    _property = _property.update(property);
-  }
-
   //*******************************************************************************************************************
 
   @override
@@ -69,7 +66,8 @@ class _Card implements Card {
 class _CoreCard extends _Card {
   _CoreCard({
     _Game game,
-    _Property initProperty = const _Property.def(),
+    @required
+    _Property initProperty,
     _Grid coreCardGrid,
   }) : assert(coreCardGrid != null),
         super(

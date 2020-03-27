@@ -28,6 +28,7 @@ class _Game implements Game {
 //        }
         _CoreCard card = _CoreCard(
           game: this,
+          initProperty: _Property(),
           coreCardGrid: _Grid(rowIndex: rowIndex, columnIndex: columnIndex, rowSpan: 1, columnSpan: 1),
         );
         _cards.add(card);
@@ -42,48 +43,56 @@ class _Game implements Game {
 //    ));
     _cards.add(_Card(
       game: this,
+      initProperty: _Property(),
       grid: (isVertical) => isVertical
           ? _Grid(rowIndex: 2, columnIndex: 2, rowSpan: 15, columnSpan: 15)
           : _Grid(rowIndex: 2, columnIndex: 2, rowSpan: 15, columnSpan: 15),
     ));
     _cards.add(_Card(
       game: this,
+      initProperty: _Property(),
       grid: (isVertical) => isVertical
           ? _Grid(rowIndex: 17, columnIndex: 2, rowSpan: 15, columnSpan: 30)
           : _Grid(rowIndex: 17, columnIndex: 2, rowSpan: 15, columnSpan: 30),
     ));
     _cards.add(_Card(
       game: this,
+      initProperty: _Property(),
       grid: (isVertical) => isVertical
           ? _Grid(rowIndex: 160, columnIndex: 2, rowSpan: 20, columnSpan: 20)
           : _Grid(rowIndex: 2, columnIndex: 160, rowSpan: 20, columnSpan: 20),
     ));
     _cards.add(_Card(
       game: this,
+      initProperty: _Property(),
       grid: (isVertical) => isVertical
           ? _Grid(rowIndex: 160, columnIndex: 22, rowSpan: 20, columnSpan: 20)
           : _Grid(rowIndex: 22, columnIndex: 160, rowSpan: 20, columnSpan: 20),
     ));
     _cards.add(_Card(
       game: this,
+      initProperty: _Property(),
       grid: (isVertical) => isVertical
           ? _Grid(rowIndex: 160, columnIndex: 42, rowSpan: 20, columnSpan: 20)
           : _Grid(rowIndex: 42, columnIndex: 160, rowSpan: 20, columnSpan: 20),
     ));
     _cards.add(_Card(
       game: this,
+      initProperty: _Property(),
       grid: (isVertical) => isVertical
           ? _Grid(rowIndex: 160, columnIndex: 62, rowSpan: 20, columnSpan: 20)
           : _Grid(rowIndex: 62, columnIndex: 160, rowSpan: 20, columnSpan: 20),
     ));
     _cards.add(_Card(
       game: this,
+      initProperty: _Property(),
       grid: (isVertical) => isVertical
           ? _Grid(rowIndex: 160, columnIndex: 82, rowSpan: 20, columnSpan: 20)
           : _Grid(rowIndex: 82, columnIndex: 160, rowSpan: 20, columnSpan: 20),
     ));
     _cards.add(_Card(
       game: this,
+      initProperty: _Property(),
       grid: (isVertical) => isVertical
           ? _Grid(rowIndex: 160, columnIndex: 102, rowSpan: 20, columnSpan: 20)
           : _Grid(rowIndex: 102, columnIndex: 160, rowSpan: 20, columnSpan: 20),
@@ -117,15 +126,11 @@ class _Game implements Game {
     assert(card != null);
     return () {
       if (card is _CoreCard) {
-        card.updateProperty(_Property(
-          color: Colors.grey,
-        ));
+        card._property.color = Colors.grey;
         callback.setState(() {
         });
         actionQueue.add(_Action.run((_Action action) {
-          card.updateProperty(_Property(
-            color: Colors.green,
-          ));
+          card._property.color = Colors.green;
           callback.setState(() {
           });
         }));
@@ -139,7 +144,7 @@ class _Game implements Game {
           _CoreCard newCard = _CoreCard(
             game: this,
             coreCardGrid: _Grid(rowIndex: rightCard.coreCardGrid.rowIndex, columnIndex: rightCard.coreCardGrid.columnIndex, rowSpan: 1, columnSpan: 1),
-            initProperty: _Property.def(/*opacity: 0.0*/),
+            initProperty: _Property(/*opacity: 0.0*/),
           );
 
           actionQueue.add(
@@ -150,7 +155,7 @@ class _Game implements Game {
           );
           actionQueue.add(_Action.run((_Action action) {
             rightCard.left();
-            rightCard._property = _Property.def();
+            rightCard._property = _Property();
 
             _cards[card.index] = newCard;
 
