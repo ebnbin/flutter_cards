@@ -9,7 +9,6 @@ class _Card implements Card {
     this.game,
     @required
     _Property initProperty,
-    this.grid,
   }) : assert(game != null),
         assert(initProperty != null) {
     _property = initProperty;
@@ -24,16 +23,12 @@ class _Card implements Card {
   int get index => game._cards.indexOf(this);
 
   //*******************************************************************************************************************
-
-  _OrientationGrid grid;
-
-  //*******************************************************************************************************************
   // 位置.
 
   /// 在 Stack 中的位置. Positioned.fromRect().
   @override
   Rect get rect {
-    return game._metric.gridRect(grid);
+    return game._metric.gridRect(_property.orientationGrid);
   }
 
   //*******************************************************************************************************************
@@ -56,7 +51,7 @@ class _Card implements Card {
 
   @override
   String toString() {
-    return '${grid(game._metric.isVertical)}\n$index';
+    return '${_property.orientationGrid(game._metric.isVertical)}\n$index';
   }
 }
 
@@ -68,46 +63,20 @@ class _CoreCard extends _Card {
     _Game game,
     @required
     _Property initProperty,
-    _Grid coreCardGrid,
-  }) : assert(coreCardGrid != null),
-        super(
+  }) : super(
         game: game,
         initProperty: initProperty,
-        grid: game._metric.coreCardGridToGrid(coreCardGrid),
       );
-
-  _Grid get coreCardGrid {
-    return game._metric.gridToCoreCardGrid(grid);
-  }
-  set coreCardGrid(_Grid coreCardGrid) {
-    grid = game._metric.coreCardGridToGrid(coreCardGrid);
-  }
-
-  void left() {
-    coreCardGrid = coreCardGrid.left();
-  }
-
-  void right() {
-    coreCardGrid = coreCardGrid.right();
-  }
-
-  void top() {
-    coreCardGrid = coreCardGrid.top();
-  }
-
-  void bottom() {
-    coreCardGrid = coreCardGrid.bottom();
-  }
 
   _Card get leftCard {
     return game._cards.firstWhere((element) {
       if (element is! _CoreCard) {
         return false;
       }
-      int r = coreCardGrid.rowIndex;
-      int c = coreCardGrid.columnIndex;
-      int r2 = (element as _CoreCard).coreCardGrid.rowIndex;
-      int c2 = (element as _CoreCard).coreCardGrid.columnIndex;
+      int r = _property.coreCardGrid.rowIndex;
+      int c = _property.coreCardGrid.columnIndex;
+      int r2 = (element as _CoreCard)._property.coreCardGrid.rowIndex;
+      int c2 = (element as _CoreCard)._property.coreCardGrid.columnIndex;
       return r == r2 && c - 1 == c2;
     }, orElse: () => null);
   }
@@ -117,10 +86,10 @@ class _CoreCard extends _Card {
       if (element is! _CoreCard) {
         return false;
       }
-      int r = coreCardGrid.rowIndex;
-      int c = coreCardGrid.columnIndex;
-      int r2 = (element as _CoreCard).coreCardGrid.rowIndex;
-      int c2 = (element as _CoreCard).coreCardGrid.columnIndex;
+      int r = _property.coreCardGrid.rowIndex;
+      int c = _property.coreCardGrid.columnIndex;
+      int r2 = (element as _CoreCard)._property.coreCardGrid.rowIndex;
+      int c2 = (element as _CoreCard)._property.coreCardGrid.columnIndex;
       return r == r2 && c + 1 == c2;
     }, orElse: () => null);
   }
@@ -130,10 +99,10 @@ class _CoreCard extends _Card {
       if (element is! _CoreCard) {
         return false;
       }
-      int r = coreCardGrid.rowIndex;
-      int c = coreCardGrid.columnIndex;
-      int r2 = (element as _CoreCard).coreCardGrid.rowIndex;
-      int c2 = (element as _CoreCard).coreCardGrid.columnIndex;
+      int r = _property.coreCardGrid.rowIndex;
+      int c = _property.coreCardGrid.columnIndex;
+      int r2 = (element as _CoreCard)._property.coreCardGrid.rowIndex;
+      int c2 = (element as _CoreCard)._property.coreCardGrid.columnIndex;
       return r - 1 == r2 && c == c2;
     }, orElse: () => null);
   }
@@ -143,16 +112,16 @@ class _CoreCard extends _Card {
       if (element is! _CoreCard) {
         return false;
       }
-      int r = coreCardGrid.rowIndex;
-      int c = coreCardGrid.columnIndex;
-      int r2 = (element as _CoreCard).coreCardGrid.rowIndex;
-      int c2 = (element as _CoreCard).coreCardGrid.columnIndex;
+      int r = _property.coreCardGrid.rowIndex;
+      int c = _property.coreCardGrid.columnIndex;
+      int r2 = (element as _CoreCard)._property.coreCardGrid.rowIndex;
+      int c2 = (element as _CoreCard)._property.coreCardGrid.columnIndex;
       return r + 1 == r2 && c == c2;
     }, orElse: () => null);
   }
 
   @override
   String toString() {
-    return '${super.toString()}\n$coreCardGrid';
+    return '${super.toString()}\n${_property.coreCardGrid}';
   }
 }

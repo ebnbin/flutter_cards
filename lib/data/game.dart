@@ -28,8 +28,10 @@ class _Game implements Game {
 //        }
         _CoreCard card = _CoreCard(
           game: this,
-          initProperty: _Property(),
-          coreCardGrid: _Grid(rowIndex: rowIndex, columnIndex: columnIndex, rowSpan: 1, columnSpan: 1),
+          initProperty: _Property.coreCard(
+            metric: _metric,
+            coreCardGrid: _Grid(rowIndex: rowIndex, columnIndex: columnIndex, rowSpan: 1, columnSpan: 1),
+          ),
         );
         _cards.add(card);
       }
@@ -43,59 +45,75 @@ class _Game implements Game {
 //    ));
     _cards.add(_Card(
       game: this,
-      initProperty: _Property(),
-      grid: (isVertical) => isVertical
-          ? _Grid(rowIndex: 2, columnIndex: 2, rowSpan: 15, columnSpan: 15)
-          : _Grid(rowIndex: 2, columnIndex: 2, rowSpan: 15, columnSpan: 15),
+      initProperty: _Property(
+        metric: _metric,
+        orientationGrid: (isVertical) => isVertical
+            ? _Grid(rowIndex: 2, columnIndex: 2, rowSpan: 15, columnSpan: 15)
+            : _Grid(rowIndex: 2, columnIndex: 2, rowSpan: 15, columnSpan: 15),
+      ),
     ));
     _cards.add(_Card(
       game: this,
-      initProperty: _Property(),
-      grid: (isVertical) => isVertical
-          ? _Grid(rowIndex: 17, columnIndex: 2, rowSpan: 15, columnSpan: 30)
-          : _Grid(rowIndex: 17, columnIndex: 2, rowSpan: 15, columnSpan: 30),
+      initProperty: _Property(
+        metric: _metric,
+        orientationGrid: (isVertical) => isVertical
+            ? _Grid(rowIndex: 17, columnIndex: 2, rowSpan: 15, columnSpan: 30)
+            : _Grid(rowIndex: 17, columnIndex: 2, rowSpan: 15, columnSpan: 30),
+      ),
     ));
     _cards.add(_Card(
       game: this,
-      initProperty: _Property(),
-      grid: (isVertical) => isVertical
-          ? _Grid(rowIndex: 160, columnIndex: 2, rowSpan: 20, columnSpan: 20)
-          : _Grid(rowIndex: 2, columnIndex: 160, rowSpan: 20, columnSpan: 20),
+      initProperty: _Property(
+        metric: _metric,
+        orientationGrid: (isVertical) => isVertical
+            ? _Grid(rowIndex: 160, columnIndex: 2, rowSpan: 20, columnSpan: 20)
+            : _Grid(rowIndex: 2, columnIndex: 160, rowSpan: 20, columnSpan: 20),
+      ),
     ));
     _cards.add(_Card(
       game: this,
-      initProperty: _Property(),
-      grid: (isVertical) => isVertical
-          ? _Grid(rowIndex: 160, columnIndex: 22, rowSpan: 20, columnSpan: 20)
-          : _Grid(rowIndex: 22, columnIndex: 160, rowSpan: 20, columnSpan: 20),
+      initProperty: _Property(
+        metric: _metric,
+        orientationGrid: (isVertical) => isVertical
+            ? _Grid(rowIndex: 160, columnIndex: 22, rowSpan: 20, columnSpan: 20)
+            : _Grid(rowIndex: 22, columnIndex: 160, rowSpan: 20, columnSpan: 20),
+      ),
     ));
     _cards.add(_Card(
       game: this,
-      initProperty: _Property(),
-      grid: (isVertical) => isVertical
-          ? _Grid(rowIndex: 160, columnIndex: 42, rowSpan: 20, columnSpan: 20)
-          : _Grid(rowIndex: 42, columnIndex: 160, rowSpan: 20, columnSpan: 20),
+      initProperty: _Property(
+        metric: _metric,
+        orientationGrid: (isVertical) => isVertical
+            ? _Grid(rowIndex: 160, columnIndex: 42, rowSpan: 20, columnSpan: 20)
+            : _Grid(rowIndex: 42, columnIndex: 160, rowSpan: 20, columnSpan: 20),
+      ),
     ));
     _cards.add(_Card(
       game: this,
-      initProperty: _Property(),
-      grid: (isVertical) => isVertical
-          ? _Grid(rowIndex: 160, columnIndex: 62, rowSpan: 20, columnSpan: 20)
-          : _Grid(rowIndex: 62, columnIndex: 160, rowSpan: 20, columnSpan: 20),
+      initProperty: _Property(
+        metric: _metric,
+        orientationGrid: (isVertical) => isVertical
+            ? _Grid(rowIndex: 160, columnIndex: 62, rowSpan: 20, columnSpan: 20)
+            : _Grid(rowIndex: 62, columnIndex: 160, rowSpan: 20, columnSpan: 20),
+      ),
     ));
     _cards.add(_Card(
       game: this,
-      initProperty: _Property(),
-      grid: (isVertical) => isVertical
-          ? _Grid(rowIndex: 160, columnIndex: 82, rowSpan: 20, columnSpan: 20)
-          : _Grid(rowIndex: 82, columnIndex: 160, rowSpan: 20, columnSpan: 20),
+      initProperty: _Property(
+        metric: _metric,
+        orientationGrid: (isVertical) => isVertical
+            ? _Grid(rowIndex: 160, columnIndex: 82, rowSpan: 20, columnSpan: 20)
+            : _Grid(rowIndex: 82, columnIndex: 160, rowSpan: 20, columnSpan: 20),
+      ),
     ));
     _cards.add(_Card(
       game: this,
-      initProperty: _Property(),
-      grid: (isVertical) => isVertical
-          ? _Grid(rowIndex: 160, columnIndex: 102, rowSpan: 20, columnSpan: 20)
-          : _Grid(rowIndex: 102, columnIndex: 160, rowSpan: 20, columnSpan: 20),
+      initProperty: _Property(
+        metric: _metric,
+        orientationGrid: (isVertical) => isVertical
+            ? _Grid(rowIndex: 160, columnIndex: 102, rowSpan: 20, columnSpan: 20)
+            : _Grid(rowIndex: 102, columnIndex: 160, rowSpan: 20, columnSpan: 20),
+      ),
     ));
   }
 
@@ -143,8 +161,10 @@ class _Game implements Game {
           _CoreCard rightCard = card.rightCard;
           _CoreCard newCard = _CoreCard(
             game: this,
-            coreCardGrid: _Grid(rowIndex: rightCard.coreCardGrid.rowIndex, columnIndex: rightCard.coreCardGrid.columnIndex, rowSpan: 1, columnSpan: 1),
-            initProperty: _Property(/*opacity: 0.0*/),
+            initProperty: _Property.coreCard(/*opacity: 0.0*/
+              metric: _metric,
+              coreCardGrid: _Grid(rowIndex: rightCard._property.coreCardGrid.rowIndex, columnIndex: rightCard._property.coreCardGrid.columnIndex, rowSpan: 1, columnSpan: 1),
+            ),
           );
 
           actionQueue.add(
@@ -154,8 +174,15 @@ class _Game implements Game {
             ).action(rightCard)
           );
           actionQueue.add(_Action.run((_Action action) {
-            rightCard.left();
-            rightCard._property = _Property();
+            print(rightCard._property.orientationGrid(true));
+            rightCard._property.coreCardGrid = _Grid(
+              rowIndex: rightCard._property.coreCardGrid.rowIndex,
+              columnIndex: rightCard._property.coreCardGrid.columnIndex - 1,
+              rowSpan: rightCard._property.coreCardGrid.rowSpan,
+              columnSpan: rightCard._property.coreCardGrid.columnSpan,
+            );
+            print(rightCard._property.orientationGrid(true));
+            rightCard._property.reset();
 
             _cards[card.index] = newCard;
 
@@ -499,7 +526,7 @@ class _Metric implements Metric {
 
 /// 网格.
 class _Grid {
-  const _Grid({
+  _Grid({
     @required
     this.rowIndex,
     @required
@@ -514,62 +541,58 @@ class _Grid {
         assert(columnSpan != null);
   
   /// 行.
-  final int rowIndex;
+  int rowIndex;
   /// 列.
-  final int columnIndex;
+  int columnIndex;
   /// 跨行.
-  final int rowSpan;
+  int rowSpan;
   /// 跨列.
-  final int columnSpan;
+  int columnSpan;
 
-  _Grid update({
+  void update({
     int rowIndex,
     int columnIndex,
     int rowSpan,
     int columnSpan,
   }) {
-    return _Grid(
-      rowIndex: rowIndex ?? this.rowIndex,
-      columnIndex: columnIndex ?? this.columnIndex,
-      rowSpan: rowSpan ?? this.rowSpan,
-      columnSpan: columnSpan ?? this.columnSpan,
-    );
+    this.rowIndex = rowIndex ?? this.rowIndex;
+    this.columnIndex = columnIndex ?? this.columnIndex;
+    this.rowSpan = rowSpan ?? this.rowSpan;
+    this.columnSpan = columnSpan ?? this.columnSpan;
   }
 
-  _Grid offset({
-    int rowIndex,
-    int columnIndex,
-    int rowSpan,
-    int columnSpan,
+  void offset({
+    int rowIndex = 0,
+    int columnIndex = 0,
+    int rowSpan = 0,
+    int columnSpan = 0,
   }) {
-    return _Grid(
-      rowIndex: this.rowIndex + (rowIndex ?? 0),
-      columnIndex: this.columnIndex + (columnIndex ?? 0),
-      rowSpan: this.rowSpan + (rowSpan ?? 0),
-      columnSpan: this.columnSpan + (columnSpan ?? 0),
-    );
+    this.rowIndex += (rowIndex ?? 0);
+    this.columnIndex += (columnIndex ?? 0);
+    this.rowSpan += (rowSpan ?? 0);
+    this.columnSpan += (columnSpan ?? 0);
   }
   
-  _Grid left() {
-    return offset(
+  void left() {
+    offset(
       columnIndex: -1,
     );
   }
   
-  _Grid right() {
-    return offset(
+  void right() {
+    offset(
       columnIndex: 1,
     );
   }
   
-  _Grid top() {
-    return offset(
+  void top() {
+    offset(
       rowIndex: -1,
     );
   }
   
-  _Grid bottom() {
-    return offset(
+  void bottom() {
+    offset(
       rowIndex: 1,
     );
   }
