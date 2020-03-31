@@ -25,9 +25,7 @@ class _PropertyCalc {
 class _Property implements Property {
   _Property({
     @required
-    this.metric,
-    @required
-    this.orientationGrid,
+    this.grid,
     this.matrix4Entry32 = 0.004,
     this.translateX = 0.0,
     this.translateY = 0.0,
@@ -44,44 +42,6 @@ class _Property implements Property {
     this.color = Colors.white,
   });
 
-  _Property.coreCard({
-    @required
-    _Metric metric,
-    @required
-    _Grid coreCardGrid,
-    double matrix4Entry32 = 0.004,
-    double translateX = 0.0,
-    double translateY = 0.0,
-    double rotateX = 0.0,
-    double rotateY = 0.0,
-    double rotateZ = 0.0,
-    double scaleX = 1.0,
-    double scaleY = 1.0,
-    double elevation = 1.0,
-    double radius = 4.0,
-    double opacity = 1.0,
-    bool visible = true,
-    double margin = 4.0,
-    Color color = Colors.white,
-  }) : this(
-    metric: metric,
-    orientationGrid: metric.coreCardGridToGrid(coreCardGrid),
-    matrix4Entry32: matrix4Entry32,
-    translateX: translateX,
-    translateY: translateY,
-    rotateX: rotateX,
-    rotateY: rotateY,
-    rotateZ: rotateZ,
-    scaleX: scaleX,
-    scaleY: scaleY,
-    elevation: elevation,
-    radius: radius,
-    opacity: opacity,
-    visible: visible,
-    margin: margin,
-    color: color,
-  );
-
   void reset() {
     translateX = 0.0;
     translateY = 0.0;
@@ -95,16 +55,7 @@ class _Property implements Property {
     opacity = 1.0;
   }
 
-  _Metric metric;
-
-  _OrientationGrid orientationGrid;
-
-  _Grid get coreCardGrid {
-    return metric.gridToCoreCardGrid(orientationGrid);
-  }
-  set coreCardGrid(_Grid coreCardGrid) {
-    orientationGrid = metric.coreCardGridToGrid(coreCardGrid);
-  }
+  _Grid grid;
 
   /// Matrix4.setEntry(3, 2, value);
   double matrix4Entry32;

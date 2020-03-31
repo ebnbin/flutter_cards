@@ -28,9 +28,8 @@ class _Game implements Game {
 //        }
         _CoreCard card = _CoreCard(
           game: this,
-          initProperty: _Property.coreCard(
-            metric: _metric,
-            coreCardGrid: _Grid(rowIndex: rowIndex, columnIndex: columnIndex, rowSpan: 1, columnSpan: 1),
+          initProperty: _Property(
+            grid: _Grid.coreCard(metric: _metric, rowIndex: rowIndex, columnIndex: columnIndex, rowSpan: 1, columnSpan: 1),
           ),
         );
         _cards.add(card);
@@ -46,75 +45,71 @@ class _Game implements Game {
     _cards.add(_Card(
       game: this,
       initProperty: _Property(
-        metric: _metric,
-        orientationGrid: (isVertical) => isVertical
-            ? _Grid(rowIndex: 2, columnIndex: 2, rowSpan: 15, columnSpan: 15)
-            : _Grid(rowIndex: 2, columnIndex: 2, rowSpan: 15, columnSpan: 15),
+        grid: _Grid(metric: _metric, verticalRowIndex: 2, verticalColumnIndex: 2, verticalRowSpan: 15, verticalColumnSpan: 15,
+            horizontalRowIndex: 2, horizontalColumnIndex: 2, horizontalRowSpan: 15, horizontalColumnSpan: 15),
       ),
     ));
     _cards.add(_Card(
       game: this,
       initProperty: _Property(
-        metric: _metric,
-        orientationGrid: (isVertical) => isVertical
-            ? _Grid(rowIndex: 17, columnIndex: 2, rowSpan: 15, columnSpan: 30)
-            : _Grid(rowIndex: 17, columnIndex: 2, rowSpan: 15, columnSpan: 30),
+        grid: _Grid(metric: _metric, verticalRowIndex: 17, verticalColumnIndex: 2, verticalRowSpan: 15, verticalColumnSpan: 30,
+          horizontalRowIndex: 17, horizontalColumnIndex: 2, horizontalRowSpan: 15, horizontalColumnSpan: 30,),
       ),
     ));
-    _cards.add(_Card(
-      game: this,
-      initProperty: _Property(
-        metric: _metric,
-        orientationGrid: (isVertical) => isVertical
-            ? _Grid(rowIndex: 160, columnIndex: 2, rowSpan: 20, columnSpan: 20)
-            : _Grid(rowIndex: 2, columnIndex: 160, rowSpan: 20, columnSpan: 20),
-      ),
-    ));
-    _cards.add(_Card(
-      game: this,
-      initProperty: _Property(
-        metric: _metric,
-        orientationGrid: (isVertical) => isVertical
-            ? _Grid(rowIndex: 160, columnIndex: 22, rowSpan: 20, columnSpan: 20)
-            : _Grid(rowIndex: 22, columnIndex: 160, rowSpan: 20, columnSpan: 20),
-      ),
-    ));
-    _cards.add(_Card(
-      game: this,
-      initProperty: _Property(
-        metric: _metric,
-        orientationGrid: (isVertical) => isVertical
-            ? _Grid(rowIndex: 160, columnIndex: 42, rowSpan: 20, columnSpan: 20)
-            : _Grid(rowIndex: 42, columnIndex: 160, rowSpan: 20, columnSpan: 20),
-      ),
-    ));
-    _cards.add(_Card(
-      game: this,
-      initProperty: _Property(
-        metric: _metric,
-        orientationGrid: (isVertical) => isVertical
-            ? _Grid(rowIndex: 160, columnIndex: 62, rowSpan: 20, columnSpan: 20)
-            : _Grid(rowIndex: 62, columnIndex: 160, rowSpan: 20, columnSpan: 20),
-      ),
-    ));
-    _cards.add(_Card(
-      game: this,
-      initProperty: _Property(
-        metric: _metric,
-        orientationGrid: (isVertical) => isVertical
-            ? _Grid(rowIndex: 160, columnIndex: 82, rowSpan: 20, columnSpan: 20)
-            : _Grid(rowIndex: 82, columnIndex: 160, rowSpan: 20, columnSpan: 20),
-      ),
-    ));
-    _cards.add(_Card(
-      game: this,
-      initProperty: _Property(
-        metric: _metric,
-        orientationGrid: (isVertical) => isVertical
-            ? _Grid(rowIndex: 160, columnIndex: 102, rowSpan: 20, columnSpan: 20)
-            : _Grid(rowIndex: 102, columnIndex: 160, rowSpan: 20, columnSpan: 20),
-      ),
-    ));
+//    _cards.add(_Card(
+//      game: this,
+//      initProperty: _Property(
+//        metric: _metric,
+//        orientationGrid: (isVertical) => isVertical
+//            ? _Grid(verticalRowIndex: 160, verticalColumnIndex: 2, verticalRowSpan: 20, verticalColumnSpan: 20)
+//            : _Grid(verticalRowIndex: 2, verticalColumnIndex: 160, verticalRowSpan: 20, verticalColumnSpan: 20),
+//      ),
+//    ));
+//    _cards.add(_Card(
+//      game: this,
+//      initProperty: _Property(
+//        metric: _metric,
+//        orientationGrid: (isVertical) => isVertical
+//            ? _Grid(verticalRowIndex: 160, verticalColumnIndex: 22, verticalRowSpan: 20, verticalColumnSpan: 20)
+//            : _Grid(verticalRowIndex: 22, verticalColumnIndex: 160, verticalRowSpan: 20, verticalColumnSpan: 20),
+//      ),
+//    ));
+//    _cards.add(_Card(
+//      game: this,
+//      initProperty: _Property(
+//        metric: _metric,
+//        orientationGrid: (isVertical) => isVertical
+//            ? _Grid(verticalRowIndex: 160, verticalColumnIndex: 42, verticalRowSpan: 20, verticalColumnSpan: 20)
+//            : _Grid(verticalRowIndex: 42, verticalColumnIndex: 160, verticalRowSpan: 20, verticalColumnSpan: 20),
+//      ),
+//    ));
+//    _cards.add(_Card(
+//      game: this,
+//      initProperty: _Property(
+//        metric: _metric,
+//        orientationGrid: (isVertical) => isVertical
+//            ? _Grid(verticalRowIndex: 160, verticalColumnIndex: 62, verticalRowSpan: 20, verticalColumnSpan: 20)
+//            : _Grid(verticalRowIndex: 62, verticalColumnIndex: 160, verticalRowSpan: 20, verticalColumnSpan: 20),
+//      ),
+//    ));
+//    _cards.add(_Card(
+//      game: this,
+//      initProperty: _Property(
+//        metric: _metric,
+//        orientationGrid: (isVertical) => isVertical
+//            ? _Grid(verticalRowIndex: 160, verticalColumnIndex: 82, verticalRowSpan: 20, verticalColumnSpan: 20)
+//            : _Grid(verticalRowIndex: 82, verticalColumnIndex: 160, verticalRowSpan: 20, verticalColumnSpan: 20),
+//      ),
+//    ));
+//    _cards.add(_Card(
+//      game: this,
+//      initProperty: _Property(
+//        metric: _metric,
+//        orientationGrid: (isVertical) => isVertical
+//            ? _Grid(verticalRowIndex: 160, verticalColumnIndex: 102, verticalRowSpan: 20, verticalColumnSpan: 20)
+//            : _Grid(verticalRowIndex: 102, verticalColumnIndex: 160, verticalRowSpan: 20, verticalColumnSpan: 20),
+//      ),
+//    ));
   }
 
   //*******************************************************************************************************************
@@ -161,9 +156,8 @@ class _Game implements Game {
           _CoreCard rightCard = card.rightCard;
           _CoreCard newCard = _CoreCard(
             game: this,
-            initProperty: _Property.coreCard(/*opacity: 0.0*/
-              metric: _metric,
-              coreCardGrid: _Grid(rowIndex: rightCard._property.coreCardGrid.rowIndex, columnIndex: rightCard._property.coreCardGrid.columnIndex, rowSpan: 1, columnSpan: 1),
+            initProperty: _Property(/*opacity: 0.0*/
+              grid: _Grid.coreCard(metric: _metric, rowIndex: rightCard._property.grid.coreCardRowIndex, columnIndex: rightCard._property.grid.coreCardColumnIndex, rowSpan: 1, columnSpan: 1),
             ),
           );
 
@@ -174,14 +168,7 @@ class _Game implements Game {
             ).action(rightCard)
           );
           actionQueue.add(_Action.run((_Action action) {
-            print(rightCard._property.orientationGrid(true));
-            rightCard._property.coreCardGrid = _Grid(
-              rowIndex: rightCard._property.coreCardGrid.rowIndex,
-              columnIndex: rightCard._property.coreCardGrid.columnIndex - 1,
-              rowSpan: rightCard._property.coreCardGrid.rowSpan,
-              columnSpan: rightCard._property.coreCardGrid.columnSpan,
-            );
-            print(rightCard._property.orientationGrid(true));
+            rightCard._property.grid.coreCardColumnIndex = rightCard._property.grid.coreCardColumnIndex - 1;
             rightCard._property.reset();
 
             _cards[card.index] = newCard;
@@ -247,6 +234,10 @@ class _Game implements Game {
 
     if (_cards.isEmpty) {
       initCards();
+    } else {
+      _cards.forEach((element) {
+        element._property.grid.metric = _metric;
+      });
     }
   }
 }
@@ -379,8 +370,7 @@ Metric _buildMetric(MediaQueryData mediaQueryData, int size) {
     footerBoardRect.bottom - paddingSize,
   );
 
-  Rect Function(_OrientationGrid orientationGrid) gridRect = (orientationGrid) {
-    _Grid grid = orientationGrid(isVertical);
+  Rect Function(_Grid grid) gridRect = (grid) {
     return Rect.fromLTWH(
       safeBoardRect.left + grid.columnIndex * gridSize,
       safeBoardRect.top + grid.rowIndex * gridSize,
@@ -396,27 +386,6 @@ Metric _buildMetric(MediaQueryData mediaQueryData, int size) {
   double coreCardSize = gridPerCoreCard * gridSize;
   /// Header footer 卡片尺寸.
   double headerFooterCardSize = _Metric.gridPerHeaderFooterCard * gridSize;
-
-  _Grid Function(_OrientationGrid orientationGrid) gridToCoreCardGrid = (orientationGrid) {
-    _Grid grid = orientationGrid(isVertical);
-    return _Grid(
-      rowIndex: (grid.rowIndex - _Metric.paddingGridCount - (isVertical ? _Metric.headerFooterBoardGridCount : 0)) ~/ gridPerCoreCard,
-      columnIndex: (grid.columnIndex - _Metric.paddingGridCount - (isVertical ? 0 : _Metric.headerFooterBoardGridCount)) ~/ gridPerCoreCard,
-      rowSpan: grid.rowSpan ~/ gridPerCoreCard,
-      columnSpan: grid.columnSpan ~/ gridPerCoreCard,
-    );
-  };
-
-  _OrientationGrid Function(_Grid coreCardGrid) coreCardGridToGrid = (coreCardGrid) {
-    return (isVertical) {
-      return _Grid(
-        rowIndex: gridPerCoreCard * coreCardGrid.rowIndex + _Metric.paddingGridCount + (isVertical ? _Metric.headerFooterBoardGridCount : 0),
-        columnIndex: gridPerCoreCard * coreCardGrid.columnIndex + _Metric.paddingGridCount + (isVertical ? 0 : _Metric.headerFooterBoardGridCount),
-        rowSpan: gridPerCoreCard * coreCardGrid.rowSpan,
-        columnSpan: gridPerCoreCard * coreCardGrid.columnSpan,
-      );
-    };
-  };
 
   return _Metric(
     size: size,
@@ -437,8 +406,6 @@ Metric _buildMetric(MediaQueryData mediaQueryData, int size) {
     gridPerCoreCard: gridPerCoreCard,
     coreCardSize: coreCardSize,
     headerFooterCardSize: headerFooterCardSize,
-    gridToCoreCardGrid: gridToCoreCardGrid,
-    coreCardGridToGrid: coreCardGridToGrid,
   );
 }
 
@@ -494,10 +461,6 @@ class _Metric implements Metric {
     this.coreCardSize,
     @required
     this.headerFooterCardSize,
-    @required
-    this.gridToCoreCardGrid,
-    @required
-    this.coreCardGridToGrid,
   });
 
   final int size;
@@ -516,92 +479,191 @@ class _Metric implements Metric {
   final Rect footerBoardRect;
   final Rect headerBoardNoPadding;
   final Rect footerBoardNoPadding;
-  final Rect Function(_OrientationGrid orientationGrid) gridRect;
+  final Rect Function(_Grid grid) gridRect;
   final int gridPerCoreCard;
   final double coreCardSize;
   final double headerFooterCardSize;
-  final _Grid Function(_OrientationGrid orientationGrid) gridToCoreCardGrid;
-  final _OrientationGrid Function(_Grid coreCardGrid) coreCardGridToGrid;
 }
 
 /// 网格.
 class _Grid {
   _Grid({
     @required
-    this.rowIndex,
+    this.metric,
     @required
-    this.columnIndex,
+    this.verticalRowIndex,
     @required
-    this.rowSpan,
+    this.verticalColumnIndex,
     @required
-    this.columnSpan,
-  }) : assert(rowIndex != null),
-        assert(columnIndex != null),
-        assert(rowSpan != null),
-        assert(columnSpan != null);
+    this.verticalRowSpan,
+    @required
+    this.verticalColumnSpan,
+    @required
+    this.horizontalRowIndex,
+    @required
+    this.horizontalColumnIndex,
+    @required
+    this.horizontalRowSpan,
+    @required
+    this.horizontalColumnSpan,
+  }) : assert(verticalRowIndex != null),
+        assert(verticalColumnIndex != null),
+        assert(verticalRowSpan != null),
+        assert(verticalColumnSpan != null),
+        assert(horizontalRowIndex != null),
+        assert(horizontalColumnIndex != null),
+        assert(horizontalRowSpan != null),
+        assert(horizontalColumnSpan != null);
+  
+  _Grid.coreCard({
+    @required
+    _Metric metric,
+    @required
+    int rowIndex,
+    @required
+    int columnIndex,
+    @required
+    int rowSpan,
+    @required
+    int columnSpan,
+  }) : this(
+    metric: metric,
+    verticalRowIndex: metric.gridPerCoreCard * rowIndex + _Metric.paddingGridCount + (true ? _Metric.headerFooterBoardGridCount : 0),
+    verticalColumnIndex: metric.gridPerCoreCard * columnIndex + _Metric.paddingGridCount + (true ? 0 : _Metric.headerFooterBoardGridCount),
+    verticalRowSpan: metric.gridPerCoreCard * rowSpan,
+    verticalColumnSpan: metric.gridPerCoreCard * columnSpan,
+    horizontalRowIndex: metric.gridPerCoreCard * rowIndex + _Metric.paddingGridCount + (false ? _Metric.headerFooterBoardGridCount : 0),
+    horizontalColumnIndex: metric.gridPerCoreCard * columnIndex + _Metric.paddingGridCount + (false ? 0 : _Metric.headerFooterBoardGridCount),
+    horizontalRowSpan: metric.gridPerCoreCard * rowSpan,
+    horizontalColumnSpan: metric.gridPerCoreCard * columnSpan,
+  );
+  
+  _Metric metric;
   
   /// 行.
-  int rowIndex;
+  int verticalRowIndex;
   /// 列.
-  int columnIndex;
+  int verticalColumnIndex;
   /// 跨行.
-  int rowSpan;
+  int verticalRowSpan;
   /// 跨列.
-  int columnSpan;
+  int verticalColumnSpan;
+  
+  int horizontalRowIndex;
+  int horizontalColumnIndex;
+  int horizontalRowSpan;
+  int horizontalColumnSpan;
+  
+  int get rowIndex => metric.isVertical ? verticalRowIndex : horizontalRowIndex;
+  int get columnIndex => metric.isVertical ? verticalColumnIndex : horizontalColumnIndex;
+  int get rowSpan => metric.isVertical ? verticalRowSpan : horizontalRowSpan;
+  int get columnSpan => metric.isVertical ? verticalColumnSpan : horizontalColumnSpan;
 
-  void update({
-    int rowIndex,
-    int columnIndex,
-    int rowSpan,
-    int columnSpan,
-  }) {
-    this.rowIndex = rowIndex ?? this.rowIndex;
-    this.columnIndex = columnIndex ?? this.columnIndex;
-    this.rowSpan = rowSpan ?? this.rowSpan;
-    this.columnSpan = columnSpan ?? this.columnSpan;
+  set rowIndex(int rowIndex) {
+    verticalRowIndex = rowIndex;
+    horizontalRowIndex = rowIndex;
   }
 
-  void offset({
-    int rowIndex = 0,
-    int columnIndex = 0,
-    int rowSpan = 0,
-    int columnSpan = 0,
-  }) {
-    this.rowIndex += (rowIndex ?? 0);
-    this.columnIndex += (columnIndex ?? 0);
-    this.rowSpan += (rowSpan ?? 0);
-    this.columnSpan += (columnSpan ?? 0);
+  set columnIndex(int columnIndex) {
+    verticalColumnIndex = columnIndex;
+    horizontalColumnIndex = columnIndex;
+  }
+
+  set rowSpan(int rowSpan) {
+    verticalRowSpan = rowSpan;
+    horizontalRowSpan = rowSpan;
+  }
+
+  set columnSpan(int columnSpan) {
+    verticalColumnSpan = columnSpan;
+    horizontalColumnSpan = columnSpan;
+  }
+
+  Rect get rect => Rect.fromLTWH(
+    metric.safeBoardRect.left + columnIndex * metric.gridSize,
+    metric.safeBoardRect.top + rowIndex * metric.gridSize,
+    columnSpan * metric.gridSize,
+    rowSpan * metric.gridSize,
+  );
+
+  int get coreCardRowIndex => (rowIndex - _Metric.paddingGridCount - (metric.isVertical ? _Metric.headerFooterBoardGridCount : 0)) ~/ metric.gridPerCoreCard;
+  int get coreCardColumnIndex => (columnIndex - _Metric.paddingGridCount - (metric.isVertical ? 0 : _Metric.headerFooterBoardGridCount)) ~/ metric.gridPerCoreCard;
+  int get coreCardRowSpan => rowSpan ~/ metric.gridPerCoreCard;
+  int get coreCardColumnSpan => columnSpan ~/ metric.gridPerCoreCard;
+
+  set coreCardRowIndex(int coreCardRowIndex) {
+    verticalRowIndex = metric.gridPerCoreCard * coreCardRowIndex + _Metric.paddingGridCount + (true ? _Metric.headerFooterBoardGridCount : 0);
+    horizontalRowIndex = metric.gridPerCoreCard * coreCardRowIndex + _Metric.paddingGridCount + (false ? _Metric.headerFooterBoardGridCount : 0);
+  }
+
+  set coreCardColumnIndex(int coreCardColumnIndex) {
+    verticalColumnIndex = metric.gridPerCoreCard * coreCardColumnIndex + _Metric.paddingGridCount + (true ? 0 : _Metric.headerFooterBoardGridCount);
+    horizontalColumnIndex = metric.gridPerCoreCard * coreCardColumnIndex + _Metric.paddingGridCount + (false ? 0 : _Metric.headerFooterBoardGridCount);
+  }
+
+  set coreCardRowSpan(int coreCardRowSpan) {
+    rowSpan = metric.gridPerCoreCard * coreCardRowSpan;
+  }
+
+  set coreCardColumnSpan(int coreCardColumnSpan) {
+    columnSpan = metric.gridPerCoreCard * coreCardColumnSpan;
   }
   
-  void left() {
-    offset(
-      columnIndex: -1,
-    );
-  }
-  
-  void right() {
-    offset(
-      columnIndex: 1,
-    );
-  }
-  
-  void top() {
-    offset(
-      rowIndex: -1,
-    );
-  }
-  
-  void bottom() {
-    offset(
-      rowIndex: 1,
-    );
-  }
+//
+//  void update({
+//    int rowIndex,
+//    int columnIndex,
+//    int rowSpan,
+//    int columnSpan,
+//  }) {
+//    this.verticalRowIndex = rowIndex ?? this.verticalRowIndex;
+//    this.verticalColumnIndex = columnIndex ?? this.verticalColumnIndex;
+//    this.verticalRowSpan = rowSpan ?? this.verticalRowSpan;
+//    this.verticalColumnSpan = columnSpan ?? this.verticalColumnSpan;
+//  }
+//
+//  void offset({
+//    int rowIndex = 0,
+//    int columnIndex = 0,
+//    int rowSpan = 0,
+//    int columnSpan = 0,
+//  }) {
+//    this.verticalRowIndex += (rowIndex ?? 0);
+//    this.verticalColumnIndex += (columnIndex ?? 0);
+//    this.verticalRowSpan += (rowSpan ?? 0);
+//    this.verticalColumnSpan += (columnSpan ?? 0);
+//  }
+//  
+//  void left() {
+//    offset(
+//      columnIndex: -1,
+//    );
+//  }
+//  
+//  void right() {
+//    offset(
+//      columnIndex: 1,
+//    );
+//  }
+//  
+//  void top() {
+//    offset(
+//      rowIndex: -1,
+//    );
+//  }
+//  
+//  void bottom() {
+//    offset(
+//      rowIndex: 1,
+//    );
+//  }
 
   @override
   String toString() {
-    return '$rowIndex,$columnIndex,$rowSpan,$columnSpan';
+    return
+      '$verticalRowIndex,$verticalColumnIndex,$verticalRowSpan,$verticalColumnSpan\n'
+        '$horizontalRowIndex,$horizontalColumnIndex,$horizontalRowSpan,$horizontalColumnSpan\n'
+//        '$rowIndex,$columnIndex,$rowSpan,$columnSpan\n'
+        '$coreCardRowIndex,$coreCardColumnIndex,$coreCardRowSpan,$coreCardColumnSpan';
   }
 }
-
-/// 根据屏幕方向返回网格.
-typedef _OrientationGrid = _Grid Function(bool isVertical);

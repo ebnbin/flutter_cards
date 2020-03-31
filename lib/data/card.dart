@@ -28,7 +28,7 @@ class _Card implements Card {
   /// 在 Stack 中的位置. Positioned.fromRect().
   @override
   Rect get rect {
-    return game._metric.gridRect(_property.orientationGrid);
+    return _property.grid.rect;
   }
 
   //*******************************************************************************************************************
@@ -38,6 +38,60 @@ class _Card implements Card {
   @override
   Property get property => _property;
   _Property _property;
+
+  //*******************************************************************************************************************
+
+  _Card get leftCard {
+    return game._cards.firstWhere((element) {
+      if (element is! _CoreCard) {
+        return false;
+      }
+      int r = _property.grid.coreCardRowIndex;
+      int c = _property.grid.coreCardColumnIndex;
+      int r2 = element._property.grid.coreCardRowIndex;
+      int c2 = element._property.grid.coreCardColumnIndex;
+      return r == r2 && c - 1 == c2;
+    }, orElse: () => null);
+  }
+
+  _Card get rightCard {
+    return game._cards.firstWhere((element) {
+      if (element is! _CoreCard) {
+        return false;
+      }
+      int r = _property.grid.coreCardRowIndex;
+      int c = _property.grid.coreCardColumnIndex;
+      int r2 = element._property.grid.coreCardRowIndex;
+      int c2 = element._property.grid.coreCardColumnIndex;
+      return r == r2 && c + 1 == c2;
+    }, orElse: () => null);
+  }
+
+  _Card get topCard {
+    return game._cards.firstWhere((element) {
+      if (element is! _CoreCard) {
+        return false;
+      }
+      int r = _property.grid.coreCardRowIndex;
+      int c = _property.grid.coreCardColumnIndex;
+      int r2 = element._property.grid.coreCardRowIndex;
+      int c2 = element._property.grid.coreCardColumnIndex;
+      return r - 1 == r2 && c == c2;
+    }, orElse: () => null);
+  }
+
+  _Card get bottomCard {
+    return game._cards.firstWhere((element) {
+      if (element is! _CoreCard) {
+        return false;
+      }
+      int r = _property.grid.coreCardRowIndex;
+      int c = _property.grid.coreCardColumnIndex;
+      int r2 = element._property.grid.coreCardRowIndex;
+      int c2 = element._property.grid.coreCardColumnIndex;
+      return r + 1 == r2 && c == c2;
+    }, orElse: () => null);
+  }
 
   //*******************************************************************************************************************
 
@@ -51,7 +105,7 @@ class _Card implements Card {
 
   @override
   String toString() {
-    return '${_property.orientationGrid(game._metric.isVertical)}\n$index';
+    return '${_property.grid}\n$index';
   }
 }
 
@@ -67,61 +121,4 @@ class _CoreCard extends _Card {
         game: game,
         initProperty: initProperty,
       );
-
-  _Card get leftCard {
-    return game._cards.firstWhere((element) {
-      if (element is! _CoreCard) {
-        return false;
-      }
-      int r = _property.coreCardGrid.rowIndex;
-      int c = _property.coreCardGrid.columnIndex;
-      int r2 = (element as _CoreCard)._property.coreCardGrid.rowIndex;
-      int c2 = (element as _CoreCard)._property.coreCardGrid.columnIndex;
-      return r == r2 && c - 1 == c2;
-    }, orElse: () => null);
-  }
-
-  _Card get rightCard {
-    return game._cards.firstWhere((element) {
-      if (element is! _CoreCard) {
-        return false;
-      }
-      int r = _property.coreCardGrid.rowIndex;
-      int c = _property.coreCardGrid.columnIndex;
-      int r2 = (element as _CoreCard)._property.coreCardGrid.rowIndex;
-      int c2 = (element as _CoreCard)._property.coreCardGrid.columnIndex;
-      return r == r2 && c + 1 == c2;
-    }, orElse: () => null);
-  }
-
-  _Card get topCard {
-    return game._cards.firstWhere((element) {
-      if (element is! _CoreCard) {
-        return false;
-      }
-      int r = _property.coreCardGrid.rowIndex;
-      int c = _property.coreCardGrid.columnIndex;
-      int r2 = (element as _CoreCard)._property.coreCardGrid.rowIndex;
-      int c2 = (element as _CoreCard)._property.coreCardGrid.columnIndex;
-      return r - 1 == r2 && c == c2;
-    }, orElse: () => null);
-  }
-
-  _Card get bottomCard {
-    return game._cards.firstWhere((element) {
-      if (element is! _CoreCard) {
-        return false;
-      }
-      int r = _property.coreCardGrid.rowIndex;
-      int c = _property.coreCardGrid.columnIndex;
-      int r2 = (element as _CoreCard)._property.coreCardGrid.rowIndex;
-      int c2 = (element as _CoreCard)._property.coreCardGrid.columnIndex;
-      return r + 1 == r2 && c == c2;
-    }, orElse: () => null);
-  }
-
-  @override
-  String toString() {
-    return '${super.toString()}\n${_property.coreCardGrid}';
-  }
 }
