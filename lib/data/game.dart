@@ -29,7 +29,7 @@ class _Game implements Game {
         _Card card = _Card(
           game: this,
           initProperty: _Property(
-            grid: _Grid.coreCard(metric: _metric, rowIndex: rowIndex, columnIndex: columnIndex, rowSpan: 1, columnSpan: 1),
+            grid: _Grid.coreCard(metric: metric, rowIndex: rowIndex, columnIndex: columnIndex, rowSpan: 1, columnSpan: 1),
           ),
         );
         _cards.add(card);
@@ -45,7 +45,7 @@ class _Game implements Game {
     _cards.add(_Card(
       game: this,
       initProperty: _Property(
-        grid: _Grid(metric: _metric, verticalRowIndex: 6, verticalColumnIndex: 1, verticalRowSpan: 10, verticalColumnSpan: 10,
+        grid: _Grid(metric: metric, verticalRowIndex: 6, verticalColumnIndex: 1, verticalRowSpan: 10, verticalColumnSpan: 10,
             horizontalRowIndex: 1, horizontalColumnIndex: 6, horizontalRowSpan: 10, horizontalColumnSpan: 10),
       ),
     ));
@@ -129,6 +129,15 @@ class _Game implements Game {
   );
 
   //*******************************************************************************************************************
+
+  @override
+  CustomPainter get painter => gridPainter;
+  _GridPainter gridPainter;
+  @override
+  CustomPainter get foregroundPainter => gridForegroundPainter;
+  _GridForegroundPainter gridForegroundPainter;
+
+  //*******************************************************************************************************************
   // 用户操作.
 
   Function onTap({
@@ -156,13 +165,13 @@ class _Game implements Game {
           _Card newCard = _Card(
             game: this,
             initProperty: _Property(/*opacity: 0.0*/
-              grid: _Grid.coreCard(metric: _metric, rowIndex: rightCard._property.grid.coreCardRowIndex, columnIndex: rightCard._property.grid.coreCardColumnIndex, rowSpan: 1, columnSpan: 1),
+              grid: _Grid.coreCard(metric: metric, rowIndex: rightCard._property.grid.coreCardRowIndex, columnIndex: rightCard._property.grid.coreCardColumnIndex, rowSpan: 1, columnSpan: 1),
             ),
           );
 
           actionQueue.add(
             _PropertyAnimation.moveCoreCard(
-              metric: _metric,
+              metric: metric,
               x: -1,
             ).action(rightCard)
           );
@@ -216,10 +225,10 @@ class _Game implements Game {
 
   //*******************************************************************************************************************
 
-  @override
-  Metric get metric => _metric;
-  _Metric _metric;
+  _Metric metric;
   _MetricCache metricCache;
+
+  bool firstBuild = true;
 
   @override
   void build() {
@@ -227,15 +236,24 @@ class _Game implements Game {
     _MetricCache metricCache = _MetricCache(mediaQueryData, size);
     if (this.metricCache != metricCache) {
       this.metricCache = metricCache;
-      _metric = _Metric.build(mediaQueryData, size);
+      metric = _Metric.build(mediaQueryData, size);
     }
 
-    if (_cards.isEmpty) {
+    if (firstBuild) {
+      firstBuild = false;
       initCards();
+      gridPainter = _GridPainter(
+        metric: metric,
+      );
+      gridForegroundPainter = _GridForegroundPainter(
+        metric: metric,
+      );
     } else {
       _cards.forEach((element) {
-        element._property.grid.metric = _metric;
+        element._property.grid.metric = metric;
       });
+      gridPainter.metric = metric;
+      gridForegroundPainter.metric = metric;
     }
   }
 }

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart' hide Card;
 part 'data/action.dart';
 part 'data/animation.dart';
 part 'data/card.dart';
+part 'data/custom_painter.dart';
 part 'data/game.dart';
 part 'data/grid.dart';
 part 'data/property.dart';
@@ -68,7 +69,8 @@ abstract class Game {
 
   void build();
 
-  Metric get metric;
+  CustomPainter get painter;
+  CustomPainter get foregroundPainter;
 }
 
 //*********************************************************************************************************************

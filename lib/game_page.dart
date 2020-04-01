@@ -17,13 +17,11 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin imple
   @override
   Widget build(BuildContext context) {
     _game.build();
-    _gridPainter.metric = _game.metric;
-    _gridForegroundPainter.metric = _game.metric;
     return Scaffold(
       body: SafeArea(
         child: CustomPaint(
-          painter: _gridPainter,
-          foregroundPainter: _gridForegroundPainter,
+          painter: _game.painter,
+          foregroundPainter: _game.foregroundPainter,
           child: Stack(
             children: <Widget>[
               Stack(
@@ -79,17 +77,8 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin imple
   void initState() {
     super.initState();
     _game = Game.create(this);
-    _gridPainter = GridPainter(
-      metric: _game.metric,
-    );
-    _gridForegroundPainter = GridForegroundPainter(
-      metric: _game.metric,
-    );
   }
 
   /// 游戏数据.
   Game _game;
-
-  GridPainter _gridPainter;
-  GridForegroundPainter _gridForegroundPainter;
 }
