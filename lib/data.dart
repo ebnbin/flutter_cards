@@ -7,7 +7,7 @@ import 'package:flutter/material.dart' hide Card;
 part 'data/action.dart';
 part 'data/animation.dart';
 part 'data/card.dart';
-part 'data/custom_painter.dart';
+part 'data/painter.dart';
 part 'data/game.dart';
 part 'data/grid.dart';
 part 'data/sprite.dart';
