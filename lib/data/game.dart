@@ -8,7 +8,9 @@ part of '../data.dart';
 class _Game implements Game {
   _Game({
     this.callback,
-  });
+  }) {
+    this.data = _GameData(this);
+  }
 
   final GameCallback callback;
 
@@ -32,7 +34,7 @@ class _Game implements Game {
             grid: _Grid.coreCard(metric: metric, rowIndex: rowIndex, columnIndex: columnIndex, rowSpan: 1, columnSpan: 1),
           ),
         );
-        _cards.add(card);
+        cards.add(card);
       }
     }
 //    _cards.add(_IndexCard(
@@ -42,7 +44,7 @@ class _Game implements Game {
 //      rowSpan: 1,
 //      columnSpan: 2,
 //    ));
-    _cards.add(_Card(
+    cards.add(_Card(
       game: this,
       initProperty: _Property(
         grid: _Grid(metric: metric, verticalRowIndex: 6, verticalColumnIndex: 1, verticalRowSpan: 10, verticalColumnSpan: 10,
@@ -115,11 +117,7 @@ class _Game implements Game {
   //*******************************************************************************************************************
 
   /// 存储所有卡片.
-  List<_Card> _cards = [];
-  @override
-  BuiltList<Card> get cards {
-    return _cards.build();
-  }
+  List<_Card> cards = [];
 
   //*******************************************************************************************************************
 
@@ -130,11 +128,7 @@ class _Game implements Game {
 
   //*******************************************************************************************************************
 
-  @override
-  CustomPainter get painter => gridPainter;
   _GridPainter gridPainter;
-  @override
-  CustomPainter get foregroundPainter => gridForegroundPainter;
   _GridForegroundPainter gridForegroundPainter;
 
   //*******************************************************************************************************************
@@ -146,12 +140,12 @@ class _Game implements Game {
   }) {
     assert(card != null);
     return () {
-      if (card._property.grid.isCoreCard) {
-        card._property.color = Colors.grey;
+      if (card.property.grid.isCoreCard) {
+        card.property.color = Colors.grey;
         callback.setState(() {
         });
         actionQueue.add(_Action.run((_Action action) {
-          card._property.color = Colors.green;
+          card.property.color = Colors.green;
           callback.setState(() {
           });
         }));
@@ -160,12 +154,12 @@ class _Game implements Game {
             angleY: _InvisibleAngle.counterClockwise90,
           ).action(card)
         );
-        if (card.rightCard != null && card.rightCard._property.grid.isCoreCard) {
+        if (card.rightCard != null && card.rightCard.property.grid.isCoreCard) {
           _Card rightCard = card.rightCard;
           _Card newCard = _Card(
             game: this,
             initProperty: _Property(/*opacity: 0.0*/
-              grid: _Grid.coreCard(metric: metric, rowIndex: rightCard._property.grid.coreCardRowIndex, columnIndex: rightCard._property.grid.coreCardColumnIndex, rowSpan: 1, columnSpan: 1),
+              grid: _Grid.coreCard(metric: metric, rowIndex: rightCard.property.grid.coreCardRowIndex, columnIndex: rightCard.property.grid.coreCardColumnIndex, rowSpan: 1, columnSpan: 1),
             ),
           );
 
@@ -176,10 +170,10 @@ class _Game implements Game {
             ).action(rightCard)
           );
           actionQueue.add(_Action.run((_Action action) {
-            rightCard._property.grid.coreCardColumnIndex = rightCard._property.grid.coreCardColumnIndex - 1;
-            rightCard._property.reset();
+            rightCard.property.grid.coreCardColumnIndex = rightCard.property.grid.coreCardColumnIndex - 1;
+            rightCard.property.reset();
 
-            _cards[card.index] = newCard;
+            cards[card.index] = newCard;
 
             callback.setState(() {
             });
@@ -230,7 +224,6 @@ class _Game implements Game {
 
   bool firstBuild = true;
 
-  @override
   void build() {
     MediaQueryData mediaQueryData = MediaQuery.of(callback.context);
     _MetricCache metricCache = _MetricCache(mediaQueryData, size);
@@ -249,11 +242,34 @@ class _Game implements Game {
         metric: metric,
       );
     } else {
-      _cards.forEach((element) {
-        element._property.grid.metric = metric;
+      cards.forEach((element) {
+        element.property.grid.metric = metric;
       });
       gridPainter.metric = metric;
       gridForegroundPainter.metric = metric;
     }
   }
+  
+  @override
+  GameData data;
+}
+
+class _GameData implements GameData {
+  _GameData(this.game);
+  
+  final _Game game;
+  
+  @override
+  void build() {
+    game.build();
+  }
+
+  @override
+  BuiltList<Card> get cards => game.cards.build();
+
+  @override
+  CustomPainter get foregroundPainter => game.gridForegroundPainter;
+
+  @override
+  CustomPainter get painter => game.gridPainter;
 }

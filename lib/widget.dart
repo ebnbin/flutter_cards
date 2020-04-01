@@ -15,7 +15,7 @@ class CardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (card.property.zIndexVisible(zIndex)) {
+    if (card.data.zIndexVisible(zIndex)) {
       return _buildVisible();
     } else {
       return _buildInvisible();
@@ -24,34 +24,34 @@ class CardWidget extends StatelessWidget {
 
   Widget _buildVisible() {
     return Positioned.fromRect(
-      rect: card.rect,
+      rect: card.data.rect,
       child: Transform(
-        transform: card.property.transform,
+        transform: card.data.transform,
         alignment: Alignment.center,
         child: Opacity(
-          opacity: card.property.opacity,
+          opacity: card.data.opacity,
           child: Container(
-            margin: EdgeInsets.all(card.property.margin),
+            margin: EdgeInsets.all(card.data.margin),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(card.property.radius),
+              borderRadius: BorderRadius.circular(card.data.radius),
               boxShadow: <BoxShadow>[
                 BoxShadow(
                   color: Colors.black.withAlpha(127),
-                  blurRadius: (card.property.radius + card.property.elevation) / 4.0,
+                  blurRadius: (card.data.radius + card.data.elevation) / 4.0,
                   spreadRadius: -1.0,
                   offset: Offset.fromDirection(0.25 * pi, 1.0),
                 )
               ],
             ),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(card.property.radius),
+              borderRadius: BorderRadius.circular(card.data.radius),
               child: GestureDetector(
                 child: Container(
-                  color: card.property.color,
+                  color: card.data.color,
                   child: child,
                 ),
-                onTap: card.onTap,
-                onLongPress: card.onLongPress,
+                onTap: card.data.onTap,
+                onLongPress: card.data.onLongPress,
               ),
             ),
           ),

@@ -14,7 +14,44 @@ part 'data/property.dart';
 
 //*********************************************************************************************************************
 
-abstract class Property {
+abstract class GameCallback implements TickerProvider {
+  BuildContext get context;
+
+  void setState(VoidCallback fn);
+}
+
+//*********************************************************************************************************************
+
+abstract class Game {
+  static Game create(GameCallback callback) {
+    return _Game(callback: callback);
+  }
+
+  GameData get data;
+}
+
+abstract class GameData {
+  BuiltList<Card> get cards;
+
+  void build();
+
+  CustomPainter get painter;
+  CustomPainter get foregroundPainter;
+}
+
+//*********************************************************************************************************************
+
+abstract class Card {
+  CardData get data;
+}
+
+abstract class CardData {
+  Rect get rect;
+
+  GestureTapCallback get onTap;
+
+  GestureLongPressCallback get onLongPress;
+
   Matrix4 get transform;
 
   double get elevation;
@@ -29,41 +66,4 @@ abstract class Property {
   double get margin;
 
   Color get color;
-}
-
-//*********************************************************************************************************************
-//*********************************************************************************************************************
-//*********************************************************************************************************************
-
-abstract class GameCallback implements TickerProvider {
-  BuildContext get context;
-
-  void setState(VoidCallback fn);
-}
-
-//*********************************************************************************************************************
-
-abstract class Game {
-  static Game create(GameCallback callback) {
-    return _Game(callback: callback);
-  }
-
-  BuiltList<Card> get cards;
-
-  void build();
-
-  CustomPainter get painter;
-  CustomPainter get foregroundPainter;
-}
-
-//*********************************************************************************************************************
-
-abstract class Card {
-  Rect get rect;
-
-  Property get property;
-
-  GestureTapCallback get onTap;
-
-  GestureLongPressCallback get onLongPress;
 }

@@ -68,11 +68,11 @@ class _CardAnimation {
     duration: 1000,
     curve: Curves.easeInOut,
     animatingProperty: (card, value) {
-      card._property.rotateY = _PropertyCalc.ab(0.0, 2.0 * pi).calc(value);
-      card._property.scaleX = _PropertyCalc.aba(1.0, 2.0).calc(value);
-      card._property.scaleY = _PropertyCalc.aba(1.0, 2.0).calc(value);
-      card._property.elevation = _PropertyCalc.aba(1.0, 4.0).calc(value);
-      card._property.radius = _PropertyCalc.aba(4.0, 16.0).calc(value);
+      card.property.rotateY = _PropertyCalc.ab(0.0, 2.0 * pi).calc(value);
+      card.property.scaleX = _PropertyCalc.aba(1.0, 2.0).calc(value);
+      card.property.scaleY = _PropertyCalc.aba(1.0, 2.0).calc(value);
+      card.property.elevation = _PropertyCalc.aba(1.0, 4.0).calc(value);
+      card.property.radius = _PropertyCalc.aba(4.0, 16.0).calc(value);
     },
 //    endProperty: (value) {
 //      return _Property.def();
@@ -95,8 +95,8 @@ class _CardAnimation {
     duration: duration,
     curve: Curves.easeInOut,
     animatingProperty: (card, value) {
-      card._property.translateX = _PropertyCalc.ab(0.0, x ?? 0.0).calc(value);
-      card._property.translateY = _PropertyCalc.ab(0.0, y ?? 0.0).calc(value);
+      card.property.translateX = _PropertyCalc.ab(0.0, x ?? 0.0).calc(value);
+      card.property.translateY = _PropertyCalc.ab(0.0, y ?? 0.0).calc(value);
     },
   );
 
@@ -150,11 +150,11 @@ class _CardAnimation {
     duration: duration,
     curve: Curves.easeOut,
     animatingProperty: (card, value) {
-      card._property.rotateX = _PropertyCalc.ab(-_invisibleAngle(angleX), 0.0).calc(value);
-      card._property.rotateY = _PropertyCalc.ab(-_invisibleAngle(angleY), 0.0).calc(value);
-      card._property.scaleX = _PropertyCalc.ab(0.5, 1.0).calc(value);
-      card._property.scaleY = _PropertyCalc.ab(0.5, 1.0).calc(value);
-      card._property.elevation = _PropertyCalc.ab(0.5, 1.0).calc(value);
+      card.property.rotateX = _PropertyCalc.ab(-_invisibleAngle(angleX), 0.0).calc(value);
+      card.property.rotateY = _PropertyCalc.ab(-_invisibleAngle(angleY), 0.0).calc(value);
+      card.property.scaleX = _PropertyCalc.ab(0.5, 1.0).calc(value);
+      card.property.scaleY = _PropertyCalc.ab(0.5, 1.0).calc(value);
+      card.property.elevation = _PropertyCalc.ab(0.5, 1.0).calc(value);
     },
   );
 
@@ -171,12 +171,12 @@ class _CardAnimation {
     duration: duration,
     curve: Curves.easeIn,
     animatingProperty: (card, value) {
-      card._property.rotateX = _PropertyCalc.ab(0.0, _invisibleAngle(angleX)).calc(value);
-      card._property.rotateX = _PropertyCalc.ab(0.0, _invisibleAngle(angleX)).calc(value);
-      card._property.rotateY = _PropertyCalc.ab(0.0, _invisibleAngle(angleY)).calc(value);
-      card._property.scaleX = _PropertyCalc.ab(1.0, 0.5).calc(value);
-      card._property.scaleY = _PropertyCalc.ab(1.0, 0.5).calc(value);
-      card._property.elevation = _PropertyCalc.ab(1.0, 0.5).calc(value);
+      card.property.rotateX = _PropertyCalc.ab(0.0, _invisibleAngle(angleX)).calc(value);
+      card.property.rotateX = _PropertyCalc.ab(0.0, _invisibleAngle(angleX)).calc(value);
+      card.property.rotateY = _PropertyCalc.ab(0.0, _invisibleAngle(angleY)).calc(value);
+      card.property.scaleX = _PropertyCalc.ab(1.0, 0.5).calc(value);
+      card.property.scaleY = _PropertyCalc.ab(1.0, 0.5).calc(value);
+      card.property.elevation = _PropertyCalc.ab(1.0, 0.5).calc(value);
     },
   );
 

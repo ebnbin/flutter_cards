@@ -16,41 +16,41 @@ class GamePage extends StatefulWidget {
 class _GamePageState extends State<GamePage> with TickerProviderStateMixin implements GameCallback {
   @override
   Widget build(BuildContext context) {
-    _game.build();
+    _game.data.build();
     return Scaffold(
       body: SafeArea(
         child: CustomPaint(
-          painter: _game.painter,
-          foregroundPainter: _game.foregroundPainter,
+          painter: _game.data.painter,
+          foregroundPainter: _game.data.foregroundPainter,
           child: Stack(
             children: <Widget>[
               Stack(
-                children: _game.cards.map<Widget>((Card card) {
+                children: _game.data.cards.map<Widget>((Card card) {
                   return _buildCard(card, 0);
                 }).toList(),
               ),
               Stack(
-                children: _game.cards.map<Widget>((Card card) {
+                children: _game.data.cards.map<Widget>((Card card) {
                   return _buildCard(card, 1);
                 }).toList(),
               ),
               Stack(
-                children: _game.cards.map<Widget>((Card card) {
+                children: _game.data.cards.map<Widget>((Card card) {
                   return _buildCard(card, 2);
                 }).toList(),
               ),
               Stack(
-                children: _game.cards.map<Widget>((Card card) {
+                children: _game.data.cards.map<Widget>((Card card) {
                   return _buildCard(card, 3);
                 }).toList(),
               ),
               Stack(
-                children: _game.cards.map<Widget>((Card card) {
+                children: _game.data.cards.map<Widget>((Card card) {
                   return _buildCard(card, 4);
                 }).toList(),
               ),
               Stack(
-                children: _game.cards.map<Widget>((Card card) {
+                children: _game.data.cards.map<Widget>((Card card) {
                   return _buildCard(card, 5);
                 }).toList(),
               ),

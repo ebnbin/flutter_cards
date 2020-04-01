@@ -22,7 +22,7 @@ class _PropertyCalc {
 //*********************************************************************************************************************
 
 /// 属性.
-class _Property implements Property {
+class _Property {
   _Property({
     @required
     this.grid,
@@ -68,7 +68,6 @@ class _Property implements Property {
   double scaleX;
   double scaleY;
 
-  @override
   Matrix4 get transform => Matrix4.identity()
     ..setEntry(3, 2, matrix4Entry32 ?? 0.0)
     ..translate(translateX ?? 0.0, translateY ?? 0.0)
@@ -77,7 +76,6 @@ class _Property implements Property {
     ..rotateZ(rotateZ ?? 0.0)
     ..scale(scaleX ?? 1.0, scaleY ?? 1.0);
 
-  @override
   double elevation;
 
   /// 范围 0 ~ 5.
@@ -94,14 +92,11 @@ class _Property implements Property {
     return elevation.ceil();
   }
 
-  @override
   double radius;
-  @override
   double opacity;
 
   bool visible;
 
-  @override
   bool Function(int zIndex) get zIndexVisible {
     assert(zIndex >= 0 && zIndex <= 5);
     return (zIndex) {
@@ -109,9 +104,7 @@ class _Property implements Property {
     };
   }
 
-  @override
   double margin;
 
-  @override
   Color color;
 }
