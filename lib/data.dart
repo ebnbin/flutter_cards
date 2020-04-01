@@ -10,7 +10,6 @@ part 'data/card.dart';
 part 'data/custom_painter.dart';
 part 'data/game.dart';
 part 'data/grid.dart';
-part 'data/property.dart';
 part 'data/sprite.dart';
 
 //*********************************************************************************************************************

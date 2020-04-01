@@ -26,26 +26,20 @@ class _Game implements Game {
       for (int columnIndex = 0; columnIndex < size; columnIndex++) {
         _Card card = _Card(
           game: this,
-          initProperty: _Property(
-            grid: _Grid.coreCard(metric: metric, rowIndex: rowIndex, columnIndex: columnIndex, rowSpan: 1, columnSpan: 1),
-          ),
+          grid: _Grid.coreCard(metric: metric, rowIndex: rowIndex, columnIndex: columnIndex, rowSpan: 1, columnSpan: 1),
         );
         cards.add(card);
       }
     }
     cards.add(_Card(
       game: this,
-      initProperty: _Property(
-        grid: _Grid(metric: metric, verticalRowIndex: 6, verticalColumnIndex: 1, verticalRowSpan: 10, verticalColumnSpan: 10,
-            horizontalRowIndex: 1, horizontalColumnIndex: 6, horizontalRowSpan: 10, horizontalColumnSpan: 10),
-      ),
+      grid: _Grid(metric: metric, verticalRowIndex: 6, verticalColumnIndex: 1, verticalRowSpan: 10, verticalColumnSpan: 10,
+          horizontalRowIndex: 1, horizontalColumnIndex: 6, horizontalRowSpan: 10, horizontalColumnSpan: 10),
     ));
     cards.add(_Card(
       game: this,
-      initProperty: _Property(
-        grid: _Grid(metric: metric, verticalRowIndex: 6, verticalColumnIndex: 11, verticalRowSpan: 10, verticalColumnSpan: 10,
-            horizontalRowIndex: 11, horizontalColumnIndex: 6, horizontalRowSpan: 10, horizontalColumnSpan: 10),
-      ),
+      grid: _Grid(metric: metric, verticalRowIndex: 6, verticalColumnIndex: 11, verticalRowSpan: 10, verticalColumnSpan: 10,
+          horizontalRowIndex: 11, horizontalColumnIndex: 6, horizontalRowSpan: 10, horizontalColumnSpan: 10),
     ));
   }
 
@@ -75,12 +69,12 @@ class _Game implements Game {
   }) {
     assert(card != null);
     return () {
-      if (card.property.grid.isCoreCard) {
-        card.property.color = Colors.grey;
+      if (card.grid.isCoreCard) {
+        card.color = Colors.grey;
         callback.setState(() {
         });
         actionQueue.add(_Action.run((_Action action) {
-          card.property.color = Colors.green;
+          card.color = Colors.green;
           callback.setState(() {
           });
         }));
@@ -89,13 +83,12 @@ class _Game implements Game {
             angleY: _InvisibleAngle.counterClockwise90,
           ).action(card)
         );
-        if (card.rightCard != null && card.rightCard.property.grid.isCoreCard) {
+        if (card.rightCard != null && card.rightCard.grid.isCoreCard) {
           _Card rightCard = card.rightCard;
           _Card newCard = _Card(
             game: this,
-            initProperty: _Property(/*opacity: 0.0*/
-              grid: _Grid.coreCard(metric: metric, rowIndex: rightCard.property.grid.coreCardRowIndex, columnIndex: rightCard.property.grid.coreCardColumnIndex, rowSpan: 1, columnSpan: 1),
-            ),
+            /*opacity: 0.0*/
+            grid: _Grid.coreCard(metric: metric, rowIndex: rightCard.grid.coreCardRowIndex, columnIndex: rightCard.grid.coreCardColumnIndex, rowSpan: 1, columnSpan: 1),
           );
 
           actionQueue.add(
@@ -105,8 +98,8 @@ class _Game implements Game {
             ).action(rightCard)
           );
           actionQueue.add(_Action.run((_Action action) {
-            rightCard.property.grid.coreCardColumnIndex = rightCard.property.grid.coreCardColumnIndex - 1;
-            rightCard.property.reset();
+            rightCard.grid.coreCardColumnIndex = rightCard.grid.coreCardColumnIndex - 1;
+            rightCard.reset();
 
             cards[card.index] = newCard;
 
@@ -161,7 +154,7 @@ class _Game implements Game {
       );
     } else {
       cards.forEach((element) {
-        element.property.grid.metric = metric;
+        element.grid.metric = metric;
       });
       gridPainter.metric = metric;
       gridForegroundPainter.metric = metric;
