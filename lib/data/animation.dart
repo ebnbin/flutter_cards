@@ -50,28 +50,29 @@ double _invisibleAngle(_InvisibleAngle invisibleAngle) {
 
 //*********************************************************************************************************************
 
-/// 属性动画.
-class _PropertyAnimation {
-  const _PropertyAnimation({
+/// 卡片动画.
+class _CardAnimation {
+  const _CardAnimation({
     this.beginDelay,
     this.endDelay,
     @required
     this.duration,
     this.curve,
+    this.beginProperty,
     this.animatingProperty,
     this.endProperty,
   }) : assert(duration != null && duration >= 0);
 
   /// 用于演示.
-  _PropertyAnimation.sample() : this(
+  _CardAnimation.sample() : this(
     duration: 1000,
     curve: Curves.easeInOut,
-    animatingProperty: (property, value) {
-      property.rotateY = _PropertyCalc.ab(0.0, 2.0 * pi).calc(value);
-      property.scaleX = _PropertyCalc.aba(1.0, 2.0).calc(value);
-      property.scaleY = _PropertyCalc.aba(1.0, 2.0).calc(value);
-      property.elevation = _PropertyCalc.aba(1.0, 4.0).calc(value);
-      property.radius = _PropertyCalc.aba(4.0, 16.0).calc(value);
+    animatingProperty: (card, value) {
+      card._property.rotateY = _PropertyCalc.ab(0.0, 2.0 * pi).calc(value);
+      card._property.scaleX = _PropertyCalc.aba(1.0, 2.0).calc(value);
+      card._property.scaleY = _PropertyCalc.aba(1.0, 2.0).calc(value);
+      card._property.elevation = _PropertyCalc.aba(1.0, 4.0).calc(value);
+      card._property.radius = _PropertyCalc.aba(4.0, 16.0).calc(value);
     },
 //    endProperty: (value) {
 //      return _Property.def();
@@ -82,7 +83,7 @@ class _PropertyAnimation {
   ///
   /// [x] 水平方向偏移量.
   /// [y] 垂直方向偏移量.
-  _PropertyAnimation.move({
+  _CardAnimation.move({
     int beginDelay,
     int endDelay,
     int duration = 1000,
@@ -93,14 +94,14 @@ class _PropertyAnimation {
     endDelay: endDelay,
     duration: duration,
     curve: Curves.easeInOut,
-    animatingProperty: (property, value) {
-      property.translateX = _PropertyCalc.ab(0.0, x ?? 0.0).calc(value);
-      property.translateY = _PropertyCalc.ab(0.0, y ?? 0.0).calc(value);
+    animatingProperty: (card, value) {
+      card._property.translateX = _PropertyCalc.ab(0.0, x ?? 0.0).calc(value);
+      card._property.translateY = _PropertyCalc.ab(0.0, y ?? 0.0).calc(value);
     },
   );
 
   /// 移动网格.
-  _PropertyAnimation.moveGrid({
+  _CardAnimation.moveGrid({
     int beginDelay,
     int endDelay,
     int duration = 1000,
@@ -117,7 +118,7 @@ class _PropertyAnimation {
   );
 
   /// 移动核心卡片.
-  _PropertyAnimation.moveCoreCard({
+  _CardAnimation.moveCoreCard({
     int beginDelay,
     int endDelay,
     int duration = 1000,
@@ -137,7 +138,7 @@ class _PropertyAnimation {
   ///
   /// [angleX] 水平方向翻转角度.
   /// [angleY] 垂直方向翻转角度.
-  _PropertyAnimation.flipIn({
+  _CardAnimation.flipIn({
     int beginDelay,
     int endDelay,
     int duration = 1000,
@@ -148,17 +149,17 @@ class _PropertyAnimation {
     endDelay: endDelay,
     duration: duration,
     curve: Curves.easeOut,
-    animatingProperty: (property, value) {
-      property.rotateX = _PropertyCalc.ab(-_invisibleAngle(angleX), 0.0).calc(value);
-      property.rotateY = _PropertyCalc.ab(-_invisibleAngle(angleY), 0.0).calc(value);
-      property.scaleX = _PropertyCalc.ab(0.5, 1.0).calc(value);
-      property.scaleY = _PropertyCalc.ab(0.5, 1.0).calc(value);
-      property.elevation = _PropertyCalc.ab(0.5, 1.0).calc(value);
+    animatingProperty: (card, value) {
+      card._property.rotateX = _PropertyCalc.ab(-_invisibleAngle(angleX), 0.0).calc(value);
+      card._property.rotateY = _PropertyCalc.ab(-_invisibleAngle(angleY), 0.0).calc(value);
+      card._property.scaleX = _PropertyCalc.ab(0.5, 1.0).calc(value);
+      card._property.scaleY = _PropertyCalc.ab(0.5, 1.0).calc(value);
+      card._property.elevation = _PropertyCalc.ab(0.5, 1.0).calc(value);
     },
   );
 
   /// 翻转退出.
-  _PropertyAnimation.flipOut({
+  _CardAnimation.flipOut({
     int beginDelay,
     int endDelay,
     int duration = 1000,
@@ -169,13 +170,13 @@ class _PropertyAnimation {
     endDelay: endDelay,
     duration: duration,
     curve: Curves.easeIn,
-    animatingProperty: (property, value) {
-      property.rotateX = _PropertyCalc.ab(0.0, _invisibleAngle(angleX)).calc(value);
-      property.rotateX = _PropertyCalc.ab(0.0, _invisibleAngle(angleX)).calc(value);
-      property.rotateY = _PropertyCalc.ab(0.0, _invisibleAngle(angleY)).calc(value);
-      property.scaleX = _PropertyCalc.ab(1.0, 0.5).calc(value);
-      property.scaleY = _PropertyCalc.ab(1.0, 0.5).calc(value);
-      property.elevation = _PropertyCalc.ab(1.0, 0.5).calc(value);
+    animatingProperty: (card, value) {
+      card._property.rotateX = _PropertyCalc.ab(0.0, _invisibleAngle(angleX)).calc(value);
+      card._property.rotateX = _PropertyCalc.ab(0.0, _invisibleAngle(angleX)).calc(value);
+      card._property.rotateY = _PropertyCalc.ab(0.0, _invisibleAngle(angleY)).calc(value);
+      card._property.scaleX = _PropertyCalc.ab(1.0, 0.5).calc(value);
+      card._property.scaleY = _PropertyCalc.ab(1.0, 0.5).calc(value);
+      card._property.elevation = _PropertyCalc.ab(1.0, 0.5).calc(value);
     },
   );
 
@@ -186,10 +187,11 @@ class _PropertyAnimation {
   /// 动画时长.
   final int duration;
   final Curve curve;
+  final void Function(_Card card, double value) beginProperty;
   /// 动画过程中设置属性.
-  final void Function(_Property property, double value) animatingProperty;
+  final void Function(_Card card, double value) animatingProperty;
   /// 动画结束时设置属性.
-  final void Function(_Property property, double value) endProperty;
+  final void Function(_Card card, double value) endProperty;
 
   /// 开始动画.
   void begin(_Card card, {
@@ -219,7 +221,7 @@ class _PropertyAnimation {
             case AnimationStatus.reverse:
               break;
             case AnimationStatus.completed:
-              endProperty?.call(card._property, curvedAnimation.value);
+              endProperty?.call(card, curvedAnimation.value);
               card.game.callback.setState(() {
               });
               animationController.dispose();
@@ -232,10 +234,11 @@ class _PropertyAnimation {
           }
         })
         ..addListener(() {
-          animatingProperty?.call(card._property, curvedAnimation.value);
+          animatingProperty?.call(card, curvedAnimation.value);
           card.game.callback.setState(() {
           });
         });
+      beginProperty?.call(card, curvedAnimation.value);
       animationController.forward();
     });
   }

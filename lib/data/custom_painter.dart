@@ -10,7 +10,7 @@ class _GridForegroundPainter extends CustomPainter {
     this.metric = metric;
   }
 
-  Metric metric;
+  _Metric metric;
 
   final Paint _paint = Paint();
 
@@ -55,7 +55,7 @@ class _GridPainter extends CustomPainter {
     this.metric = metric;
   }
 
-  Metric metric;
+  _Metric metric;
 
   final Paint _paint = Paint();
 

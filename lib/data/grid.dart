@@ -24,7 +24,7 @@ class _MetricCache {
 
 //*********************************************************************************************************************
 
-class _Metric implements Metric {
+class _Metric {
   /// 边距网格总数.
   static const int paddingGridCount = 1;
   /// 核心面板网格总数 (不包括 padding).
@@ -38,7 +38,7 @@ class _Metric implements Metric {
   /// 安全面板网格总数.
   static const int safeBoardGridCount = coreBoardGridCount + headerFooterBoardGridCount * 2;
 
-  static Metric build(MediaQueryData mediaQueryData, int size) {
+  static _Metric build(MediaQueryData mediaQueryData, int size) {
     /// 安全的屏幕矩形.
     Rect safeScreenRect = Rect.fromLTWH(
       0.0,
@@ -217,24 +217,15 @@ class _Metric implements Metric {
     this.coreCardSize,
   });
 
-  @override
   final int size;
-  @override
   final Rect safeScreenRect;
-  @override
   final Rect screenRect;
   final bool isVertical;
-  @override
   final int horizontalGridCount;
-  @override
   final int verticalGridCount;
-  @override
   final double gridSize;
-  @override
   final Rect safeBoardRect;
-  @override
   final Rect coreBoardRect;
-  @override
   final Rect coreBoardNoPaddingRect;
   final Rect headerBoardRect;
   final Rect footerBoardRect;
@@ -242,7 +233,6 @@ class _Metric implements Metric {
   final Rect footerBoardNoPadding;
   final Rect Function(_Grid grid) gridRect;
   final int gridPerCoreCard;
-  @override
   final double coreCardSize;
 }
 

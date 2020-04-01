@@ -15,8 +15,6 @@ part 'data/property.dart';
 //*********************************************************************************************************************
 
 abstract class Property {
-  Property._();
-
   Matrix4 get transform;
 
   double get elevation;
@@ -43,24 +41,9 @@ abstract class GameCallback implements TickerProvider {
   void setState(VoidCallback fn);
 }
 
-abstract class Metric {
-  int get size;
-  Rect get safeScreenRect;
-  Rect get screenRect;
-  int get horizontalGridCount;
-  int get verticalGridCount;
-  double get gridSize;
-  Rect get safeBoardRect;
-  Rect get coreBoardRect;
-  Rect get coreBoardNoPaddingRect;
-  double get coreCardSize;
-}
-
 //*********************************************************************************************************************
 
 abstract class Game {
-  Game._();
-
   static Game create(GameCallback callback) {
     return _Game(callback: callback);
   }
@@ -76,8 +59,6 @@ abstract class Game {
 //*********************************************************************************************************************
 
 abstract class Card {
-  Card._();
-
   Rect get rect;
 
   Property get property;

@@ -156,7 +156,7 @@ class _Game implements Game {
           });
         }));
         actionQueue.add(
-          _PropertyAnimation.flipOut(
+          _CardAnimation.flipOut(
             angleY: _InvisibleAngle.counterClockwise90,
           ).action(card)
         );
@@ -170,7 +170,7 @@ class _Game implements Game {
           );
 
           actionQueue.add(
-            _PropertyAnimation.moveCoreCard(
+            _CardAnimation.moveCoreCard(
               metric: metric,
               x: -1,
             ).action(rightCard)
@@ -187,14 +187,14 @@ class _Game implements Game {
           )
           );
           actionQueue.add(
-            _PropertyAnimation.flipIn(
+            _CardAnimation.flipIn(
               angleY: _InvisibleAngle.counterClockwise90,
             ).action(newCard)
           );
         }
       } else {
-        List<_PropertyAnimation> animations = <_PropertyAnimation>[
-          _PropertyAnimation.sample(),
+        List<_CardAnimation> animations = <_CardAnimation>[
+          _CardAnimation.sample(),
 //          _PropertyAnimation.rotateXYIn(
 //            invisibleRotateY: _InvisibleRotate.clockwise270,
 //          ),
