@@ -8,6 +8,8 @@ part 'data/action.dart';
 part 'data/animation.dart';
 part 'data/card.dart';
 part 'data/game.dart';
+part 'data/grid.dart';
+part 'data/property.dart';
 
 //*********************************************************************************************************************
 
@@ -42,6 +44,8 @@ abstract class GameCallback implements TickerProvider {
 
 abstract class Metric {
   int get size;
+  Rect get safeScreenRect;
+  Rect get screenRect;
   int get horizontalGridCount;
   int get verticalGridCount;
   double get gridSize;
@@ -61,16 +65,6 @@ abstract class Game {
   }
 
   BuiltList<Card> get cards;
-
-  Function onTap({
-    @required
-    Card card,
-  });
-
-  Function onLongPress({
-    @required
-    Card card,
-  });
 
   void build();
 

@@ -43,7 +43,7 @@ class _Card implements Card {
 
   _Card get leftCard {
     return game._cards.firstWhere((element) {
-      if (element is! _CoreCard) {
+      if (!element._property.grid.isCoreCard) {
         return false;
       }
       int r = _property.grid.coreCardRowIndex;
@@ -56,7 +56,7 @@ class _Card implements Card {
 
   _Card get rightCard {
     return game._cards.firstWhere((element) {
-      if (element is! _CoreCard) {
+      if (!element._property.grid.isCoreCard) {
         return false;
       }
       int r = _property.grid.coreCardRowIndex;
@@ -69,7 +69,7 @@ class _Card implements Card {
 
   _Card get topCard {
     return game._cards.firstWhere((element) {
-      if (element is! _CoreCard) {
+      if (!element._property.grid.isCoreCard) {
         return false;
       }
       int r = _property.grid.coreCardRowIndex;
@@ -82,7 +82,7 @@ class _Card implements Card {
 
   _Card get bottomCard {
     return game._cards.firstWhere((element) {
-      if (element is! _CoreCard) {
+      if (!element._property.grid.isCoreCard) {
         return false;
       }
       int r = _property.grid.coreCardRowIndex;
@@ -107,18 +107,4 @@ class _Card implements Card {
   String toString() {
     return '${_property.grid}\n$index';
   }
-}
-
-//*********************************************************************************************************************
-
-/// 按照索引定位的卡片, 不能根据横竖屏控制不同的行列.
-class _CoreCard extends _Card {
-  _CoreCard({
-    _Game game,
-    @required
-    _Property initProperty,
-  }) : super(
-        game: game,
-        initProperty: initProperty,
-      );
 }

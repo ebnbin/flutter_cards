@@ -18,59 +18,48 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin imple
   Widget build(BuildContext context) {
     _game.build();
     _gridPainter.metric = _game.metric;
+    _gridForegroundPainter.metric = _game.metric;
     return Scaffold(
       body: SafeArea(
-        child: Stack(
-          children: <Widget>[
-            Positioned.fromRect(
-              rect: _game.metric.safeBoardRect,
-              child: Container(
-                color: Colors.red,
+        child: CustomPaint(
+          painter: _gridPainter,
+          foregroundPainter: _gridForegroundPainter,
+          child: Stack(
+            children: <Widget>[
+              Stack(
+                children: _game.cards.map<Widget>((Card card) {
+                  return _buildCard(card, 0);
+                }).toList(),
               ),
-            ),
-            Positioned.fromRect(
-              rect: _game.metric.coreBoardRect,
-              child: Container(
-                color: Colors.yellow,
+              Stack(
+                children: _game.cards.map<Widget>((Card card) {
+                  return _buildCard(card, 1);
+                }).toList(),
               ),
-            ),
-            Stack(
-              children: _game.cards.map<Widget>((Card card) {
-                return _buildCard(card, 0);
-              }).toList(),
-            ),
-            Stack(
-              children: _game.cards.map<Widget>((Card card) {
-                return _buildCard(card, 1);
-              }).toList(),
-            ),
-            Stack(
-              children: _game.cards.map<Widget>((Card card) {
-                return _buildCard(card, 2);
-              }).toList(),
-            ),
-            Stack(
-              children: _game.cards.map<Widget>((Card card) {
-                return _buildCard(card, 3);
-              }).toList(),
-            ),
-            Stack(
-              children: _game.cards.map<Widget>((Card card) {
-                return _buildCard(card, 4);
-              }).toList(),
-            ),
-            Stack(
-              children: _game.cards.map<Widget>((Card card) {
-                return _buildCard(card, 5);
-              }).toList(),
-            ),
-            CustomPaint(
-              painter: _gridPainter,
-            ),
-          ],
-        )
+              Stack(
+                children: _game.cards.map<Widget>((Card card) {
+                  return _buildCard(card, 2);
+                }).toList(),
+              ),
+              Stack(
+                children: _game.cards.map<Widget>((Card card) {
+                  return _buildCard(card, 3);
+                }).toList(),
+              ),
+              Stack(
+                children: _game.cards.map<Widget>((Card card) {
+                  return _buildCard(card, 4);
+                }).toList(),
+              ),
+              Stack(
+                children: _game.cards.map<Widget>((Card card) {
+                  return _buildCard(card, 5);
+                }).toList(),
+              ),
+            ],
+          ),
+        ),
       ),
-      backgroundColor: Colors.blue,
     );
   }
 
@@ -93,10 +82,14 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin imple
     _gridPainter = GridPainter(
       metric: _game.metric,
     );
+    _gridForegroundPainter = GridForegroundPainter(
+      metric: _game.metric,
+    );
   }
 
   /// 游戏数据.
   Game _game;
 
   GridPainter _gridPainter;
+  GridForegroundPainter _gridForegroundPainter;
 }

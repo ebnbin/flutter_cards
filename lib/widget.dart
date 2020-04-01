@@ -67,8 +67,8 @@ class CardWidget extends StatelessWidget {
   }
 }
 
-class GridPainter extends CustomPainter {
-  GridPainter({
+class GridForegroundPainter extends CustomPainter {
+  GridForegroundPainter({
     @required
     this.metric,
   }) {
@@ -77,11 +77,11 @@ class GridPainter extends CustomPainter {
 
   Metric metric;
 
-  final Paint _paint = Paint()
-    ..style = PaintingStyle.stroke;
+  final Paint _paint = Paint();
 
   @override
   void paint(Canvas canvas, Size size) {
+    _paint.style = PaintingStyle.stroke;
     _paint.color = Colors.cyan;
     for (int rowIndex = 0; rowIndex <= metric.verticalGridCount; rowIndex += 1) {
       Offset p1 = new Offset(metric.safeBoardRect.left, metric.safeBoardRect.top + rowIndex * metric.gridSize);
@@ -104,6 +104,35 @@ class GridPainter extends CustomPainter {
       Offset p2 = new Offset(metric.coreBoardNoPaddingRect.left + columnIndex * metric.coreCardSize, metric.coreBoardNoPaddingRect.bottom);
       canvas.drawLine(p1, p2, _paint);
     }
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return false;
+  }
+}
+
+class GridPainter extends CustomPainter {
+  GridPainter({
+    @required
+    this.metric,
+  }) {
+    this.metric = metric;
+  }
+
+  Metric metric;
+
+  final Paint _paint = Paint();
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    _paint.style = PaintingStyle.fill;
+    _paint.color = Colors.blue;
+    canvas.drawRect(metric.screenRect, _paint);
+    _paint.color = Colors.red;
+    canvas.drawRect(metric.safeBoardRect, _paint);
+    _paint.color = Colors.yellow;
+    canvas.drawRect(metric.coreBoardRect, _paint);
   }
 
   @override
