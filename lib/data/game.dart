@@ -22,12 +22,8 @@ class _Game implements Game {
   //*******************************************************************************************************************
 
   void initCards() {
-//    print(calcMap['gridPerCard']);
     for (int rowIndex = 0; rowIndex < size; rowIndex++) {
       for (int columnIndex = 0; columnIndex < size; columnIndex++) {
-//        if (rowIndex == 2 && (columnIndex == 1 || columnIndex == 2)) {
-//          continue;
-//        }
         _Card card = _Card(
           game: this,
           initProperty: _Property(
@@ -37,13 +33,6 @@ class _Game implements Game {
         cards.add(card);
       }
     }
-//    _cards.add(_IndexCard(
-//      game: this,
-//      rowIndex: 2,
-//      columnIndex: 1,
-//      rowSpan: 1,
-//      columnSpan: 2,
-//    ));
     cards.add(_Card(
       game: this,
       initProperty: _Property(
@@ -51,67 +40,13 @@ class _Game implements Game {
             horizontalRowIndex: 1, horizontalColumnIndex: 6, horizontalRowSpan: 10, horizontalColumnSpan: 10),
       ),
     ));
-//    _cards.add(_Card(
-//      game: this,
-//      initProperty: _Property(
-//        grid: _Grid(metric: _metric, verticalRowIndex: 17, verticalColumnIndex: 2, verticalRowSpan: 15, verticalColumnSpan: 30,
-//          horizontalRowIndex: 17, horizontalColumnIndex: 2, horizontalRowSpan: 15, horizontalColumnSpan: 30,),
-//      ),
-//    ));
-//    _cards.add(_Card(
-//      game: this,
-//      initProperty: _Property(
-//        metric: _metric,
-//        orientationGrid: (isVertical) => isVertical
-//            ? _Grid(verticalRowIndex: 160, verticalColumnIndex: 2, verticalRowSpan: 20, verticalColumnSpan: 20)
-//            : _Grid(verticalRowIndex: 2, verticalColumnIndex: 160, verticalRowSpan: 20, verticalColumnSpan: 20),
-//      ),
-//    ));
-//    _cards.add(_Card(
-//      game: this,
-//      initProperty: _Property(
-//        metric: _metric,
-//        orientationGrid: (isVertical) => isVertical
-//            ? _Grid(verticalRowIndex: 160, verticalColumnIndex: 22, verticalRowSpan: 20, verticalColumnSpan: 20)
-//            : _Grid(verticalRowIndex: 22, verticalColumnIndex: 160, verticalRowSpan: 20, verticalColumnSpan: 20),
-//      ),
-//    ));
-//    _cards.add(_Card(
-//      game: this,
-//      initProperty: _Property(
-//        metric: _metric,
-//        orientationGrid: (isVertical) => isVertical
-//            ? _Grid(verticalRowIndex: 160, verticalColumnIndex: 42, verticalRowSpan: 20, verticalColumnSpan: 20)
-//            : _Grid(verticalRowIndex: 42, verticalColumnIndex: 160, verticalRowSpan: 20, verticalColumnSpan: 20),
-//      ),
-//    ));
-//    _cards.add(_Card(
-//      game: this,
-//      initProperty: _Property(
-//        metric: _metric,
-//        orientationGrid: (isVertical) => isVertical
-//            ? _Grid(verticalRowIndex: 160, verticalColumnIndex: 62, verticalRowSpan: 20, verticalColumnSpan: 20)
-//            : _Grid(verticalRowIndex: 62, verticalColumnIndex: 160, verticalRowSpan: 20, verticalColumnSpan: 20),
-//      ),
-//    ));
-//    _cards.add(_Card(
-//      game: this,
-//      initProperty: _Property(
-//        metric: _metric,
-//        orientationGrid: (isVertical) => isVertical
-//            ? _Grid(verticalRowIndex: 160, verticalColumnIndex: 82, verticalRowSpan: 20, verticalColumnSpan: 20)
-//            : _Grid(verticalRowIndex: 82, verticalColumnIndex: 160, verticalRowSpan: 20, verticalColumnSpan: 20),
-//      ),
-//    ));
-//    _cards.add(_Card(
-//      game: this,
-//      initProperty: _Property(
-//        metric: _metric,
-//        orientationGrid: (isVertical) => isVertical
-//            ? _Grid(verticalRowIndex: 160, verticalColumnIndex: 102, verticalRowSpan: 20, verticalColumnSpan: 20)
-//            : _Grid(verticalRowIndex: 102, verticalColumnIndex: 160, verticalRowSpan: 20, verticalColumnSpan: 20),
-//      ),
-//    ));
+    cards.add(_Card(
+      game: this,
+      initProperty: _Property(
+        grid: _Grid(metric: metric, verticalRowIndex: 6, verticalColumnIndex: 11, verticalRowSpan: 10, verticalColumnSpan: 10,
+            horizontalRowIndex: 11, horizontalColumnIndex: 6, horizontalRowSpan: 10, horizontalColumnSpan: 10),
+      ),
+    ));
   }
 
   //*******************************************************************************************************************
@@ -187,24 +122,7 @@ class _Game implements Game {
           );
         }
       } else {
-        List<_CardAnimation> animations = <_CardAnimation>[
-          _CardAnimation.sample(),
-//          _PropertyAnimation.rotateXYIn(
-//            invisibleRotateY: _InvisibleRotate.clockwise270,
-//          ),
-//          _PropertyAnimation.rotateXYOut(
-//            invisibleRotateX: _InvisibleRotate.counterClockwise90,
-//          ),
-//          _PropertyAnimation.translate(
-//            translateX: -metrics[Metric.cardSize],
-//            translateY: metrics[Metric.cardSize],
-//          ),
-//          _PropertyAnimation.translateIndex(
-//            metrics: metrics,
-//            indexX: -1,
-//          ),
-        ];
-        animations[Random().nextInt(animations.length)].begin(card);
+        _CardAnimation.sample().begin(card);
       }
     };
   }

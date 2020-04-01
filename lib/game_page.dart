@@ -23,38 +23,13 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin imple
           painter: _game.data.painter,
           foregroundPainter: _game.data.foregroundPainter,
           child: Stack(
-            children: <Widget>[
-              Stack(
-                children: _game.data.cards.map<Widget>((Card card) {
-                  return _buildCard(card, 0);
+            children: [0, 1, 2, 3, 4, 5].map<Widget>((zIndex) {
+              return Stack(
+                children: _game.data.cards.map<Widget>((card) {
+                  return _buildCard(card, zIndex);
                 }).toList(),
-              ),
-              Stack(
-                children: _game.data.cards.map<Widget>((Card card) {
-                  return _buildCard(card, 1);
-                }).toList(),
-              ),
-              Stack(
-                children: _game.data.cards.map<Widget>((Card card) {
-                  return _buildCard(card, 2);
-                }).toList(),
-              ),
-              Stack(
-                children: _game.data.cards.map<Widget>((Card card) {
-                  return _buildCard(card, 3);
-                }).toList(),
-              ),
-              Stack(
-                children: _game.data.cards.map<Widget>((Card card) {
-                  return _buildCard(card, 4);
-                }).toList(),
-              ),
-              Stack(
-                children: _game.data.cards.map<Widget>((Card card) {
-                  return _buildCard(card, 5);
-                }).toList(),
-              ),
-            ],
+              );
+            }).toList(),
           ),
         ),
       ),
@@ -66,9 +41,6 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin imple
     return CardWidget(
       card: card,
       zIndex: zIndex,
-      child: Center(
-        child: Text('$card'),
-      ),
     );
   }
 

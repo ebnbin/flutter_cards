@@ -13,6 +13,7 @@ class _Card implements Card {
         assert(initProperty != null) {
     property = initProperty;
     data = _CardData(this);
+    sprite = _Sprite(card: this);
   }
 
   //*******************************************************************************************************************
@@ -101,6 +102,8 @@ class _Card implements Card {
   //*******************************************************************************************************************
 
   CardData data;
+
+  _Sprite sprite;
 }
 
 class _CardData implements CardData {
@@ -137,4 +140,7 @@ class _CardData implements CardData {
 
   @override
   bool Function(int zIndex) get zIndexVisible => card.property.zIndexVisible;
+
+  @override
+  Sprite get sprite => card.sprite;
 }

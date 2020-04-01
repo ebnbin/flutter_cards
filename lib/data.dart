@@ -11,6 +11,7 @@ part 'data/custom_painter.dart';
 part 'data/game.dart';
 part 'data/grid.dart';
 part 'data/property.dart';
+part 'data/sprite.dart';
 
 //*********************************************************************************************************************
 
@@ -66,4 +67,15 @@ abstract class CardData {
   double get margin;
 
   Color get color;
+
+  Sprite get sprite;
+}
+
+//*********************************************************************************************************************
+
+abstract class Sprite {
+  SpriteData data;
+}
+
+abstract class SpriteData {
 }
