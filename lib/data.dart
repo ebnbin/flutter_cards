@@ -41,8 +41,14 @@ abstract class GameCallback implements TickerProvider {
 }
 
 abstract class Metric {
+  int get size;
+  int get horizontalGridCount;
+  int get verticalGridCount;
+  double get gridSize;
   Rect get safeBoardRect;
   Rect get coreBoardRect;
+  Rect get coreBoardNoPaddingRect;
+  double get coreCardSize;
 }
 
 //*********************************************************************************************************************

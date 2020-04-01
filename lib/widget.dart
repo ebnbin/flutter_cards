@@ -66,3 +66,48 @@ class CardWidget extends StatelessWidget {
     );
   }
 }
+
+class GridPainter extends CustomPainter {
+  GridPainter({
+    @required
+    this.metric,
+  }) {
+    this.metric = metric;
+  }
+
+  Metric metric;
+
+  final Paint _paint = Paint()
+    ..style = PaintingStyle.stroke;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    _paint.color = Colors.cyan;
+    for (int rowIndex = 0; rowIndex <= metric.verticalGridCount; rowIndex += 1) {
+      Offset p1 = new Offset(metric.safeBoardRect.left, metric.safeBoardRect.top + rowIndex * metric.gridSize);
+      Offset p2 = new Offset(metric.safeBoardRect.right, metric.safeBoardRect.top + rowIndex * metric.gridSize);
+      canvas.drawLine(p1, p2, _paint);
+    }
+    for (int columnIndex = 0; columnIndex <= metric.horizontalGridCount; columnIndex += 1) {
+      Offset p1 = new Offset(metric.safeBoardRect.left + columnIndex * metric.gridSize, metric.safeBoardRect.top);
+      Offset p2 = new Offset(metric.safeBoardRect.left + columnIndex * metric.gridSize, metric.safeBoardRect.bottom);
+      canvas.drawLine(p1, p2, _paint);
+    }
+    _paint.color = Colors.pink;
+    for (int rowIndex = 0; rowIndex <= metric.size; rowIndex += 1) {
+      Offset p1 = new Offset(metric.coreBoardNoPaddingRect.left, metric.coreBoardNoPaddingRect.top + rowIndex * metric.coreCardSize);
+      Offset p2 = new Offset(metric.coreBoardNoPaddingRect.right, metric.coreBoardNoPaddingRect.top + rowIndex * metric.coreCardSize);
+      canvas.drawLine(p1, p2, _paint);
+    }
+    for (int columnIndex = 0; columnIndex <= metric.size; columnIndex += 1) {
+      Offset p1 = new Offset(metric.coreBoardNoPaddingRect.left + columnIndex * metric.coreCardSize, metric.coreBoardNoPaddingRect.top);
+      Offset p2 = new Offset(metric.coreBoardNoPaddingRect.left + columnIndex * metric.coreCardSize, metric.coreBoardNoPaddingRect.bottom);
+      canvas.drawLine(p1, p2, _paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return false;
+  }
+}

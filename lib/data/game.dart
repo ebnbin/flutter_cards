@@ -45,17 +45,17 @@ class _Game implements Game {
     _cards.add(_Card(
       game: this,
       initProperty: _Property(
-        grid: _Grid(metric: _metric, verticalRowIndex: 2, verticalColumnIndex: 2, verticalRowSpan: 15, verticalColumnSpan: 15,
-            horizontalRowIndex: 2, horizontalColumnIndex: 2, horizontalRowSpan: 15, horizontalColumnSpan: 15),
+        grid: _Grid(metric: _metric, verticalRowIndex: 6, verticalColumnIndex: 1, verticalRowSpan: 10, verticalColumnSpan: 10,
+            horizontalRowIndex: 1, horizontalColumnIndex: 6, horizontalRowSpan: 10, horizontalColumnSpan: 10),
       ),
     ));
-    _cards.add(_Card(
-      game: this,
-      initProperty: _Property(
-        grid: _Grid(metric: _metric, verticalRowIndex: 17, verticalColumnIndex: 2, verticalRowSpan: 15, verticalColumnSpan: 30,
-          horizontalRowIndex: 17, horizontalColumnIndex: 2, horizontalRowSpan: 15, horizontalColumnSpan: 30,),
-      ),
-    ));
+//    _cards.add(_Card(
+//      game: this,
+//      initProperty: _Property(
+//        grid: _Grid(metric: _metric, verticalRowIndex: 17, verticalColumnIndex: 2, verticalRowSpan: 15, verticalColumnSpan: 30,
+//          horizontalRowIndex: 17, horizontalColumnIndex: 2, horizontalRowSpan: 15, horizontalColumnSpan: 30,),
+//      ),
+//    ));
 //    _cards.add(_Card(
 //      game: this,
 //      initProperty: _Property(
@@ -384,8 +384,6 @@ Metric _buildMetric(MediaQueryData mediaQueryData, int size) {
 
   /// 核心卡片尺寸.
   double coreCardSize = gridPerCoreCard * gridSize;
-  /// Header footer 卡片尺寸.
-  double headerFooterCardSize = _Metric.gridPerHeaderFooterCard * gridSize;
 
   return _Metric(
     size: size,
@@ -405,24 +403,22 @@ Metric _buildMetric(MediaQueryData mediaQueryData, int size) {
     gridRect: gridRect,
     gridPerCoreCard: gridPerCoreCard,
     coreCardSize: coreCardSize,
-    headerFooterCardSize: headerFooterCardSize,
   );
 }
 
 class _Metric implements Metric {
   /// 边距网格总数.
-  static const int paddingGridCount = 2;
+  static const int paddingGridCount = 1;
   /// 核心面板网格总数 (不包括 padding).
-  static const int coreBoardNoPaddingGridCount = 120;
+  static const int coreBoardNoPaddingGridCount = 60;
   /// Header footer 面板网格总数 (不包括 padding).
-  static const int headerFooterBoardNoPaddingGridCount = 30;
+  static const int headerFooterBoardNoPaddingGridCount = 15;
   /// 核心面板网格总数 (包括 padding).
   static const int coreBoardGridCount = coreBoardNoPaddingGridCount + paddingGridCount * 2;
   /// Header footer 面板网格总数 (包括 padding).
   static const int headerFooterBoardGridCount = headerFooterBoardNoPaddingGridCount + paddingGridCount * 2;
   /// 安全面板网格总数.
   static const int safeBoardGridCount = coreBoardGridCount + headerFooterBoardGridCount * 2;
-  static const int gridPerHeaderFooterCard = 20;
 
   _Metric({
     @required
@@ -459,21 +455,24 @@ class _Metric implements Metric {
     this.gridPerCoreCard,
     @required
     this.coreCardSize,
-    @required
-    this.headerFooterCardSize,
   });
 
+  @override
   final int size;
   final Rect safeScreenRect;
   final Rect screenRect;
   final bool isVertical;
+  @override
   final int horizontalGridCount;
+  @override
   final int verticalGridCount;
+  @override
   final double gridSize;
   @override
   final Rect safeBoardRect;
   @override
   final Rect coreBoardRect;
+  @override
   final Rect coreBoardNoPaddingRect;
   final Rect headerBoardRect;
   final Rect footerBoardRect;
@@ -481,8 +480,8 @@ class _Metric implements Metric {
   final Rect footerBoardNoPadding;
   final Rect Function(_Grid grid) gridRect;
   final int gridPerCoreCard;
+  @override
   final double coreCardSize;
-  final double headerFooterCardSize;
 }
 
 /// 网格.
@@ -608,55 +607,6 @@ class _Grid {
   set coreCardColumnSpan(int coreCardColumnSpan) {
     columnSpan = metric.gridPerCoreCard * coreCardColumnSpan;
   }
-  
-//
-//  void update({
-//    int rowIndex,
-//    int columnIndex,
-//    int rowSpan,
-//    int columnSpan,
-//  }) {
-//    this.verticalRowIndex = rowIndex ?? this.verticalRowIndex;
-//    this.verticalColumnIndex = columnIndex ?? this.verticalColumnIndex;
-//    this.verticalRowSpan = rowSpan ?? this.verticalRowSpan;
-//    this.verticalColumnSpan = columnSpan ?? this.verticalColumnSpan;
-//  }
-//
-//  void offset({
-//    int rowIndex = 0,
-//    int columnIndex = 0,
-//    int rowSpan = 0,
-//    int columnSpan = 0,
-//  }) {
-//    this.verticalRowIndex += (rowIndex ?? 0);
-//    this.verticalColumnIndex += (columnIndex ?? 0);
-//    this.verticalRowSpan += (rowSpan ?? 0);
-//    this.verticalColumnSpan += (columnSpan ?? 0);
-//  }
-//  
-//  void left() {
-//    offset(
-//      columnIndex: -1,
-//    );
-//  }
-//  
-//  void right() {
-//    offset(
-//      columnIndex: 1,
-//    );
-//  }
-//  
-//  void top() {
-//    offset(
-//      rowIndex: -1,
-//    );
-//  }
-//  
-//  void bottom() {
-//    offset(
-//      rowIndex: 1,
-//    );
-//  }
 
   @override
   String toString() {

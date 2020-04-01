@@ -17,6 +17,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin imple
   @override
   Widget build(BuildContext context) {
     _game.build();
+    _gridPainter.metric = _game.metric;
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -63,6 +64,9 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin imple
                 return _buildCard(card, 5);
               }).toList(),
             ),
+            CustomPaint(
+              painter: _gridPainter,
+            ),
           ],
         )
       ),
@@ -86,8 +90,13 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin imple
   void initState() {
     super.initState();
     _game = Game.create(this);
+    _gridPainter = GridPainter(
+      metric: _game.metric,
+    );
   }
 
   /// 游戏数据.
   Game _game;
+
+  GridPainter _gridPainter;
 }

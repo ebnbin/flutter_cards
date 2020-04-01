@@ -249,23 +249,6 @@ class _PropertyAnimation {
     y: metric.coreCardSize * (y ?? 0),
   );
 
-  /// 移动 header footer 卡片.
-  _PropertyAnimation.moveHeaderFooterCard({
-    int beginDelay,
-    int endDelay,
-    int duration = 1000,
-    @required
-    _Metric metric,
-    int x,
-    int y,
-  }) : this.move(
-    beginDelay: beginDelay,
-    endDelay: endDelay,
-    duration: duration,
-    x: metric.headerFooterCardSize * (x ?? 0),
-    y: metric.headerFooterCardSize * (y ?? 0),
-  );
-
   /// 翻转进入.
   ///
   /// [angleX] 水平方向翻转角度.
