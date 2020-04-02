@@ -38,8 +38,8 @@ class _Game implements Game {
     ));
     cards.add(_Card(
       game: this,
-      grid: _Grid(metric: metric, verticalRowIndex: 6, verticalColumnIndex: 11, verticalRowSpan: 10, verticalColumnSpan: 10,
-          horizontalRowIndex: 11, horizontalColumnIndex: 6, horizontalRowSpan: 10, horizontalColumnSpan: 10),
+      grid: _Grid(metric: metric, verticalRowIndex: 6, verticalColumnIndex: 11, verticalRowSpan: 10, verticalColumnSpan: 15,
+          horizontalRowIndex: 11, horizontalColumnIndex: 1, horizontalRowSpan: 10, horizontalColumnSpan: 15),
     ));
   }
 

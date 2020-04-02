@@ -10,7 +10,7 @@ class _Card implements Card {
     this.game,
     @required
     this.grid,
-    this.matrix4Entry32 = 0.004,
+//    this.matrix4Entry32 = 0.004,
     this.translateX = 0.0,
     this.translateY = 0.0,
     this.rotateX = 0.0,
@@ -22,7 +22,7 @@ class _Card implements Card {
     this.radius = 4.0,
     this.opacity = 1.0,
     this.visible = true,
-    this.margin = 4.0,
+//    this.margin = 4.0,
     this.state = _CardState.idle,
   }) : assert(game != null),
         assert(grid != null) {
@@ -56,7 +56,9 @@ class _Card implements Card {
   _Grid grid;
 
   /// Matrix4.setEntry(3, 2, value);
-  double matrix4Entry32;
+  double get matrix4Entry32 {
+    return _Metric.coreBoardNoPaddingGridCount / max(grid.rowSpan, grid.columnSpan) / 1000.0;
+  }
 
   double translateX;
   double translateY;
@@ -102,7 +104,9 @@ class _Card implements Card {
     };
   }
 
-  double margin;
+  double get margin {
+    return 2.0 / (_Metric.coreBoardNoPaddingGridCount / min(grid.rowSpan, grid.columnSpan)) * grid.metric.gridSize;
+  }
 
   Color get color {
     switch (state) {
