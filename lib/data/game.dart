@@ -52,7 +52,7 @@ class _Game implements Game {
 
   /// 事件管理.
   final _ActionQueue actionQueue = _ActionQueue(
-//    max: 1,
+    max: 1,
   );
 
   //*******************************************************************************************************************
@@ -70,50 +70,64 @@ class _Game implements Game {
     assert(card != null);
     return () {
       if (card.grid.isCoreCard) {
-        card.color = Colors.grey;
+        if (card.state != _CardState.idle || !actionQueue.canAdd()) {
+          return;
+        }
+        _Card rightCard = card.rightCard;
+        if (rightCard == null || rightCard.state != _CardState.idle) {
+          return;
+        }
+        _Card newCard = _Card(
+          game: this,
+          /*opacity: 0.0*/
+          grid: _Grid.coreCard(metric: metric, rowIndex: rightCard.grid.coreCardRowIndex, columnIndex: rightCard.grid.coreCardColumnIndex, rowSpan: 1, columnSpan: 1),
+        );
+        int oldIndex = card.index;
+
+        card.state = _CardState.pending;
+        rightCard.state = _CardState.pending;
+        newCard.state = _CardState.pending;
         callback.setState(() {
         });
-        actionQueue.add(_Action.run((_Action action) {
-          card.color = Colors.green;
-          callback.setState(() {
-          });
-        }));
-        actionQueue.add(
-          _CardAnimation.flipOut(
-            angleY: _InvisibleAngle.counterClockwise90,
-          ).action(card)
-        );
-        if (card.rightCard != null && card.rightCard.grid.isCoreCard) {
-          _Card rightCard = card.rightCard;
-          _Card newCard = _Card(
-            game: this,
-            /*opacity: 0.0*/
-            grid: _Grid.coreCard(metric: metric, rowIndex: rightCard.grid.coreCardRowIndex, columnIndex: rightCard.grid.coreCardColumnIndex, rowSpan: 1, columnSpan: 1),
-          );
 
-          actionQueue.add(
-            _CardAnimation.moveCoreCard(
-              metric: metric,
-              x: -1,
-            ).action(rightCard)
-          );
-          actionQueue.add(_Action.run((_Action action) {
-            rightCard.grid.coreCardColumnIndex = rightCard.grid.coreCardColumnIndex - 1;
-            rightCard.reset();
-
-            cards[card.index] = newCard;
-
-            callback.setState(() {
-            });
+        _Action action0 = _CardAnimation.flipOut(
+          duration: 500,
+          angleY: _InvisibleAngle.counterClockwise90,
+          beginProperty: (card, value) {
+            card.state = _CardState.acting;
           },
-          )
-          );
-          actionQueue.add(
-            _CardAnimation.flipIn(
-              angleY: _InvisibleAngle.counterClockwise90,
-            ).action(newCard)
-          );
-        }
+          endProperty: (card, value) {
+            card.state = _CardState.idle;
+          },
+        ).action(card);
+        _Action action1 = _CardAnimation.moveCoreCard(
+          duration: 500,
+          metric: metric,
+          x: -1,
+          beginDelay: 250,
+          beginProperty: (card, value) {
+            card.state = _CardState.acting;
+          },
+          endProperty: (card, value) {
+            card.grid.coreCardColumnIndex = card.grid.coreCardColumnIndex - 1;
+            card.reset();
+            card.state = _CardState.idle;
+          },
+        ).action(rightCard);
+        _Action action2 = _CardAnimation.flipIn(
+          duration: 500,
+          beginDelay: 500,
+          angleY: _InvisibleAngle.counterClockwise90,
+          beginProperty: (card, value) {
+            cards[oldIndex] = card;
+            card.state = _CardState.acting;
+          },
+          endProperty: (card, value) {
+            card.state = _CardState.idle;
+          },
+        ).action(newCard);
+        List<_Action> actions = [action0, action1, action2];
+        actionQueue.addList(actions);
       } else {
         _CardAnimation.sample().begin(card);
       }

@@ -39,7 +39,7 @@ class _ActionQueue {
     if (actions == null || actions.isEmpty) {
       return false;
     }
-    if (max >= 0 && queue.length >= max) {
+    if (!canAdd()) {
       return false;
     }
     if (addFirst) {
@@ -77,6 +77,10 @@ class _ActionQueue {
     int length = queue.length;
     queue.clear();
     return length;
+  }
+
+  bool canAdd() {
+    return max < 0 || queue.length < max;
   }
 }
 

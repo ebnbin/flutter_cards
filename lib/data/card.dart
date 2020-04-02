@@ -23,7 +23,7 @@ class _Card implements Card {
     this.opacity = 1.0,
     this.visible = true,
     this.margin = 4.0,
-    this.color = Colors.white,
+    this.state = _CardState.idle,
   }) : assert(game != null),
         assert(grid != null) {
     data = _CardData(this);
@@ -104,7 +104,18 @@ class _Card implements Card {
 
   double margin;
 
-  Color color;
+  Color get color {
+    switch (state) {
+      case _CardState.idle:
+        return Colors.white;
+      case _CardState.pending:
+        return Colors.grey;
+      case _CardState.acting:
+        return Colors.green;
+      default:
+        return Colors.white;
+    }
+  }
 
   //*******************************************************************************************************************
 
@@ -178,6 +189,14 @@ class _Card implements Card {
   CardData data;
 
   _Sprite sprite;
+
+  _CardState state;
+}
+
+enum _CardState {
+  idle,
+  pending,
+  acting,
 }
 
 class _CardData implements CardData {
