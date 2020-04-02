@@ -19,45 +19,46 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin imple
   Widget build(BuildContext context) {
     _game.data.build();
     return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: <Widget>[
-            Positioned.fromRect(
-              rect: _game.data.headerRect,
-              child: MaterialCard(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.zero,
-                ),
-                margin: EdgeInsets.zero,
-                color: Colors.blueGrey,
+      body: Stack(
+        children: <Widget>[
+          Positioned.fromRect(
+            rect: _game.data.headerRect,
+            child: MaterialCard(
+              color: Colors.blueGrey.shade300,
+              elevation: 4.0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.zero,
               ),
+              margin: EdgeInsets.zero,
             ),
-            Positioned.fromRect(
-              rect: _game.data.footerRect,
-              child: MaterialCard(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.zero,
-                ),
-                margin: EdgeInsets.zero,
-                color: Colors.blueGrey,
+          ),
+          Positioned.fromRect(
+            rect: _game.data.footerRect,
+            child: MaterialCard(
+              color: Colors.blueGrey.shade300,
+              elevation: 4.0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.zero,
               ),
+              margin: EdgeInsets.zero,
             ),
-            CustomPaint(
-//          painter: _game.data.painter,
-          foregroundPainter: _game.data.foregroundPainter,
-              child: Stack(
-                children: [0, 1, 2, 3, 4, 5].map<Widget>((zIndex) {
-                  return Stack(
-                    children: _game.data.cards.map<Widget>((card) {
-                      return _buildCard(card, zIndex);
-                    }).toList(),
-                  );
-                }).toList(),
-              ),
+          ),
+          CustomPaint(
+//            painter: _game.data.painter,
+//            foregroundPainter: _game.data.foregroundPainter,
+            child: Stack(
+              children: [0, 1, 2, 3, 4, 5].map<Widget>((zIndex) {
+                return Stack(
+                  children: _game.data.cards.map<Widget>((card) {
+                    return _buildCard(card, zIndex);
+                  }).toList(),
+                );
+              }).toList(),
             ),
-          ],
-        )
+          ),
+        ],
       ),
+      backgroundColor: Colors.blueGrey.shade100,
     );
   }
 

@@ -111,7 +111,7 @@ class _Card implements Card {
       case _CardState.pending:
         return Colors.grey;
       case _CardState.acting:
-        return Colors.green;
+        return Colors.yellow;
       default:
         return Colors.white;
     }

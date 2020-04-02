@@ -39,19 +39,19 @@ class _Metric {
   static const int safeBoardGridCount = coreBoardGridCount + headerFooterBoardGridCount * 2;
 
   static _Metric build(MediaQueryData mediaQueryData, int size) {
-    /// 安全的屏幕矩形.
-    Rect safeScreenRect = Rect.fromLTWH(
-      0.0,
-      0.0,
-      mediaQueryData.size.width - mediaQueryData.padding.left - mediaQueryData.padding.right,
-      mediaQueryData.size.height - mediaQueryData.padding.top - mediaQueryData.padding.bottom,
-    );
     /// 屏幕矩形.
-    Rect screenRect = Rect.fromLTRB(
-      safeScreenRect.left - mediaQueryData.padding.left,
-      safeScreenRect.top - mediaQueryData.padding.top,
-      safeScreenRect.right + mediaQueryData.padding.right,
-      safeScreenRect.bottom + mediaQueryData.padding.bottom,
+    Rect screenRect = Rect.fromLTWH(
+      0.0,
+      0.0,
+      mediaQueryData.size.width,
+      mediaQueryData.size.height,
+    );
+    /// 安全的屏幕矩形.
+    Rect safeScreenRect = Rect.fromLTRB(
+      screenRect.left + mediaQueryData.padding.left,
+      screenRect.top + mediaQueryData.padding.top,
+      screenRect.right - mediaQueryData.padding.right,
+      screenRect.bottom - mediaQueryData.padding.bottom,
     );
     /// 是否竖屏. [MediaQueryData.orientation].
     bool isVertical = screenRect.width <= screenRect.height;
@@ -69,14 +69,11 @@ class _Metric {
     /// 网格尺寸.
     double gridSize = min(safeScreenRect.width / horizontalGridCount, safeScreenRect.height / verticalGridCount);
 
-    double safeBoardWidth = horizontalGridCount * gridSize;
-    double safeBoardHeight = verticalGridCount * gridSize;
     /// 安全面板矩形.
-    Rect safeBoardRect = Rect.fromLTWH(
-      (safeScreenRect.width - safeBoardWidth) / 2.0,
-      (safeScreenRect.height - safeBoardHeight) / 2.0,
-      safeBoardWidth,
-      safeBoardHeight,
+    Rect safeBoardRect = Rect.fromCenter(
+      center: safeScreenRect.center,
+      width: horizontalGridCount * gridSize,
+      height: verticalGridCount * gridSize,
     );
 
     /// 边距尺寸.
@@ -84,11 +81,10 @@ class _Metric {
 
     double coreBoardSize = _Metric.coreBoardGridCount * gridSize;
     /// 核心面板矩形 (包括 padding).
-    Rect coreBoardRect = Rect.fromLTWH(
-      (safeScreenRect.width - coreBoardSize) / 2.0,
-      (safeScreenRect.height - coreBoardSize) / 2.0,
-      coreBoardSize,
-      coreBoardSize,
+    Rect coreBoardRect = Rect.fromCenter(
+      center: safeBoardRect.center,
+      width: coreBoardSize,
+      height: coreBoardSize,
     );
     /// 核心面板矩形 (不包括 padding).
     Rect coreBoardNoPaddingRect = Rect.fromLTRB(

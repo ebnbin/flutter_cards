@@ -64,9 +64,9 @@ class _GridPainter extends CustomPainter {
     _paint.style = PaintingStyle.fill;
     _paint.color = Colors.blue;
     canvas.drawRect(metric.screenRect, _paint);
-    _paint.color = Colors.red;
+    _paint.color = Colors.green;
     canvas.drawRect(metric.safeBoardRect, _paint);
-    _paint.color = Colors.yellow;
+    _paint.color = Colors.red;
     canvas.drawRect(metric.coreBoardRect, _paint);
   }
 
