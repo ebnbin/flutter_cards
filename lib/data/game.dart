@@ -197,4 +197,10 @@ class _GameData implements GameData {
 
   @override
   CustomPainter get painter => game.gridPainter;
+
+  @override
+  Rect get headerRect => game.metric.headerBoardUnsafeRect;
+
+  @override
+  Rect get footerRect => game.metric.footerBoardUnsafeRect;
 }

@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:cards/data.dart';
+import 'package:cards/material_card.dart';
 import 'package:flutter/material.dart' hide Card;
 
 part 'widget.dart';
@@ -19,19 +20,43 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin imple
     _game.data.build();
     return Scaffold(
       body: SafeArea(
-        child: CustomPaint(
-          painter: _game.data.painter,
-//          foregroundPainter: _game.data.foregroundPainter,
-          child: Stack(
-            children: [0, 1, 2, 3, 4, 5].map<Widget>((zIndex) {
-              return Stack(
-                children: _game.data.cards.map<Widget>((card) {
-                  return _buildCard(card, zIndex);
+        child: Stack(
+          children: <Widget>[
+            Positioned.fromRect(
+              rect: _game.data.headerRect,
+              child: MaterialCard(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.zero,
+                ),
+                margin: EdgeInsets.zero,
+                color: Colors.blueGrey,
+              ),
+            ),
+            Positioned.fromRect(
+              rect: _game.data.footerRect,
+              child: MaterialCard(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.zero,
+                ),
+                margin: EdgeInsets.zero,
+                color: Colors.blueGrey,
+              ),
+            ),
+            CustomPaint(
+//          painter: _game.data.painter,
+          foregroundPainter: _game.data.foregroundPainter,
+              child: Stack(
+                children: [0, 1, 2, 3, 4, 5].map<Widget>((zIndex) {
+                  return Stack(
+                    children: _game.data.cards.map<Widget>((card) {
+                      return _buildCard(card, zIndex);
+                    }).toList(),
+                  );
                 }).toList(),
-              );
-            }).toList(),
-          ),
-        ),
+              ),
+            ),
+          ],
+        )
       ),
     );
   }

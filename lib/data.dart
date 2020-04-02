@@ -37,6 +37,9 @@ abstract class GameData {
 
   CustomPainter get painter;
   CustomPainter get foregroundPainter;
+
+  Rect get headerRect;
+  Rect get footerRect;
 }
 
 //*********************************************************************************************************************

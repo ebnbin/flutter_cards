@@ -102,12 +102,16 @@ class _Metric {
     Rect headerBoardRect;
     /// Footer 面板矩形 (包括 padding).
     Rect footerBoardRect;
+    /// Header 面板矩形 (包括不安全区域).
+    Rect headerBoardUnsafeRect;
+    /// Footer 面板矩形 (包括不安全区域).
+    Rect footerBoardUnsafeRect;
     if (isVertical) {
       headerBoardRect = Rect.fromLTWH(
         safeBoardRect.left,
         safeBoardRect.top,
         safeBoardRect.width,
-        coreBoardRect.top,
+        coreBoardRect.top - safeBoardRect.top,
       );
       footerBoardRect = Rect.fromLTWH(
         headerBoardRect.left,
@@ -115,11 +119,23 @@ class _Metric {
         headerBoardRect.width,
         headerBoardRect.height,
       );
+      headerBoardUnsafeRect = Rect.fromLTWH(
+        screenRect.left,
+        screenRect.top,
+        screenRect.width,
+        coreBoardRect.top - screenRect.top,
+      );
+      footerBoardUnsafeRect = Rect.fromLTWH(
+        headerBoardUnsafeRect.left,
+        coreBoardRect.bottom,
+        headerBoardUnsafeRect.width,
+        screenRect.bottom - coreBoardRect.bottom,
+      );
     } else {
       headerBoardRect = Rect.fromLTWH(
         safeBoardRect.left,
         safeBoardRect.top,
-        coreBoardRect.left,
+        coreBoardRect.left - safeBoardRect.left,
         safeBoardRect.height,
       );
       footerBoardRect = Rect.fromLTWH(
@@ -127,6 +143,18 @@ class _Metric {
         headerBoardRect.top,
         headerBoardRect.width,
         headerBoardRect.height,
+      );
+      headerBoardUnsafeRect = Rect.fromLTWH(
+        screenRect.left,
+        screenRect.top,
+        coreBoardRect.left - screenRect.left,
+        screenRect.height,
+      );
+      footerBoardUnsafeRect = Rect.fromLTWH(
+        coreBoardRect.right,
+        headerBoardUnsafeRect.top,
+        screenRect.right - coreBoardRect.right,
+        headerBoardUnsafeRect.height,
       );
     }
     /// Header 面板矩形 (不包括 padding).
@@ -174,6 +202,8 @@ class _Metric {
       footerBoardRect: footerBoardRect,
       headerBoardNoPadding: headerBoardNoPadding,
       footerBoardNoPadding: footerBoardNoPadding,
+      headerBoardUnsafeRect: headerBoardUnsafeRect,
+      footerBoardUnsafeRect: footerBoardUnsafeRect,
       gridRect: gridRect,
       gridPerCoreCard: gridPerCoreCard,
       coreCardSize: coreCardSize,
@@ -204,12 +234,16 @@ class _Metric {
     @required
     this.headerBoardRect,
     @required
-    this.footerBoardRect,
     @required
     this.headerBoardNoPadding,
     @required
     this.footerBoardNoPadding,
     @required
+    this.footerBoardRect,
+    @required
+    this.headerBoardUnsafeRect,
+    @required
+    this.footerBoardUnsafeRect,
     this.gridRect,
     @required
     this.gridPerCoreCard,
@@ -231,6 +265,8 @@ class _Metric {
   final Rect footerBoardRect;
   final Rect headerBoardNoPadding;
   final Rect footerBoardNoPadding;
+  final Rect headerBoardUnsafeRect;
+  final Rect footerBoardUnsafeRect;
   final Rect Function(_Grid grid) gridRect;
   final int gridPerCoreCard;
   final double coreCardSize;
