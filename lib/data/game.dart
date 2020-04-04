@@ -102,7 +102,6 @@ class _Game implements Game {
         ).action(card);
         _Action action1 = _CardAnimation.moveCoreCard(
           duration: 500,
-          metric: metric,
           x: -1,
           beginDelay: 250,
           beginProperty: (card, value) {

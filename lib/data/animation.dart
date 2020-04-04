@@ -128,19 +128,20 @@ class _CardAnimation {
     int beginDelay,
     int endDelay,
     int duration = 1000,
-    @required
-    _Metric metric,
     int x,
     int y,
     void Function(_Card card, double value) beginProperty,
     void Function(_Card card, double value) endProperty,
-  }) : this.move(
+  }) : this(
     beginDelay: beginDelay,
     endDelay: endDelay,
     duration: duration,
-    x: metric.gridSize * (x ?? 0),
-    y: metric.gridSize * (y ?? 0),
+    curve: Curves.easeInOut,
     beginProperty: beginProperty,
+    animatingProperty: (card, value) {
+      card.translateX = _PropertyCalc.ab(0.0, card.grid.metric.gridSize * (x ?? 0.0)).calc(value);
+      card.translateY = _PropertyCalc.ab(0.0, card.grid.metric.gridSize * (y ?? 0.0)).calc(value);
+    },
     endProperty: endProperty,
   );
 
@@ -149,19 +150,20 @@ class _CardAnimation {
     int beginDelay,
     int endDelay,
     int duration = 1000,
-    @required
-    _Metric metric,
     int x,
     int y,
     void Function(_Card card, double value) beginProperty,
     void Function(_Card card, double value) endProperty,
-  }) : this.move(
+  }) : this(
     beginDelay: beginDelay,
     endDelay: endDelay,
     duration: duration,
-    x: metric.coreCardSize * (x ?? 0),
-    y: metric.coreCardSize * (y ?? 0),
+    curve: Curves.easeInOut,
     beginProperty: beginProperty,
+    animatingProperty: (card, value) {
+      card.translateX = _PropertyCalc.ab(0.0, card.grid.metric.coreCardSize * (x ?? 0.0)).calc(value);
+      card.translateY = _PropertyCalc.ab(0.0, card.grid.metric.coreCardSize * (y ?? 0.0)).calc(value);
+    },
     endProperty: endProperty,
   );
 
