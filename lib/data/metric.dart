@@ -103,8 +103,9 @@ class _Metric {
     int bodyCardGrid = bodyNoPaddingGrid ~/ game.square;
     /// Body 卡片尺寸.
     double bodyCardSize = bodyCardGrid * gridSize;
-    
-    /// [_Grid] 相关.
+
+    //*****************************************************************************************************************
+    // Grid 相关.
 
     int Function(_Grid grid) gridGetRowIndex = (grid) {
       return isVertical ? grid.verticalRowIndex : grid.horizontalRowIndex;
@@ -177,13 +178,14 @@ class _Metric {
       grid.columnSpan = bodyCardGrid * bodyColumnSpan;
     };
 
+    //*****************************************************************************************************************
+
     sizeCache = mediaQueryData.size;
     paddingCache = mediaQueryData.padding;
     squareCache = game.square;
     metricCache = _Metric(
       game.square,
       screenRect,
-      isVertical,
       horizontalGrid,
       verticalGrid,
       gridSize,
@@ -192,7 +194,6 @@ class _Metric {
       bodyNoPaddingRect,
       headerUnsafeRect,
       footerUnsafeRect,
-      bodyCardGrid,
       bodyCardSize,
       gridGetRowIndex,
       gridSetRowIndex,
@@ -233,7 +234,6 @@ class _Metric {
   _Metric(
       this.square,
       this.screenRect,
-      this.isVertical,
       this.horizontalGrid,
       this.verticalGrid,
       this.gridSize,
@@ -242,7 +242,6 @@ class _Metric {
       this.bodyNoPaddingRect,
       this.headerUnsafeRect,
       this.footerUnsafeRect,
-      this.bodyCardGrid,
       this.bodyCardSize,
       this.gridGetRowIndex,
       this.gridSetRowIndex,
@@ -265,7 +264,6 @@ class _Metric {
 
   final int square;
   final Rect screenRect;
-  final bool isVertical;
   final int horizontalGrid;
   final int verticalGrid;
   final double gridSize;
@@ -274,7 +272,6 @@ class _Metric {
   final Rect bodyNoPaddingRect;
   final Rect headerUnsafeRect;
   final Rect footerUnsafeRect;
-  final int bodyCardGrid;
   final double bodyCardSize;
   final int Function(_Grid grid) gridGetRowIndex;
   final void Function(_Grid grid, int rowIndex) gridSetRowIndex;
