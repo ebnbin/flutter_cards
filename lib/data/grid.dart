@@ -2,278 +2,10 @@ part of '../data.dart';
 
 //*********************************************************************************************************************
 
-class _MetricCache {
-  const _MetricCache(this.mediaQueryData, this.size);
-
-  final MediaQueryData mediaQueryData;
-  final int size;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-          other is _MetricCache &&
-              runtimeType == other.runtimeType &&
-              mediaQueryData == other.mediaQueryData &&
-              size == other.size;
-
-  @override
-  int get hashCode =>
-      mediaQueryData.hashCode ^
-      size.hashCode;
-}
-
-//*********************************************************************************************************************
-
-class _Metric2 {
-  /// 边距网格总数.
-  static const int paddingGridCount = 1;
-  /// 核心面板网格总数 (不包括 padding).
-  static const int coreBoardNoPaddingGridCount = 60;
-  /// Header footer 面板网格总数 (不包括 padding).
-  static const int headerFooterBoardNoPaddingGridCount = 15;
-  /// 核心面板网格总数 (包括 padding).
-  static const int coreBoardGridCount = coreBoardNoPaddingGridCount + paddingGridCount * 2;
-  /// Header footer 面板网格总数 (包括 padding).
-  static const int headerFooterBoardGridCount = headerFooterBoardNoPaddingGridCount + paddingGridCount * 2;
-  /// 安全面板网格总数.
-  static const int safeBoardGridCount = coreBoardGridCount + headerFooterBoardGridCount * 2;
-
-  static _Metric2 build(MediaQueryData mediaQueryData, int size) {
-    /// 屏幕矩形.
-    Rect screenRect = Rect.fromLTWH(
-      0.0,
-      0.0,
-      mediaQueryData.size.width,
-      mediaQueryData.size.height,
-    );
-    /// 安全的屏幕矩形.
-    Rect safeScreenRect = Rect.fromLTRB(
-      screenRect.left + mediaQueryData.padding.left,
-      screenRect.top + mediaQueryData.padding.top,
-      screenRect.right - mediaQueryData.padding.right,
-      screenRect.bottom - mediaQueryData.padding.bottom,
-    );
-    /// 是否竖屏. [MediaQueryData.orientation].
-    bool isVertical = screenRect.width <= screenRect.height;
-    /// 水平方向网格总数.
-    int horizontalGridCount;
-    /// 垂直方向网格总数.
-    int verticalGridCount;
-    if (isVertical) {
-      horizontalGridCount = _Metric2.coreBoardGridCount;
-      verticalGridCount = _Metric2.safeBoardGridCount;
-    } else {
-      horizontalGridCount = _Metric2.safeBoardGridCount;
-      verticalGridCount = _Metric2.coreBoardGridCount;
-    }
-    /// 网格尺寸.
-    double gridSize = min(safeScreenRect.width / horizontalGridCount, safeScreenRect.height / verticalGridCount);
-
-    /// 安全面板矩形.
-    Rect safeBoardRect = Rect.fromCenter(
-      center: safeScreenRect.center,
-      width: horizontalGridCount * gridSize,
-      height: verticalGridCount * gridSize,
-    );
-
-    /// 边距尺寸.
-    double paddingSize = _Metric2.paddingGridCount * gridSize;
-
-    double coreBoardSize = _Metric2.coreBoardGridCount * gridSize;
-    /// 核心面板矩形 (包括 padding).
-    Rect coreBoardRect = Rect.fromCenter(
-      center: safeBoardRect.center,
-      width: coreBoardSize,
-      height: coreBoardSize,
-    );
-    /// 核心面板矩形 (不包括 padding).
-    Rect coreBoardNoPaddingRect = Rect.fromLTRB(
-      coreBoardRect.left + paddingSize,
-      coreBoardRect.top + paddingSize,
-      coreBoardRect.right - paddingSize,
-      coreBoardRect.bottom - paddingSize,
-    );
-
-    /// Header 面板矩形 (包括 padding).
-    Rect headerBoardRect;
-    /// Footer 面板矩形 (包括 padding).
-    Rect footerBoardRect;
-    /// Header 面板矩形 (包括不安全区域).
-    Rect headerBoardUnsafeRect;
-    /// Footer 面板矩形 (包括不安全区域).
-    Rect footerBoardUnsafeRect;
-    if (isVertical) {
-      headerBoardRect = Rect.fromLTWH(
-        safeBoardRect.left,
-        safeBoardRect.top,
-        safeBoardRect.width,
-        coreBoardRect.top - safeBoardRect.top,
-      );
-      footerBoardRect = Rect.fromLTWH(
-        headerBoardRect.left,
-        coreBoardRect.bottom,
-        headerBoardRect.width,
-        headerBoardRect.height,
-      );
-      headerBoardUnsafeRect = Rect.fromLTWH(
-        screenRect.left,
-        screenRect.top,
-        screenRect.width,
-        coreBoardRect.top - screenRect.top,
-      );
-      footerBoardUnsafeRect = Rect.fromLTWH(
-        headerBoardUnsafeRect.left,
-        coreBoardRect.bottom,
-        headerBoardUnsafeRect.width,
-        screenRect.bottom - coreBoardRect.bottom,
-      );
-    } else {
-      headerBoardRect = Rect.fromLTWH(
-        safeBoardRect.left,
-        safeBoardRect.top,
-        coreBoardRect.left - safeBoardRect.left,
-        safeBoardRect.height,
-      );
-      footerBoardRect = Rect.fromLTWH(
-        coreBoardRect.right,
-        headerBoardRect.top,
-        headerBoardRect.width,
-        headerBoardRect.height,
-      );
-      headerBoardUnsafeRect = Rect.fromLTWH(
-        screenRect.left,
-        screenRect.top,
-        coreBoardRect.left - screenRect.left,
-        screenRect.height,
-      );
-      footerBoardUnsafeRect = Rect.fromLTWH(
-        coreBoardRect.right,
-        headerBoardUnsafeRect.top,
-        screenRect.right - coreBoardRect.right,
-        headerBoardUnsafeRect.height,
-      );
-    }
-    /// Header 面板矩形 (不包括 padding).
-    Rect headerBoardNoPadding = Rect.fromLTRB(
-      headerBoardRect.left + paddingSize,
-      headerBoardRect.top + paddingSize,
-      headerBoardRect.right - paddingSize,
-      headerBoardRect.bottom - paddingSize,
-    );
-    /// Footer 面板矩形 (不包括 padding).
-    Rect footerBoardNoPadding = Rect.fromLTRB(
-      footerBoardRect.left + paddingSize,
-      footerBoardRect.top + paddingSize,
-      footerBoardRect.right - paddingSize,
-      footerBoardRect.bottom - paddingSize,
-    );
-
-    Rect Function(_Grid grid) gridRect = (grid) {
-      return Rect.fromLTWH(
-        safeBoardRect.left + grid.columnIndex * gridSize,
-        safeBoardRect.top + grid.rowIndex * gridSize,
-        grid.columnSpan * gridSize,
-        grid.rowSpan * gridSize,
-      );
-    };
-
-    /// 每个核心卡片占几个网格.
-    int gridPerCoreCard = _Metric2.coreBoardNoPaddingGridCount ~/ size;
-
-    /// 核心卡片尺寸.
-    double coreCardSize = gridPerCoreCard * gridSize;
-
-    return _Metric2(
-      size: size,
-      safeScreenRect: safeScreenRect,
-      screenRect: screenRect,
-      isVertical: isVertical,
-      horizontalGridCount: horizontalGridCount,
-      verticalGridCount: verticalGridCount,
-      gridSize: gridSize,
-      safeBoardRect: safeBoardRect,
-      coreBoardRect: coreBoardRect,
-      coreBoardNoPaddingRect: coreBoardNoPaddingRect,
-      headerBoardRect: headerBoardRect,
-      footerBoardRect: footerBoardRect,
-      headerBoardNoPadding: headerBoardNoPadding,
-      footerBoardNoPadding: footerBoardNoPadding,
-      headerBoardUnsafeRect: headerBoardUnsafeRect,
-      footerBoardUnsafeRect: footerBoardUnsafeRect,
-      gridRect: gridRect,
-      gridPerCoreCard: gridPerCoreCard,
-      coreCardSize: coreCardSize,
-    );
-  }
-
-  _Metric2({
-    @required
-    this.size,
-    @required
-    this.safeScreenRect,
-    @required
-    this.screenRect,
-    @required
-    this.isVertical,
-    @required
-    this.horizontalGridCount,
-    @required
-    this.verticalGridCount,
-    @required
-    this.gridSize,
-    @required
-    this.safeBoardRect,
-    @required
-    this.coreBoardRect,
-    @required
-    this.coreBoardNoPaddingRect,
-    @required
-    this.headerBoardRect,
-    @required
-    @required
-    this.headerBoardNoPadding,
-    @required
-    this.footerBoardNoPadding,
-    @required
-    this.footerBoardRect,
-    @required
-    this.headerBoardUnsafeRect,
-    @required
-    this.footerBoardUnsafeRect,
-    this.gridRect,
-    @required
-    this.gridPerCoreCard,
-    @required
-    this.coreCardSize,
-  });
-
-  final int size;
-  final Rect safeScreenRect;
-  final Rect screenRect;
-  final bool isVertical;
-  final int horizontalGridCount;
-  final int verticalGridCount;
-  final double gridSize;
-  final Rect safeBoardRect;
-  final Rect coreBoardRect;
-  final Rect coreBoardNoPaddingRect;
-  final Rect headerBoardRect;
-  final Rect footerBoardRect;
-  final Rect headerBoardNoPadding;
-  final Rect footerBoardNoPadding;
-  final Rect headerBoardUnsafeRect;
-  final Rect footerBoardUnsafeRect;
-  final Rect Function(_Grid grid) gridRect;
-  final int gridPerCoreCard;
-  final double coreCardSize;
-}
-
 /// 网格.
 class _Grid {
   _Grid({
     this.isCoreCard = false,
-    @required
-    this.metric,
     @required
     this.verticalRowIndex,
     @required
@@ -301,8 +33,6 @@ class _Grid {
 
   _Grid.coreCard({
     @required
-    _Metric2 metric,
-    @required
     int rowIndex,
     @required
     int columnIndex,
@@ -312,20 +42,17 @@ class _Grid {
     int columnSpan,
   }) : this(
     isCoreCard: true,
-    metric: metric,
-    verticalRowIndex: metric.gridPerCoreCard * rowIndex + _Metric2.paddingGridCount + (true ? _Metric2.headerFooterBoardGridCount : 0),
-    verticalColumnIndex: metric.gridPerCoreCard * columnIndex + _Metric2.paddingGridCount + (true ? 0 : _Metric2.headerFooterBoardGridCount),
-    verticalRowSpan: metric.gridPerCoreCard * rowSpan,
-    verticalColumnSpan: metric.gridPerCoreCard * columnSpan,
-    horizontalRowIndex: metric.gridPerCoreCard * rowIndex + _Metric2.paddingGridCount + (false ? _Metric2.headerFooterBoardGridCount : 0),
-    horizontalColumnIndex: metric.gridPerCoreCard * columnIndex + _Metric2.paddingGridCount + (false ? 0 : _Metric2.headerFooterBoardGridCount),
-    horizontalRowSpan: metric.gridPerCoreCard * rowSpan,
-    horizontalColumnSpan: metric.gridPerCoreCard * columnSpan,
+    verticalRowIndex: _Metric.get().bodyCardGrid * rowIndex + _Metric.paddingGrid + (true ? _Metric.headerFooterGrid : 0),
+    verticalColumnIndex: _Metric.get().bodyCardGrid * columnIndex + _Metric.paddingGrid + (true ? 0 : _Metric.headerFooterGrid),
+    verticalRowSpan: _Metric.get().bodyCardGrid * rowSpan,
+    verticalColumnSpan: _Metric.get().bodyCardGrid * columnSpan,
+    horizontalRowIndex: _Metric.get().bodyCardGrid * rowIndex + _Metric.paddingGrid + (false ? _Metric.headerFooterGrid : 0),
+    horizontalColumnIndex: _Metric.get().bodyCardGrid * columnIndex + _Metric.paddingGrid + (false ? 0 : _Metric.headerFooterGrid),
+    horizontalRowSpan: _Metric.get().bodyCardGrid * rowSpan,
+    horizontalColumnSpan: _Metric.get().bodyCardGrid * columnSpan,
   );
 
   final bool isCoreCard;
-
-  _Metric2 metric;
 
   /// 行.
   int verticalRowIndex;
@@ -341,10 +68,10 @@ class _Grid {
   int horizontalRowSpan;
   int horizontalColumnSpan;
 
-  int get rowIndex => metric.isVertical ? verticalRowIndex : horizontalRowIndex;
-  int get columnIndex => metric.isVertical ? verticalColumnIndex : horizontalColumnIndex;
-  int get rowSpan => metric.isVertical ? verticalRowSpan : horizontalRowSpan;
-  int get columnSpan => metric.isVertical ? verticalColumnSpan : horizontalColumnSpan;
+  int get rowIndex => _Metric.get().isVertical ? verticalRowIndex : horizontalRowIndex;
+  int get columnIndex => _Metric.get().isVertical ? verticalColumnIndex : horizontalColumnIndex;
+  int get rowSpan => _Metric.get().isVertical ? verticalRowSpan : horizontalRowSpan;
+  int get columnSpan => _Metric.get().isVertical ? verticalColumnSpan : horizontalColumnSpan;
 
   set rowIndex(int rowIndex) {
     verticalRowIndex = rowIndex;
@@ -367,33 +94,33 @@ class _Grid {
   }
 
   Rect get rect => Rect.fromLTWH(
-    metric.safeBoardRect.left + columnIndex * metric.gridSize,
-    metric.safeBoardRect.top + rowIndex * metric.gridSize,
-    columnSpan * metric.gridSize,
-    rowSpan * metric.gridSize,
+    _Metric.get().safeRect.left + columnIndex * _Metric.get().gridSize,
+    _Metric.get().safeRect.top + rowIndex * _Metric.get().gridSize,
+    columnSpan * _Metric.get().gridSize,
+    rowSpan * _Metric.get().gridSize,
   );
 
-  int get coreCardRowIndex => (rowIndex - _Metric2.paddingGridCount - (metric.isVertical ? _Metric2.headerFooterBoardGridCount : 0)) ~/ metric.gridPerCoreCard;
-  int get coreCardColumnIndex => (columnIndex - _Metric2.paddingGridCount - (metric.isVertical ? 0 : _Metric2.headerFooterBoardGridCount)) ~/ metric.gridPerCoreCard;
-  int get coreCardRowSpan => rowSpan ~/ metric.gridPerCoreCard;
-  int get coreCardColumnSpan => columnSpan ~/ metric.gridPerCoreCard;
+  int get coreCardRowIndex => (rowIndex - _Metric.paddingGrid - (_Metric.get().isVertical ? _Metric.headerFooterGrid : 0)) ~/ _Metric.get().bodyCardGrid;
+  int get coreCardColumnIndex => (columnIndex - _Metric.paddingGrid - (_Metric.get().isVertical ? 0 : _Metric.headerFooterGrid)) ~/ _Metric.get().bodyCardGrid;
+  int get coreCardRowSpan => rowSpan ~/ _Metric.get().bodyCardGrid;
+  int get coreCardColumnSpan => columnSpan ~/ _Metric.get().bodyCardGrid;
 
   set coreCardRowIndex(int coreCardRowIndex) {
-    verticalRowIndex = metric.gridPerCoreCard * coreCardRowIndex + _Metric2.paddingGridCount + (true ? _Metric2.headerFooterBoardGridCount : 0);
-    horizontalRowIndex = metric.gridPerCoreCard * coreCardRowIndex + _Metric2.paddingGridCount + (false ? _Metric2.headerFooterBoardGridCount : 0);
+    verticalRowIndex = _Metric.get().bodyCardGrid * coreCardRowIndex + _Metric.paddingGrid + (true ? _Metric.headerFooterGrid : 0);
+    horizontalRowIndex = _Metric.get().bodyCardGrid * coreCardRowIndex + _Metric.paddingGrid + (false ? _Metric.headerFooterGrid : 0);
   }
 
   set coreCardColumnIndex(int coreCardColumnIndex) {
-    verticalColumnIndex = metric.gridPerCoreCard * coreCardColumnIndex + _Metric2.paddingGridCount + (true ? 0 : _Metric2.headerFooterBoardGridCount);
-    horizontalColumnIndex = metric.gridPerCoreCard * coreCardColumnIndex + _Metric2.paddingGridCount + (false ? 0 : _Metric2.headerFooterBoardGridCount);
+    verticalColumnIndex = _Metric.get().bodyCardGrid * coreCardColumnIndex + _Metric.paddingGrid + (true ? 0 : _Metric.headerFooterGrid);
+    horizontalColumnIndex = _Metric.get().bodyCardGrid * coreCardColumnIndex + _Metric.paddingGrid + (false ? 0 : _Metric.headerFooterGrid);
   }
 
   set coreCardRowSpan(int coreCardRowSpan) {
-    rowSpan = metric.gridPerCoreCard * coreCardRowSpan;
+    rowSpan = _Metric.get().bodyCardGrid * coreCardRowSpan;
   }
 
   set coreCardColumnSpan(int coreCardColumnSpan) {
-    columnSpan = metric.gridPerCoreCard * coreCardColumnSpan;
+    columnSpan = _Metric.get().bodyCardGrid * coreCardColumnSpan;
   }
 
   @override

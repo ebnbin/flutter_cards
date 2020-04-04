@@ -44,8 +44,8 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin imple
             ),
           ),
           CustomPaint(
-//            painter: _game.data.painter,
-//            foregroundPainter: _game.data.foregroundPainter,
+            painter: _game.data.painter,
+            foregroundPainter: _game.data.foregroundPainter,
             child: Stack(
               children: [0, 1, 2, 3, 4, 5].map<Widget>((zIndex) {
                 return Stack(

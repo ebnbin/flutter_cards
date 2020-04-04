@@ -26,19 +26,19 @@ class _Game implements Game {
       for (int columnIndex = 0; columnIndex < square; columnIndex++) {
         _Card card = _Card(
           game: this,
-          grid: _Grid.coreCard(metric: metric, rowIndex: rowIndex, columnIndex: columnIndex, rowSpan: 1, columnSpan: 1),
+          grid: _Grid.coreCard(rowIndex: rowIndex, columnIndex: columnIndex, rowSpan: 1, columnSpan: 1),
         );
         cards.add(card);
       }
     }
     cards.add(_Card(
       game: this,
-      grid: _Grid(metric: metric, verticalRowIndex: 6, verticalColumnIndex: 1, verticalRowSpan: 10, verticalColumnSpan: 10,
+      grid: _Grid(verticalRowIndex: 6, verticalColumnIndex: 1, verticalRowSpan: 10, verticalColumnSpan: 10,
           horizontalRowIndex: 1, horizontalColumnIndex: 6, horizontalRowSpan: 10, horizontalColumnSpan: 10),
     ));
     cards.add(_Card(
       game: this,
-      grid: _Grid(metric: metric, verticalRowIndex: 6, verticalColumnIndex: 11, verticalRowSpan: 10, verticalColumnSpan: 15,
+      grid: _Grid(verticalRowIndex: 6, verticalColumnIndex: 11, verticalRowSpan: 10, verticalColumnSpan: 15,
           horizontalRowIndex: 11, horizontalColumnIndex: 1, horizontalRowSpan: 10, horizontalColumnSpan: 15),
     ));
   }
@@ -80,7 +80,7 @@ class _Game implements Game {
         _Card newCard = _Card(
           game: this,
           /*opacity: 0.0*/
-          grid: _Grid.coreCard(metric: metric, rowIndex: rightCard.grid.coreCardRowIndex, columnIndex: rightCard.grid.coreCardColumnIndex, rowSpan: 1, columnSpan: 1),
+          grid: _Grid.coreCard(rowIndex: rightCard.grid.coreCardRowIndex, columnIndex: rightCard.grid.coreCardColumnIndex, rowSpan: 1, columnSpan: 1),
         );
         int oldIndex = card.index;
 
@@ -143,36 +143,16 @@ class _Game implements Game {
 
   //*******************************************************************************************************************
 
-  _Metric2 metric;
-  _MetricCache metricCache;
-
   bool firstBuild = true;
 
   void build() {
     _Metric.build(this);
 
-    MediaQueryData mediaQueryData = MediaQuery.of(callback.context);
-    _MetricCache metricCache = _MetricCache(mediaQueryData, square);
-    if (this.metricCache != metricCache) {
-      this.metricCache = metricCache;
-      metric = _Metric2.build(mediaQueryData, square);
-    }
-
     if (firstBuild) {
       firstBuild = false;
       initCards();
-      gridPainter = _GridPainter(
-        metric: metric,
-      );
-      gridForegroundPainter = _GridForegroundPainter(
-        metric: metric,
-      );
-    } else {
-      cards.forEach((element) {
-        element.grid.metric = metric;
-      });
-      gridPainter.metric = metric;
-      gridForegroundPainter.metric = metric;
+      gridPainter = _GridPainter();
+      gridForegroundPainter = _GridForegroundPainter();
     }
   }
 
@@ -209,8 +189,8 @@ class _GameData implements GameData {
   CustomPainter get painter => game.gridPainter;
 
   @override
-  Rect get headerRect => game.metric.headerBoardUnsafeRect;
+  Rect get headerRect => _Metric.get().headerUnsafeRect;
 
   @override
-  Rect get footerRect => game.metric.footerBoardUnsafeRect;
+  Rect get footerRect => _Metric.get().footerUnsafeRect;
 }
