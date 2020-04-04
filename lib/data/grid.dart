@@ -2,129 +2,90 @@ part of '../data.dart';
 
 //*********************************************************************************************************************
 
-/// 网格.
+/// 卡片网格.
 class _Grid {
   _Grid({
-    @required
-    this.verticalRowIndex,
-    @required
-    this.verticalColumnIndex,
-    @required
-    this.verticalRowSpan,
-    @required
-    this.verticalColumnSpan,
-    @required
-    this.horizontalRowIndex,
-    @required
-    this.horizontalColumnIndex,
-    @required
-    this.horizontalRowSpan,
-    @required
-    this.horizontalColumnSpan,
-  }) : assert(verticalRowIndex != null),
-        assert(verticalColumnIndex != null),
-        assert(verticalRowSpan != null),
-        assert(verticalColumnSpan != null),
-        assert(horizontalRowIndex != null),
-        assert(horizontalColumnIndex != null),
-        assert(horizontalRowSpan != null),
-        assert(horizontalColumnSpan != null);
+    this.verticalRowIndex = 0,
+    this.verticalColumnIndex = 0,
+    this.verticalRowSpan = 1,
+    this.verticalColumnSpan = 1,
+    this.horizontalRowIndex = 0,
+    this.horizontalColumnIndex = 0,
+    this.horizontalRowSpan = 1,
+    this.horizontalColumnSpan = 1,
+  });
 
-  _Grid.coreCard({
-    @required
-    int rowIndex,
-    @required
-    int columnIndex,
-    @required
-    int rowSpan,
-    @required
-    int columnSpan,
-  }) : this(
-    verticalRowIndex: _Metric.get().bodyCardGrid * rowIndex + _Metric.paddingGrid + (true ? _Metric.headerFooterGrid : 0),
-    verticalColumnIndex: _Metric.get().bodyCardGrid * columnIndex + _Metric.paddingGrid + (true ? 0 : _Metric.headerFooterGrid),
-    verticalRowSpan: _Metric.get().bodyCardGrid * rowSpan,
-    verticalColumnSpan: _Metric.get().bodyCardGrid * columnSpan,
-    horizontalRowIndex: _Metric.get().bodyCardGrid * rowIndex + _Metric.paddingGrid + (false ? _Metric.headerFooterGrid : 0),
-    horizontalColumnIndex: _Metric.get().bodyCardGrid * columnIndex + _Metric.paddingGrid + (false ? 0 : _Metric.headerFooterGrid),
-    horizontalRowSpan: _Metric.get().bodyCardGrid * rowSpan,
-    horizontalColumnSpan: _Metric.get().bodyCardGrid * columnSpan,
-  );
+  /// Body 卡片网格.
+  _Grid.body({
+    int rowIndex = 0,
+    int columnIndex = 0,
+    int rowSpan = 1,
+    int columnSpan = 1,
+  }) {
+    bodyRowIndex = rowIndex;
+    bodyColumnIndex = columnIndex;
+    bodyRowSpan = rowSpan;
+    bodyColumnSpan = columnSpan;
+  }
 
-  /// 行.
+  /// 所属卡片.
+  _Card card;
+
+  /// 竖屏行.
   int verticalRowIndex;
-  /// 列.
+  /// 竖屏列.
   int verticalColumnIndex;
-  /// 跨行.
+  /// 竖屏跨行.
   int verticalRowSpan;
-  /// 跨列.
+  /// 竖屏跨列.
   int verticalColumnSpan;
-
+  /// 横屏行.
   int horizontalRowIndex;
+  /// 横屏列.
   int horizontalColumnIndex;
+  /// 横屏跨行.
   int horizontalRowSpan;
+  /// 横屏跨列.
   int horizontalColumnSpan;
 
-  int get rowIndex => _Metric.get().isVertical ? verticalRowIndex : horizontalRowIndex;
-  int get columnIndex => _Metric.get().isVertical ? verticalColumnIndex : horizontalColumnIndex;
-  int get rowSpan => _Metric.get().isVertical ? verticalRowSpan : horizontalRowSpan;
-  int get columnSpan => _Metric.get().isVertical ? verticalColumnSpan : horizontalColumnSpan;
+  /// 当前屏幕旋转方向的行.
+  int get rowIndex => _Metric.get().gridGetRowIndex(this);
+  set rowIndex(int rowIndex) => _Metric.get().gridSetRowIndex(this, rowIndex);
 
-  set rowIndex(int rowIndex) {
-    verticalRowIndex = rowIndex;
-    horizontalRowIndex = rowIndex;
-  }
+  /// 当前屏幕旋转方向的列.
+  int get columnIndex => _Metric.get().gridGetColumnIndex(this);
+  set columnIndex(int columnIndex) => _Metric.get().gridSetColumnIndex(this, columnIndex);
 
-  set columnIndex(int columnIndex) {
-    verticalColumnIndex = columnIndex;
-    horizontalColumnIndex = columnIndex;
-  }
+  /// 当前屏幕旋转方向的跨行.
+  int get rowSpan => _Metric.get().gridGetRowSpan(this);
+  set rowSpan(int rowSpan) => _Metric.get().gridSetRowSpan(this, rowSpan);
 
-  set rowSpan(int rowSpan) {
-    verticalRowSpan = rowSpan;
-    horizontalRowSpan = rowSpan;
-  }
+  /// 当前屏幕旋转方向的跨列.
+  int get columnSpan => _Metric.get().gridGetColumnSpan(this);
+  set columnSpan(int columnSpan) => _Metric.get().gridSetColumnSpan(this, columnSpan);
 
-  set columnSpan(int columnSpan) {
-    verticalColumnSpan = columnSpan;
-    horizontalColumnSpan = columnSpan;
-  }
+  /// 网格矩形.
+  Rect get rect => _Metric.get().gridRect(this);
 
-  Rect get rect => Rect.fromLTWH(
-    _Metric.get().safeRect.left + columnIndex * _Metric.get().gridSize,
-    _Metric.get().safeRect.top + rowIndex * _Metric.get().gridSize,
-    columnSpan * _Metric.get().gridSize,
-    rowSpan * _Metric.get().gridSize,
-  );
+  /// Body 卡片行.
+  int get bodyRowIndex => _Metric.get().gridGetBodyRowIndex(this);
+  set bodyRowIndex(int bodyRowIndex) => _Metric.get().gridSetBodyRowIndex(this, bodyRowIndex);
 
-  int get coreCardRowIndex => (rowIndex - _Metric.paddingGrid - (_Metric.get().isVertical ? _Metric.headerFooterGrid : 0)) ~/ _Metric.get().bodyCardGrid;
-  int get coreCardColumnIndex => (columnIndex - _Metric.paddingGrid - (_Metric.get().isVertical ? 0 : _Metric.headerFooterGrid)) ~/ _Metric.get().bodyCardGrid;
-  int get coreCardRowSpan => rowSpan ~/ _Metric.get().bodyCardGrid;
-  int get coreCardColumnSpan => columnSpan ~/ _Metric.get().bodyCardGrid;
+  /// Body 卡片列.
+  int get bodyColumnIndex => _Metric.get().gridGetBodyColumnIndex(this);
+  set bodyColumnIndex(int bodyColumnIndex) => _Metric.get().gridSetBodyColumnIndex(this, bodyColumnIndex);
 
-  set coreCardRowIndex(int coreCardRowIndex) {
-    verticalRowIndex = _Metric.get().bodyCardGrid * coreCardRowIndex + _Metric.paddingGrid + (true ? _Metric.headerFooterGrid : 0);
-    horizontalRowIndex = _Metric.get().bodyCardGrid * coreCardRowIndex + _Metric.paddingGrid + (false ? _Metric.headerFooterGrid : 0);
-  }
+  /// Body 卡片跨行.
+  int get bodyRowSpan => _Metric.get().gridGetBodyRowSpan(this);
+  set bodyRowSpan(int bodyRowSpan) => _Metric.get().gridSetBodyRowSpan(this, bodyRowSpan);
 
-  set coreCardColumnIndex(int coreCardColumnIndex) {
-    verticalColumnIndex = _Metric.get().bodyCardGrid * coreCardColumnIndex + _Metric.paddingGrid + (true ? 0 : _Metric.headerFooterGrid);
-    horizontalColumnIndex = _Metric.get().bodyCardGrid * coreCardColumnIndex + _Metric.paddingGrid + (false ? 0 : _Metric.headerFooterGrid);
-  }
-
-  set coreCardRowSpan(int coreCardRowSpan) {
-    rowSpan = _Metric.get().bodyCardGrid * coreCardRowSpan;
-  }
-
-  set coreCardColumnSpan(int coreCardColumnSpan) {
-    columnSpan = _Metric.get().bodyCardGrid * coreCardColumnSpan;
-  }
+  /// Body 卡片跨列.
+  int get bodyColumnSpan => _Metric.get().gridGetBodyColumnSpan(this);
+  set bodyColumnSpan(int bodyColumnSpan) => _Metric.get().gridSetBodyColumnSpan(this, bodyColumnSpan);
 
   @override
   String toString() {
-    return
-      '$verticalRowIndex,$verticalColumnIndex,$verticalRowSpan,$verticalColumnSpan\n'
-          '$horizontalRowIndex,$horizontalColumnIndex,$horizontalRowSpan,$horizontalColumnSpan\n'
-//        '$rowIndex,$columnIndex,$rowSpan,$columnSpan\n'
-          '$coreCardRowIndex,$coreCardColumnIndex,$coreCardRowSpan,$coreCardColumnSpan';
+    return '$verticalRowIndex,$verticalColumnIndex,$verticalRowSpan,$verticalColumnSpan\n'
+        '$horizontalRowIndex,$horizontalColumnIndex,$horizontalRowSpan,$horizontalColumnSpan';
   }
 }

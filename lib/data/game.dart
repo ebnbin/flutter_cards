@@ -26,7 +26,7 @@ class _Game implements Game {
       for (int columnIndex = 0; columnIndex < square; columnIndex++) {
         _Card card = _Card(
           game: this,
-          grid: _Grid.coreCard(rowIndex: rowIndex, columnIndex: columnIndex, rowSpan: 1, columnSpan: 1),
+          grid: _Grid.body(rowIndex: rowIndex, columnIndex: columnIndex, rowSpan: 1, columnSpan: 1),
           isCoreCard: true,
         );
         cards.add(card);
@@ -83,7 +83,7 @@ class _Game implements Game {
         _Card newCard = _Card(
           game: this,
           /*opacity: 0.0*/
-          grid: _Grid.coreCard(rowIndex: rightCard.grid.coreCardRowIndex, columnIndex: rightCard.grid.coreCardColumnIndex, rowSpan: 1, columnSpan: 1),
+          grid: _Grid.body(rowIndex: rightCard.grid.bodyRowIndex, columnIndex: rightCard.grid.bodyColumnIndex, rowSpan: 1, columnSpan: 1),
           isCoreCard: true,
         );
         int oldIndex = card.index;
@@ -112,7 +112,7 @@ class _Game implements Game {
             card.state = _CardState.acting;
           },
           endProperty: (card, value) {
-            card.grid.coreCardColumnIndex = card.grid.coreCardColumnIndex - 1;
+            card.grid.bodyColumnIndex = card.grid.bodyColumnIndex - 1;
             card.reset();
             card.state = _CardState.idle;
           },

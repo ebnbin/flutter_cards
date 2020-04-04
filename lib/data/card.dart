@@ -30,6 +30,8 @@ class _Card implements Card {
         assert(grid != null) {
     data = _CardData(this);
     sprite = _Sprite(card: this);
+
+    grid.card = this;
   }
 
   //*******************************************************************************************************************
@@ -132,10 +134,10 @@ class _Card implements Card {
       if (!element.isCoreCard) {
         return false;
       }
-      int r = grid.coreCardRowIndex;
-      int c = grid.coreCardColumnIndex;
-      int r2 = element.grid.coreCardRowIndex;
-      int c2 = element.grid.coreCardColumnIndex;
+      int r = grid.bodyRowIndex;
+      int c = grid.bodyColumnIndex;
+      int r2 = element.grid.bodyRowIndex;
+      int c2 = element.grid.bodyColumnIndex;
       return r == r2 && c - 1 == c2;
     }, orElse: () => null);
   }
@@ -145,10 +147,10 @@ class _Card implements Card {
       if (!element.isCoreCard) {
         return false;
       }
-      int r = grid.coreCardRowIndex;
-      int c = grid.coreCardColumnIndex;
-      int r2 = element.grid.coreCardRowIndex;
-      int c2 = element.grid.coreCardColumnIndex;
+      int r = grid.bodyRowIndex;
+      int c = grid.bodyColumnIndex;
+      int r2 = element.grid.bodyRowIndex;
+      int c2 = element.grid.bodyColumnIndex;
       return r == r2 && c + 1 == c2;
     }, orElse: () => null);
   }
@@ -158,10 +160,10 @@ class _Card implements Card {
       if (!element.isCoreCard) {
         return false;
       }
-      int r = grid.coreCardRowIndex;
-      int c = grid.coreCardColumnIndex;
-      int r2 = element.grid.coreCardRowIndex;
-      int c2 = element.grid.coreCardColumnIndex;
+      int r = grid.bodyRowIndex;
+      int c = grid.bodyColumnIndex;
+      int r2 = element.grid.bodyRowIndex;
+      int c2 = element.grid.bodyColumnIndex;
       return r - 1 == r2 && c == c2;
     }, orElse: () => null);
   }
@@ -171,10 +173,10 @@ class _Card implements Card {
       if (!element.isCoreCard) {
         return false;
       }
-      int r = grid.coreCardRowIndex;
-      int c = grid.coreCardColumnIndex;
-      int r2 = element.grid.coreCardRowIndex;
-      int c2 = element.grid.coreCardColumnIndex;
+      int r = grid.bodyRowIndex;
+      int c = grid.bodyColumnIndex;
+      int r2 = element.grid.bodyRowIndex;
+      int c2 = element.grid.bodyColumnIndex;
       return r + 1 == r2 && c == c2;
     }, orElse: () => null);
   }
