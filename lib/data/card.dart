@@ -10,6 +10,8 @@ class _Card implements Card {
     this.game,
     @required
     this.grid,
+    @required
+    this.isCoreCard,
 //    this.matrix4Entry32 = 0.004,
     this.translateX = 0.0,
     this.translateY = 0.0,
@@ -33,6 +35,8 @@ class _Card implements Card {
   //*******************************************************************************************************************
 
   final _Game game;
+
+  final bool isCoreCard;
 
   //*******************************************************************************************************************
 
@@ -125,7 +129,7 @@ class _Card implements Card {
 
   _Card get leftCard {
     return game.cards.firstWhere((element) {
-      if (!element.grid.isCoreCard) {
+      if (!element.isCoreCard) {
         return false;
       }
       int r = grid.coreCardRowIndex;
@@ -138,7 +142,7 @@ class _Card implements Card {
 
   _Card get rightCard {
     return game.cards.firstWhere((element) {
-      if (!element.grid.isCoreCard) {
+      if (!element.isCoreCard) {
         return false;
       }
       int r = grid.coreCardRowIndex;
@@ -151,7 +155,7 @@ class _Card implements Card {
 
   _Card get topCard {
     return game.cards.firstWhere((element) {
-      if (!element.grid.isCoreCard) {
+      if (!element.isCoreCard) {
         return false;
       }
       int r = grid.coreCardRowIndex;
@@ -164,7 +168,7 @@ class _Card implements Card {
 
   _Card get bottomCard {
     return game.cards.firstWhere((element) {
-      if (!element.grid.isCoreCard) {
+      if (!element.isCoreCard) {
         return false;
       }
       int r = grid.coreCardRowIndex;

@@ -27,6 +27,7 @@ class _Game implements Game {
         _Card card = _Card(
           game: this,
           grid: _Grid.coreCard(rowIndex: rowIndex, columnIndex: columnIndex, rowSpan: 1, columnSpan: 1),
+          isCoreCard: true,
         );
         cards.add(card);
       }
@@ -35,11 +36,13 @@ class _Game implements Game {
       game: this,
       grid: _Grid(verticalRowIndex: 6, verticalColumnIndex: 1, verticalRowSpan: 10, verticalColumnSpan: 10,
           horizontalRowIndex: 1, horizontalColumnIndex: 6, horizontalRowSpan: 10, horizontalColumnSpan: 10),
+      isCoreCard: false,
     ));
     cards.add(_Card(
       game: this,
       grid: _Grid(verticalRowIndex: 6, verticalColumnIndex: 11, verticalRowSpan: 10, verticalColumnSpan: 15,
           horizontalRowIndex: 11, horizontalColumnIndex: 1, horizontalRowSpan: 10, horizontalColumnSpan: 15),
+      isCoreCard: false,
     ));
   }
 
@@ -69,7 +72,7 @@ class _Game implements Game {
   }) {
     assert(card != null);
     return () {
-      if (card.grid.isCoreCard) {
+      if (card.isCoreCard) {
         if (card.state != _CardState.idle || !actionQueue.canAdd()) {
           return;
         }
@@ -81,6 +84,7 @@ class _Game implements Game {
           game: this,
           /*opacity: 0.0*/
           grid: _Grid.coreCard(rowIndex: rightCard.grid.coreCardRowIndex, columnIndex: rightCard.grid.coreCardColumnIndex, rowSpan: 1, columnSpan: 1),
+          isCoreCard: true,
         );
         int oldIndex = card.index;
 

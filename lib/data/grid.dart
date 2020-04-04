@@ -5,7 +5,6 @@ part of '../data.dart';
 /// 网格.
 class _Grid {
   _Grid({
-    this.isCoreCard = false,
     @required
     this.verticalRowIndex,
     @required
@@ -41,7 +40,6 @@ class _Grid {
     @required
     int columnSpan,
   }) : this(
-    isCoreCard: true,
     verticalRowIndex: _Metric.get().bodyCardGrid * rowIndex + _Metric.paddingGrid + (true ? _Metric.headerFooterGrid : 0),
     verticalColumnIndex: _Metric.get().bodyCardGrid * columnIndex + _Metric.paddingGrid + (true ? 0 : _Metric.headerFooterGrid),
     verticalRowSpan: _Metric.get().bodyCardGrid * rowSpan,
@@ -51,8 +49,6 @@ class _Grid {
     horizontalRowSpan: _Metric.get().bodyCardGrid * rowSpan,
     horizontalColumnSpan: _Metric.get().bodyCardGrid * columnSpan,
   );
-
-  final bool isCoreCard;
 
   /// 行.
   int verticalRowIndex;
