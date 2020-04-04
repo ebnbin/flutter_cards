@@ -57,7 +57,7 @@ class _Card implements Card {
 
   /// Matrix4.setEntry(3, 2, value);
   double get matrix4Entry32 {
-    return _Metric.coreBoardNoPaddingGridCount / max(grid.rowSpan, grid.columnSpan) / 1000.0;
+    return _Metric2.coreBoardNoPaddingGridCount / max(grid.rowSpan, grid.columnSpan) / 1000.0;
   }
 
   double translateX;
@@ -105,7 +105,7 @@ class _Card implements Card {
   }
 
   double get margin {
-    return 2.0 / (_Metric.coreBoardNoPaddingGridCount / min(grid.rowSpan, grid.columnSpan)) * grid.metric.gridSize;
+    return 2.0 / (_Metric2.coreBoardNoPaddingGridCount / min(grid.rowSpan, grid.columnSpan)) * grid.metric.gridSize;
   }
 
   Color get color {

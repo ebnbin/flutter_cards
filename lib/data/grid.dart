@@ -24,7 +24,7 @@ class _MetricCache {
 
 //*********************************************************************************************************************
 
-class _Metric {
+class _Metric2 {
   /// 边距网格总数.
   static const int paddingGridCount = 1;
   /// 核心面板网格总数 (不包括 padding).
@@ -38,7 +38,7 @@ class _Metric {
   /// 安全面板网格总数.
   static const int safeBoardGridCount = coreBoardGridCount + headerFooterBoardGridCount * 2;
 
-  static _Metric build(MediaQueryData mediaQueryData, int size) {
+  static _Metric2 build(MediaQueryData mediaQueryData, int size) {
     /// 屏幕矩形.
     Rect screenRect = Rect.fromLTWH(
       0.0,
@@ -60,11 +60,11 @@ class _Metric {
     /// 垂直方向网格总数.
     int verticalGridCount;
     if (isVertical) {
-      horizontalGridCount = _Metric.coreBoardGridCount;
-      verticalGridCount = _Metric.safeBoardGridCount;
+      horizontalGridCount = _Metric2.coreBoardGridCount;
+      verticalGridCount = _Metric2.safeBoardGridCount;
     } else {
-      horizontalGridCount = _Metric.safeBoardGridCount;
-      verticalGridCount = _Metric.coreBoardGridCount;
+      horizontalGridCount = _Metric2.safeBoardGridCount;
+      verticalGridCount = _Metric2.coreBoardGridCount;
     }
     /// 网格尺寸.
     double gridSize = min(safeScreenRect.width / horizontalGridCount, safeScreenRect.height / verticalGridCount);
@@ -77,9 +77,9 @@ class _Metric {
     );
 
     /// 边距尺寸.
-    double paddingSize = _Metric.paddingGridCount * gridSize;
+    double paddingSize = _Metric2.paddingGridCount * gridSize;
 
-    double coreBoardSize = _Metric.coreBoardGridCount * gridSize;
+    double coreBoardSize = _Metric2.coreBoardGridCount * gridSize;
     /// 核心面板矩形 (包括 padding).
     Rect coreBoardRect = Rect.fromCenter(
       center: safeBoardRect.center,
@@ -178,12 +178,12 @@ class _Metric {
     };
 
     /// 每个核心卡片占几个网格.
-    int gridPerCoreCard = _Metric.coreBoardNoPaddingGridCount ~/ size;
+    int gridPerCoreCard = _Metric2.coreBoardNoPaddingGridCount ~/ size;
 
     /// 核心卡片尺寸.
     double coreCardSize = gridPerCoreCard * gridSize;
 
-    return _Metric(
+    return _Metric2(
       size: size,
       safeScreenRect: safeScreenRect,
       screenRect: screenRect,
@@ -206,7 +206,7 @@ class _Metric {
     );
   }
 
-  _Metric({
+  _Metric2({
     @required
     this.size,
     @required
@@ -301,7 +301,7 @@ class _Grid {
 
   _Grid.coreCard({
     @required
-    _Metric metric,
+    _Metric2 metric,
     @required
     int rowIndex,
     @required
@@ -313,19 +313,19 @@ class _Grid {
   }) : this(
     isCoreCard: true,
     metric: metric,
-    verticalRowIndex: metric.gridPerCoreCard * rowIndex + _Metric.paddingGridCount + (true ? _Metric.headerFooterBoardGridCount : 0),
-    verticalColumnIndex: metric.gridPerCoreCard * columnIndex + _Metric.paddingGridCount + (true ? 0 : _Metric.headerFooterBoardGridCount),
+    verticalRowIndex: metric.gridPerCoreCard * rowIndex + _Metric2.paddingGridCount + (true ? _Metric2.headerFooterBoardGridCount : 0),
+    verticalColumnIndex: metric.gridPerCoreCard * columnIndex + _Metric2.paddingGridCount + (true ? 0 : _Metric2.headerFooterBoardGridCount),
     verticalRowSpan: metric.gridPerCoreCard * rowSpan,
     verticalColumnSpan: metric.gridPerCoreCard * columnSpan,
-    horizontalRowIndex: metric.gridPerCoreCard * rowIndex + _Metric.paddingGridCount + (false ? _Metric.headerFooterBoardGridCount : 0),
-    horizontalColumnIndex: metric.gridPerCoreCard * columnIndex + _Metric.paddingGridCount + (false ? 0 : _Metric.headerFooterBoardGridCount),
+    horizontalRowIndex: metric.gridPerCoreCard * rowIndex + _Metric2.paddingGridCount + (false ? _Metric2.headerFooterBoardGridCount : 0),
+    horizontalColumnIndex: metric.gridPerCoreCard * columnIndex + _Metric2.paddingGridCount + (false ? 0 : _Metric2.headerFooterBoardGridCount),
     horizontalRowSpan: metric.gridPerCoreCard * rowSpan,
     horizontalColumnSpan: metric.gridPerCoreCard * columnSpan,
   );
 
   final bool isCoreCard;
 
-  _Metric metric;
+  _Metric2 metric;
 
   /// 行.
   int verticalRowIndex;
@@ -373,19 +373,19 @@ class _Grid {
     rowSpan * metric.gridSize,
   );
 
-  int get coreCardRowIndex => (rowIndex - _Metric.paddingGridCount - (metric.isVertical ? _Metric.headerFooterBoardGridCount : 0)) ~/ metric.gridPerCoreCard;
-  int get coreCardColumnIndex => (columnIndex - _Metric.paddingGridCount - (metric.isVertical ? 0 : _Metric.headerFooterBoardGridCount)) ~/ metric.gridPerCoreCard;
+  int get coreCardRowIndex => (rowIndex - _Metric2.paddingGridCount - (metric.isVertical ? _Metric2.headerFooterBoardGridCount : 0)) ~/ metric.gridPerCoreCard;
+  int get coreCardColumnIndex => (columnIndex - _Metric2.paddingGridCount - (metric.isVertical ? 0 : _Metric2.headerFooterBoardGridCount)) ~/ metric.gridPerCoreCard;
   int get coreCardRowSpan => rowSpan ~/ metric.gridPerCoreCard;
   int get coreCardColumnSpan => columnSpan ~/ metric.gridPerCoreCard;
 
   set coreCardRowIndex(int coreCardRowIndex) {
-    verticalRowIndex = metric.gridPerCoreCard * coreCardRowIndex + _Metric.paddingGridCount + (true ? _Metric.headerFooterBoardGridCount : 0);
-    horizontalRowIndex = metric.gridPerCoreCard * coreCardRowIndex + _Metric.paddingGridCount + (false ? _Metric.headerFooterBoardGridCount : 0);
+    verticalRowIndex = metric.gridPerCoreCard * coreCardRowIndex + _Metric2.paddingGridCount + (true ? _Metric2.headerFooterBoardGridCount : 0);
+    horizontalRowIndex = metric.gridPerCoreCard * coreCardRowIndex + _Metric2.paddingGridCount + (false ? _Metric2.headerFooterBoardGridCount : 0);
   }
 
   set coreCardColumnIndex(int coreCardColumnIndex) {
-    verticalColumnIndex = metric.gridPerCoreCard * coreCardColumnIndex + _Metric.paddingGridCount + (true ? 0 : _Metric.headerFooterBoardGridCount);
-    horizontalColumnIndex = metric.gridPerCoreCard * coreCardColumnIndex + _Metric.paddingGridCount + (false ? 0 : _Metric.headerFooterBoardGridCount);
+    verticalColumnIndex = metric.gridPerCoreCard * coreCardColumnIndex + _Metric2.paddingGridCount + (true ? 0 : _Metric2.headerFooterBoardGridCount);
+    horizontalColumnIndex = metric.gridPerCoreCard * coreCardColumnIndex + _Metric2.paddingGridCount + (false ? 0 : _Metric2.headerFooterBoardGridCount);
   }
 
   set coreCardRowSpan(int coreCardRowSpan) {

@@ -17,13 +17,13 @@ class _Game implements Game {
   //*******************************************************************************************************************
 
   /// 行列数. 不包括 header footer.
-  int size = 4;
+  int square = 4;
 
   //*******************************************************************************************************************
 
   void initCards() {
-    for (int rowIndex = 0; rowIndex < size; rowIndex++) {
-      for (int columnIndex = 0; columnIndex < size; columnIndex++) {
+    for (int rowIndex = 0; rowIndex < square; rowIndex++) {
+      for (int columnIndex = 0; columnIndex < square; columnIndex++) {
         _Card card = _Card(
           game: this,
           grid: _Grid.coreCard(metric: metric, rowIndex: rowIndex, columnIndex: columnIndex, rowSpan: 1, columnSpan: 1),
@@ -143,17 +143,19 @@ class _Game implements Game {
 
   //*******************************************************************************************************************
 
-  _Metric metric;
+  _Metric2 metric;
   _MetricCache metricCache;
 
   bool firstBuild = true;
 
   void build() {
+    _Metric.build(this);
+
     MediaQueryData mediaQueryData = MediaQuery.of(callback.context);
-    _MetricCache metricCache = _MetricCache(mediaQueryData, size);
+    _MetricCache metricCache = _MetricCache(mediaQueryData, square);
     if (this.metricCache != metricCache) {
       this.metricCache = metricCache;
-      metric = _Metric.build(mediaQueryData, size);
+      metric = _Metric2.build(mediaQueryData, square);
     }
 
     if (firstBuild) {
@@ -173,6 +175,10 @@ class _Game implements Game {
       gridForegroundPainter.metric = metric;
     }
   }
+
+  void dispose() {
+    _Metric.dispose();
+  }
   
   @override
   GameData data;
@@ -186,6 +192,11 @@ class _GameData implements GameData {
   @override
   void build() {
     game.build();
+  }
+
+  @override
+  void dispose() {
+    game.dispose();
   }
 
   @override

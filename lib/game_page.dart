@@ -77,6 +77,13 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin imple
     _game = Game.create(this);
   }
 
+
+  @override
+  void dispose() {
+    _game.data.dispose();
+    super.dispose();
+  }
+
   /// 游戏数据.
   Game _game;
 }
