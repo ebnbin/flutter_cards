@@ -105,87 +105,6 @@ class _Metric {
     double bodyCardSize = bodyCardGrid * gridSize;
 
     //*****************************************************************************************************************
-    // Grid 相关.
-
-    int Function(_Grid grid) gridGetRowIndex = (grid) {
-      return isVertical ? grid.verticalRowIndex : grid.horizontalRowIndex;
-    };
-    void Function(_Grid grid, int rowIndex) gridSetRowIndex = (grid, rowIndex) {
-      grid.horizontalRowIndex = rowIndex;
-      grid.verticalRowIndex = rowIndex;
-    };
-
-    int Function(_Grid grid) gridGetColumnIndex = (grid) {
-      return isVertical ? grid.verticalColumnIndex : grid.horizontalColumnIndex;
-    };
-    void Function(_Grid grid, int columnIndex) gridSetColumnIndex = (grid, columnIndex) {
-      grid.horizontalColumnIndex = columnIndex;
-      grid.verticalColumnIndex = columnIndex;
-    };
-
-    int Function(_Grid grid) gridGetRowSpan = (grid) {
-      return isVertical ? grid.verticalRowSpan : grid.horizontalRowSpan;
-    };
-    void Function(_Grid grid, int rowSpan) gridSetRowSpan = (grid, rowSpan) {
-      grid.horizontalRowSpan = rowSpan;
-      grid.verticalRowSpan = rowSpan;
-    };
-
-    int Function(_Grid grid) gridGetColumnSpan = (grid) {
-      return isVertical ? grid.verticalColumnSpan : grid.horizontalColumnSpan;
-    };
-    void Function(_Grid grid, int columnSpan) gridSetColumnSpan = (grid, columnSpan) {
-      grid.horizontalColumnSpan = columnSpan;
-      grid.verticalColumnSpan = columnSpan;
-    };
-
-    Rect Function(_Grid grid) gridRect = (grid) {
-      return Rect.fromLTWH(
-        safeRect.left + grid.columnIndex * gridSize,
-        safeRect.top + grid.rowIndex * gridSize,
-        grid.columnSpan * gridSize,
-        grid.rowSpan * gridSize,
-      );
-    };
-
-    int Function(_Grid grid) gridGetBodyRowIndex = (grid) {
-      return (grid.rowIndex - paddingGrid - (isVertical ? headerFooterGrid : 0)) ~/ bodyCardGrid;
-    };
-    void Function(_Grid grid, int bodyRowIndex) gridSetBodyRowIndex = (grid, bodyRowIndex) {
-      grid.verticalRowIndex = bodyCardGrid * bodyRowIndex + paddingGrid + headerFooterGrid;
-      grid.horizontalRowIndex = bodyCardGrid * bodyRowIndex + paddingGrid;
-    };
-
-    int Function(_Grid grid) gridGetBodyColumnIndex = (grid) {
-      return (grid.columnIndex - paddingGrid - (isVertical ? 0 : headerFooterGrid)) ~/ bodyCardGrid;
-    };
-    void Function(_Grid grid, int bodyColumnIndex) gridSetBodyColumnIndex = (grid, bodyColumnIndex) {
-      grid.verticalColumnIndex = bodyCardGrid * bodyColumnIndex + paddingGrid;
-      grid.horizontalColumnIndex = bodyCardGrid * bodyColumnIndex + paddingGrid + headerFooterGrid;
-    };
-
-    int Function(_Grid grid) gridGetBodyRowSpan = (grid) {
-      return grid.rowSpan ~/ bodyCardGrid;
-    };
-    void Function(_Grid grid, int bodyRowSpan) gridSetBodyRowSpan = (grid, bodyRowSpan) {
-      grid.rowSpan = bodyCardGrid * bodyRowSpan;
-    };
-
-    int Function(_Grid grid) gridGetBodyColumnSpan = (grid) {
-      return grid.columnSpan ~/ bodyCardGrid;
-    };
-    void Function(_Grid grid, int bodyColumnSpan) gridSetBodyColumnSpan = (grid, bodyColumnSpan) {
-      grid.columnSpan = bodyCardGrid * bodyColumnSpan;
-    };
-
-    //*****************************************************************************************************************
-    // Property 相关.
-
-    double Function(_Property property) propertyGetMatrix4Entry32 = (property) {
-      return bodyNoPaddingGrid / property.card.grid.maxSpan / 1000.0;
-    };
-
-    //*****************************************************************************************************************
 
     sizeCache = mediaQueryData.size;
     paddingCache = mediaQueryData.padding;
@@ -193,6 +112,7 @@ class _Metric {
     metricCache = _Metric(
       game.square,
       screenRect,
+      isVertical,
       horizontalGrid,
       verticalGrid,
       gridSize,
@@ -201,25 +121,8 @@ class _Metric {
       bodyNoPaddingRect,
       headerUnsafeRect,
       footerUnsafeRect,
+      bodyCardGrid,
       bodyCardSize,
-      gridGetRowIndex,
-      gridSetRowIndex,
-      gridGetColumnIndex,
-      gridSetColumnIndex,
-      gridGetRowSpan,
-      gridSetRowSpan,
-      gridGetColumnSpan,
-      gridSetColumnSpan,
-      gridRect,
-      gridGetBodyRowIndex,
-      gridSetBodyRowIndex,
-      gridGetBodyColumnIndex,
-      gridSetBodyColumnIndex,
-      gridGetBodyRowSpan,
-      gridSetBodyRowSpan,
-      gridGetBodyColumnSpan,
-      gridSetBodyColumnSpan,
-      propertyGetMatrix4Entry32,
     );
   }
 
@@ -242,6 +145,7 @@ class _Metric {
   _Metric(
       this.square,
       this.screenRect,
+      this.isVertical,
       this.horizontalGrid,
       this.verticalGrid,
       this.gridSize,
@@ -250,29 +154,13 @@ class _Metric {
       this.bodyNoPaddingRect,
       this.headerUnsafeRect,
       this.footerUnsafeRect,
+      this.bodyCardGrid,
       this.bodyCardSize,
-      this.gridGetRowIndex,
-      this.gridSetRowIndex,
-      this.gridGetColumnIndex,
-      this.gridSetColumnIndex,
-      this.gridGetRowSpan,
-      this.gridSetRowSpan,
-      this.gridGetColumnSpan,
-      this.gridSetColumnSpan,
-      this.gridRect,
-      this.gridGetBodyRowIndex,
-      this.gridSetBodyRowIndex,
-      this.gridGetBodyColumnIndex,
-      this.gridSetBodyColumnIndex,
-      this.gridGetBodyRowSpan,
-      this.gridSetBodyRowSpan,
-      this.gridGetBodyColumnSpan,
-      this.gridSetBodyColumnSpan,
-      this.propertyGetMatrix4Entry32,
       );
 
   final int square;
   final Rect screenRect;
+  final bool isVertical;
   final int horizontalGrid;
   final int verticalGrid;
   final double gridSize;
@@ -281,23 +169,6 @@ class _Metric {
   final Rect bodyNoPaddingRect;
   final Rect headerUnsafeRect;
   final Rect footerUnsafeRect;
+  final int bodyCardGrid;
   final double bodyCardSize;
-  final int Function(_Grid grid) gridGetRowIndex;
-  final void Function(_Grid grid, int rowIndex) gridSetRowIndex;
-  final int Function(_Grid grid) gridGetColumnIndex;
-  final void Function(_Grid grid, int columnIndex) gridSetColumnIndex;
-  final int Function(_Grid grid) gridGetRowSpan;
-  final void Function(_Grid grid, int rowSpan) gridSetRowSpan;
-  final int Function(_Grid grid) gridGetColumnSpan;
-  final void Function(_Grid grid, int columnSpan) gridSetColumnSpan;
-  final Rect Function(_Grid grid) gridRect;
-  final int Function(_Grid grid) gridGetBodyRowIndex;
-  final void Function(_Grid grid, int bodyRowIndex) gridSetBodyRowIndex;
-  final int Function(_Grid grid) gridGetBodyColumnIndex;
-  final void Function(_Grid grid, int bodyColumnIndex) gridSetBodyColumnIndex;
-  final int Function(_Grid grid) gridGetBodyRowSpan;
-  final void Function(_Grid grid, int bodyRowSpan) gridSetBodyRowSpan;
-  final int Function(_Grid grid) gridGetBodyColumnSpan;
-  final void Function(_Grid grid, int bodyColumnSpan) gridSetBodyColumnSpan;
-  final double Function(_Property property) propertyGetMatrix4Entry32;
 }

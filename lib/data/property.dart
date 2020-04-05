@@ -22,7 +22,9 @@ class _Property {
   _Card card;
 
   /// Matrix4.setEntry(3, 2, value);
-  double get matrix4Entry32 => _Metric.get().propertyGetMatrix4Entry32(this);
+  double get matrix4Entry32 {
+    return _Metric.bodyNoPaddingGrid / card.grid.maxSpan / 1000.0;
+  }
 
   double translateX;
   double translateY;

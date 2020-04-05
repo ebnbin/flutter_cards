@@ -49,20 +49,40 @@ class _Grid {
   int horizontalColumnSpan;
 
   /// 当前屏幕旋转方向的行.
-  int get rowIndex => _Metric.get().gridGetRowIndex(this);
-  set rowIndex(int rowIndex) => _Metric.get().gridSetRowIndex(this, rowIndex);
+  int get rowIndex {
+    return _Metric.get().isVertical ? verticalRowIndex : horizontalRowIndex;
+  }
+  set rowIndex(int rowIndex) {
+    horizontalRowIndex = rowIndex;
+    verticalRowIndex = rowIndex;
+  }
 
   /// 当前屏幕旋转方向的列.
-  int get columnIndex => _Metric.get().gridGetColumnIndex(this);
-  set columnIndex(int columnIndex) => _Metric.get().gridSetColumnIndex(this, columnIndex);
+  int get columnIndex {
+    return _Metric.get().isVertical ? verticalColumnIndex : horizontalColumnIndex;
+  }
+  set columnIndex(int columnIndex) {
+    horizontalColumnIndex = columnIndex;
+    verticalColumnIndex = columnIndex;
+  }
 
   /// 当前屏幕旋转方向的跨行.
-  int get rowSpan => _Metric.get().gridGetRowSpan(this);
-  set rowSpan(int rowSpan) => _Metric.get().gridSetRowSpan(this, rowSpan);
+  int get rowSpan {
+    return _Metric.get().isVertical ? verticalRowSpan : horizontalRowSpan;
+  }
+  set rowSpan(int rowSpan) {
+    horizontalRowSpan = rowSpan;
+    verticalRowSpan = rowSpan;
+  }
 
   /// 当前屏幕旋转方向的跨列.
-  int get columnSpan => _Metric.get().gridGetColumnSpan(this);
-  set columnSpan(int columnSpan) => _Metric.get().gridSetColumnSpan(this, columnSpan);
+  int get columnSpan {
+    return _Metric.get().isVertical ? verticalColumnSpan : horizontalColumnSpan;
+  }
+  set columnSpan(int columnSpan) {
+    horizontalColumnSpan = columnSpan;
+    verticalColumnSpan = columnSpan;
+  }
 
   /// 当前屏幕旋转方向的跨行跨列取小值.
   int get minSpan => min(rowSpan, columnSpan);
@@ -70,23 +90,49 @@ class _Grid {
   int get maxSpan => max(rowSpan, columnSpan);
 
   /// 网格矩形.
-  Rect get rect => _Metric.get().gridRect(this);
+  Rect get rect => Rect.fromLTWH(
+    _Metric.get().safeRect.left + columnIndex * _Metric.get().gridSize,
+    _Metric.get().safeRect.top + rowIndex * _Metric.get().gridSize,
+    columnSpan * _Metric.get().gridSize,
+    rowSpan * _Metric.get().gridSize,
+  );
 
   /// Body 卡片行.
-  int get bodyRowIndex => _Metric.get().gridGetBodyRowIndex(this);
-  set bodyRowIndex(int bodyRowIndex) => _Metric.get().gridSetBodyRowIndex(this, bodyRowIndex);
+  int get bodyRowIndex {
+    return (rowIndex - _Metric.paddingGrid - (_Metric.get().isVertical ? _Metric.headerFooterGrid : 0)) ~/
+        _Metric.get().bodyCardGrid;
+  }
+  set bodyRowIndex(int bodyRowIndex) {
+    verticalRowIndex = _Metric.get().bodyCardGrid * bodyRowIndex + _Metric.paddingGrid + _Metric.headerFooterGrid;
+    horizontalRowIndex = _Metric.get().bodyCardGrid * bodyRowIndex + _Metric.paddingGrid;
+  }
 
   /// Body 卡片列.
-  int get bodyColumnIndex => _Metric.get().gridGetBodyColumnIndex(this);
-  set bodyColumnIndex(int bodyColumnIndex) => _Metric.get().gridSetBodyColumnIndex(this, bodyColumnIndex);
+  int get bodyColumnIndex {
+    return (columnIndex - _Metric.paddingGrid - (_Metric.get().isVertical ? 0 : _Metric.headerFooterGrid)) ~/
+        _Metric.get().bodyCardGrid;
+  }
+  set bodyColumnIndex(int bodyColumnIndex) {
+    verticalColumnIndex = _Metric.get().bodyCardGrid * bodyColumnIndex + _Metric.paddingGrid;
+    horizontalColumnIndex = _Metric.get().bodyCardGrid * bodyColumnIndex + _Metric.paddingGrid +
+        _Metric.headerFooterGrid;
+  }
 
   /// Body 卡片跨行.
-  int get bodyRowSpan => _Metric.get().gridGetBodyRowSpan(this);
-  set bodyRowSpan(int bodyRowSpan) => _Metric.get().gridSetBodyRowSpan(this, bodyRowSpan);
+  int get bodyRowSpan {
+    return rowSpan ~/ _Metric.get().bodyCardGrid;
+  }
+  set bodyRowSpan(int bodyRowSpan) {
+    rowSpan = _Metric.get().bodyCardGrid * bodyRowSpan;
+  }
 
   /// Body 卡片跨列.
-  int get bodyColumnSpan => _Metric.get().gridGetBodyColumnSpan(this);
-  set bodyColumnSpan(int bodyColumnSpan) => _Metric.get().gridSetBodyColumnSpan(this, bodyColumnSpan);
+  int get bodyColumnSpan {
+    return columnSpan ~/ _Metric.get().bodyCardGrid;
+  }
+  set bodyColumnSpan(int bodyColumnSpan) {
+    columnSpan = _Metric.get().bodyCardGrid * bodyColumnSpan;
+  }
 
   @override
   String toString() {
