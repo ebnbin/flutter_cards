@@ -64,6 +64,11 @@ class _Grid {
   int get columnSpan => _Metric.get().gridGetColumnSpan(this);
   set columnSpan(int columnSpan) => _Metric.get().gridSetColumnSpan(this, columnSpan);
 
+  /// 当前屏幕旋转方向的跨行跨列取小值.
+  int get minSpan => min(rowSpan, columnSpan);
+  /// 当前屏幕旋转方向的跨行跨列取大值.
+  int get maxSpan => max(rowSpan, columnSpan);
+
   /// 网格矩形.
   Rect get rect => _Metric.get().gridRect(this);
 

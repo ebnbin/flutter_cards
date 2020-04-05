@@ -11,6 +11,7 @@ part 'data/game.dart';
 part 'data/grid.dart';
 part 'data/metric.dart';
 part 'data/painter.dart';
+part 'data/property.dart';
 part 'data/sprite.dart';
 
 //*********************************************************************************************************************

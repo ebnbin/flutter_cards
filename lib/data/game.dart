@@ -27,6 +27,7 @@ class _Game implements Game {
         _Card card = _Card(
           game: this,
           grid: _Grid.body(rowIndex: rowIndex, columnIndex: columnIndex, rowSpan: 1, columnSpan: 1),
+          property: _Property(),
           isCoreCard: true,
         );
         cards.add(card);
@@ -36,12 +37,14 @@ class _Game implements Game {
       game: this,
       grid: _Grid(verticalRowIndex: 6, verticalColumnIndex: 1, verticalRowSpan: 10, verticalColumnSpan: 10,
           horizontalRowIndex: 1, horizontalColumnIndex: 6, horizontalRowSpan: 10, horizontalColumnSpan: 10),
+      property: _Property(),
       isCoreCard: false,
     ));
     cards.add(_Card(
       game: this,
       grid: _Grid(verticalRowIndex: 6, verticalColumnIndex: 11, verticalRowSpan: 10, verticalColumnSpan: 15,
           horizontalRowIndex: 11, horizontalColumnIndex: 1, horizontalRowSpan: 10, horizontalColumnSpan: 15),
+      property: _Property(),
       isCoreCard: false,
     ));
   }
@@ -84,6 +87,7 @@ class _Game implements Game {
           game: this,
           /*opacity: 0.0*/
           grid: _Grid.body(rowIndex: rightCard.grid.bodyRowIndex, columnIndex: rightCard.grid.bodyColumnIndex, rowSpan: 1, columnSpan: 1),
+          property: _Property(),
           isCoreCard: true,
         );
         int oldIndex = card.index;
@@ -113,7 +117,8 @@ class _Game implements Game {
           },
           endProperty: (card, value) {
             card.grid.bodyColumnIndex = card.grid.bodyColumnIndex - 1;
-            card.reset();
+            card.property.translateX = 0.0;
+            card.property.translateY = 0.0;
             card.state = _CardState.idle;
           },
         ).action(rightCard);

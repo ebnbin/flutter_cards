@@ -179,6 +179,13 @@ class _Metric {
     };
 
     //*****************************************************************************************************************
+    // Property 相关.
+
+    double Function(_Property property) propertyGetMatrix4Entry32 = (property) {
+      return bodyNoPaddingGrid / property.card.grid.maxSpan / 1000.0;
+    };
+
+    //*****************************************************************************************************************
 
     sizeCache = mediaQueryData.size;
     paddingCache = mediaQueryData.padding;
@@ -212,6 +219,7 @@ class _Metric {
       gridSetBodyRowSpan,
       gridGetBodyColumnSpan,
       gridSetBodyColumnSpan,
+      propertyGetMatrix4Entry32,
     );
   }
 
@@ -260,6 +268,7 @@ class _Metric {
       this.gridSetBodyRowSpan,
       this.gridGetBodyColumnSpan,
       this.gridSetBodyColumnSpan,
+      this.propertyGetMatrix4Entry32,
       );
 
   final int square;
@@ -290,4 +299,5 @@ class _Metric {
   final void Function(_Grid grid, int bodyRowSpan) gridSetBodyRowSpan;
   final int Function(_Grid grid) gridGetBodyColumnSpan;
   final void Function(_Grid grid, int bodyColumnSpan) gridSetBodyColumnSpan;
+  final double Function(_Property property) propertyGetMatrix4Entry32;
 }
