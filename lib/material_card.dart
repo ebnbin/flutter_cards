@@ -4,7 +4,6 @@ class MaterialCard extends Card {
   const MaterialCard({
     Key key,
     Color color,
-    Color shadowColor,
     double elevation,
     ShapeBorder shape,
     bool borderOnForeground = true,
@@ -15,7 +14,6 @@ class MaterialCard extends Card {
   }) : super(
     key: key,
     color: color,
-    shadowColor: shadowColor,
     elevation: elevation,
     shape: shape,
     borderOnForeground: borderOnForeground,

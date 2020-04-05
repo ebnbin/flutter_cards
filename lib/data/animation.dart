@@ -29,18 +29,20 @@ enum _VisibleAngle {
   clockwise360,
 }
 
-double _visibleAngle(_VisibleAngle visibleAngle) {
-  switch (visibleAngle) {
-    case _VisibleAngle.counterClockwise360:
-      return -2.0 * pi;
-    case _VisibleAngle.counterClockwise180:
-      return -pi;
-    case _VisibleAngle.clockwise180:
-      return pi;
-    case _VisibleAngle.clockwise360:
-      return 2.0 * pi;
-    default:
-      return 0.0;
+extension on _VisibleAngle {
+  double get value {
+    switch (this) {
+      case _VisibleAngle.counterClockwise360:
+        return -2.0 * pi;
+      case _VisibleAngle.counterClockwise180:
+        return -pi;
+      case _VisibleAngle.clockwise180:
+        return pi;
+      case _VisibleAngle.clockwise360:
+        return 2.0 * pi;
+      default:
+        return 0.0;
+    }
   }
 }
 
@@ -52,18 +54,20 @@ enum _InvisibleAngle {
   clockwise270,
 }
 
-double _invisibleAngle(_InvisibleAngle invisibleAngle) {
-  switch (invisibleAngle) {
-    case _InvisibleAngle.counterClockwise270:
-      return -1.5 * pi;
-    case _InvisibleAngle.counterClockwise90:
-      return -0.5 * pi;
-    case _InvisibleAngle.clockwise90:
-      return 0.5 * pi;
-    case _InvisibleAngle.clockwise270:
-      return 1.5 * pi;
-    default:
-      return 0.0;
+extension on _InvisibleAngle {
+  double get value {
+    switch (this) {
+      case _InvisibleAngle.counterClockwise270:
+        return -1.5 * pi;
+      case _InvisibleAngle.counterClockwise90:
+        return -0.5 * pi;
+      case _InvisibleAngle.clockwise90:
+        return 0.5 * pi;
+      case _InvisibleAngle.clockwise270:
+        return 1.5 * pi;
+      default:
+        return 0.0;
+    }
   }
 }
 
@@ -186,8 +190,8 @@ class _CardAnimation {
     curve: Curves.easeOut,
     beginProperty: beginProperty,
     animatingProperty: (card, value) {
-      card.property.rotateX = _PropertyCalc.ab(-_invisibleAngle(angleX), 0.0).calc(value);
-      card.property.rotateY = _PropertyCalc.ab(-_invisibleAngle(angleY), 0.0).calc(value);
+      card.property.rotateX = _PropertyCalc.ab(-angleX.value, 0.0).calc(value);
+      card.property.rotateY = _PropertyCalc.ab(-angleY.value, 0.0).calc(value);
       card.property.scaleX = _PropertyCalc.ab(0.5, 1.0).calc(value);
       card.property.scaleY = _PropertyCalc.ab(0.5, 1.0).calc(value);
       card.property.elevation = _PropertyCalc.ab(0.5, 1.0).calc(value);
@@ -211,9 +215,9 @@ class _CardAnimation {
     curve: Curves.easeIn,
     beginProperty: beginProperty,
     animatingProperty: (card, value) {
-      card.property.rotateX = _PropertyCalc.ab(0.0, _invisibleAngle(angleX)).calc(value);
-      card.property.rotateX = _PropertyCalc.ab(0.0, _invisibleAngle(angleX)).calc(value);
-      card.property.rotateY = _PropertyCalc.ab(0.0, _invisibleAngle(angleY)).calc(value);
+      card.property.rotateX = _PropertyCalc.ab(0.0, angleX.value).calc(value);
+      card.property.rotateX = _PropertyCalc.ab(0.0, angleX.value).calc(value);
+      card.property.rotateY = _PropertyCalc.ab(0.0, angleY.value).calc(value);
       card.property.scaleX = _PropertyCalc.ab(1.0, 0.5).calc(value);
       card.property.scaleY = _PropertyCalc.ab(1.0, 0.5).calc(value);
       card.property.elevation = _PropertyCalc.ab(1.0, 0.5).calc(value);
