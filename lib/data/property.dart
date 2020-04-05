@@ -16,6 +16,7 @@ class _Property {
     this.radius = 4.0,
     this.opacity = 1.0,
     this.visible = true,
+    this.gestureType = _GestureType.normal,
   });
 
   /// 所属卡片.
@@ -77,4 +78,23 @@ class _Property {
   double get margin {
     return 2.0 / (_Metric.bodyNoPaddingGrid / card.grid.minSpan) * _Metric.get().gridSize;
   }
+
+  /// 手势类型.
+  _GestureType gestureType;
+
+  /// 是否拦截手势.
+  bool get absorbPointer => gestureType == _GestureType.absorb;
+
+  /// 是否忽略手势.
+  bool get ignorePointer => gestureType == _GestureType.ignore;
+}
+
+/// 手势类型.
+enum _GestureType {
+  /// 正常接收处理手势.
+  normal,
+  /// 拦截手势, 自己不处理, 下层 Widget 也无法处理.
+  absorb,
+  /// 忽略手势, 自己不处理, 下层 Widget 可以处理.
+  ignore,
 }

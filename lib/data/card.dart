@@ -173,4 +173,10 @@ class _CardData implements CardData {
 
   @override
   Sprite get sprite => card.sprite;
+
+  @override
+  bool get absorbPointer => card.property.absorbPointer;
+
+  @override
+  bool get ignorePointer => card.property.ignorePointer;
 }

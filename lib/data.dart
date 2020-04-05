@@ -75,6 +75,10 @@ abstract class CardData {
   Color get color;
 
   Sprite get sprite;
+
+  bool get absorbPointer;
+
+  bool get ignorePointer;
 }
 
 //*********************************************************************************************************************
