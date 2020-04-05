@@ -73,4 +73,8 @@ class _Property {
     assert(zIndex >= 0 && zIndex <= 5);
     return visible && this.zIndex == zIndex;
   };
+
+  double get margin {
+    return 2.0 / (_Metric.bodyNoPaddingGrid / card.grid.minSpan) * _Metric.get().gridSize;
+  }
 }

@@ -41,10 +41,6 @@ class _Card implements Card {
 
   _Property property;
 
-  double get margin {
-    return 2.0 / (_Metric.bodyNoPaddingGrid / min(grid.rowSpan, grid.columnSpan)) * _Metric.get().gridSize;
-  }
-
   Color get color {
     switch (state) {
       case _CardState.idle:
@@ -161,7 +157,7 @@ class _CardData implements CardData {
   double get elevation => card.property.elevation;
 
   @override
-  double get margin => card.margin;
+  double get margin => card.property.margin;
 
   @override
   double get opacity => card.property.opacity;
