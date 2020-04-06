@@ -24,40 +24,39 @@ class _Game implements Game {
   void initCards() {
     for (int rowIndex = 0; rowIndex < square; rowIndex++) {
       for (int columnIndex = 0; columnIndex < square; columnIndex++) {
-        _Card card = _CoreCard(
+        coreCards.add(_CoreCard(
           game: this,
           rowIndex: rowIndex,
           columnIndex: columnIndex,
           property: _CardProperty(),
           sprite: _CardSprite(isPlayer: rowIndex == 0 && columnIndex == 0),
-        );
-        cards.add(card);
+        ));
       }
     }
     cards.add(_Card(
       game: this,
-      verticalRowIndex: 6,
-      verticalColumnIndex: 1,
-      verticalRowSpan: 10,
-      verticalColumnSpan: 10,
-      horizontalRowIndex: 1,
-      horizontalColumnIndex: 6,
-      horizontalRowSpan: 10,
-      horizontalColumnSpan: 10,
+      verticalRowGridIndex: 6,
+      verticalColumnGridIndex: 1,
+      verticalRowGridSpan: 10,
+      verticalColumnGridSpan: 10,
+      horizontalRowGridIndex: 1,
+      horizontalColumnGridIndex: 6,
+      horizontalRowGridSpan: 10,
+      horizontalColumnGridSpan: 10,
       type: _CardType.headerFooter,
       property: _CardProperty(),
       sprite: _CardSprite(),
     ));
     cards.add(_Card(
       game: this,
-      verticalRowIndex: 6,
-      verticalColumnIndex: 11,
-      verticalRowSpan: 10,
-      verticalColumnSpan: 15,
-      horizontalRowIndex: 11,
-      horizontalColumnIndex: 1,
-      horizontalRowSpan: 10,
-      horizontalColumnSpan: 15,
+      verticalRowGridIndex: 6,
+      verticalColumnGridIndex: 11,
+      verticalRowGridSpan: 10,
+      verticalColumnGridSpan: 15,
+      horizontalRowGridIndex: 11,
+      horizontalColumnGridIndex: 1,
+      horizontalRowGridSpan: 10,
+      horizontalColumnGridSpan: 15,
       type: _CardType.headerFooter,
       property: _CardProperty(),
       sprite: _CardSprite(),
@@ -68,12 +67,7 @@ class _Game implements Game {
 
   /// 存储所有卡片.
   List<_Card> cards = <_Card>[];
-
-  BuiltList<_CoreCard> get coreCards {
-    return cards.where((element) {
-      return element.type == _CardType.core;
-    }).toBuiltList();
-  }
+  List<_CoreCard> coreCards = <_CoreCard>[];
 
   //*******************************************************************************************************************
 
@@ -224,7 +218,7 @@ class _GameData implements GameData {
   }
 
   @override
-  BuiltList<Card> get cards => game.cards.build();
+  BuiltList<Card> get cards => (<_Card>[]..addAll(game.coreCards)..addAll(game.cards)).build();
 
   @override
   CustomPainter get foregroundPainter => game.gridForegroundPainter;

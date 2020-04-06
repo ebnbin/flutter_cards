@@ -125,8 +125,8 @@ class _Animation<T extends _Card> {
         }
       },
       onHalf: (card) {
-        card.coreRowIndex += ltrb.y;
-        card.coreColumnIndex += ltrb.x;
+        card.rowIndex += ltrb.y;
+        card.columnIndex += ltrb.x;
       },
     );
   }

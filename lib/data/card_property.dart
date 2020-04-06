@@ -24,7 +24,7 @@ class _CardProperty {
 
   /// Matrix4.setEntry(3, 2, value);
   double get matrix4Entry32 {
-    return _Metric.coreNoPaddingGrid / card.maxSpan / 800.0;
+    return _Metric.coreNoPaddingGrid / card.maxGridSpan / 800.0;
   }
 
   double translateX;
@@ -78,7 +78,7 @@ class _CardProperty {
   };
 
   double get margin {
-    return 2.0 / (_Metric.coreNoPaddingGrid / card.minSpan) * _Metric.get().gridSize;
+    return 2.0 / (_Metric.coreNoPaddingGrid / card.minGridSpan) * _Metric.get().gridSize;
   }
 
   /// 手势类型.
