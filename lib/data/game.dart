@@ -28,7 +28,6 @@ class _Game implements Game {
           game: this,
           grid: _CardGrid.core(rowIndex: rowIndex, columnIndex: columnIndex, rowSpan: 1, columnSpan: 1),
           property: _CardProperty(),
-          isCoreCard: true,
           sprite: _Sprite(isPlayer: rowIndex == 0 && columnIndex == 0),
         );
         coreCards.add(card);
@@ -37,17 +36,17 @@ class _Game implements Game {
     headerFooterCards.add(_Card(
       game: this,
       grid: _CardGrid(verticalRowIndex: 6, verticalColumnIndex: 1, verticalRowSpan: 10, verticalColumnSpan: 10,
-          horizontalRowIndex: 1, horizontalColumnIndex: 6, horizontalRowSpan: 10, horizontalColumnSpan: 10),
+          horizontalRowIndex: 1, horizontalColumnIndex: 6, horizontalRowSpan: 10, horizontalColumnSpan: 10,
+          type: _CardType.headerFooter,),
       property: _CardProperty(),
-      isCoreCard: false,
       sprite: _Sprite(),
     ));
     headerFooterCards.add(_Card(
       game: this,
       grid: _CardGrid(verticalRowIndex: 6, verticalColumnIndex: 11, verticalRowSpan: 10, verticalColumnSpan: 15,
-          horizontalRowIndex: 11, horizontalColumnIndex: 1, horizontalRowSpan: 10, horizontalColumnSpan: 15),
+          horizontalRowIndex: 11, horizontalColumnIndex: 1, horizontalRowSpan: 10, horizontalColumnSpan: 15,
+          type: _CardType.headerFooter,),
       property: _CardProperty(),
-      isCoreCard: false,
       sprite: _Sprite(),
     ));
   }
@@ -85,7 +84,7 @@ class _Game implements Game {
   }) {
     assert(card != null);
     return () {
-      if (card.isCoreCard) {
+      if (card.grid.type == _CardType.core) {
 //        _LTRB ltrb = playerCard.grid.coreRelative(card);
 //        switch (ltrb) {
 //          case _LTRB.left:

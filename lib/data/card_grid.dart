@@ -13,6 +13,8 @@ class _CardGrid {
     this.horizontalColumnIndex = 0,
     this.horizontalRowSpan = 1,
     this.horizontalColumnSpan = 1,
+    @required
+    this.type,
   });
 
   /// Core 卡片网格.
@@ -21,7 +23,7 @@ class _CardGrid {
     int columnIndex = 0,
     int rowSpan = 1,
     int columnSpan = 1,
-  }) {
+  }) : this.type = _CardType.core {
     coreRowIndex = rowIndex;
     coreColumnIndex = columnIndex;
     coreRowSpan = rowSpan;
@@ -30,6 +32,8 @@ class _CardGrid {
 
   /// 所属卡片.
   _Card card;
+
+  final _CardType type;
 
   /// 竖屏行.
   int verticalRowIndex;
@@ -47,6 +51,18 @@ class _CardGrid {
   int horizontalRowSpan;
   /// 横屏跨列.
   int horizontalColumnSpan;
+
+  /// 当前卡片在对应类型卡片列表中的 index.
+  int get index {
+    switch (type) {
+      case _CardType.core:
+        return card.game.coreCards.indexOf(card);
+      case _CardType.headerFooter:
+        return card.game.headerFooterCards.indexOf(card);
+      default:
+        throw Exception();
+    }
+  }
 
   /// 当前屏幕旋转方向的行.
   int get rowIndex {
@@ -339,8 +355,13 @@ class _CardGrid {
 
   @override
   String toString() {
-    return '$verticalRowIndex,$verticalColumnIndex,$verticalRowSpan,$verticalColumnSpan\n'
+    String result = '$verticalRowIndex,$verticalColumnIndex,$verticalRowSpan,$verticalColumnSpan\n'
         '$horizontalRowIndex,$horizontalColumnIndex,$horizontalRowSpan,$horizontalColumnSpan';
+    if (type == _CardType.core) {
+      result += '\n$coreRowIndex,$coreColumnIndex,$coreRowSpan,$coreColumnSpan';
+    }
+    result += '\n$index';
+    return result;
   }
 }
 
@@ -420,4 +441,10 @@ extension _LTRBExtension on _LTRB {
         throw Exception();
     }
   }
+}
+
+/// 卡片类型.
+enum _CardType {
+  core,
+  headerFooter,
 }

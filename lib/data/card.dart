@@ -13,10 +13,6 @@ class _Card implements Card {
     @required
     this.property,
     @required
-    this.isCoreCard,
-//    this.margin = 4.0,
-    this.state = _CardState.idle,
-    @required
     this.sprite,
   }) : assert(game != null),
         assert(grid != null) {
@@ -31,33 +27,9 @@ class _Card implements Card {
 
   final _Game game;
 
-  final bool isCoreCard;
-
-  //*******************************************************************************************************************
-
-  int get index => game.coreCards.indexOf(this);
-
-  //*******************************************************************************************************************
-
   _CardGrid grid;
 
   _CardProperty property;
-
-  Color get color {
-    if (sprite.isPlayer) {
-      return Colors.blueGrey;
-    }
-    switch (state) {
-      case _CardState.idle:
-        return Colors.white;
-      case _CardState.pending:
-        return Colors.grey;
-      case _CardState.acting:
-        return Colors.yellow;
-      default:
-        return Colors.white;
-    }
-  }
 
   //*******************************************************************************************************************
 
@@ -69,7 +41,7 @@ class _Card implements Card {
 
   @override
   String toString() {
-    return '$grid\n$index';
+    return '$grid';
   }
 
   //*******************************************************************************************************************
@@ -77,14 +49,6 @@ class _Card implements Card {
   CardData data;
 
   _Sprite sprite;
-
-  _CardState state;
-}
-
-enum _CardState {
-  idle,
-  pending,
-  acting,
 }
 
 class _CardData implements CardData {
@@ -102,7 +66,7 @@ class _CardData implements CardData {
   Rect get rect => card.grid.rect;
 
   @override
-  Color get color => card.color;
+  Color get color => Colors.white;
 
   @override
   double get elevation => card.property.elevation;
