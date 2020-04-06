@@ -16,6 +16,7 @@ class _CardProperty {
     this.radius = 4.0,
     this.opacity = 1.0,
     this.visible = true,
+    this.touchable = true,
     this.gestureType = _CardGestureType.normal,
   });
 
@@ -81,14 +82,27 @@ class _CardProperty {
     return 2.0 / (_Metric.coreNoPaddingGrid / card.minGridSpan) * _Metric.get().gridSize;
   }
 
+  /// 是否可点击 (卡片是否可交互). 初始化后不可改变.
+  final bool touchable;
+
   /// 手势类型.
   _CardGestureType gestureType;
 
   /// 是否拦截手势.
-  bool get absorbPointer => gestureType == _CardGestureType.absorb;
+  bool get absorbPointer {
+    if (!touchable) {
+      return false;
+    }
+    return gestureType == _CardGestureType.absorb;
+  }
 
   /// 是否忽略手势.
-  bool get ignorePointer => gestureType == _CardGestureType.ignore;
+  bool get ignorePointer {
+    if (!touchable) {
+      return true;
+    }
+    return gestureType == _CardGestureType.ignore;
+  }
 }
 
 /// 卡片手势类型.
