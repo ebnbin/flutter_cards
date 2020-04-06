@@ -29,7 +29,7 @@ enum _VisibleAngle {
   clockwise360,
 }
 
-extension on _VisibleAngle {
+extension _VisibleAngleExtension on _VisibleAngle {
   double get value {
     switch (this) {
       case _VisibleAngle.counterClockwise360:
@@ -54,7 +54,7 @@ enum _InvisibleAngle {
   clockwise270,
 }
 
-extension on _InvisibleAngle {
+extension _InvisibleAngleExtension on _InvisibleAngle {
   double get value {
     switch (this) {
       case _InvisibleAngle.counterClockwise270:

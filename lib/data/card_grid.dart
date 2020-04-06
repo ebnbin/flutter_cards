@@ -151,7 +151,7 @@ class _CardGrid {
   BuiltList<_Card> get bodyLeft {
     int targetColumn = bodyColumnRange.from - 1;
     if (targetColumn < 0) {
-      return [].toBuiltList();
+      return <_Card>[].toBuiltList();
     }
     _CardRowColumnRange targetRowRange = bodyRowRange;
     return card.game.bodyCards.where((element) {
@@ -164,7 +164,7 @@ class _CardGrid {
   BuiltList<_Card> get bodyTop {
     int targetRow = bodyRowRange.from - 1;
     if (targetRow < 0) {
-      return [].toBuiltList();
+      return <_Card>[].toBuiltList();
     }
     _CardRowColumnRange targetColumnRange = bodyColumnRange;
     return card.game.bodyCards.where((element) {
@@ -177,7 +177,7 @@ class _CardGrid {
   BuiltList<_Card> get bodyRight {
     int targetColumn = bodyColumnRange.to + 1;
     if (targetColumn >= _Metric.get().square) {
-      return [].toBuiltList();
+      return <_Card>[].toBuiltList();
     }
     _CardRowColumnRange targetRowRange = bodyRowRange;
     return card.game.bodyCards.where((element) {
@@ -190,7 +190,7 @@ class _CardGrid {
   BuiltList<_Card> get bodyBottom {
     int targetRow = bodyRowRange.to + 1;
     if (targetRow >= _Metric.get().square) {
-      return [].toBuiltList();
+      return <_Card>[].toBuiltList();
     }
     _CardRowColumnRange targetColumnRange = bodyColumnRange;
     return card.game.bodyCards.where((element) {
@@ -203,13 +203,13 @@ class _CardGrid {
   BuiltList<BuiltList<_Card>> get bodyLeftAll {
     _CardRowColumnRange targetColumnRange = _CardRowColumnRange(0, bodyColumnRange.from - 1);
     if (!targetColumnRange.isValid()) {
-      return [[].toBuiltList()].toBuiltList();
+      return <BuiltList<_Card>>[].toBuiltList();
     }
     _CardRowColumnRange targetRowRange = bodyRowRange;
-    List<_Card> bodyCards = []..addAll(card.game.bodyCards);
-    List<BuiltList<_Card>> list2 = [];
+    List<_Card> bodyCards = <_Card>[]..addAll(card.game.bodyCards);
+    List<BuiltList<_Card>> list2 = <BuiltList<_Card>>[];
     for (int targetColumn = targetColumnRange.to; targetColumn >= targetColumnRange.from; targetColumn--) {
-      List<_Card> list = [];
+      List<_Card> list = <_Card>[];
       bodyCards.toBuiltList().forEach((element) {
         if (targetRowRange.contain(element.grid.bodyRowRange) &&
             element.grid.bodyColumnRange.containValue(targetColumn)) {
@@ -226,13 +226,13 @@ class _CardGrid {
   BuiltList<BuiltList<_Card>> get bodyTopAll {
     _CardRowColumnRange targetRowRange = _CardRowColumnRange(0, bodyRowRange.from - 1);
     if (!targetRowRange.isValid()) {
-      return [[].toBuiltList()].toBuiltList();
+      return <BuiltList<_Card>>[].toBuiltList();
     }
     _CardRowColumnRange targetColumnRange = bodyColumnRange;
-    List<_Card> bodyCards = []..addAll(card.game.bodyCards);
-    List<BuiltList<_Card>> list2 = [];
+    List<_Card> bodyCards = <_Card>[]..addAll(card.game.bodyCards);
+    List<BuiltList<_Card>> list2 = <BuiltList<_Card>>[];
     for (int targetRow = targetRowRange.to; targetRow >= targetRowRange.from; targetRow--) {
-      List<_Card> list = [];
+      List<_Card> list = <_Card>[];
       bodyCards.toBuiltList().forEach((element) {
         if (element.grid.bodyRowRange.containValue(targetRow) &&
             targetColumnRange.contain(element.grid.bodyColumnRange)) {
@@ -249,13 +249,13 @@ class _CardGrid {
   BuiltList<BuiltList<_Card>> get bodyRightAll {
     _CardRowColumnRange targetColumnRange = _CardRowColumnRange(bodyColumnRange.to + 1, _Metric.get().square - 1);
     if (!targetColumnRange.isValid()) {
-      return [[].toBuiltList()].toBuiltList();
+      return <BuiltList<_Card>>[].toBuiltList();
     }
     _CardRowColumnRange targetRowRange = bodyRowRange;
-    List<_Card> bodyCards = []..addAll(card.game.bodyCards);
-    List<BuiltList<_Card>> list2 = [];
+    List<_Card> bodyCards = <_Card>[]..addAll(card.game.bodyCards);
+    List<BuiltList<_Card>> list2 = <BuiltList<_Card>>[];
     for (int targetColumn = targetColumnRange.from; targetColumn <= targetColumnRange.to; targetColumn++) {
-      List<_Card> list = [];
+      List<_Card> list = <_Card>[];
       bodyCards.toBuiltList().forEach((element) {
         if (targetRowRange.contain(element.grid.bodyRowRange) &&
             element.grid.bodyColumnRange.containValue(targetColumn)) {
@@ -272,13 +272,13 @@ class _CardGrid {
   BuiltList<BuiltList<_Card>> get bodyBottomAll {
     _CardRowColumnRange targetRowRange = _CardRowColumnRange(bodyRowRange.to + 1, _Metric.get().square - 1);
     if (!targetRowRange.isValid()) {
-      return [[].toBuiltList()].toBuiltList();
+      return <BuiltList<_Card>>[].toBuiltList();
     }
     _CardRowColumnRange targetColumnRange = bodyColumnRange;
-    List<_Card> bodyCards = []..addAll(card.game.bodyCards);
-    List<BuiltList<_Card>> list2 = [];
+    List<_Card> bodyCards = <_Card>[]..addAll(card.game.bodyCards);
+    List<BuiltList<_Card>> list2 = <BuiltList<_Card>>[];
     for (int targetRow = targetRowRange.from; targetRow <= targetRowRange.to; targetRow++) {
-      List<_Card> list = [];
+      List<_Card> list = <_Card>[];
       bodyCards.toBuiltList().forEach((element) {
         if (element.grid.bodyRowRange.containValue(targetRow) &&
             targetColumnRange.contain(element.grid.bodyColumnRange)) {
@@ -289,6 +289,33 @@ class _CardGrid {
       list2.add(list.toBuiltList());
     }
     return list2.toBuiltList();
+  }
+
+  /// 根据 [ltrb] 返回指定方向的所有卡片.
+  BuiltList<BuiltList<_Card>> bodyLTRBAll(_LTRB ltrb) {
+    switch (ltrb) {
+      case _LTRB.left:
+        return bodyLeftAll;
+      case _LTRB.top:
+        return bodyTopAll;
+      case _LTRB.right:
+        return bodyRightAll;
+      case _LTRB.bottom:
+        return bodyBottomAll;
+    }
+  }
+
+  /// 根据 [ltrb] 返回指定方向的所有卡片. 如果指定方向的卡片为空, 返回
+  BuiltList<BuiltList<_Card>> bodyLTRBAllFallback(_LTRB ltrb, {
+    bool clockwise = false,
+  }) {
+    for (_LTRB currentLtrb in ltrb.turns(clockwise: clockwise)) {
+      BuiltList<BuiltList<_Card>> list = bodyLTRBAll(currentLtrb);
+      if (list.isNotEmpty) {
+        return list;
+      }
+    }
+    return <BuiltList<_Card>>[].toBuiltList();
   }
 
   //*******************************************************************************************************************
@@ -324,5 +351,26 @@ class _CardRowColumnRange {
 
   bool isValid() {
     return to >= from;
+  }
+}
+
+enum _LTRB {
+  left,
+  top,
+  right,
+  bottom,
+}
+
+extension _LTRBExtension on _LTRB {
+  /// 按照 [clockwise] 顺时针或逆时针顺序依次返回从当前方向开始的四个方向列表.
+  BuiltList<_LTRB> turns({
+    bool clockwise = false,
+  }) {
+    List<_LTRB> list = _LTRB.values + _LTRB.values;
+    if (!clockwise) {
+      list = list.reversed.toList();
+    }
+    int start = list.indexOf(this);
+    return list.sublist(start, start + _LTRB.values.length).toBuiltList();
   }
 }

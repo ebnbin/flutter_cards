@@ -52,8 +52,8 @@ class _Game implements Game {
   //*******************************************************************************************************************
 
   /// 存储所有卡片.
-  List<_Card> bodyCards = [];
-  List<_Card> headerFooterCards = [];
+  List<_Card> bodyCards = <_Card>[];
+  List<_Card> headerFooterCards = <_Card>[];
 
   //*******************************************************************************************************************
 
@@ -99,45 +99,49 @@ class _Game implements Game {
 //        callback.setState(() {
 //        });
 //
-//        _Action action0 = _CardAnimation.flipOut(
-//          duration: 500,
-//          angleY: _InvisibleAngle.counterClockwise90,
-//          beginProperty: (card, value) {
-//            card.state = _CardState.acting;
-//          },
-//          endProperty: (card, value) {
-//            card.state = _CardState.idle;
-//          },
-//        ).action(card);
-//        _Action action1 = _CardAnimation.moveCoreCard(
-//          duration: 500,
-//          x: -1,
-//          beginDelay: 250,
-//          beginProperty: (card, value) {
-//            card.state = _CardState.acting;
-//          },
-//          endProperty: (card, value) {
-//            card.grid.bodyColumnIndex = card.grid.bodyColumnIndex - 1;
-//            card.property.translateX = 0.0;
-//            card.property.translateY = 0.0;
-//            card.state = _CardState.idle;
-//          },
-//        ).action(rightCard);
-//        _Action action2 = _CardAnimation.flipIn(
-//          duration: 500,
-//          beginDelay: 500,
-//          angleY: _InvisibleAngle.counterClockwise90,
-//          beginProperty: (card, value) {
-//            bodyCards[oldIndex] = card;
-//            card.state = _CardState.acting;
-//          },
-//          endProperty: (card, value) {
-//            card.state = _CardState.idle;
-//          },
-//        ).action(newCard);
-//        List<_Action> actions = [action0, action1, action2];
-//        actionQueue.addList(actions);
-        print(card.grid.bodyBottomAll);
+//        List<_Action> actions0 = [
+//          _CardAnimation.flipOut(
+//            duration: 500,
+//            angleY: _InvisibleAngle.counterClockwise90,
+//            beginProperty: (card, value) {
+//              card.state = _CardState.acting;
+//            },
+//            endProperty: (card, value) {
+//              card.state = _CardState.idle;
+//            },
+//          ).action(card),
+//          _CardAnimation.moveCoreCard(
+//            duration: 500,
+//            x: -1,
+//            beginDelay: 250,
+//            beginProperty: (card, value) {
+//              card.state = _CardState.acting;
+//            },
+//            endProperty: (card, value) {
+//              card.grid.bodyColumnIndex = card.grid.bodyColumnIndex - 1;
+//              card.property.translateX = 0.0;
+//              card.property.translateY = 0.0;
+//              card.state = _CardState.idle;
+//            },
+//          ).action(rightCard),
+//        ];
+//        List<_Action> actions1 = [
+//          _CardAnimation.flipIn(
+//            duration: 500,
+//            beginDelay: 500,
+//            angleY: _InvisibleAngle.counterClockwise90,
+//            beginProperty: (card, value) {
+//              bodyCards[oldIndex] = card;
+//              card.state = _CardState.acting;
+//            },
+//            endProperty: (card, value) {
+//              card.state = _CardState.idle;
+//            },
+//          ).action(newCard)
+//        ];
+//        actionQueue.addList(actions0);
+//        actionQueue.addList(actions1);
+        print(card.grid.bodyLTRBAllFallback(_LTRB.right));
       } else {
         _CardAnimation.sample().begin(card);
       }
