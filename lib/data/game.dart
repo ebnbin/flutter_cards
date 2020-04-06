@@ -24,16 +24,20 @@ class _Game implements Game {
   void initCards() {
     for (int rowIndex = 0; rowIndex < square; rowIndex++) {
       for (int columnIndex = 0; columnIndex < square; columnIndex++) {
-        coreCards.add(_CoreCard(
-          game: this,
-          rowIndex: rowIndex,
-          columnIndex: columnIndex,
-          sprite: _CardSprite(isPlayer: rowIndex == 0 && columnIndex == 0),
-        ));
+        if (rowIndex == 1 && columnIndex == 1) {
+          spriteCards.add(_PlayerCard(this,
+            rowIndex: rowIndex,
+            columnIndex: columnIndex,
+          ));
+        } else {
+          spriteCards.add(_SpriteCard(this,
+            rowIndex: rowIndex,
+            columnIndex: columnIndex,
+          ));
+        }
       }
     }
-    cards.add(_Card(
-      game: this,
+    cards.add(_Card(this,
       verticalRowGridIndex: 6,
       verticalColumnGridIndex: 1,
       verticalRowGridSpan: 10,
@@ -43,10 +47,8 @@ class _Game implements Game {
       horizontalRowGridSpan: 10,
       horizontalColumnGridSpan: 10,
       type: _CardType.headerFooter,
-      sprite: _CardSprite(),
     ));
-    cards.add(_Card(
-      game: this,
+    cards.add(_Card(this,
       verticalRowGridIndex: 6,
       verticalColumnGridIndex: 11,
       verticalRowGridSpan: 10,
@@ -56,7 +58,6 @@ class _Game implements Game {
       horizontalRowGridSpan: 10,
       horizontalColumnGridSpan: 15,
       type: _CardType.headerFooter,
-      sprite: _CardSprite(),
     ));
   }
 
@@ -64,7 +65,7 @@ class _Game implements Game {
 
   /// 存储所有卡片.
   List<_Card> cards = <_Card>[];
-  List<_CoreCard> coreCards = <_CoreCard>[];
+  List<_SpriteCard> spriteCards = <_SpriteCard>[];
 
   //*******************************************************************************************************************
 
@@ -84,7 +85,7 @@ class _Game implements Game {
   Function onTap(_Card card) {
     assert(card != null);
     return () {
-      if (card.type == _CardType.core) {
+      if (card is _SpriteCard) {
 //        _LTRB ltrb = playerCard.grid.coreRelative(card);
 //        switch (ltrb) {
 //          case _LTRB.left:
@@ -215,7 +216,7 @@ class _GameData implements GameData {
   }
 
   @override
-  BuiltList<Card> get cards => (<_Card>[]..addAll(game.coreCards)..addAll(game.cards)).build();
+  BuiltList<Card> get cards => (<_Card>[]..addAll(game.spriteCards)..addAll(game.cards)).build();
 
   @override
   CustomPainter get foregroundPainter => game.gridForegroundPainter;

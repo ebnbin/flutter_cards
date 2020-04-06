@@ -104,13 +104,13 @@ class _Animation<T extends _Card> {
   );
 
   /// Core 卡片移动.
-  static _Animation<_CoreCard> coreMove(_CoreCard card, {
+  static _Animation<_SpriteCard> coreMove(_SpriteCard card, {
     int beginDelay = 0,
     int endDelay = 0,
     @required
     _LTRB ltrb,
   }) {
-    return _Animation<_CoreCard>(card,
+    return _Animation<_SpriteCard>(card,
       duration: 500,
       beginDelay: beginDelay,
       endDelay: endDelay,
@@ -127,16 +127,18 @@ class _Animation<T extends _Card> {
       onHalf: (card) {
         card.rowIndex += ltrb.y;
         card.columnIndex += ltrb.x;
+        card.translateX = _AnimationCalc.ab(-_Metric.get().coreCardSize * ltrb.x, 0.0).calc(0.5);
+        card.translateY = _AnimationCalc.ab(-_Metric.get().coreCardSize * ltrb.y, 0.0).calc(0.5);
       },
     );
   }
 
   /// Core 卡片进入.
-  static _Animation<_CoreCard> coreEnter(_CoreCard card, {
+  static _Animation<_SpriteCard> coreEnter(_SpriteCard card, {
     int beginDelay = 0,
     int endDelay = 0,
   }) {
-    return _Animation<_CoreCard>(card,
+    return _Animation<_SpriteCard>(card,
       duration: 500,
       beginDelay: beginDelay,
       endDelay: endDelay,
@@ -151,11 +153,11 @@ class _Animation<T extends _Card> {
   }
 
   /// Core 卡片退出.
-  static _Animation<_CoreCard> coreExit(_CoreCard card, {
+  static _Animation<_SpriteCard> coreExit(_SpriteCard card, {
     int beginDelay = 0,
     int endDelay = 0,
   }) {
-    return _Animation(card,
+    return _Animation<_SpriteCard>(card,
       duration: 500,
       beginDelay: beginDelay,
       endDelay: endDelay,
@@ -234,8 +236,8 @@ class _Animation<T extends _Card> {
           if (!_half && curvedAnimation.value >= 0.5) {
             _half = true;
             onHalf?.call(card);
-//            card.game.callback.setState(() {
-//            });
+            card.game.callback.setState(() {
+            });
           }
           onAnimating?.call(card, curvedAnimation.value);
           card.game.callback.setState(() {
