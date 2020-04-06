@@ -23,13 +23,13 @@ class _GridForegroundPainter extends CustomPainter {
     }
     _paint.color = Colors.yellow;
     for (int rowIndex = 0; rowIndex <= _Metric.get().square; rowIndex += 1) {
-      Offset p1 = new Offset(_Metric.get().bodyNoPaddingRect.left, _Metric.get().bodyNoPaddingRect.top + rowIndex * _Metric.get().bodyCardSize);
-      Offset p2 = new Offset(_Metric.get().bodyNoPaddingRect.right, _Metric.get().bodyNoPaddingRect.top + rowIndex * _Metric.get().bodyCardSize);
+      Offset p1 = new Offset(_Metric.get().coreNoPaddingRect.left, _Metric.get().coreNoPaddingRect.top + rowIndex * _Metric.get().coreCardSize);
+      Offset p2 = new Offset(_Metric.get().coreNoPaddingRect.right, _Metric.get().coreNoPaddingRect.top + rowIndex * _Metric.get().coreCardSize);
       canvas.drawLine(p1, p2, _paint);
     }
     for (int columnIndex = 0; columnIndex <= _Metric.get().square; columnIndex += 1) {
-      Offset p1 = new Offset(_Metric.get().bodyNoPaddingRect.left + columnIndex * _Metric.get().bodyCardSize, _Metric.get().bodyNoPaddingRect.top);
-      Offset p2 = new Offset(_Metric.get().bodyNoPaddingRect.left + columnIndex * _Metric.get().bodyCardSize, _Metric.get().bodyNoPaddingRect.bottom);
+      Offset p1 = new Offset(_Metric.get().coreNoPaddingRect.left + columnIndex * _Metric.get().coreCardSize, _Metric.get().coreNoPaddingRect.top);
+      Offset p2 = new Offset(_Metric.get().coreNoPaddingRect.left + columnIndex * _Metric.get().coreCardSize, _Metric.get().coreNoPaddingRect.bottom);
       canvas.drawLine(p1, p2, _paint);
     }
   }
@@ -53,7 +53,7 @@ class _GridPainter extends CustomPainter {
     _paint.color = Colors.green;
     canvas.drawRect(_Metric.get().safeRect, _paint);
     _paint.color = Colors.red;
-    canvas.drawRect(_Metric.get().bodyRect, _paint);
+    canvas.drawRect(_Metric.get().coreRect, _paint);
   }
 
   @override

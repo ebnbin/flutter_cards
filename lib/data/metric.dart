@@ -6,16 +6,16 @@ part of '../data.dart';
 class _Metric {
   /// Padding 网格数.
   static const int paddingGrid = 1;
-  /// Body 网格数 (不包含 padding).
-  static const int bodyNoPaddingGrid = 60;
+  /// Core 网格数 (不包含 padding).
+  static const int coreNoPaddingGrid = 60;
   /// Header footer 网格数 (不包含 padding).
   static const int headerFooterNoPaddingGrid = 15;
-  /// Body 网格数.
-  static const int bodyGrid = bodyNoPaddingGrid + paddingGrid * 2;
+  /// Core 网格数.
+  static const int coreGrid = coreNoPaddingGrid + paddingGrid * 2;
   /// Header footer 网格数.
   static const int headerFooterGrid = headerFooterNoPaddingGrid + paddingGrid * 2;
   /// 安全网格数.
-  static const int safeGrid = bodyGrid + headerFooterGrid * 2;
+  static const int safeGrid = coreGrid + headerFooterGrid * 2;
 
   static Size sizeCache;
   static EdgeInsets paddingCache;
@@ -47,9 +47,9 @@ class _Metric {
     /// 是否竖屏. [MediaQueryData.orientation].
     bool isVertical = screenRect.width <= screenRect.height;
     /// 水平方向网格数.
-    int horizontalGrid = isVertical ? bodyGrid : safeGrid;
+    int horizontalGrid = isVertical ? coreGrid : safeGrid;
     /// 垂直方向网格数.
-    int verticalGrid = isVertical ? safeGrid : bodyGrid;
+    int verticalGrid = isVertical ? safeGrid : coreGrid;
     /// 网格尺寸.
     double gridSize = min(safeScreenRect.width / horizontalGrid, safeScreenRect.height / verticalGrid);
     /// 安全矩形.
@@ -58,30 +58,30 @@ class _Metric {
       width: horizontalGrid * gridSize,
       height: verticalGrid * gridSize,
     );
-    /// Body 矩形.
-    Rect bodyRect = Rect.fromCenter(
+    /// Core 矩形.
+    Rect coreRect = Rect.fromCenter(
       center: safeRect.center,
-      width: bodyGrid * gridSize,
-      height: bodyGrid * gridSize,
+      width: coreGrid * gridSize,
+      height: coreGrid * gridSize,
     );
-    /// Body 矩形 (不包含 padding).
-    Rect bodyNoPaddingRect = Rect.fromLTRB(
-      bodyRect.left + paddingGrid * gridSize,
-      bodyRect.top + paddingGrid * gridSize,
-      bodyRect.right - paddingGrid * gridSize,
-      bodyRect.bottom - paddingGrid * gridSize,
+    /// Core 矩形 (不包含 padding).
+    Rect coreNoPaddingRect = Rect.fromLTRB(
+      coreRect.left + paddingGrid * gridSize,
+      coreRect.top + paddingGrid * gridSize,
+      coreRect.right - paddingGrid * gridSize,
+      coreRect.bottom - paddingGrid * gridSize,
     );
     /// Header 矩形.
     Rect headerRect = Rect.fromLTWH(
       safeRect.left,
       safeRect.top,
-      isVertical ? safeRect.width : (bodyRect.left - safeRect.left),
-      isVertical ? (bodyRect.top - safeRect.top) : safeRect.height,
+      isVertical ? safeRect.width : (coreRect.left - safeRect.left),
+      isVertical ? (coreRect.top - safeRect.top) : safeRect.height,
     );
     /// Footer 矩形.
     Rect footerRect = Rect.fromLTWH(
-      isVertical ? headerRect.left : bodyRect.right,
-      isVertical ? bodyRect.bottom : headerRect.top,
+      isVertical ? headerRect.left : coreRect.right,
+      isVertical ? coreRect.bottom : headerRect.top,
       headerRect.width,
       headerRect.height,
     );
@@ -89,20 +89,20 @@ class _Metric {
     Rect headerUnsafeRect = Rect.fromLTWH(
       screenRect.left,
       screenRect.top,
-      isVertical ? screenRect.width : (bodyRect.left - screenRect.left),
-      isVertical ? (bodyRect.top - screenRect.top) : screenRect.height,
+      isVertical ? screenRect.width : (coreRect.left - screenRect.left),
+      isVertical ? (coreRect.top - screenRect.top) : screenRect.height,
     );
     /// Footer 矩形 (包含屏幕不安全区域).
     Rect footerUnsafeRect = Rect.fromLTWH(
-      isVertical ? headerUnsafeRect.left : bodyRect.right,
-      isVertical ? bodyRect.bottom : headerUnsafeRect.top,
-      isVertical ? headerUnsafeRect.width : (screenRect.right - bodyRect.right),
-      isVertical ? (screenRect.bottom - bodyRect.bottom) : headerUnsafeRect.height,
+      isVertical ? headerUnsafeRect.left : coreRect.right,
+      isVertical ? coreRect.bottom : headerUnsafeRect.top,
+      isVertical ? headerUnsafeRect.width : (screenRect.right - coreRect.right),
+      isVertical ? (screenRect.bottom - coreRect.bottom) : headerUnsafeRect.height,
     );
-    /// Body 卡片网格数.
-    int bodyCardGrid = bodyNoPaddingGrid ~/ game.square;
-    /// Body 卡片尺寸.
-    double bodyCardSize = bodyCardGrid * gridSize;
+    /// Core 卡片网格数.
+    int coreCardGrid = coreNoPaddingGrid ~/ game.square;
+    /// Core 卡片尺寸.
+    double coreCardSize = coreCardGrid * gridSize;
 
     //*****************************************************************************************************************
 
@@ -117,12 +117,12 @@ class _Metric {
       verticalGrid,
       gridSize,
       safeRect,
-      bodyRect,
-      bodyNoPaddingRect,
+      coreRect,
+      coreNoPaddingRect,
       headerUnsafeRect,
       footerUnsafeRect,
-      bodyCardGrid,
-      bodyCardSize,
+      coreCardGrid,
+      coreCardSize,
     );
   }
 
@@ -150,12 +150,12 @@ class _Metric {
       this.verticalGrid,
       this.gridSize,
       this.safeRect,
-      this.bodyRect,
-      this.bodyNoPaddingRect,
+      this.coreRect,
+      this.coreNoPaddingRect,
       this.headerUnsafeRect,
       this.footerUnsafeRect,
-      this.bodyCardGrid,
-      this.bodyCardSize,
+      this.coreCardGrid,
+      this.coreCardSize,
       );
 
   final int square;
@@ -165,10 +165,10 @@ class _Metric {
   final int verticalGrid;
   final double gridSize;
   final Rect safeRect;
-  final Rect bodyRect;
-  final Rect bodyNoPaddingRect;
+  final Rect coreRect;
+  final Rect coreNoPaddingRect;
   final Rect headerUnsafeRect;
   final Rect footerUnsafeRect;
-  final int bodyCardGrid;
-  final double bodyCardSize;
+  final int coreCardGrid;
+  final double coreCardSize;
 }

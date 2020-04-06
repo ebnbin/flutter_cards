@@ -26,12 +26,12 @@ class _Game implements Game {
       for (int columnIndex = 0; columnIndex < square; columnIndex++) {
         _Card card = _Card(
           game: this,
-          grid: _CardGrid.body(rowIndex: rowIndex, columnIndex: columnIndex, rowSpan: 1, columnSpan: 1),
+          grid: _CardGrid.core(rowIndex: rowIndex, columnIndex: columnIndex, rowSpan: 1, columnSpan: 1),
           property: _CardProperty(),
           isCoreCard: true,
           sprite: _Sprite(isPlayer: rowIndex == 0 && columnIndex == 0),
         );
-        bodyCards.add(card);
+        coreCards.add(card);
       }
     }
     headerFooterCards.add(_Card(
@@ -55,11 +55,11 @@ class _Game implements Game {
   //*******************************************************************************************************************
 
   /// 存储所有卡片.
-  List<_Card> bodyCards = <_Card>[];
+  List<_Card> coreCards = <_Card>[];
   List<_Card> headerFooterCards = <_Card>[];
 
   _Card get playerCard {
-    return bodyCards.firstWhere((element) {
+    return coreCards.firstWhere((element) {
       return element.sprite.isPlayer;
     });
   }
@@ -86,7 +86,7 @@ class _Game implements Game {
     assert(card != null);
     return () {
       if (card.isCoreCard) {
-//        _LTRB ltrb = playerCard.grid.bodyRelative(card);
+//        _LTRB ltrb = playerCard.grid.coreRelative(card);
 //        switch (ltrb) {
 //          case _LTRB.left:
 //            break;
@@ -110,7 +110,7 @@ class _Game implements Game {
 //        _Card newCard = _Card(
 //          game: this,
 //          /*opacity: 0.0*/
-//          grid: _CardGrid.body(rowIndex: rightCard.grid.bodyRowIndex, columnIndex: rightCard.grid.bodyColumnIndex, rowSpan: 1, columnSpan: 1),
+//          grid: _CardGrid.core(rowIndex: rightCard.grid.coreRowIndex, columnIndex: rightCard.grid.coreColumnIndex, rowSpan: 1, columnSpan: 1),
 //          property: _CardProperty(),
 //          isCoreCard: true,
 //          sprite: _Sprite(),
@@ -142,7 +142,7 @@ class _Game implements Game {
 //              card.state = _CardState.acting;
 //            },
 //            endProperty: (card, value) {
-//              card.grid.bodyColumnIndex = card.grid.bodyColumnIndex - 1;
+//              card.grid.coreColumnIndex = card.grid.coreColumnIndex - 1;
 //              card.property.translateX = 0.0;
 //              card.property.translateY = 0.0;
 //              card.state = _CardState.idle;
@@ -155,7 +155,7 @@ class _Game implements Game {
 //            beginDelay: 500,
 //            angleY: _InvisibleAngle.counterClockwise90,
 //            beginProperty: (card, value) {
-//              bodyCards[oldIndex] = card;
+//              coreCards[oldIndex] = card;
 //              card.state = _CardState.acting;
 //            },
 //            endProperty: (card, value) {
@@ -218,7 +218,7 @@ class _GameData implements GameData {
   }
 
   @override
-  BuiltList<Card> get cards => (game.bodyCards + game.headerFooterCards).build();
+  BuiltList<Card> get cards => (game.coreCards + game.headerFooterCards).build();
 
   @override
   CustomPainter get foregroundPainter => game.gridForegroundPainter;

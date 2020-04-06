@@ -165,8 +165,8 @@ class _CardAnimation {
     curve: Curves.easeInOut,
     beginProperty: beginProperty,
     animatingProperty: (card, value) {
-      card.property.translateX = _PropertyCalc.ab(0.0, _Metric.get().bodyCardSize * (x ?? 0.0)).calc(value);
-      card.property.translateY = _PropertyCalc.ab(0.0, _Metric.get().bodyCardSize * (y ?? 0.0)).calc(value);
+      card.property.translateX = _PropertyCalc.ab(0.0, _Metric.get().coreCardSize * (x ?? 0.0)).calc(value);
+      card.property.translateY = _PropertyCalc.ab(0.0, _Metric.get().coreCardSize * (y ?? 0.0)).calc(value);
     },
     endProperty: endProperty,
   );
