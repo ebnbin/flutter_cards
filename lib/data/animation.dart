@@ -123,8 +123,8 @@ class _Animation {
       }
     },
     onHalf: (card) {
-      card.grid.coreRowIndex += ltrb.y;
-      card.grid.coreColumnIndex += ltrb.x;
+      card.coreRowIndex += ltrb.y;
+      card.coreColumnIndex += ltrb.x;
     },
   );
 
