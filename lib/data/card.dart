@@ -33,7 +33,7 @@ class _Card implements Card {
 
   //*******************************************************************************************************************
 
-  int get index => game.cards.indexOf(this);
+  int get index => game.bodyCards.indexOf(this);
 
   //*******************************************************************************************************************
 
@@ -57,7 +57,7 @@ class _Card implements Card {
   //*******************************************************************************************************************
 
   _Card get leftCard {
-    return game.cards.firstWhere((element) {
+    return game.bodyCards.firstWhere((element) {
       if (!element.isCoreCard) {
         return false;
       }
@@ -70,7 +70,7 @@ class _Card implements Card {
   }
 
   _Card get rightCard {
-    return game.cards.firstWhere((element) {
+    return game.bodyCards.firstWhere((element) {
       if (!element.isCoreCard) {
         return false;
       }
@@ -83,7 +83,7 @@ class _Card implements Card {
   }
 
   _Card get topCard {
-    return game.cards.firstWhere((element) {
+    return game.bodyCards.firstWhere((element) {
       if (!element.isCoreCard) {
         return false;
       }
@@ -96,7 +96,7 @@ class _Card implements Card {
   }
 
   _Card get bottomCard {
-    return game.cards.firstWhere((element) {
+    return game.bodyCards.firstWhere((element) {
       if (!element.isCoreCard) {
         return false;
       }
