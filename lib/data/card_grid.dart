@@ -390,4 +390,34 @@ extension _LTRBExtension on _LTRB {
     int start = list.indexOf(this);
     return list.sublist(start, start + _LTRB.values.length).toBuiltList();
   }
+
+  int get x {
+    switch (this) {
+      case _LTRB.left:
+        return -1;
+      case _LTRB.top:
+        return 0;
+      case _LTRB.right:
+        return 1;
+      case _LTRB.bottom:
+        return 0;
+      default:
+        throw Exception();
+    }
+  }
+
+  int get y {
+    switch (this) {
+      case _LTRB.left:
+        return 0;
+      case _LTRB.top:
+        return -1;
+      case _LTRB.right:
+        return 0;
+      case _LTRB.bottom:
+        return 1;
+      default:
+        throw Exception();
+    }
+  }
 }

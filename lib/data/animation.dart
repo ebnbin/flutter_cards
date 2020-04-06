@@ -2,17 +2,17 @@ part of '../data.dart';
 
 //*********************************************************************************************************************
 
-/// 接收 [Animation.value] 计算当前属性值.
-class _PropertyCalc {
-  const _PropertyCalc(this.calc) : assert(calc != null);
+/// 根据 [Animation.value] 计算当前值.
+class _AnimationCalc {
+  _AnimationCalc(this.calc);
 
   /// a -> b.
-  _PropertyCalc.ab(double a, double b) : this((value) {
+  _AnimationCalc.ab(double a, double b) : this((value) {
     return a + (b - a) * value;
   });
 
   /// a -> b -> a.
-  _PropertyCalc.aba(double a, double b) : this((value) {
+  _AnimationCalc.aba(double a, double b) : this((value) {
     return a + (b - a) * (1.0 - (2.0 * value - 1.0).abs());
   });
 
@@ -21,24 +21,24 @@ class _PropertyCalc {
 
 //*********************************************************************************************************************
 
-/// 可见的 3d 旋转角度. -360, -180, 180, 360.
-enum _VisibleAngle {
+/// 可见的 rotateX, rotateY 旋转角度. -360, -180, 180, 360.
+enum _VisibleRotateXY {
   counterClockwise360,
   counterClockwise180,
   clockwise180,
   clockwise360,
 }
 
-extension _VisibleAngleExtension on _VisibleAngle {
+extension _VisibleRotateXYExtension on _VisibleRotateXY {
   double get value {
     switch (this) {
-      case _VisibleAngle.counterClockwise360:
+      case _VisibleRotateXY.counterClockwise360:
         return -2.0 * pi;
-      case _VisibleAngle.counterClockwise180:
+      case _VisibleRotateXY.counterClockwise180:
         return -pi;
-      case _VisibleAngle.clockwise180:
+      case _VisibleRotateXY.clockwise180:
         return pi;
-      case _VisibleAngle.clockwise360:
+      case _VisibleRotateXY.clockwise360:
         return 2.0 * pi;
       default:
         return 0.0;
@@ -46,24 +46,24 @@ extension _VisibleAngleExtension on _VisibleAngle {
   }
 }
 
-/// 不可见的 3d 旋转角度. -270, -90, 90, 270.
-enum _InvisibleAngle {
+/// 不可见的 rotateX, rotateY 旋转角度. -270, -90, 90, 270.
+enum _InvisibleRotateXY {
   counterClockwise270,
   counterClockwise90,
   clockwise90,
   clockwise270,
 }
 
-extension _InvisibleAngleExtension on _InvisibleAngle {
+extension _InvisibleRotateXYExtension on _InvisibleRotateXY {
   double get value {
     switch (this) {
-      case _InvisibleAngle.counterClockwise270:
+      case _InvisibleRotateXY.counterClockwise270:
         return -1.5 * pi;
-      case _InvisibleAngle.counterClockwise90:
+      case _InvisibleRotateXY.counterClockwise90:
         return -0.5 * pi;
-      case _InvisibleAngle.clockwise90:
+      case _InvisibleRotateXY.clockwise90:
         return 0.5 * pi;
-      case _InvisibleAngle.clockwise270:
+      case _InvisibleRotateXY.clockwise270:
         return 1.5 * pi;
       default:
         return 0.0;
@@ -74,177 +74,121 @@ extension _InvisibleAngleExtension on _InvisibleAngle {
 //*********************************************************************************************************************
 
 /// 卡片动画.
-class _CardAnimation {
-  const _CardAnimation({
-    this.beginDelay,
-    this.endDelay,
-    @required
-    this.duration,
-    this.curve,
-    this.beginProperty,
-    this.animatingProperty,
-    this.endProperty,
-  }) : assert(duration != null && duration >= 0);
+class _Animation {
+  _Animation({
+    this.duration = 0,
+    this.beginDelay = 0,
+    this.endDelay = 0,
+    this.curve = Curves.linear,
+    this.onAnimating,
+    this.onBegin,
+    this.onHalf,
+    this.onEnd,
+  });
 
   /// 用于演示.
-  _CardAnimation.sample() : this(
+  _Animation.sample() : this(
     duration: 1000,
     curve: Curves.easeInOut,
-    animatingProperty: (card, value) {
-      card.property.rotateY = _PropertyCalc.ab(0.0, 2.0 * pi).calc(value);
-      card.property.scaleX = _PropertyCalc.aba(1.0, 2.0).calc(value);
-      card.property.scaleY = _PropertyCalc.aba(1.0, 2.0).calc(value);
-      card.property.elevation = _PropertyCalc.aba(1.0, 4.0).calc(value);
-      card.property.radius = _PropertyCalc.aba(4.0, 16.0).calc(value);
+    onAnimating: (card, value) {
+      card.property.rotateY = _AnimationCalc.ab(0.0, _VisibleRotateXY.clockwise360.value).calc(value);
+      card.property.scaleX = _AnimationCalc.aba(1.0, 2.0).calc(value);
+      card.property.scaleY = _AnimationCalc.aba(1.0, 2.0).calc(value);
+      card.property.elevation = _AnimationCalc.aba(1.0, 4.0).calc(value);
+      card.property.radius = _AnimationCalc.aba(4.0, 16.0).calc(value);
     },
-//    endProperty: (value) {
-//      return _Property.def();
-//    },
+    onEnd: (card) {
+      card.property.rotateY = 0.0;
+    }
   );
 
-  /// 移动.
-  ///
-  /// [x] 水平方向偏移量.
-  /// [y] 垂直方向偏移量.
-  _CardAnimation.move({
-    int beginDelay,
-    int endDelay,
-    int duration = 1000,
-    double x,
-    double y,
-    void Function(_Card card, double value) beginProperty,
-    void Function(_Card card, double value) endProperty,
+  /// Core 卡片移动.
+  _Animation.coreMove({
+    int beginDelay = 0,
+    int endDelay = 0,
+    @required
+    _LTRB ltrb,
   }) : this(
+    duration: 500,
     beginDelay: beginDelay,
     endDelay: endDelay,
-    duration: duration,
     curve: Curves.easeInOut,
-    beginProperty: beginProperty,
-    animatingProperty: (card, value) {
-      card.property.translateX = _PropertyCalc.ab(0.0, x ?? 0.0).calc(value);
-      card.property.translateY = _PropertyCalc.ab(0.0, y ?? 0.0).calc(value);
+    onAnimating: (card, value) {
+      if (value < 0.5) {
+        card.property.translateX = _AnimationCalc.ab(0.0, _Metric.get().coreCardSize * ltrb.x).calc(value);
+        card.property.translateY = _AnimationCalc.ab(0.0, _Metric.get().coreCardSize * ltrb.y).calc(value);
+      } else {
+        card.property.translateX = _AnimationCalc.ab(-_Metric.get().coreCardSize * ltrb.x, 0.0).calc(value);
+        card.property.translateY = _AnimationCalc.ab(-_Metric.get().coreCardSize * ltrb.y, 0.0).calc(value);
+      }
     },
-    endProperty: endProperty,
+    onHalf: (card) {
+      card.grid.coreRowIndex += ltrb.y;
+      card.grid.coreColumnIndex += ltrb.x;
+    },
   );
 
-  /// 移动网格.
-  _CardAnimation.moveGrid({
-    int beginDelay,
-    int endDelay,
-    int duration = 1000,
-    int x,
-    int y,
-    void Function(_Card card, double value) beginProperty,
-    void Function(_Card card, double value) endProperty,
+  /// Core 卡片进入.
+  _Animation.coreEnter({
+    int beginDelay = 0,
+    int endDelay = 0,
   }) : this(
+    duration: 500,
     beginDelay: beginDelay,
     endDelay: endDelay,
-    duration: duration,
-    curve: Curves.easeInOut,
-    beginProperty: beginProperty,
-    animatingProperty: (card, value) {
-      card.property.translateX = _PropertyCalc.ab(0.0, _Metric.get().gridSize * (x ?? 0.0)).calc(value);
-      card.property.translateY = _PropertyCalc.ab(0.0, _Metric.get().gridSize * (y ?? 0.0)).calc(value);
-    },
-    endProperty: endProperty,
-  );
-
-  /// 移动核心卡片.
-  _CardAnimation.moveCoreCard({
-    int beginDelay,
-    int endDelay,
-    int duration = 1000,
-    int x,
-    int y,
-    void Function(_Card card, double value) beginProperty,
-    void Function(_Card card, double value) endProperty,
-  }) : this(
-    beginDelay: beginDelay,
-    endDelay: endDelay,
-    duration: duration,
-    curve: Curves.easeInOut,
-    beginProperty: beginProperty,
-    animatingProperty: (card, value) {
-      card.property.translateX = _PropertyCalc.ab(0.0, _Metric.get().coreCardSize * (x ?? 0.0)).calc(value);
-      card.property.translateY = _PropertyCalc.ab(0.0, _Metric.get().coreCardSize * (y ?? 0.0)).calc(value);
-    },
-    endProperty: endProperty,
-  );
-
-  /// 翻转进入.
-  ///
-  /// [angleX] 水平方向翻转角度.
-  /// [angleY] 垂直方向翻转角度.
-  _CardAnimation.flipIn({
-    int beginDelay,
-    int endDelay,
-    int duration = 1000,
-    _InvisibleAngle angleX,
-    _InvisibleAngle angleY,
-    void Function(_Card card, double value) beginProperty,
-    void Function(_Card card, double value) endProperty,
-  }) : this(
-    beginDelay: beginDelay,
-    endDelay: endDelay,
-    duration: duration,
-    curve: Curves.easeOut,
-    beginProperty: beginProperty,
-    animatingProperty: (card, value) {
-      card.property.rotateX = _PropertyCalc.ab(-angleX.value, 0.0).calc(value);
-      card.property.rotateY = _PropertyCalc.ab(-angleY.value, 0.0).calc(value);
-      card.property.scaleX = _PropertyCalc.ab(0.5, 1.0).calc(value);
-      card.property.scaleY = _PropertyCalc.ab(0.5, 1.0).calc(value);
-      card.property.elevation = _PropertyCalc.ab(0.5, 1.0).calc(value);
-    },
-    endProperty: endProperty,
-  );
-
-  /// 翻转退出.
-  _CardAnimation.flipOut({
-    int beginDelay,
-    int endDelay,
-    int duration = 1000,
-    _InvisibleAngle angleX,
-    _InvisibleAngle angleY,
-    void Function(_Card card, double value) beginProperty,
-    void Function(_Card card, double value) endProperty,
-  }) : this(
-    beginDelay: beginDelay,
-    endDelay: endDelay,
-    duration: duration,
     curve: Curves.easeIn,
-    beginProperty: beginProperty,
-    animatingProperty: (card, value) {
-      card.property.rotateX = _PropertyCalc.ab(0.0, angleX.value).calc(value);
-      card.property.rotateX = _PropertyCalc.ab(0.0, angleX.value).calc(value);
-      card.property.rotateY = _PropertyCalc.ab(0.0, angleY.value).calc(value);
-      card.property.scaleX = _PropertyCalc.ab(1.0, 0.5).calc(value);
-      card.property.scaleY = _PropertyCalc.ab(1.0, 0.5).calc(value);
-      card.property.elevation = _PropertyCalc.ab(1.0, 0.5).calc(value);
+    onAnimating: (card, value) {
+      card.property.rotateY = _AnimationCalc.ab(_InvisibleRotateXY.clockwise90.value, 0.0).calc(value);
+      card.property.scaleX = _AnimationCalc.ab(0.5, 1.0).calc(value);
+      card.property.scaleY = _AnimationCalc.ab(0.5, 1.0).calc(value);
+      card.property.elevation = _AnimationCalc.ab(0.5, 1.0).calc(value);
     },
-    endProperty: endProperty,
   );
 
-  /// 动画开始前延迟.
-  final int beginDelay;
-  /// 动画结束后延迟.
-  final int endDelay;
+  /// Core 卡片退出.
+  _Animation.coreExit({
+    int beginDelay = 0,
+    int endDelay = 0,
+  }) : this(
+    duration: 500,
+    beginDelay: beginDelay,
+    endDelay: endDelay,
+    curve: Curves.easeOut,
+    onAnimating: (card, value) {
+      card.property.rotateY = _AnimationCalc.ab(0.0, _InvisibleRotateXY.counterClockwise90.value).calc(value);
+      card.property.scaleX = _AnimationCalc.ab(1.0, 0.5).calc(value);
+      card.property.scaleY = _AnimationCalc.ab(1.0, 0.5).calc(value);
+      card.property.elevation = _AnimationCalc.ab(1.0, 0.5).calc(value);
+    },
+  );
+
   /// 动画时长.
   final int duration;
+  /// [onBegin] 之前延迟.
+  final int beginDelay;
+  /// [onEnd] 之后延迟.
+  final int endDelay;
   final Curve curve;
-  final void Function(_Card card, double value) beginProperty;
-  /// 动画过程中设置属性.
-  final void Function(_Card card, double value) animatingProperty;
-  /// 动画结束时设置属性.
-  final void Function(_Card card, double value) endProperty;
+  /// 动画过程中回调.
+  final void Function(_Card card, double value) onAnimating;
+  /// 动画开始时回调 (只会回调一次).
+  final void Function(_Card card) onBegin;
+  /// 动画过半时回调 (只会回调一次).
+  final void Function(_Card card) onHalf;
+  /// 动画结束时回调 (只会回调一次).
+  final void Function(_Card card) onEnd;
+
+  /// 动画是否过半.
+  bool _half = false;
 
   /// 开始动画.
+  ///
+  /// [endCallback] 动画结束后, 包括 [endDelay] 延迟后回调.
   void begin(_Card card, {
     VoidCallback endCallback,
   }) {
-    assert(card != null);
     Future.delayed(Duration(
-      milliseconds: max(0, beginDelay ?? 0),
+      milliseconds: beginDelay,
     ), () {
       AnimationController animationController = AnimationController(
         duration: Duration(
@@ -254,7 +198,7 @@ class _CardAnimation {
       );
       CurvedAnimation curvedAnimation = CurvedAnimation(
         parent: animationController,
-        curve: curve ?? Curves.linear,
+        curve: curve,
       );
       curvedAnimation
         ..addStatusListener((status) {
@@ -266,36 +210,34 @@ class _CardAnimation {
             case AnimationStatus.reverse:
               break;
             case AnimationStatus.completed:
-              endProperty?.call(card, curvedAnimation.value);
+              onEnd?.call(card);
               card.game.callback.setState(() {
               });
               animationController.dispose();
               Future.delayed(Duration(
-                milliseconds: max(0, endDelay ?? 0),
+                milliseconds: endDelay,
               ), () {
+                _half = false;
                 endCallback?.call();
               });
               break;
           }
         })
         ..addListener(() {
-          animatingProperty?.call(card, curvedAnimation.value);
+          if (!_half && curvedAnimation.value >= 0.5) {
+            _half = true;
+            onHalf?.call(card);
+//            card.game.callback.setState(() {
+//            });
+          }
+          onAnimating?.call(card, curvedAnimation.value);
           card.game.callback.setState(() {
           });
         });
-      beginProperty?.call(card, curvedAnimation.value);
+      onBegin?.call(card);
       card.game.callback.setState(() {
       });
       animationController.forward();
-    });
-  }
-
-  /// 转化为 [_Action].
-  _Action action(_Card card) {
-    return _Action((action) {
-      begin(card, endCallback: () {
-        action.end();
-      },);
     });
   }
 }

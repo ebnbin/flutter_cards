@@ -165,8 +165,9 @@ class _Game implements Game {
 //        ];
 //        actionQueue.addList(actions0);
 //        actionQueue.addList(actions1);
+        _Animation.coreEnter().begin(card);
       } else {
-        _CardAnimation.sample().begin(card);
+        _Animation.sample().begin(card);
       }
     };
   }

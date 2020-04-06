@@ -24,7 +24,7 @@ class _CardProperty {
 
   /// Matrix4.setEntry(3, 2, value);
   double get matrix4Entry32 {
-    return _Metric.coreNoPaddingGrid / card.grid.maxSpan / 1000.0;
+    return _Metric.coreNoPaddingGrid / card.grid.maxSpan / 800.0;
   }
 
   double translateX;
