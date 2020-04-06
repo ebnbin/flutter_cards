@@ -3,8 +3,8 @@ part of '../data.dart';
 //*********************************************************************************************************************
 
 /// 卡片属性.
-class _Property {
-  _Property({
+class _CardProperty {
+  _CardProperty({
     this.translateX = 0.0,
     this.translateY = 0.0,
     this.rotateX = 0.0,
@@ -16,7 +16,7 @@ class _Property {
     this.radius = 4.0,
     this.opacity = 1.0,
     this.visible = true,
-    this.gestureType = _GestureType.normal,
+    this.gestureType = _CardGestureType.normal,
   });
 
   /// 所属卡片.
@@ -80,17 +80,17 @@ class _Property {
   }
 
   /// 手势类型.
-  _GestureType gestureType;
+  _CardGestureType gestureType;
 
   /// 是否拦截手势.
-  bool get absorbPointer => gestureType == _GestureType.absorb;
+  bool get absorbPointer => gestureType == _CardGestureType.absorb;
 
   /// 是否忽略手势.
-  bool get ignorePointer => gestureType == _GestureType.ignore;
+  bool get ignorePointer => gestureType == _CardGestureType.ignore;
 }
 
-/// 手势类型.
-enum _GestureType {
+/// 卡片手势类型.
+enum _CardGestureType {
   /// 正常接收处理手势.
   normal,
   /// 拦截手势, 自己不处理, 下层 Widget 也无法处理.

@@ -37,9 +37,9 @@ class _Card implements Card {
 
   //*******************************************************************************************************************
 
-  _Grid grid;
+  _CardGrid grid;
 
-  _Property property;
+  _CardProperty property;
 
   Color get color {
     switch (state) {

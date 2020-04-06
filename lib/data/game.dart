@@ -26,8 +26,8 @@ class _Game implements Game {
       for (int columnIndex = 0; columnIndex < square; columnIndex++) {
         _Card card = _Card(
           game: this,
-          grid: _Grid.body(rowIndex: rowIndex, columnIndex: columnIndex, rowSpan: 1, columnSpan: 1),
-          property: _Property(),
+          grid: _CardGrid.body(rowIndex: rowIndex, columnIndex: columnIndex, rowSpan: 1, columnSpan: 1),
+          property: _CardProperty(),
           isCoreCard: true,
         );
         cards.add(card);
@@ -35,16 +35,16 @@ class _Game implements Game {
     }
     cards.add(_Card(
       game: this,
-      grid: _Grid(verticalRowIndex: 6, verticalColumnIndex: 1, verticalRowSpan: 10, verticalColumnSpan: 10,
+      grid: _CardGrid(verticalRowIndex: 6, verticalColumnIndex: 1, verticalRowSpan: 10, verticalColumnSpan: 10,
           horizontalRowIndex: 1, horizontalColumnIndex: 6, horizontalRowSpan: 10, horizontalColumnSpan: 10),
-      property: _Property(),
+      property: _CardProperty(),
       isCoreCard: false,
     ));
     cards.add(_Card(
       game: this,
-      grid: _Grid(verticalRowIndex: 6, verticalColumnIndex: 11, verticalRowSpan: 10, verticalColumnSpan: 15,
+      grid: _CardGrid(verticalRowIndex: 6, verticalColumnIndex: 11, verticalRowSpan: 10, verticalColumnSpan: 15,
           horizontalRowIndex: 11, horizontalColumnIndex: 1, horizontalRowSpan: 10, horizontalColumnSpan: 15),
-      property: _Property(),
+      property: _CardProperty(),
       isCoreCard: false,
     ));
   }
@@ -86,8 +86,8 @@ class _Game implements Game {
         _Card newCard = _Card(
           game: this,
           /*opacity: 0.0*/
-          grid: _Grid.body(rowIndex: rightCard.grid.bodyRowIndex, columnIndex: rightCard.grid.bodyColumnIndex, rowSpan: 1, columnSpan: 1),
-          property: _Property(),
+          grid: _CardGrid.body(rowIndex: rightCard.grid.bodyRowIndex, columnIndex: rightCard.grid.bodyColumnIndex, rowSpan: 1, columnSpan: 1),
+          property: _CardProperty(),
           isCoreCard: true,
         );
         int oldIndex = card.index;

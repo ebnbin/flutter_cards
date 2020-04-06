@@ -3,8 +3,8 @@ part of '../data.dart';
 //*********************************************************************************************************************
 
 /// 卡片网格.
-class _Grid {
-  _Grid({
+class _CardGrid {
+  _CardGrid({
     this.verticalRowIndex = 0,
     this.verticalColumnIndex = 0,
     this.verticalRowSpan = 1,
@@ -16,7 +16,7 @@ class _Grid {
   });
 
   /// Body 卡片网格.
-  _Grid.body({
+  _CardGrid.body({
     int rowIndex = 0,
     int columnIndex = 0,
     int rowSpan = 1,
@@ -97,6 +97,9 @@ class _Grid {
     rowSpan * _Metric.get().gridSize,
   );
 
+  //*******************************************************************************************************************
+  // Body 相关.
+
   /// Body 卡片行.
   int get bodyRowIndex {
     return (rowIndex - _Metric.paddingGrid - (_Metric.get().isVertical ? _Metric.headerFooterGrid : 0)) ~/
@@ -133,6 +136,8 @@ class _Grid {
   set bodyColumnSpan(int bodyColumnSpan) {
     columnSpan = _Metric.get().bodyCardGrid * bodyColumnSpan;
   }
+
+  //*******************************************************************************************************************
 
   @override
   String toString() {
