@@ -26,7 +26,7 @@ class _Card implements Card {
 
   final _CardProperty property;
 
-  final _Sprite sprite;
+  final _CardSprite sprite;
 
   @override
   final _CardData data;

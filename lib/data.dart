@@ -9,10 +9,10 @@ part 'data/animation.dart';
 part 'data/card.dart';
 part 'data/card_grid.dart';
 part 'data/card_property.dart';
+part 'data/card_sprite.dart';
 part 'data/game.dart';
 part 'data/metric.dart';
 part 'data/painter.dart';
-part 'data/sprite.dart';
 
 //*********************************************************************************************************************
 

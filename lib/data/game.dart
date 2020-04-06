@@ -28,7 +28,7 @@ class _Game implements Game {
           game: this,
           grid: _CardGrid.core(rowIndex: rowIndex, columnIndex: columnIndex, rowSpan: 1, columnSpan: 1),
           property: _CardProperty(),
-          sprite: _Sprite(isPlayer: rowIndex == 0 && columnIndex == 0),
+          sprite: _CardSprite(isPlayer: rowIndex == 0 && columnIndex == 0),
         );
         coreCards.add(card);
       }
@@ -39,7 +39,7 @@ class _Game implements Game {
           horizontalRowIndex: 1, horizontalColumnIndex: 6, horizontalRowSpan: 10, horizontalColumnSpan: 10,
           type: _CardType.headerFooter,),
       property: _CardProperty(),
-      sprite: _Sprite(),
+      sprite: _CardSprite(),
     ));
     headerFooterCards.add(_Card(
       game: this,
@@ -47,7 +47,7 @@ class _Game implements Game {
           horizontalRowIndex: 11, horizontalColumnIndex: 1, horizontalRowSpan: 10, horizontalColumnSpan: 15,
           type: _CardType.headerFooter,),
       property: _CardProperty(),
-      sprite: _Sprite(),
+      sprite: _CardSprite(),
     ));
   }
 
