@@ -322,8 +322,6 @@ class _SpriteCard extends _CoreCard {
     double elevation = 1.0,
     double radius = 4.0,
     double opacity = 1.0,
-    bool visible = true,
-    bool touchable = true,
     _CardGestureType gestureType = _CardGestureType.normal,
   }) : super(game,
     rowIndex: rowIndex,
@@ -340,8 +338,10 @@ class _SpriteCard extends _CoreCard {
     elevation: elevation,
     radius: radius,
     opacity: opacity,
-    visible: visible,
-    touchable: touchable,
+    // 精灵卡片初始化时是不可见的, 通过动画出现.
+    visible: false,
+    // 精灵卡片必须是可交互的.
+    touchable: true,
     gestureType: gestureType,
   );
 
@@ -551,8 +551,6 @@ class _PlayerCard extends _SpriteCard {
   _PlayerCard(_Game game, {
     int rowIndex = 0,
     int columnIndex = 0,
-    int rowSpan = 1,
-    int columnSpan = 1,
     double translateX = 0.0,
     double translateY = 0.0,
     double rotateX = 0.0,
@@ -563,14 +561,12 @@ class _PlayerCard extends _SpriteCard {
     double elevation = 1.0,
     double radius = 4.0,
     double opacity = 1.0,
-    bool visible = true,
-    bool touchable = true,
     _CardGestureType gestureType = _CardGestureType.normal,
   }) : super(game,
     rowIndex: rowIndex,
     columnIndex: columnIndex,
-    rowSpan: rowSpan,
-    columnSpan: columnSpan,
+    rowSpan: 1,
+    columnSpan: 1,
     translateX: translateX,
     translateY: translateY,
     rotateX: rotateX,
@@ -581,10 +577,25 @@ class _PlayerCard extends _SpriteCard {
     elevation: elevation,
     radius: radius,
     opacity: opacity,
-    visible: visible,
-    touchable: touchable,
     gestureType: gestureType,
   );
+
+  /// 创建一个随机位置的玩家卡片.
+  static _PlayerCard random(_Game game) {
+    int rowIndex;
+    int columnIndex;
+    if (_Metric.get().square > 2) {
+      rowIndex = Random().nextInt(_Metric.get().square - 2) + 1;
+      columnIndex = Random().nextInt(_Metric.get().square - 2) + 1;
+    } else {
+      rowIndex = Random().nextInt(_Metric.get().square);
+      columnIndex = Random().nextInt(_Metric.get().square);
+    }
+    return _PlayerCard(game,
+      rowIndex: rowIndex,
+      columnIndex: columnIndex,
+    );
+  }
 
   @override
   String toString() {
@@ -676,6 +687,8 @@ extension _LTRBExtension on _LTRB {
 enum _CardType {
   core,
   headerFooter,
+  fun0,
+  fun1
 }
 
 //*********************************************************************************************************************

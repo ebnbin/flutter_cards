@@ -22,21 +22,7 @@ class _Game implements Game {
   //*******************************************************************************************************************
 
   void initCards() {
-    for (int rowIndex = 0; rowIndex < square; rowIndex++) {
-      for (int columnIndex = 0; columnIndex < square; columnIndex++) {
-        if (rowIndex == 1 && columnIndex == 1) {
-          spriteCards.add(_PlayerCard(this,
-            rowIndex: rowIndex,
-            columnIndex: columnIndex,
-          ));
-        } else {
-          spriteCards.add(_SpriteCard(this,
-            rowIndex: rowIndex,
-            columnIndex: columnIndex,
-          ));
-        }
-      }
-    }
+    _addFunCards();
     cards.add(_Card(this,
       verticalRowGridIndex: 6,
       verticalColumnGridIndex: 1,
@@ -59,6 +45,61 @@ class _Game implements Game {
       horizontalColumnGridSpan: 15,
       type: _CardType.headerFooter,
     ));
+  }
+
+  void _addFunCards() {
+    cards.add(_Card(this,
+      type: _CardType.fun0,
+      verticalRowGridIndex: 80,
+      verticalColumnGridIndex: 1,
+      verticalRowGridSpan: 10,
+      verticalColumnGridSpan: 10,
+      horizontalRowGridIndex: 1,
+      horizontalColumnGridIndex: 80,
+      horizontalRowGridSpan: 10,
+      horizontalColumnGridSpan: 10,
+    ));
+    cards.add(_Card(this,
+      type: _CardType.fun1,
+      verticalRowGridIndex: 80,
+      verticalColumnGridIndex: 11,
+      verticalRowGridSpan: 10,
+      verticalColumnGridSpan: 10,
+      horizontalRowGridIndex: 11,
+      horizontalColumnGridIndex: 80,
+      horizontalRowGridSpan: 10,
+      horizontalColumnGridSpan: 10,
+    ));
+  }
+
+  void _addSpriteCards() {
+    _PlayerCard playerCard = _PlayerCard.random(this);
+    spriteCards.add(playerCard);
+    for (int rowIndex = 0; rowIndex < square; rowIndex++) {
+      for (int columnIndex = 0; columnIndex < square; columnIndex++) {
+        if (rowIndex == playerCard.rowIndex && columnIndex == playerCard.columnIndex) {
+          continue;
+        }
+        spriteCards.add(_SpriteCard(this,
+          rowIndex: rowIndex,
+          columnIndex: columnIndex,
+        ));
+      }
+    }
+
+    spriteCards.forEach((spriteCard) {
+      _Animation.spriteFirstEnter(spriteCard).begin();
+    });
+  }
+  
+  void _removeSpriteCards() {
+    spriteCards.toBuiltList().forEach((spriteCard) {
+      _Animation.spriteLastExit(spriteCard,
+        endCallback: () {
+          spriteCards.remove(spriteCard);
+        },
+      ).begin();
+    });
   }
 
   //*******************************************************************************************************************
@@ -165,9 +206,15 @@ class _Game implements Game {
 //        ];
 //        actionQueue.addList(actions0);
 //        actionQueue.addList(actions1);
-        _Animation.coreEnter(card).begin();
-      } else {
         _Animation.sample(card).begin();
+      } else {
+        if (card.type == _CardType.fun0) {
+          _addSpriteCards();
+        } else if (card.type == _CardType.fun1) {
+          _removeSpriteCards();
+        } else {
+          _Animation.sample(card).begin();
+        }
       }
     };
   }
@@ -179,13 +226,13 @@ class _Game implements Game {
 
   //*******************************************************************************************************************
 
-  bool firstBuild = true;
+  bool _firstBuild = true;
 
   void build() {
     _Metric.build(this);
 
-    if (firstBuild) {
-      firstBuild = false;
+    if (_firstBuild) {
+      _firstBuild = false;
       initCards();
       gridPainter = _GridPainter();
       gridForegroundPainter = _GridForegroundPainter();
