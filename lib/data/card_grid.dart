@@ -318,6 +318,23 @@ class _CardGrid {
     return <BuiltList<_Card>>[].toBuiltList();
   }
 
+  /// 返回 [card] 在当前卡片的相对位置. 如果不在左上右下则返回 null.
+  _LTRB bodyRelative(_Card card) {
+    if (bodyLeft.contains(card)) {
+      return _LTRB.left;
+    }
+    if (bodyTop.contains(card)) {
+      return _LTRB.top;
+    }
+    if (bodyRight.contains(card)) {
+      return _LTRB.right;
+    }
+    if (bodyBottom.contains(card)) {
+      return _LTRB.bottom;
+    }
+    return null;
+  }
+
   //*******************************************************************************************************************
 
   @override

@@ -16,10 +16,12 @@ class _Card implements Card {
     this.isCoreCard,
 //    this.margin = 4.0,
     this.state = _CardState.idle,
+    @required
+    this.sprite,
   }) : assert(game != null),
         assert(grid != null) {
     data = _CardData(this);
-    sprite = _Sprite(card: this);
+    sprite.card = this;
 
     grid.card = this;
     property.card = this;
@@ -42,6 +44,9 @@ class _Card implements Card {
   _CardProperty property;
 
   Color get color {
+    if (sprite.isPlayer) {
+      return Colors.blueGrey;
+    }
     switch (state) {
       case _CardState.idle:
         return Colors.white;
@@ -52,60 +57,6 @@ class _Card implements Card {
       default:
         return Colors.white;
     }
-  }
-
-  //*******************************************************************************************************************
-
-  _Card get leftCard {
-    return game.bodyCards.firstWhere((element) {
-      if (!element.isCoreCard) {
-        return false;
-      }
-      int r = grid.bodyRowIndex;
-      int c = grid.bodyColumnIndex;
-      int r2 = element.grid.bodyRowIndex;
-      int c2 = element.grid.bodyColumnIndex;
-      return r == r2 && c - 1 == c2;
-    }, orElse: () => null);
-  }
-
-  _Card get rightCard {
-    return game.bodyCards.firstWhere((element) {
-      if (!element.isCoreCard) {
-        return false;
-      }
-      int r = grid.bodyRowIndex;
-      int c = grid.bodyColumnIndex;
-      int r2 = element.grid.bodyRowIndex;
-      int c2 = element.grid.bodyColumnIndex;
-      return r == r2 && c + 1 == c2;
-    }, orElse: () => null);
-  }
-
-  _Card get topCard {
-    return game.bodyCards.firstWhere((element) {
-      if (!element.isCoreCard) {
-        return false;
-      }
-      int r = grid.bodyRowIndex;
-      int c = grid.bodyColumnIndex;
-      int r2 = element.grid.bodyRowIndex;
-      int c2 = element.grid.bodyColumnIndex;
-      return r - 1 == r2 && c == c2;
-    }, orElse: () => null);
-  }
-
-  _Card get bottomCard {
-    return game.bodyCards.firstWhere((element) {
-      if (!element.isCoreCard) {
-        return false;
-      }
-      int r = grid.bodyRowIndex;
-      int c = grid.bodyColumnIndex;
-      int r2 = element.grid.bodyRowIndex;
-      int c2 = element.grid.bodyColumnIndex;
-      return r + 1 == r2 && c == c2;
-    }, orElse: () => null);
   }
 
   //*******************************************************************************************************************

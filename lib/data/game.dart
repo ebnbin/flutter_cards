@@ -29,6 +29,7 @@ class _Game implements Game {
           grid: _CardGrid.body(rowIndex: rowIndex, columnIndex: columnIndex, rowSpan: 1, columnSpan: 1),
           property: _CardProperty(),
           isCoreCard: true,
+          sprite: _Sprite(isPlayer: rowIndex == 0 && columnIndex == 0),
         );
         bodyCards.add(card);
       }
@@ -39,6 +40,7 @@ class _Game implements Game {
           horizontalRowIndex: 1, horizontalColumnIndex: 6, horizontalRowSpan: 10, horizontalColumnSpan: 10),
       property: _CardProperty(),
       isCoreCard: false,
+      sprite: _Sprite(),
     ));
     headerFooterCards.add(_Card(
       game: this,
@@ -46,6 +48,7 @@ class _Game implements Game {
           horizontalRowIndex: 11, horizontalColumnIndex: 1, horizontalRowSpan: 10, horizontalColumnSpan: 15),
       property: _CardProperty(),
       isCoreCard: false,
+      sprite: _Sprite(),
     ));
   }
 
@@ -54,6 +57,12 @@ class _Game implements Game {
   /// 存储所有卡片.
   List<_Card> bodyCards = <_Card>[];
   List<_Card> headerFooterCards = <_Card>[];
+
+  _Card get playerCard {
+    return bodyCards.firstWhere((element) {
+      return element.sprite.isPlayer;
+    });
+  }
 
   //*******************************************************************************************************************
 
@@ -77,6 +86,20 @@ class _Game implements Game {
     assert(card != null);
     return () {
       if (card.isCoreCard) {
+//        _LTRB ltrb = playerCard.grid.bodyRelative(card);
+//        switch (ltrb) {
+//          case _LTRB.left:
+//            break;
+//          case _LTRB.top:
+//            break;
+//          case _LTRB.right:
+//            break;
+//          case _LTRB.bottom:
+//            break;
+//          default:
+//            break;
+//        }
+//
 //        if (card.state != _CardState.idle || !actionQueue.canAdd()) {
 //          return;
 //        }
@@ -90,6 +113,7 @@ class _Game implements Game {
 //          grid: _CardGrid.body(rowIndex: rightCard.grid.bodyRowIndex, columnIndex: rightCard.grid.bodyColumnIndex, rowSpan: 1, columnSpan: 1),
 //          property: _CardProperty(),
 //          isCoreCard: true,
+//          sprite: _Sprite(),
 //        );
 //        int oldIndex = card.index;
 //
@@ -141,7 +165,6 @@ class _Game implements Game {
 //        ];
 //        actionQueue.addList(actions0);
 //        actionQueue.addList(actions1);
-        print(card.grid.bodyLTRBAllFallback(_LTRB.right));
       } else {
         _CardAnimation.sample().begin(card);
       }

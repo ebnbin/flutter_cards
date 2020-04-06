@@ -4,13 +4,14 @@ part of '../data.dart';
 
 class _Sprite implements Sprite {
   _Sprite({
-    @required
-    this.card,
+    this.isPlayer = false,
   }) {
     data = _SpriteData(this);
   }
 
-  final _Card card;
+  _Card card;
+
+  final bool isPlayer;
 
   @override
   SpriteData data;
