@@ -582,18 +582,11 @@ class _PlayerCard extends _SpriteCard {
 
   /// 创建一个随机位置的玩家卡片.
   static _PlayerCard random(_Game game) {
-    int rowIndex;
-    int columnIndex;
-    if (_Metric.get().square > 2) {
-      rowIndex = Random().nextInt(_Metric.get().square - 2) + 1;
-      columnIndex = Random().nextInt(_Metric.get().square - 2) + 1;
-    } else {
-      rowIndex = Random().nextInt(_Metric.get().square);
-      columnIndex = Random().nextInt(_Metric.get().square);
-    }
+    int from = _Metric.get().square > 2 ? 1 : 0;
+    int to = _Metric.get().square > 2 ? (_Metric.get().square - 2) : (_Metric.get().square - 1);
     return _PlayerCard(game,
-      rowIndex: rowIndex,
-      columnIndex: columnIndex,
+      rowIndex: _random.nextIntFromTo(from, to),
+      columnIndex: _random.nextIntFromTo(from, to),
     );
   }
 
@@ -686,9 +679,9 @@ extension _LTRBExtension on _LTRB {
 /// 卡片类型.
 enum _CardType {
   core,
-  headerFooter,
+  sample,
   fun0,
-  fun1
+  fun1,
 }
 
 //*********************************************************************************************************************

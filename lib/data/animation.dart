@@ -160,28 +160,6 @@ class _Animation<T extends _Card> {
     );
   }
 
-  /// 精灵卡片第一次进入.
-  static _Animation<_SpriteCard> spriteFirstEnter(_SpriteCard card) {
-    return _Animation<_SpriteCard>(card,
-      duration: Random().nextInt(500) + 500,
-      beginDelay: Random().nextInt(500),
-      curve: Curves.easeOut,
-      onAnimating: (card, value) {
-        card.rotateY = _AnimationCalc.ab(_InvisibleRotateXY.clockwise270.value, 0.0).calc(value);
-        card.scaleX = _AnimationCalc.ab(0.5, 1.0).calc(value);
-        card.scaleY = _AnimationCalc.ab(0.5, 1.0).calc(value);
-        card.elevation = _AnimationCalc.ab(0.5, 1.0).calc(value);
-      },
-      onBegin: (card) {
-        card.visible = true;
-        card.rotateY = _InvisibleRotateXY.clockwise270.value;
-        card.scaleX = 0.5;
-        card.scaleY = 0.5;
-        card.elevation = 0.5;
-      },
-    );
-  }
-
   /// 精灵卡片退出.
   static _Animation<_SpriteCard> spriteExit(_SpriteCard card, {
     int duration = 500,
@@ -209,23 +187,53 @@ class _Animation<T extends _Card> {
     );
   }
 
+  /// 精灵卡片第一次进入.
+  static _Animation<_SpriteCard> spriteFirstEnter(_SpriteCard card) {
+    double rotateY = _random.nextListItem(<double>[
+      _InvisibleRotateXY.clockwise90.value,
+      _InvisibleRotateXY.clockwise270.value,
+    ]);
+    return _Animation<_SpriteCard>(card,
+      duration: _random.nextIntFromTo(500, 1000),
+      beginDelay: _random.nextIntFromTo(0, 500),
+      curve: Curves.easeOut,
+      onAnimating: (card, value) {
+        card.rotateY = _AnimationCalc.ab(rotateY, 0.0).calc(value);
+        card.scaleX = _AnimationCalc.ab(0.5, 1.0).calc(value);
+        card.scaleY = _AnimationCalc.ab(0.5, 1.0).calc(value);
+        card.elevation = _AnimationCalc.ab(0.5, 1.0).calc(value);
+      },
+      onBegin: (card) {
+        card.visible = true;
+        card.rotateY = rotateY;
+        card.scaleX = 0.5;
+        card.scaleY = 0.5;
+        card.elevation = 0.5;
+      },
+    );
+  }
+
   /// 精灵卡片最后一次退出.
   static _Animation<_SpriteCard> spriteLastExit(_SpriteCard card, {
     VoidCallback endCallback,
   }) {
+    double rotateY = _random.nextListItem(<double>[
+      _InvisibleRotateXY.counterClockwise90.value,
+      _InvisibleRotateXY.counterClockwise270.value,
+    ]);
     return _Animation<_SpriteCard>(card,
-      duration: Random().nextInt(500) + 500,
-      beginDelay: Random().nextInt(500),
+      duration: _random.nextIntFromTo(500, 1000),
+      beginDelay: _random.nextIntFromTo(0, 500),
       curve: Curves.easeIn,
       onAnimating: (card, value) {
-        card.rotateY = _AnimationCalc.ab(0.0, _InvisibleRotateXY.counterClockwise270.value).calc(value);
+        card.rotateY = _AnimationCalc.ab(0.0, rotateY).calc(value);
         card.scaleX = _AnimationCalc.ab(1.0, 0.5).calc(value);
         card.scaleY = _AnimationCalc.ab(1.0, 0.5).calc(value);
         card.elevation = _AnimationCalc.ab(1.0, 0.5).calc(value);
       },
       onEnd: (card) {
         card.visible = false;
-        card.rotateY = _InvisibleRotateXY.counterClockwise270.value;
+        card.rotateY = rotateY;
         card.scaleX = 0.5;
         card.scaleY = 0.5;
         card.elevation = 0.5;

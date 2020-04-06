@@ -10,6 +10,7 @@ part 'data/card.dart';
 part 'data/game.dart';
 part 'data/metric.dart';
 part 'data/painter.dart';
+part 'data/random.dart';
 
 //*********************************************************************************************************************
 

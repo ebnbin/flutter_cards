@@ -17,37 +17,22 @@ class _Game implements Game {
   //*******************************************************************************************************************
 
   /// 行列数. 不包括 header footer.
-  int square = 4;
+  int square = 6;
 
   //*******************************************************************************************************************
 
   void initCards() {
-    _addFunCards();
     cards.add(_Card(this,
-      verticalRowGridIndex: 6,
+      type: _CardType.sample,
+      verticalRowGridIndex: 1,
       verticalColumnGridIndex: 1,
       verticalRowGridSpan: 10,
-      verticalColumnGridSpan: 10,
-      horizontalRowGridIndex: 1,
-      horizontalColumnGridIndex: 6,
-      horizontalRowGridSpan: 10,
-      horizontalColumnGridSpan: 10,
-      type: _CardType.headerFooter,
-    ));
-    cards.add(_Card(this,
-      verticalRowGridIndex: 6,
-      verticalColumnGridIndex: 11,
-      verticalRowGridSpan: 10,
       verticalColumnGridSpan: 15,
-      horizontalRowGridIndex: 11,
+      horizontalRowGridIndex: 1,
       horizontalColumnGridIndex: 1,
       horizontalRowGridSpan: 10,
       horizontalColumnGridSpan: 15,
-      type: _CardType.headerFooter,
     ));
-  }
-
-  void _addFunCards() {
     cards.add(_Card(this,
       type: _CardType.fun0,
       verticalRowGridIndex: 80,
@@ -208,12 +193,18 @@ class _Game implements Game {
 //        actionQueue.addList(actions1);
         _Animation.sample(card).begin();
       } else {
-        if (card.type == _CardType.fun0) {
-          _addSpriteCards();
-        } else if (card.type == _CardType.fun1) {
-          _removeSpriteCards();
-        } else {
-          _Animation.sample(card).begin();
+        switch (card.type) {
+          case _CardType.sample:
+            _Animation.sample(card).begin();
+            break;
+          case _CardType.fun0:
+            _addSpriteCards();
+            break;
+          case _CardType.fun1:
+            _removeSpriteCards();
+            break;
+          default:
+            break;
         }
       }
     };
