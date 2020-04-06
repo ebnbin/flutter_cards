@@ -28,7 +28,6 @@ class _Game implements Game {
           game: this,
           rowIndex: rowIndex,
           columnIndex: columnIndex,
-          property: _CardProperty(),
           sprite: _CardSprite(isPlayer: rowIndex == 0 && columnIndex == 0),
         ));
       }
@@ -44,7 +43,6 @@ class _Game implements Game {
       horizontalRowGridSpan: 10,
       horizontalColumnGridSpan: 10,
       type: _CardType.headerFooter,
-      property: _CardProperty(),
       sprite: _CardSprite(),
     ));
     cards.add(_Card(
@@ -58,7 +56,6 @@ class _Game implements Game {
       horizontalRowGridSpan: 10,
       horizontalColumnGridSpan: 15,
       type: _CardType.headerFooter,
-      property: _CardProperty(),
       sprite: _CardSprite(),
     ));
   }

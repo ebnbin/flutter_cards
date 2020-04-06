@@ -92,14 +92,14 @@ class _Animation<T extends _Card> {
     duration: 1000,
     curve: Curves.easeInOut,
     onAnimating: (card, value) {
-      card.property.rotateY = _AnimationCalc.ab(0.0, _VisibleRotateXY.clockwise360.value).calc(value);
-      card.property.scaleX = _AnimationCalc.aba(1.0, 2.0).calc(value);
-      card.property.scaleY = _AnimationCalc.aba(1.0, 2.0).calc(value);
-      card.property.elevation = _AnimationCalc.aba(1.0, 4.0).calc(value);
-      card.property.radius = _AnimationCalc.aba(4.0, 16.0).calc(value);
+      card.rotateY = _AnimationCalc.ab(0.0, _VisibleRotateXY.clockwise360.value).calc(value);
+      card.scaleX = _AnimationCalc.aba(1.0, 2.0).calc(value);
+      card.scaleY = _AnimationCalc.aba(1.0, 2.0).calc(value);
+      card.elevation = _AnimationCalc.aba(1.0, 4.0).calc(value);
+      card.radius = _AnimationCalc.aba(4.0, 16.0).calc(value);
     },
     onEnd: (card) {
-      card.property.rotateY = 0.0;
+      card.rotateY = 0.0;
     }
   );
 
@@ -117,11 +117,11 @@ class _Animation<T extends _Card> {
       curve: Curves.easeInOut,
       onAnimating: (card, value) {
         if (value < 0.5) {
-          card.property.translateX = _AnimationCalc.ab(0.0, _Metric.get().coreCardSize * ltrb.x).calc(value);
-          card.property.translateY = _AnimationCalc.ab(0.0, _Metric.get().coreCardSize * ltrb.y).calc(value);
+          card.translateX = _AnimationCalc.ab(0.0, _Metric.get().coreCardSize * ltrb.x).calc(value);
+          card.translateY = _AnimationCalc.ab(0.0, _Metric.get().coreCardSize * ltrb.y).calc(value);
         } else {
-          card.property.translateX = _AnimationCalc.ab(-_Metric.get().coreCardSize * ltrb.x, 0.0).calc(value);
-          card.property.translateY = _AnimationCalc.ab(-_Metric.get().coreCardSize * ltrb.y, 0.0).calc(value);
+          card.translateX = _AnimationCalc.ab(-_Metric.get().coreCardSize * ltrb.x, 0.0).calc(value);
+          card.translateY = _AnimationCalc.ab(-_Metric.get().coreCardSize * ltrb.y, 0.0).calc(value);
         }
       },
       onHalf: (card) {
@@ -142,10 +142,10 @@ class _Animation<T extends _Card> {
       endDelay: endDelay,
       curve: Curves.easeIn,
       onAnimating: (card, value) {
-        card.property.rotateY = _AnimationCalc.ab(_InvisibleRotateXY.clockwise90.value, 0.0).calc(value);
-        card.property.scaleX = _AnimationCalc.ab(0.5, 1.0).calc(value);
-        card.property.scaleY = _AnimationCalc.ab(0.5, 1.0).calc(value);
-        card.property.elevation = _AnimationCalc.ab(0.5, 1.0).calc(value);
+        card.rotateY = _AnimationCalc.ab(_InvisibleRotateXY.clockwise90.value, 0.0).calc(value);
+        card.scaleX = _AnimationCalc.ab(0.5, 1.0).calc(value);
+        card.scaleY = _AnimationCalc.ab(0.5, 1.0).calc(value);
+        card.elevation = _AnimationCalc.ab(0.5, 1.0).calc(value);
       },
     );
   }
@@ -161,10 +161,10 @@ class _Animation<T extends _Card> {
       endDelay: endDelay,
       curve: Curves.easeOut,
       onAnimating: (card, value) {
-        card.property.rotateY = _AnimationCalc.ab(0.0, _InvisibleRotateXY.counterClockwise90.value).calc(value);
-        card.property.scaleX = _AnimationCalc.ab(1.0, 0.5).calc(value);
-        card.property.scaleY = _AnimationCalc.ab(1.0, 0.5).calc(value);
-        card.property.elevation = _AnimationCalc.ab(1.0, 0.5).calc(value);
+        card.rotateY = _AnimationCalc.ab(0.0, _InvisibleRotateXY.counterClockwise90.value).calc(value);
+        card.scaleX = _AnimationCalc.ab(1.0, 0.5).calc(value);
+        card.scaleY = _AnimationCalc.ab(1.0, 0.5).calc(value);
+        card.elevation = _AnimationCalc.ab(1.0, 0.5).calc(value);
       },
     );
   }

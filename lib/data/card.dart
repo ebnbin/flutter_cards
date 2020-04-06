@@ -17,12 +17,22 @@ class _Card implements Card {
     this.horizontalColumnGridIndex = 0,
     this.horizontalRowGridSpan = 1,
     this.horizontalColumnGridSpan = 1,
-    @required
-    this.property,
+    this.translateX = 0.0,
+    this.translateY = 0.0,
+    this.rotateX = 0.0,
+    this.rotateY = 0.0,
+    this.rotateZ = 0.0,
+    this.scaleX = 1.0,
+    this.scaleY = 1.0,
+    this.elevation = 1.0,
+    this.radius = 4.0,
+    this.opacity = 1.0,
+    this.visible = true,
+    this.touchable = true,
+    this.gestureType = _CardGestureType.normal,
     @required
     this.sprite,
   }) : data = _CardData() {
-    property.card = this;
     sprite.card = this;
     data.card = this;
   }
@@ -102,7 +112,88 @@ class _Card implements Card {
 
   //*******************************************************************************************************************
 
-  final _CardProperty property;
+  /// Matrix4.setEntry(3, 2, value);
+  double get matrix4Entry32 {
+    return _Metric.coreNoPaddingGrid / maxGridSpan / 800.0;
+  }
+
+  double translateX;
+  double translateY;
+  double rotateX;
+  double rotateY;
+  double rotateZ;
+  double scaleX;
+  double scaleY;
+
+  Matrix4 get transform => Matrix4.identity()
+    ..setEntry(3, 2, matrix4Entry32)
+    ..translate(translateX, translateY)
+    ..rotateX(rotateX)
+    ..rotateY(rotateY)
+    ..rotateZ(rotateZ)
+    ..scale(scaleX, scaleY);
+
+  /// Z 方向高度. 建议范围 0.0 ~ 4.0.
+  double elevation;
+
+  /// 范围 0 ~ 5.
+  int get zIndex {
+    if (elevation < 1.0) {
+      return 0;
+    }
+    if (elevation == 1.0) {
+      return 1;
+    }
+    if (elevation > 4.0) {
+      return 5;
+    }
+    return elevation.ceil();
+  }
+
+  /// 圆角.
+  double radius;
+
+  /// 透明度.
+  double opacity;
+
+  /// 是否可见.
+  bool visible;
+
+  /// 在 [zIndex] 上是否可见.
+  ///
+  /// [zIndex] 范围 0 ~ 5.
+  bool Function(int zIndex) get zIndexVisible => (zIndex) {
+    assert(zIndex >= 0 && zIndex <= 5);
+    return visible && this.zIndex == zIndex;
+  };
+
+  double get margin {
+    return 2.0 / (_Metric.coreNoPaddingGrid / minGridSpan) * _Metric.get().gridSize;
+  }
+
+  /// 是否可点击 (卡片是否可交互). 初始化后不可改变.
+  final bool touchable;
+
+  /// 手势类型.
+  _CardGestureType gestureType;
+
+  /// 是否拦截手势.
+  bool get absorbPointer {
+    if (!touchable) {
+      return false;
+    }
+    return gestureType == _CardGestureType.absorb;
+  }
+
+  /// 是否忽略手势.
+  bool get ignorePointer {
+    if (!touchable) {
+      return true;
+    }
+    return gestureType == _CardGestureType.ignore;
+  }
+
+  //*******************************************************************************************************************
 
   final _CardSprite sprite;
 
@@ -129,12 +220,36 @@ class _CoreCard extends _Card {
     int columnIndex = 0,
     int rowSpan = 1,
     int columnSpan = 1,
-    _CardProperty property,
+    double translateX = 0.0,
+    double translateY = 0.0,
+    double rotateX = 0.0,
+    double rotateY = 0.0,
+    double rotateZ = 0.0,
+    double scaleX = 1.0,
+    double scaleY = 1.0,
+    double elevation = 1.0,
+    double radius = 4.0,
+    double opacity = 1.0,
+    bool visible = true,
+    bool touchable = true,
+    _CardGestureType gestureType = _CardGestureType.normal,
     _CardSprite sprite,
   }) : super(
     game: game,
     type: _CardType.core,
-    property: property,
+    translateX: translateX,
+    translateY: translateY,
+    rotateX: rotateX,
+    rotateY: rotateY,
+    rotateZ: rotateZ,
+    scaleX: scaleX,
+    scaleY: scaleY,
+    elevation: elevation,
+    radius: radius,
+    opacity: opacity,
+    visible: visible,
+    touchable: touchable,
+    gestureType: gestureType,
     sprite: sprite,
   ) {
     this.rowIndex = rowIndex;
@@ -477,23 +592,35 @@ enum _CardType {
 
 //*********************************************************************************************************************
 
+/// 卡片手势类型.
+enum _CardGestureType {
+  /// 正常接收处理手势.
+  normal,
+  /// 拦截手势, 自己不处理, 下层 Widget 也无法处理.
+  absorb,
+  /// 忽略手势, 自己不处理, 下层 Widget 可以处理.
+  ignore,
+}
+
+//*********************************************************************************************************************
+
 class _CardData implements CardData {
   _Card card;
 
   @override
-  bool get absorbPointer => card.property.absorbPointer;
+  bool get absorbPointer => card.absorbPointer;
 
   @override
   Color get color => Colors.white;
 
   @override
-  double get elevation => card.property.elevation;
+  double get elevation => card.elevation;
 
   @override
-  bool get ignorePointer => card.property.ignorePointer;
+  bool get ignorePointer => card.ignorePointer;
 
   @override
-  double get margin => card.property.margin;
+  double get margin => card.margin;
 
   @override
   get onLongPress => card.game.onLongPress(card);
@@ -502,19 +629,19 @@ class _CardData implements CardData {
   get onTap => card.game.onTap(card);
 
   @override
-  double get opacity => card.property.opacity;
+  double get opacity => card.opacity;
 
   @override
-  double get radius => card.property.radius;
+  double get radius => card.radius;
 
   @override
   Rect get rect => card.rect;
 
   @override
-  Matrix4 get transform => card.property.transform;
+  Matrix4 get transform => card.transform;
 
   @override
-  bool Function(int zIndex) get zIndexVisible => card.property.zIndexVisible;
+  bool Function(int zIndex) get zIndexVisible => card.zIndexVisible;
 
   @override
   String toString() {
