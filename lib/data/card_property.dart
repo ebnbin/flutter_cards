@@ -70,6 +70,8 @@ class _CardProperty {
   bool visible;
 
   /// 在 [zIndex] 上是否可见.
+  ///
+  /// [zIndex] 范围 0 ~ 5.
   bool Function(int zIndex) get zIndexVisible => (zIndex) {
     assert(zIndex >= 0 && zIndex <= 5);
     return visible && this.zIndex == zIndex;

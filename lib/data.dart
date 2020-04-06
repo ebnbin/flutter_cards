@@ -65,27 +65,13 @@ abstract class CardData {
   double get radius;
   double get opacity;
 
-  /// 根据 [zIndex] 计算是否可见.
-  ///
-  /// [zIndex] 范围 0 ~ 5.
   bool Function(int zIndex) get zIndexVisible;
 
   double get margin;
 
   Color get color;
 
-  Sprite get sprite;
-
   bool get absorbPointer;
 
   bool get ignorePointer;
-}
-
-//*********************************************************************************************************************
-
-abstract class Sprite {
-  SpriteData data;
-}
-
-abstract class SpriteData {
 }

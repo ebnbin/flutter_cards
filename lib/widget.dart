@@ -49,8 +49,13 @@ class CardWidget extends StatelessWidget {
                   child: GestureDetector(
                     child: Container(
                       color: card.data.color,
-                      child: SpriteWidget(
-                        sprite: card.data.sprite,
+                      child: Center(
+                        child: Text(
+                          '${card.data.toString()}',
+                          style: TextStyle(
+                            fontSize: 10.0,
+                          ),
+                        ),
                       ),
                     ),
                     onTap: card.data.onTap,
@@ -68,26 +73,6 @@ class CardWidget extends StatelessWidget {
   Widget _buildInvisible() {
     return Positioned.fill(
       child: SizedBox.shrink(),
-    );
-  }
-}
-
-class SpriteWidget extends StatelessWidget {
-  SpriteWidget({
-    this.sprite,
-  });
-  
-  final Sprite sprite;
-  
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        '${sprite.data.toString()}',
-        style: TextStyle(
-          fontSize: 10.0,
-        ),
-      ),
     );
   }
 }

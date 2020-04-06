@@ -1,9 +1,8 @@
 part of '../data.dart';
 
 //*********************************************************************************************************************
-// 游戏中所有元素都由卡片组成.
 
-/// 按照网格定位的卡片, 可以根据横竖屏控制不同的行列.
+/// 卡片.
 class _Card implements Card {
   _Card({
     @required
@@ -14,56 +13,30 @@ class _Card implements Card {
     this.property,
     @required
     this.sprite,
-  }) : assert(game != null),
-        assert(grid != null) {
-    data = _CardData(this);
-    sprite.card = this;
-
+  }) : data = _CardData() {
     grid.card = this;
     property.card = this;
+    sprite.card = this;
+    data.card = this;
   }
-
-  //*******************************************************************************************************************
 
   final _Game game;
 
-  _CardGrid grid;
+  final _CardGrid grid;
 
-  _CardProperty property;
+  final _CardProperty property;
 
-  //*******************************************************************************************************************
-
-  GestureTapCallback get onTap => game.onTap(card: this);
-
-  GestureLongPressCallback get onLongPress => game.onLongPress(card: this);
-
-  //*******************************************************************************************************************
+  final _Sprite sprite;
 
   @override
-  String toString() {
-    return '$grid';
-  }
-
-  //*******************************************************************************************************************
-
-  CardData data;
-
-  _Sprite sprite;
+  final _CardData data;
 }
 
 class _CardData implements CardData {
-  _CardData(this.card);
-
-  final _Card card;
+  _Card card;
 
   @override
-  get onLongPress => card.onLongPress;
-
-  @override
-  get onTap => card.onTap;
-
-  @override
-  Rect get rect => card.grid.rect;
+  bool get absorbPointer => card.property.absorbPointer;
 
   @override
   Color get color => Colors.white;
@@ -72,7 +45,16 @@ class _CardData implements CardData {
   double get elevation => card.property.elevation;
 
   @override
+  bool get ignorePointer => card.property.ignorePointer;
+
+  @override
   double get margin => card.property.margin;
+
+  @override
+  get onLongPress => card.game.onLongPress(card);
+
+  @override
+  get onTap => card.game.onTap(card);
 
   @override
   double get opacity => card.property.opacity;
@@ -81,17 +63,16 @@ class _CardData implements CardData {
   double get radius => card.property.radius;
 
   @override
+  Rect get rect => card.grid.rect;
+
+  @override
   Matrix4 get transform => card.property.transform;
 
   @override
   bool Function(int zIndex) get zIndexVisible => card.property.zIndexVisible;
 
   @override
-  Sprite get sprite => card.sprite;
-
-  @override
-  bool get absorbPointer => card.property.absorbPointer;
-
-  @override
-  bool get ignorePointer => card.property.ignorePointer;
+  String toString() {
+    return card.toString();
+  }
 }

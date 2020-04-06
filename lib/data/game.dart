@@ -78,10 +78,7 @@ class _Game implements Game {
   //*******************************************************************************************************************
   // 用户操作.
 
-  Function onTap({
-    @required
-    _Card card,
-  }) {
+  Function onTap(_Card card) {
     assert(card != null);
     return () {
       if (card.grid.type == _CardType.core) {
@@ -171,10 +168,7 @@ class _Game implements Game {
     };
   }
 
-  Function onLongPress({
-    @required
-    _Card card,
-  }) {
+  Function onLongPress(_Card card) {
     assert(card != null);
     return null;
   }
