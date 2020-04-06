@@ -27,30 +27,6 @@ class _Card implements Card {
     data.card = this;
   }
 
-  /// Core 卡片网格.
-  _Card.core({
-    @required
-    this.game,
-    int rowIndex = 0,
-    int columnIndex = 0,
-    int rowSpan = 1,
-    int columnSpan = 1,
-    @required
-    this.property,
-    @required
-    this.sprite,
-  }) : type = _CardType.core,
-        data = _CardData() {
-    coreRowIndex = rowIndex;
-    coreColumnIndex = columnIndex;
-    coreRowSpan = rowSpan;
-    coreColumnSpan = columnSpan;
-
-    property.card = this;
-    sprite.card = this;
-    data.card = this;
-  }
-
   final _Game game;
 
   //*******************************************************************************************************************
@@ -75,17 +51,8 @@ class _Card implements Card {
   /// 横屏跨列.
   int horizontalColumnSpan;
 
-  /// 当前卡片在对应类型卡片列表中的 index.
-  int get index {
-    switch (type) {
-      case _CardType.core:
-        return game.coreCards.indexOf(this);
-      case _CardType.headerFooter:
-        return game.headerFooterCards.indexOf(this);
-      default:
-        throw Exception();
-    }
-  }
+  /// 当前卡片在 [_Game.cards] 中的 index.
+  int get index => game.cards.indexOf(this);
 
   /// 当前屏幕旋转方向的行.
   int get rowIndex {
@@ -137,7 +104,53 @@ class _Card implements Card {
   );
 
   //*******************************************************************************************************************
-  // Core 相关.
+
+  final _CardProperty property;
+
+  final _CardSprite sprite;
+
+  @override
+  final _CardData data;
+
+  //*******************************************************************************************************************
+
+  @override
+  String toString() {
+    String result = '$verticalRowIndex,$verticalColumnIndex,$verticalRowSpan,$verticalColumnSpan\n'
+        '$horizontalRowIndex,$horizontalColumnIndex,$horizontalRowSpan,$horizontalColumnSpan';
+//    if (type == _CardType.core) {
+//      result += '\n$coreRowIndex,$coreColumnIndex,$coreRowSpan,$coreColumnSpan';
+//    }
+    result += '\n$index';
+    return result;
+  }
+}
+
+//*********************************************************************************************************************
+
+/// Core 卡片.
+class _CoreCard extends _Card {
+  _CoreCard({
+    @required
+    _Game game,
+    int rowIndex = 0,
+    int columnIndex = 0,
+    int rowSpan = 1,
+    int columnSpan = 1,
+    _CardProperty property,
+    _CardSprite sprite,
+  }) : super(
+    game: game,
+    type: _CardType.core,
+    property: property,
+    sprite: sprite,
+  ) {
+    coreRowIndex = rowIndex;
+    coreColumnIndex = columnIndex;
+    coreRowSpan = rowSpan;
+    coreColumnSpan = columnSpan;
+  }
+  //*******************************************************************************************************************
 
   /// Core 卡片行.
   int get coreRowIndex {
@@ -187,10 +200,10 @@ class _Card implements Card {
   }
 
   /// 从 [_Game.coreCards] 中返回当前卡片左边的卡片. 当卡片跨多行时可能存在多个符合条件的卡片. 如果没符合条件的卡片则返回空列表.
-  BuiltList<_Card> get coreLeft {
+  BuiltList<_CoreCard> get coreLeft {
     int targetColumn = coreColumnRange.from - 1;
     if (targetColumn < 0) {
-      return <_Card>[].toBuiltList();
+      return <_CoreCard>[].toBuiltList();
     }
     _CardRowColumnRange targetRowRange = coreRowRange;
     return game.coreCards.where((element) {
@@ -199,10 +212,10 @@ class _Card implements Card {
   }
 
   /// 从 [_Game.coreCards] 中返回当前卡片上边的卡片. 当卡片跨多行时可能存在多个符合条件的卡片. 如果没符合条件的卡片则返回空列表.
-  BuiltList<_Card> get coreTop {
+  BuiltList<_CoreCard> get coreTop {
     int targetRow = coreRowRange.from - 1;
     if (targetRow < 0) {
-      return <_Card>[].toBuiltList();
+      return <_CoreCard>[].toBuiltList();
     }
     _CardRowColumnRange targetColumnRange = coreColumnRange;
     return game.coreCards.where((element) {
@@ -211,10 +224,10 @@ class _Card implements Card {
   }
 
   /// 从 [_Game.coreCards] 中返回当前卡片右边的卡片. 当卡片跨多行时可能存在多个符合条件的卡片. 如果没符合条件的卡片则返回空列表.
-  BuiltList<_Card> get coreRight {
+  BuiltList<_CoreCard> get coreRight {
     int targetColumn = coreColumnRange.to + 1;
     if (targetColumn >= _Metric.get().square) {
-      return <_Card>[].toBuiltList();
+      return <_CoreCard>[].toBuiltList();
     }
     _CardRowColumnRange targetRowRange = coreRowRange;
     return game.coreCards.where((element) {
@@ -223,10 +236,10 @@ class _Card implements Card {
   }
 
   /// 从 [_Game.coreCards] 中返回当前卡片下边的卡片. 当卡片跨多行时可能存在多个符合条件的卡片. 如果没符合条件的卡片则返回空列表.
-  BuiltList<_Card> get coreBottom {
+  BuiltList<_CoreCard> get coreBottom {
     int targetRow = coreRowRange.to + 1;
     if (targetRow >= _Metric.get().square) {
-      return <_Card>[].toBuiltList();
+      return <_CoreCard>[].toBuiltList();
     }
     _CardRowColumnRange targetColumnRange = coreColumnRange;
     return game.coreCards.where((element) {
@@ -235,16 +248,16 @@ class _Card implements Card {
   }
 
   /// 从 [_Game.coreCards] 中返回当前卡片左边所有的卡片. 第一维度列表表示从右向左的各列, 第二维度列表表示该列符合条件的多个卡片.
-  BuiltList<BuiltList<_Card>> get coreLeftAll {
+  BuiltList<BuiltList<_CoreCard>> get coreLeftAll {
     _CardRowColumnRange targetColumnRange = _CardRowColumnRange(0, coreColumnRange.from - 1);
     if (!targetColumnRange.isValid()) {
-      return <BuiltList<_Card>>[].toBuiltList();
+      return <BuiltList<_CoreCard>>[].toBuiltList();
     }
     _CardRowColumnRange targetRowRange = coreRowRange;
-    List<_Card> coreCards = <_Card>[]..addAll(game.coreCards);
-    List<BuiltList<_Card>> list2 = <BuiltList<_Card>>[];
+    List<_CoreCard> coreCards = <_CoreCard>[]..addAll(game.coreCards);
+    List<BuiltList<_CoreCard>> list2 = <BuiltList<_CoreCard>>[];
     for (int targetColumn = targetColumnRange.to; targetColumn >= targetColumnRange.from; targetColumn--) {
-      List<_Card> list = <_Card>[];
+      List<_CoreCard> list = <_CoreCard>[];
       coreCards.toBuiltList().forEach((element) {
         if (targetRowRange.contain(element.coreRowRange) && element.coreColumnRange.containValue(targetColumn)) {
           list.add(element);
@@ -257,16 +270,16 @@ class _Card implements Card {
   }
 
   /// 从 [_Game.coreCards] 中返回当前卡片上边所有的卡片. 第一维度列表表示从下向上的各列, 第二维度列表表示该列符合条件的多个卡片.
-  BuiltList<BuiltList<_Card>> get coreTopAll {
+  BuiltList<BuiltList<_CoreCard>> get coreTopAll {
     _CardRowColumnRange targetRowRange = _CardRowColumnRange(0, coreRowRange.from - 1);
     if (!targetRowRange.isValid()) {
-      return <BuiltList<_Card>>[].toBuiltList();
+      return <BuiltList<_CoreCard>>[].toBuiltList();
     }
     _CardRowColumnRange targetColumnRange = coreColumnRange;
-    List<_Card> coreCards = <_Card>[]..addAll(game.coreCards);
-    List<BuiltList<_Card>> list2 = <BuiltList<_Card>>[];
+    List<_CoreCard> coreCards = <_CoreCard>[]..addAll(game.coreCards);
+    List<BuiltList<_CoreCard>> list2 = <BuiltList<_CoreCard>>[];
     for (int targetRow = targetRowRange.to; targetRow >= targetRowRange.from; targetRow--) {
-      List<_Card> list = <_Card>[];
+      List<_CoreCard> list = <_CoreCard>[];
       coreCards.toBuiltList().forEach((element) {
         if (element.coreRowRange.containValue(targetRow) && targetColumnRange.contain(element.coreColumnRange)) {
           list.add(element);
@@ -279,16 +292,16 @@ class _Card implements Card {
   }
 
   /// 从 [_Game.coreCards] 中返回当前卡片右边所有的卡片. 第一维度列表表示从左向右的各列, 第二维度列表表示该列符合条件的多个卡片.
-  BuiltList<BuiltList<_Card>> get coreRightAll {
+  BuiltList<BuiltList<_CoreCard>> get coreRightAll {
     _CardRowColumnRange targetColumnRange = _CardRowColumnRange(coreColumnRange.to + 1, _Metric.get().square - 1);
     if (!targetColumnRange.isValid()) {
-      return <BuiltList<_Card>>[].toBuiltList();
+      return <BuiltList<_CoreCard>>[].toBuiltList();
     }
     _CardRowColumnRange targetRowRange = coreRowRange;
-    List<_Card> coreCards = <_Card>[]..addAll(game.coreCards);
-    List<BuiltList<_Card>> list2 = <BuiltList<_Card>>[];
+    List<_CoreCard> coreCards = <_CoreCard>[]..addAll(game.coreCards);
+    List<BuiltList<_CoreCard>> list2 = <BuiltList<_CoreCard>>[];
     for (int targetColumn = targetColumnRange.from; targetColumn <= targetColumnRange.to; targetColumn++) {
-      List<_Card> list = <_Card>[];
+      List<_CoreCard> list = <_CoreCard>[];
       coreCards.toBuiltList().forEach((element) {
         if (targetRowRange.contain(element.coreRowRange) &&
             element.coreColumnRange.containValue(targetColumn)) {
@@ -302,16 +315,16 @@ class _Card implements Card {
   }
 
   /// 从 [_Game.coreCards] 中返回当前卡片下边所有的卡片. 第一维度列表表示从上向下的各列, 第二维度列表表示该列符合条件的多个卡片.
-  BuiltList<BuiltList<_Card>> get coreBottomAll {
+  BuiltList<BuiltList<_CoreCard>> get coreBottomAll {
     _CardRowColumnRange targetRowRange = _CardRowColumnRange(coreRowRange.to + 1, _Metric.get().square - 1);
     if (!targetRowRange.isValid()) {
-      return <BuiltList<_Card>>[].toBuiltList();
+      return <BuiltList<_CoreCard>>[].toBuiltList();
     }
     _CardRowColumnRange targetColumnRange = coreColumnRange;
-    List<_Card> coreCards = <_Card>[]..addAll(game.coreCards);
-    List<BuiltList<_Card>> list2 = <BuiltList<_Card>>[];
+    List<_CoreCard> coreCards = <_CoreCard>[]..addAll(game.coreCards);
+    List<BuiltList<_CoreCard>> list2 = <BuiltList<_CoreCard>>[];
     for (int targetRow = targetRowRange.from; targetRow <= targetRowRange.to; targetRow++) {
-      List<_Card> list = <_Card>[];
+      List<_CoreCard> list = <_CoreCard>[];
       coreCards.toBuiltList().forEach((element) {
         if (element.coreRowRange.containValue(targetRow) &&
             targetColumnRange.contain(element.coreColumnRange)) {
@@ -325,7 +338,7 @@ class _Card implements Card {
   }
 
   /// 根据 [ltrb] 返回指定方向的所有卡片.
-  BuiltList<BuiltList<_Card>> coreLTRBAll(_LTRB ltrb) {
+  BuiltList<BuiltList<_CoreCard>> coreLTRBAll(_LTRB ltrb) {
     switch (ltrb) {
       case _LTRB.left:
         return coreLeftAll;
@@ -339,20 +352,20 @@ class _Card implements Card {
   }
 
   /// 根据 [ltrb] 返回指定方向的所有卡片. 如果指定方向的卡片为空, 返回
-  BuiltList<BuiltList<_Card>> coreLTRBAllFallback(_LTRB ltrb, {
+  BuiltList<BuiltList<_CoreCard>> coreLTRBAllFallback(_LTRB ltrb, {
     bool clockwise = false,
   }) {
     for (_LTRB currentLtrb in ltrb.turns(clockwise: clockwise)) {
-      BuiltList<BuiltList<_Card>> list = coreLTRBAll(currentLtrb);
+      BuiltList<BuiltList<_CoreCard>> list = coreLTRBAll(currentLtrb);
       if (list.isNotEmpty) {
         return list;
       }
     }
-    return <BuiltList<_Card>>[].toBuiltList();
+    return <BuiltList<_CoreCard>>[].toBuiltList();
   }
 
   /// 返回 [card] 在当前卡片的相对位置. 如果不在左上右下则返回 null.
-  _LTRB coreRelative(_Card card) {
+  _LTRB coreRelative(_CoreCard card) {
     if (coreLeft.contains(card)) {
       return _LTRB.left;
     }
@@ -366,28 +379,6 @@ class _Card implements Card {
       return _LTRB.bottom;
     }
     return null;
-  }
-
-  //*******************************************************************************************************************
-
-  final _CardProperty property;
-
-  final _CardSprite sprite;
-
-  @override
-  final _CardData data;
-
-  //*******************************************************************************************************************
-
-  @override
-  String toString() {
-    String result = '$verticalRowIndex,$verticalColumnIndex,$verticalRowSpan,$verticalColumnSpan\n'
-        '$horizontalRowIndex,$horizontalColumnIndex,$horizontalRowSpan,$horizontalColumnSpan';
-    if (type == _CardType.core) {
-      result += '\n$coreRowIndex,$coreColumnIndex,$coreRowSpan,$coreColumnSpan';
-    }
-    result += '\n$index';
-    return result;
   }
 }
 

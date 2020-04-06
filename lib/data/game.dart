@@ -24,17 +24,17 @@ class _Game implements Game {
   void initCards() {
     for (int rowIndex = 0; rowIndex < square; rowIndex++) {
       for (int columnIndex = 0; columnIndex < square; columnIndex++) {
-        _Card card = _Card.core(
+        _Card card = _CoreCard(
           game: this,
           rowIndex: rowIndex,
           columnIndex: columnIndex,
           property: _CardProperty(),
           sprite: _CardSprite(isPlayer: rowIndex == 0 && columnIndex == 0),
         );
-        coreCards.add(card);
+        cards.add(card);
       }
     }
-    headerFooterCards.add(_Card(
+    cards.add(_Card(
       game: this,
       verticalRowIndex: 6,
       verticalColumnIndex: 1,
@@ -48,7 +48,7 @@ class _Game implements Game {
       property: _CardProperty(),
       sprite: _CardSprite(),
     ));
-    headerFooterCards.add(_Card(
+    cards.add(_Card(
       game: this,
       verticalRowIndex: 6,
       verticalColumnIndex: 11,
@@ -67,13 +67,12 @@ class _Game implements Game {
   //*******************************************************************************************************************
 
   /// 存储所有卡片.
-  List<_Card> coreCards = <_Card>[];
-  List<_Card> headerFooterCards = <_Card>[];
+  List<_Card> cards = <_Card>[];
 
-  _Card get playerCard {
-    return coreCards.firstWhere((element) {
-      return element.sprite.isPlayer;
-    });
+  BuiltList<_CoreCard> get coreCards {
+    return cards.where((element) {
+      return element.type == _CardType.core;
+    }).toBuiltList();
   }
 
   //*******************************************************************************************************************
@@ -174,9 +173,9 @@ class _Game implements Game {
 //        ];
 //        actionQueue.addList(actions0);
 //        actionQueue.addList(actions1);
-        _Animation.coreEnter().begin(card);
+        _Animation.coreEnter(card).begin();
       } else {
-        _Animation.sample().begin(card);
+        _Animation.sample(card).begin();
       }
     };
   }
@@ -225,7 +224,7 @@ class _GameData implements GameData {
   }
 
   @override
-  BuiltList<Card> get cards => (game.coreCards + game.headerFooterCards).build();
+  BuiltList<Card> get cards => game.cards.build();
 
   @override
   CustomPainter get foregroundPainter => game.gridForegroundPainter;
