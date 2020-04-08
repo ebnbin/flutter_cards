@@ -194,12 +194,12 @@ class _Card implements Card {
   final _CardData data;
 
   //*******************************************************************************************************************
-
-  @override
-  String toString() {
-    return '$verticalRowGridIndex,$verticalColumnGridIndex,$verticalRowGridSpan,$verticalColumnGridSpan\n'
-        '$horizontalRowGridIndex,$horizontalColumnGridIndex,$horizontalRowGridSpan,$horizontalColumnGridSpan';
-  }
+//
+//  @override
+//  String toString() {
+//    return '$verticalRowGridIndex,$verticalColumnGridIndex,$verticalRowGridSpan,$verticalColumnGridSpan\n'
+//        '$horizontalRowGridIndex,$horizontalColumnGridIndex,$horizontalRowGridSpan,$horizontalColumnGridSpan';
+//  }
 }
 
 //*********************************************************************************************************************
@@ -296,11 +296,11 @@ class _CoreCard extends _Card {
   }
 
   //*******************************************************************************************************************
-
-  @override
-  String toString() {
-    return '${super.toString()}\n$rowIndex,$columnIndex,$rowSpan,$columnSpan';
-  }
+//
+//  @override
+//  String toString() {
+//    return '${super.toString()}\n$rowIndex,$columnIndex,$rowSpan,$columnSpan';
+//  }
 }
 
 //*********************************************************************************************************************
@@ -360,6 +360,9 @@ class _SpriteCard extends _CoreCard {
     }
     _CardRowColumnRange targetRowRange = rowRange;
     return game.spriteCards.where((element) {
+      if (!element.visible) {
+        return false;
+      }
       return targetRowRange.contain(element.rowRange) && element.columnRange.containValue(targetColumn);
     }).toBuiltList();
   }
@@ -372,6 +375,9 @@ class _SpriteCard extends _CoreCard {
     }
     _CardRowColumnRange targetColumnRange = columnRange;
     return game.spriteCards.where((element) {
+      if (!element.visible) {
+        return false;
+      }
       return element.rowRange.containValue(targetRow) && targetColumnRange.contain(element.columnRange);
     }).toBuiltList();
   }
@@ -384,6 +390,9 @@ class _SpriteCard extends _CoreCard {
     }
     _CardRowColumnRange targetRowRange = rowRange;
     return game.spriteCards.where((element) {
+      if (!element.visible) {
+        return false;
+      }
       return targetRowRange.contain(element.rowRange) && element.columnRange.containValue(targetColumn);
     }).toBuiltList();
   }
@@ -396,6 +405,9 @@ class _SpriteCard extends _CoreCard {
     }
     _CardRowColumnRange targetColumnRange = columnRange;
     return game.spriteCards.where((element) {
+      if (!element.visible) {
+        return false;
+      }
       return element.rowRange.containValue(targetRow) && targetColumnRange.contain(element.columnRange);
     }).toBuiltList();
   }
@@ -412,6 +424,9 @@ class _SpriteCard extends _CoreCard {
     for (int targetColumn = targetColumnRange.to; targetColumn >= targetColumnRange.from; targetColumn--) {
       List<_SpriteCard> list = <_SpriteCard>[];
       spriteCards.toBuiltList().forEach((element) {
+        if (!element.visible) {
+          return;
+        }
         if (targetRowRange.contain(element.rowRange) && element.columnRange.containValue(targetColumn)) {
           list.add(element);
           spriteCards.remove(element);
@@ -434,6 +449,9 @@ class _SpriteCard extends _CoreCard {
     for (int targetRow = targetRowRange.to; targetRow >= targetRowRange.from; targetRow--) {
       List<_SpriteCard> list = <_SpriteCard>[];
       spriteCards.toBuiltList().forEach((element) {
+        if (!element.visible) {
+          return;
+        }
         if (element.rowRange.containValue(targetRow) && targetColumnRange.contain(element.columnRange)) {
           list.add(element);
           spriteCards.remove(element);
@@ -456,6 +474,9 @@ class _SpriteCard extends _CoreCard {
     for (int targetColumn = targetColumnRange.from; targetColumn <= targetColumnRange.to; targetColumn++) {
       List<_SpriteCard> list = <_SpriteCard>[];
       spriteCards.toBuiltList().forEach((element) {
+        if (!element.visible) {
+          return;
+        }
         if (targetRowRange.contain(element.rowRange) &&
             element.columnRange.containValue(targetColumn)) {
           list.add(element);
@@ -479,6 +500,9 @@ class _SpriteCard extends _CoreCard {
     for (int targetRow = targetRowRange.from; targetRow <= targetRowRange.to; targetRow++) {
       List<_SpriteCard> list = <_SpriteCard>[];
       spriteCards.toBuiltList().forEach((element) {
+        if (!element.visible) {
+          return;
+        }
         if (element.rowRange.containValue(targetRow) &&
             targetColumnRange.contain(element.columnRange)) {
           list.add(element);
@@ -519,8 +543,8 @@ class _SpriteCard extends _CoreCard {
     return <BuiltList<_SpriteCard>>[].toBuiltList();
   }
 
-  /// 返回 [card] 在当前卡片的相对位置. 如果不在左上右下则返回 null.
-  _LTRB relative(_SpriteCard card) {
+  /// 返回 [card] 在当前卡片的相邻位置. 如果不在左上右下则返回 null.
+  _LTRB adjacent(_SpriteCard card) {
     if (left.contains(card)) {
       return _LTRB.left;
     }
@@ -540,7 +564,8 @@ class _SpriteCard extends _CoreCard {
 
   @override
   String toString() {
-    return '${super.toString()}\n$index';
+//    return '${super.toString()}\n$index';
+    return '$index';
   }
 }
 
