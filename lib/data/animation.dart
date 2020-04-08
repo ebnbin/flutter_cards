@@ -87,8 +87,8 @@ class _Animation<T extends _Card> {
     this.endCallback,
   });
 
-  /// 用于演示.
-  _Animation.sample(T card) : this(card,
+  /// 开发用.
+  _Animation.dev(T card) : this(card,
     duration: 1000,
     curve: Curves.easeInOut,
     onAnimating: (card, value) {
@@ -274,7 +274,7 @@ class _Animation<T extends _Card> {
         duration: Duration(
           milliseconds: duration,
         ),
-        vsync: card.game.callback,
+        vsync: card.screen.game.callback,
       );
       CurvedAnimation curvedAnimation = CurvedAnimation(
         parent: animationController,
@@ -291,7 +291,7 @@ class _Animation<T extends _Card> {
               break;
             case AnimationStatus.completed:
               onEnd?.call(card);
-              card.game.callback.setState(() {
+              card.screen.game.callback.setState(() {
               });
               animationController.dispose();
               Future.delayed(Duration(
@@ -307,15 +307,15 @@ class _Animation<T extends _Card> {
           if (!_half && curvedAnimation.value >= 0.5) {
             _half = true;
             onHalf?.call(card);
-            card.game.callback.setState(() {
+            card.screen.game.callback.setState(() {
             });
           }
           onAnimating?.call(card, curvedAnimation.value);
-          card.game.callback.setState(() {
+          card.screen.game.callback.setState(() {
           });
         });
       onBegin?.call(card);
-      card.game.callback.setState(() {
+      card.screen.game.callback.setState(() {
       });
       animationController.forward();
     });

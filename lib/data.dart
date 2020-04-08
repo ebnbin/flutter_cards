@@ -11,6 +11,7 @@ part 'data/game.dart';
 part 'data/metric.dart';
 part 'data/painter.dart';
 part 'data/random.dart';
+part 'data/screen.dart';
 
 //*********************************************************************************************************************
 
@@ -24,7 +25,7 @@ abstract class GameCallback implements TickerProvider {
 
 abstract class Game {
   static Game create(GameCallback callback) {
-    return _Game(callback: callback);
+    return _Game(callback);
   }
 
   GameData get data;
@@ -39,9 +40,6 @@ abstract class GameData {
 
   CustomPainter get painter;
   CustomPainter get foregroundPainter;
-
-  Rect get headerRect;
-  Rect get footerRect;
 }
 
 //*********************************************************************************************************************
