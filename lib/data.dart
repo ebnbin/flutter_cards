@@ -24,50 +24,74 @@ abstract class GameCallback implements TickerProvider {
 //*********************************************************************************************************************
 
 abstract class Game {
-  static Game create(GameCallback callback) {
-    return _Game(callback);
+  static void init(GameCallback callback) {
+    _Game.init(callback);
   }
 
-  GameData get data;
+  static Game get() {
+    return _Game.get();
+  }
+
+  static void dispose() {
+    _Game.dispose();
+  }
+
+  GameData data;
 }
 
-abstract class GameData {
-  BuiltList<Card> get cards;
+class GameData {
+  GameData._(this._game);
+  
+  final _Game _game;
 
-  void build();
+  void build() {
+    _game.build();
+  }
 
-  void dispose();
+  BuiltList<Card> get cards => _game.screen.cards;
 
-  CustomPainter get painter;
-  CustomPainter get foregroundPainter;
+  CustomPainter get foregroundPainter => _game.gridForegroundPainter;
+
+  CustomPainter get painter => _game.gridPainter;
 }
 
 //*********************************************************************************************************************
 
 abstract class Card {
-  CardData get data;
+  CardData data;
 }
 
-abstract class CardData {
-  Rect get rect;
+class CardData {
+  CardData._(this._card);
 
-  GestureTapCallback get onTap;
+  final _Card _card;
 
-  GestureLongPressCallback get onLongPress;
+  bool get absorbPointer => _card.absorbPointer;
 
-  Matrix4 get transform;
+  Color get color => Colors.white;
 
-  double get elevation;
-  double get radius;
-  double get opacity;
+  double get elevation => _card.elevation;
 
-  bool Function(int zIndex) get zIndexVisible;
+  bool get ignorePointer => _card.ignorePointer;
 
-  double get margin;
+  double get margin => _card.margin;
 
-  Color get color;
+  GestureLongPressCallback get onLongPress => _card.screen.onLongPress(_card);
 
-  bool get absorbPointer;
+  GestureTapCallback get onTap => _card.screen.onTap(_card);
 
-  bool get ignorePointer;
+  double get opacity => _card.opacity;
+
+  double get radius => _card.radius;
+
+  Rect get rect => _card.rect;
+
+  Matrix4 get transform => _card.transform;
+
+  bool Function(int zIndex) get zIndexVisible => _card.zIndexVisible;
+
+  @override
+  String toString() {
+    return _card.toString();
+  }
 }

@@ -4,8 +4,32 @@ part of '../data.dart';
 
 /// 游戏数据.
 class _Game implements Game {
-  _Game(this.callback) : data = _GameData() {
-    data.game = this;
+  static _Game _game;
+
+  static void init(GameCallback callback) {
+    if (_game != null) {
+      throw Exception();
+    }
+    _game = _Game(callback);
+  }
+
+  static _Game get() {
+    if (_game == null) {
+      throw Exception();
+    }
+    return _game;
+  }
+
+  static void dispose() {
+    _game?.onDispose();
+    _game = null;
+    _Metric.dispose();
+  }
+
+  //*******************************************************************************************************************
+
+  _Game(this.callback) {
+    data = GameData._(this);
     setScreen(_Screen.round(this, square: 6));
   }
 
@@ -20,13 +44,14 @@ class _Game implements Game {
   bool _firstBuild = true;
 
   void build() {
+    _Metric.build(_game);
     if (_firstBuild) {
       _firstBuild = false;
       screen.init();
     }
   }
 
-  void dispose() {
+  void onDispose() {
   }
 
   //*******************************************************************************************************************
@@ -45,32 +70,8 @@ class _Game implements Game {
 
   //*******************************************************************************************************************
 
-  final _GameData data;
-}
-
-class _GameData implements GameData {
-  _Game game;
-
   @override
-  void build() {
-    _Metric.build(game);
-    game.build();
-  }
-
-  @override
-  BuiltList<Card> get cards => game.screen.cards;
-
-  @override
-  void dispose() {
-    game.dispose();
-    _Metric.dispose();
-  }
-
-  @override
-  CustomPainter get foregroundPainter => game.gridForegroundPainter;
-
-  @override
-  CustomPainter get painter => game.gridPainter;
+  GameData data;
 }
 
 /// 卡片类型.

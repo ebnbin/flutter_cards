@@ -16,15 +16,15 @@ class GamePage extends StatefulWidget {
 class _GamePageState extends State<GamePage> with TickerProviderStateMixin implements GameCallback {
   @override
   Widget build(BuildContext context) {
-    _game.data.build();
+    Game.get().data.build();
     return Scaffold(
       body: CustomPaint(
-        painter: _game.data.painter,
-        foregroundPainter: _game.data.foregroundPainter,
+        painter: Game.get().data.painter,
+        foregroundPainter: Game.get().data.foregroundPainter,
         child: Stack(
           children: [0, 1, 2, 3, 4, 5].map<Widget>((zIndex) {
             return Stack(
-              children: _game.data.cards.map<Widget>((card) {
+              children: Game.get().data.cards.map<Widget>((card) {
                 return _buildCard(card, zIndex);
               }).toList(),
             );
@@ -46,16 +46,13 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin imple
   @override
   void initState() {
     super.initState();
-    _game = Game.create(this);
+    Game.init(this);
   }
 
 
   @override
   void dispose() {
-    _game.data.dispose();
+    Game.dispose();
     super.dispose();
   }
-
-  /// 游戏数据.
-  Game _game;
 }

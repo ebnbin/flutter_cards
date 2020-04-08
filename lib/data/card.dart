@@ -28,8 +28,8 @@ class _Card implements Card {
     this.visible = true,
     this.touchable = true,
     this.gestureType = _CardGestureType.normal,
-  }) : data = _CardData() {
-    data.card = this;
+  }) {
+    data = CardData._(this);
   }
 
   /// 占位卡片. [visible] 为 false.
@@ -197,7 +197,7 @@ class _Card implements Card {
   //*******************************************************************************************************************
 
   @override
-  final _CardData data;
+  CardData data;
 
   //*******************************************************************************************************************
 //
@@ -720,51 +720,4 @@ enum _CardGestureType {
   absorb,
   /// 忽略手势, 自己不处理, 下层 Widget 可以处理.
   ignore,
-}
-
-//*********************************************************************************************************************
-
-class _CardData implements CardData {
-  _Card card;
-
-  @override
-  bool get absorbPointer => card.absorbPointer;
-
-  @override
-  Color get color => Colors.white;
-
-  @override
-  double get elevation => card.elevation;
-
-  @override
-  bool get ignorePointer => card.ignorePointer;
-
-  @override
-  double get margin => card.margin;
-
-  @override
-  get onLongPress => card.screen.onLongPress(card);
-
-  @override
-  get onTap => card.screen.onTap(card);
-
-  @override
-  double get opacity => card.opacity;
-
-  @override
-  double get radius => card.radius;
-
-  @override
-  Rect get rect => card.rect;
-
-  @override
-  Matrix4 get transform => card.transform;
-
-  @override
-  bool Function(int zIndex) get zIndexVisible => card.zIndexVisible;
-
-  @override
-  String toString() {
-    return card.toString();
-  }
 }
