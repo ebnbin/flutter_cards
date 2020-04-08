@@ -30,7 +30,7 @@ class _Game implements Game {
 
   _Game(this.callback) {
     data = GameData._(this);
-    setScreen(_Screen.round(this, square: 6));
+    setScreen(_Screen.round(square: 6));
   }
 
   final GameCallback callback;
@@ -44,7 +44,7 @@ class _Game implements Game {
   bool _firstBuild = true;
 
   void build() {
-    _Metric.build(_game);
+    _Metric.build();
     if (_firstBuild) {
       _firstBuild = false;
       screen.init();
@@ -64,7 +64,7 @@ class _Game implements Game {
     if (_firstBuild) {
       return;
     }
-    _Metric.build(this);
+    _Metric.build();
     screen.init();
   }
 

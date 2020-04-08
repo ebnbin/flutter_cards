@@ -24,11 +24,11 @@ class _Metric {
   static _Metric metricCache;
 
   /// 在 [_Game.build] 中调用.
-  static void build(_Game game) {
-    MediaQueryData mediaQueryData = MediaQuery.of(game.callback.context);
+  static void build() {
+    MediaQueryData mediaQueryData = MediaQuery.of(_Game.get().callback.context);
     if (sizeCache == mediaQueryData.size &&
         paddingCache == mediaQueryData.padding &&
-        squareCache == game.screen.square) {
+        squareCache == _Game.get().screen.square) {
       return;
     }
 
@@ -102,7 +102,7 @@ class _Metric {
       isVertical ? (screenRect.bottom - coreRect.bottom) : headerUnsafeRect.height,
     );
     /// Core 卡片网格数.
-    int coreCardGrid = coreNoPaddingGrid ~/ game.screen.square;
+    int coreCardGrid = coreNoPaddingGrid ~/ _Game.get().screen.square;
     /// Core 卡片尺寸.
     double coreCardSize = coreCardGrid * gridSize;
 
@@ -110,9 +110,9 @@ class _Metric {
 
     sizeCache = mediaQueryData.size;
     paddingCache = mediaQueryData.padding;
-    squareCache = game.screen.square;
+    squareCache = _Game.get().screen.square;
     metricCache = _Metric(
-      game.screen.square,
+      _Game.get().screen.square,
       screenRect,
       isVertical,
       horizontalGrid,

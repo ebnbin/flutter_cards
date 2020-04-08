@@ -4,19 +4,19 @@ part of '../data.dart';
 
 /// 屏幕 (一局游戏).
 class _Screen {
-  _Screen(this.game, this.type, {
+  _Screen(this.type, {
     this.square,
   });
 
   /// 开屏.
-  _Screen.splash(_Game game) : this(game, _ScreenType.splash,
+  _Screen.splash() : this(_ScreenType.splash,
     square: 4,
   );
 
   /// 一局游戏.
-  _Screen.round(_Game game, {
+  _Screen.round({
     int square,
-  }) : this(game, _ScreenType.round,
+  }) : this(_ScreenType.round,
     square: square,
   );
 
@@ -33,8 +33,6 @@ class _Screen {
       horizontalColumnGridSpan: 15,
     ));
   }
-
-  final _Game game;
 
   /// 屏幕类型.
   final _ScreenType type;
