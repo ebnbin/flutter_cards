@@ -2,6 +2,47 @@ part of '../data.dart';
 
 //*********************************************************************************************************************
 
+abstract class Card {
+  CardData get data;
+}
+
+class CardData {
+  CardData._(this._card);
+
+  final _Card _card;
+
+  bool get absorbPointer => _card.absorbPointer;
+
+  Color get color => Colors.white;
+
+  double get elevation => _card.elevation;
+
+  bool get ignorePointer => _card.ignorePointer;
+
+  double get margin => _card.margin;
+
+  GestureLongPressCallback get onLongPress => _card.screen.onLongPress(_card);
+
+  GestureTapCallback get onTap => _card.screen.onTap(_card);
+
+  double get opacity => _card.opacity;
+
+  double get radius => _card.radius;
+
+  Rect get rect => _card.rect;
+
+  Matrix4 get transform => _card.transform;
+
+  bool Function(int zIndex) get zIndexVisible => _card.zIndexVisible;
+
+  @override
+  String toString() {
+    return _card.toString();
+  }
+}
+
+//*********************************************************************************************************************
+
 /// 卡片.
 class _Card implements Card {
   _Card(this.screen, {

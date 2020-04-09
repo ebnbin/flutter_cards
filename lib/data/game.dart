@@ -2,6 +2,48 @@ part of '../data.dart';
 
 //*********************************************************************************************************************
 
+abstract class GameCallback implements TickerProvider {
+  BuildContext get context;
+
+  void setState(VoidCallback fn);
+}
+
+//*********************************************************************************************************************
+
+abstract class Game {
+  static void init(GameCallback callback) {
+    _Game.init(callback);
+  }
+
+  static Game get() {
+    return _Game.get();
+  }
+
+  static void dispose() {
+    _Game.dispose();
+  }
+
+  GameData data;
+}
+
+class GameData {
+  GameData._(this._game);
+
+  final _Game _game;
+
+  void build() {
+    _game.build();
+  }
+
+  BuiltList<Card> get cards => _game.screen.cards;
+
+  CustomPainter get foregroundPainter => _game.gridForegroundPainter;
+
+  CustomPainter get painter => _game.gridPainter;
+}
+
+//*********************************************************************************************************************
+
 /// 游戏数据.
 class _Game implements Game {
   static _Game _game;
