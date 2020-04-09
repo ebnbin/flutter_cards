@@ -87,8 +87,8 @@ class _Animation<T extends _Card> {
     this.endCallback,
   });
 
-  /// 开发用.
-  _Animation.dev(T card) : this(card,
+  /// 用于演示.
+  _Animation.sample(T card) : this(card,
     duration: 1000,
     curve: Curves.easeInOut,
     onAnimating: (card, value) {

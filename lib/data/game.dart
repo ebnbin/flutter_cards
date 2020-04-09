@@ -30,7 +30,7 @@ class _Game implements Game {
 
   _Game(this.callback) {
     data = GameData._(this);
-    setScreen(_Screen.round(square: 6));
+    setScreen(_GameScreen(square: 6));
   }
 
   final GameCallback callback;
@@ -79,6 +79,7 @@ enum _CardType {
   placeholder,
   core,
 
+  sample,
   dev0,
   dev1,
   dev2,

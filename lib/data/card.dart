@@ -206,6 +206,11 @@ class _Card implements Card {
 //    return '$verticalRowGridIndex,$verticalColumnGridIndex,$verticalRowGridSpan,$verticalColumnGridSpan\n'
 //        '$horizontalRowGridIndex,$horizontalColumnGridIndex,$horizontalRowGridSpan,$horizontalColumnGridSpan';
 //  }
+
+  @override
+  String toString() {
+    return type.toString();
+  }
 }
 
 //*********************************************************************************************************************
@@ -313,7 +318,7 @@ class _CoreCard extends _Card {
 
 /// 精灵卡片.
 class _SpriteCard extends _CoreCard {
-  _SpriteCard(_Screen screen, {
+  _SpriteCard(_GameScreen screen, {
     int rowIndex = 0,
     int columnIndex = 0,
     int rowSpan = 1,
@@ -351,24 +356,26 @@ class _SpriteCard extends _CoreCard {
     gestureType: gestureType,
   );
 
+  _GameScreen get gameScreen => screen as _GameScreen;
+
   /// 占位卡片. [visible] 为 false.
-  _SpriteCard.placeholder(_Screen screen) : this(screen);
+  _SpriteCard.placeholder(_GameScreen screen) : this(screen);
 
   //*******************************************************************************************************************
 
-  /// 当前卡片在 [screen.sprites] 中的 index.
-  int get index => screen.sprites.indexOf(this);
+  /// 当前卡片在 [screen.spriteCards] 中的 index.
+  int get index => gameScreen.spriteCards.indexOf(this);
 
   //*******************************************************************************************************************
 
-  /// 从 [screen.sprites] 中返回当前卡片左边的卡片. 当卡片跨多行时可能存在多个符合条件的卡片. 如果没符合条件的卡片则返回空列表.
+  /// 从 [screen.spriteCards] 中返回当前卡片左边的卡片. 当卡片跨多行时可能存在多个符合条件的卡片. 如果没符合条件的卡片则返回空列表.
   BuiltList<_SpriteCard> get left {
     int targetColumn = columnRange.from - 1;
     if (targetColumn < 0) {
       return <_SpriteCard>[].toBuiltList();
     }
     _CardRowColumnRange targetRowRange = rowRange;
-    return screen.sprites.where((element) {
+    return gameScreen.spriteCards.where((element) {
       if (!element.visible) {
         return false;
       }
@@ -376,14 +383,14 @@ class _SpriteCard extends _CoreCard {
     }).toBuiltList();
   }
 
-  /// 从 [screen.sprites] 中返回当前卡片上边的卡片. 当卡片跨多行时可能存在多个符合条件的卡片. 如果没符合条件的卡片则返回空列表.
+  /// 从 [screen.spriteCards] 中返回当前卡片上边的卡片. 当卡片跨多行时可能存在多个符合条件的卡片. 如果没符合条件的卡片则返回空列表.
   BuiltList<_SpriteCard> get top {
     int targetRow = rowRange.from - 1;
     if (targetRow < 0) {
       return <_SpriteCard>[].toBuiltList();
     }
     _CardRowColumnRange targetColumnRange = columnRange;
-    return screen.sprites.where((element) {
+    return gameScreen.spriteCards.where((element) {
       if (!element.visible) {
         return false;
       }
@@ -391,14 +398,14 @@ class _SpriteCard extends _CoreCard {
     }).toBuiltList();
   }
 
-  /// 从 [screen.sprites] 中返回当前卡片右边的卡片. 当卡片跨多行时可能存在多个符合条件的卡片. 如果没符合条件的卡片则返回空列表.
+  /// 从 [screen.spriteCards] 中返回当前卡片右边的卡片. 当卡片跨多行时可能存在多个符合条件的卡片. 如果没符合条件的卡片则返回空列表.
   BuiltList<_SpriteCard> get right {
     int targetColumn = columnRange.to + 1;
     if (targetColumn >= _Metric.get().square) {
       return <_SpriteCard>[].toBuiltList();
     }
     _CardRowColumnRange targetRowRange = rowRange;
-    return screen.sprites.where((element) {
+    return gameScreen.spriteCards.where((element) {
       if (!element.visible) {
         return false;
       }
@@ -406,14 +413,14 @@ class _SpriteCard extends _CoreCard {
     }).toBuiltList();
   }
 
-  /// 从 [screen.sprites] 中返回当前卡片下边的卡片. 当卡片跨多行时可能存在多个符合条件的卡片. 如果没符合条件的卡片则返回空列表.
+  /// 从 [screen.spriteCards] 中返回当前卡片下边的卡片. 当卡片跨多行时可能存在多个符合条件的卡片. 如果没符合条件的卡片则返回空列表.
   BuiltList<_SpriteCard> get bottom {
     int targetRow = rowRange.to + 1;
     if (targetRow >= _Metric.get().square) {
       return <_SpriteCard>[].toBuiltList();
     }
     _CardRowColumnRange targetColumnRange = columnRange;
-    return screen.sprites.where((element) {
+    return gameScreen.spriteCards.where((element) {
       if (!element.visible) {
         return false;
       }
@@ -421,24 +428,24 @@ class _SpriteCard extends _CoreCard {
     }).toBuiltList();
   }
 
-  /// 从 [screen.sprites] 中返回当前卡片左边所有的卡片. 第一维度列表表示从右向左的各列, 第二维度列表表示该列符合条件的多个卡片.
+  /// 从 [screen.spriteCards] 中返回当前卡片左边所有的卡片. 第一维度列表表示从右向左的各列, 第二维度列表表示该列符合条件的多个卡片.
   BuiltList<BuiltList<_SpriteCard>> get leftAll {
     _CardRowColumnRange targetColumnRange = _CardRowColumnRange(0, columnRange.from - 1);
     if (!targetColumnRange.isValid()) {
       return <BuiltList<_SpriteCard>>[].toBuiltList();
     }
     _CardRowColumnRange targetRowRange = rowRange;
-    List<_SpriteCard> sprites = <_SpriteCard>[]..addAll(screen.sprites);
+    List<_SpriteCard> spriteCards = <_SpriteCard>[]..addAll(gameScreen.spriteCards);
     List<BuiltList<_SpriteCard>> list2 = <BuiltList<_SpriteCard>>[];
     for (int targetColumn = targetColumnRange.to; targetColumn >= targetColumnRange.from; targetColumn--) {
       List<_SpriteCard> list = <_SpriteCard>[];
-      sprites.toBuiltList().forEach((element) {
+      spriteCards.toBuiltList().forEach((element) {
         if (!element.visible) {
           return;
         }
         if (targetRowRange.contain(element.rowRange) && element.columnRange.containValue(targetColumn)) {
           list.add(element);
-          sprites.remove(element);
+          spriteCards.remove(element);
         }
       });
       list2.add(list.toBuiltList());
@@ -446,24 +453,24 @@ class _SpriteCard extends _CoreCard {
     return list2.toBuiltList();
   }
 
-  /// 从 [screen.sprites] 中返回当前卡片上边所有的卡片. 第一维度列表表示从下向上的各列, 第二维度列表表示该列符合条件的多个卡片.
+  /// 从 [screen.spriteCards] 中返回当前卡片上边所有的卡片. 第一维度列表表示从下向上的各列, 第二维度列表表示该列符合条件的多个卡片.
   BuiltList<BuiltList<_SpriteCard>> get topAll {
     _CardRowColumnRange targetRowRange = _CardRowColumnRange(0, rowRange.from - 1);
     if (!targetRowRange.isValid()) {
       return <BuiltList<_SpriteCard>>[].toBuiltList();
     }
     _CardRowColumnRange targetColumnRange = columnRange;
-    List<_SpriteCard> sprites = <_SpriteCard>[]..addAll(screen.sprites);
+    List<_SpriteCard> spriteCards = <_SpriteCard>[]..addAll(gameScreen.spriteCards);
     List<BuiltList<_SpriteCard>> list2 = <BuiltList<_SpriteCard>>[];
     for (int targetRow = targetRowRange.to; targetRow >= targetRowRange.from; targetRow--) {
       List<_SpriteCard> list = <_SpriteCard>[];
-      sprites.toBuiltList().forEach((element) {
+      spriteCards.toBuiltList().forEach((element) {
         if (!element.visible) {
           return;
         }
         if (element.rowRange.containValue(targetRow) && targetColumnRange.contain(element.columnRange)) {
           list.add(element);
-          sprites.remove(element);
+          spriteCards.remove(element);
         }
       });
       list2.add(list.toBuiltList());
@@ -471,25 +478,25 @@ class _SpriteCard extends _CoreCard {
     return list2.toBuiltList();
   }
 
-  /// 从 [screen.sprites] 中返回当前卡片右边所有的卡片. 第一维度列表表示从左向右的各列, 第二维度列表表示该列符合条件的多个卡片.
+  /// 从 [screen.spriteCards] 中返回当前卡片右边所有的卡片. 第一维度列表表示从左向右的各列, 第二维度列表表示该列符合条件的多个卡片.
   BuiltList<BuiltList<_SpriteCard>> get rightAll {
     _CardRowColumnRange targetColumnRange = _CardRowColumnRange(columnRange.to + 1, _Metric.get().square - 1);
     if (!targetColumnRange.isValid()) {
       return <BuiltList<_SpriteCard>>[].toBuiltList();
     }
     _CardRowColumnRange targetRowRange = rowRange;
-    List<_SpriteCard> sprites = <_SpriteCard>[]..addAll(screen.sprites);
+    List<_SpriteCard> spriteCards = <_SpriteCard>[]..addAll(gameScreen.spriteCards);
     List<BuiltList<_SpriteCard>> list2 = <BuiltList<_SpriteCard>>[];
     for (int targetColumn = targetColumnRange.from; targetColumn <= targetColumnRange.to; targetColumn++) {
       List<_SpriteCard> list = <_SpriteCard>[];
-      sprites.toBuiltList().forEach((element) {
+      spriteCards.toBuiltList().forEach((element) {
         if (!element.visible) {
           return;
         }
         if (targetRowRange.contain(element.rowRange) &&
             element.columnRange.containValue(targetColumn)) {
           list.add(element);
-          sprites.remove(element);
+          spriteCards.remove(element);
         }
       });
       list2.add(list.toBuiltList());
@@ -497,25 +504,25 @@ class _SpriteCard extends _CoreCard {
     return list2.toBuiltList();
   }
 
-  /// 从 [screen.sprites] 中返回当前卡片下边所有的卡片. 第一维度列表表示从上向下的各列, 第二维度列表表示该列符合条件的多个卡片.
+  /// 从 [screen.spriteCards] 中返回当前卡片下边所有的卡片. 第一维度列表表示从上向下的各列, 第二维度列表表示该列符合条件的多个卡片.
   BuiltList<BuiltList<_SpriteCard>> get bottomAll {
     _CardRowColumnRange targetRowRange = _CardRowColumnRange(rowRange.to + 1, _Metric.get().square - 1);
     if (!targetRowRange.isValid()) {
       return <BuiltList<_SpriteCard>>[].toBuiltList();
     }
     _CardRowColumnRange targetColumnRange = columnRange;
-    List<_SpriteCard> sprites = <_SpriteCard>[]..addAll(screen.sprites);
+    List<_SpriteCard> spriteCards = <_SpriteCard>[]..addAll(gameScreen.spriteCards);
     List<BuiltList<_SpriteCard>> list2 = <BuiltList<_SpriteCard>>[];
     for (int targetRow = targetRowRange.from; targetRow <= targetRowRange.to; targetRow++) {
       List<_SpriteCard> list = <_SpriteCard>[];
-      sprites.toBuiltList().forEach((element) {
+      spriteCards.toBuiltList().forEach((element) {
         if (!element.visible) {
           return;
         }
         if (element.rowRange.containValue(targetRow) &&
             targetColumnRange.contain(element.columnRange)) {
           list.add(element);
-          sprites.remove(element);
+          spriteCards.remove(element);
         }
       });
       list2.add(list.toBuiltList());
@@ -582,7 +589,7 @@ class _SpriteCard extends _CoreCard {
 
 /// 玩家卡片.
 class _PlayerCard extends _SpriteCard {
-  _PlayerCard(_Screen screen, {
+  _PlayerCard(_GameScreen screen, {
     int rowIndex = 0,
     int columnIndex = 0,
     double translateX = 0.0,
@@ -615,7 +622,7 @@ class _PlayerCard extends _SpriteCard {
   );
 
   /// 创建一个随机位置的玩家卡片.
-  static _PlayerCard random(_Screen screen) {
+  static _PlayerCard random(_GameScreen screen) {
     int from = _Metric.get().square > 2 ? 1 : 0;
     int to = _Metric.get().square > 2 ? (_Metric.get().square - 2) : (_Metric.get().square - 1);
     return _PlayerCard(screen,
