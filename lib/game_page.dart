@@ -1,9 +1,5 @@
-import 'dart:math';
-
 import 'package:cards/data.dart';
 import 'package:flutter/material.dart' hide Card;
-
-part 'widget.dart';
 
 /// 游戏页面.
 ///
@@ -34,14 +30,61 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin imple
     );
   }
 
-  /// 构建一个卡片.
   Widget _buildCard(Card card, int zIndex) {
-    return CardWidget(
-      card: card,
-      zIndex: zIndex,
+    if (card.data.zIndexVisible(zIndex)) {
+      return _buildVisibleCard(card);
+    } else {
+      return _buildInvisibleCard();
+    }
+  }
+
+  Widget _buildVisibleCard(Card card) {
+    return Positioned.fromRect(
+      rect: card.data.rect,
+      child: Transform(
+        transform: card.data.transform,
+        alignment: Alignment.center,
+        child: AbsorbPointer(
+          absorbing: card.data.absorbPointer,
+          child: IgnorePointer(
+            ignoring: card.data.ignorePointer,
+            child: Opacity(
+              opacity: card.data.opacity,
+              child: Container(
+                margin: EdgeInsets.all(card.data.margin),
+                child: Material(
+                  type: MaterialType.card,
+                  color: card.data.color,
+                  elevation: card.data.elevation,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(card.data.radius),
+                  ),
+                  clipBehavior: Clip.antiAlias,
+                  child: InkWell(
+                    child: Center(
+                      child: Text('${card.data}',
+                        style: TextStyle(
+                          fontSize: 10.0,
+                        ),
+                      ),
+                    ),
+                    onTap: card.data.onTap,
+                    onLongPress: card.data.onLongPress,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 
+  Widget _buildInvisibleCard() {
+    return Positioned.fill(
+      child: SizedBox.shrink(),
+    );
+  }
 
   @override
   void initState() {
