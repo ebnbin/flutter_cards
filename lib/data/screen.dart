@@ -8,17 +8,7 @@ abstract class _Screen {
     this.square,
   }) : cards = List.filled(length(type, square), _Card.placeholder,
     growable: false,
-  );
-
-  static int length(_ScreenType type, int square) {
-    int length = 0;
-    length += square * square;
-    length += 1; // sample.
-    length += 6; // dev.
-    return length;
-  }
-
-  void init() {
+  ) {
     _GridCard sampleCard = _GridCard(this,
       verticalRowGridIndex: 1,
       verticalColumnGridIndex: 1,
@@ -46,6 +36,14 @@ abstract class _Screen {
       );
       cards[i + 1] = devCard;
     }
+  }
+
+  static int length(_ScreenType type, int square) {
+    int length = 0;
+    length += square * square;
+    length += 1; // sample.
+    length += 6; // dev.
+    return length;
   }
 
   /// 屏幕类型.
@@ -76,7 +74,14 @@ class _GameScreen extends _Screen {
     int square,
   }) : super(_ScreenType.game,
     square: square,
-  );
+  ) {
+    (cards[1] as _GridCard).onTap = () {
+      addSpriteCards();
+    };
+    (cards[2] as _GridCard).onTap = () {
+      removeSpriteCards();
+    };
+  }
 
   /// 精灵卡片.
   List<_SpriteCard> get spriteCards {
@@ -87,17 +92,6 @@ class _GameScreen extends _Screen {
       }
     });
     return list;
-  }
-
-  @override
-  void init() {
-    super.init();
-    (cards[1] as _GridCard).onTap = () {
-      addSpriteCards();
-    };
-    (cards[2] as _GridCard).onTap = () {
-      removeSpriteCards();
-    };
   }
 
   void addSpriteCards() {

@@ -63,16 +63,13 @@ class _Game {
   }
 
   static void dispose() {
-    _game?.onDispose();
     _game = null;
     _Metric.dispose();
   }
 
   //*******************************************************************************************************************
 
-  _Game(this.callback) {
-    setScreen(_GameScreen(square: 6));
-  }
+  _Game(this.callback);
 
   final GameCallback callback;
 
@@ -81,30 +78,11 @@ class _Game {
 
   //*******************************************************************************************************************
 
-  /// 是否是第一次调用 [build].
-  bool _firstBuild = true;
-
   void build() {
     _Metric.build(callback.context);
-    if (_firstBuild) {
-      _firstBuild = false;
-      screen.init();
-    }
-  }
-
-  void onDispose() {
   }
 
   //*******************************************************************************************************************
 
-  _Screen screen;
-
-  /// 改变屏幕时必须重新调用 [_Metric.build].
-  void setScreen(_Screen screen) {
-    this.screen = screen;
-    if (_firstBuild) {
-      return;
-    }
-    screen.init();
-  }
+  _Screen screen = _GameScreen(square: 6);
 }
