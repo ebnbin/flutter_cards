@@ -29,10 +29,6 @@ class Game {
 
   final _Game _game;
 
-  void build() {
-    _game.build();
-  }
-
   BuiltList<Card> get cards => _game.screen.cards.map<Card>((card) {
     return Card._(card);
   }).toBuiltList();
@@ -64,7 +60,6 @@ class _Game {
 
   static void dispose() {
     _game = null;
-    _Metric.dispose();
   }
 
   //*******************************************************************************************************************
@@ -75,12 +70,6 @@ class _Game {
 
   final _GridPainter gridPainter = _GridPainter();
   final _GridForegroundPainter gridForegroundPainter = _GridForegroundPainter();
-
-  //*******************************************************************************************************************
-
-  void build() {
-    _Metric.build(callback.context);
-  }
 
   //*******************************************************************************************************************
 

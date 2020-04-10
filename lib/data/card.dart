@@ -172,7 +172,7 @@ class _GridCard extends _Card {
 
   /// 当前屏幕旋转方向的网格行.
   int get rowGridIndex {
-    return _Metric.get().isVertical ? verticalRowGridIndex : horizontalRowGridIndex;
+    return Metric.get().isVertical ? verticalRowGridIndex : horizontalRowGridIndex;
   }
   set rowGridIndex(int rowIndex) {
     horizontalRowGridIndex = rowIndex;
@@ -181,7 +181,7 @@ class _GridCard extends _Card {
 
   /// 当前屏幕旋转方向的网格列.
   int get columnGridIndex {
-    return _Metric.get().isVertical ? verticalColumnGridIndex : horizontalColumnGridIndex;
+    return Metric.get().isVertical ? verticalColumnGridIndex : horizontalColumnGridIndex;
   }
   set columnGridIndex(int columnIndex) {
     horizontalColumnGridIndex = columnIndex;
@@ -190,7 +190,7 @@ class _GridCard extends _Card {
 
   /// 当前屏幕旋转方向的网格跨行.
   int get rowGridSpan {
-    return _Metric.get().isVertical ? verticalRowGridSpan : horizontalRowGridSpan;
+    return Metric.get().isVertical ? verticalRowGridSpan : horizontalRowGridSpan;
   }
   set rowGridSpan(int rowSpan) {
     horizontalRowGridSpan = rowSpan;
@@ -199,7 +199,7 @@ class _GridCard extends _Card {
 
   /// 当前屏幕旋转方向的网格跨列.
   int get columnGridSpan {
-    return _Metric.get().isVertical ? verticalColumnGridSpan : horizontalColumnGridSpan;
+    return Metric.get().isVertical ? verticalColumnGridSpan : horizontalColumnGridSpan;
   }
   set columnGridSpan(int columnSpan) {
     horizontalColumnGridSpan = columnSpan;
@@ -213,17 +213,17 @@ class _GridCard extends _Card {
 
   /// 网格矩形.
   Rect get rect => Rect.fromLTWH(
-    _Metric.get().safeRect.left + columnGridIndex * _Metric.get().gridSize,
-    _Metric.get().safeRect.top + rowGridIndex * _Metric.get().gridSize,
-    columnGridSpan * _Metric.get().gridSize,
-    rowGridSpan * _Metric.get().gridSize,
+    Metric.get().safeRect.left + columnGridIndex * Metric.get().gridSize,
+    Metric.get().safeRect.top + rowGridIndex * Metric.get().gridSize,
+    columnGridSpan * Metric.get().gridSize,
+    rowGridSpan * Metric.get().gridSize,
   );
 
   //*******************************************************************************************************************
 
   /// Matrix4.setEntry(3, 2, value);
   double get matrix4Entry32 {
-    return _Metric.coreNoPaddingGrid / maxGridSpan / 800.0;
+    return Metric.coreNoPaddingGrid / maxGridSpan / 800.0;
   }
 
   double translateX;
@@ -277,7 +277,7 @@ class _GridCard extends _Card {
   };
 
   double get margin {
-    return 2.0 / (_Metric.coreNoPaddingGrid / minGridSpan) * _Metric.get().gridSize;
+    return 2.0 / (Metric.coreNoPaddingGrid / minGridSpan) * Metric.get().gridSize;
   }
 
   /// 是否可点击 (卡片是否可交互). 初始化后不可改变.
@@ -368,39 +368,39 @@ class _CoreCard extends _GridCard {
 
   /// 行.
   int get rowIndex {
-    return (rowGridIndex - _Metric.paddingGrid - (_Metric.get().isVertical ? _Metric.headerFooterGrid : 0)) ~/
-        _Metric.get().coreCardGrid(screen.square);
+    return (rowGridIndex - Metric.paddingGrid - (Metric.get().isVertical ? Metric.headerFooterGrid : 0)) ~/
+        Metric.get().coreCardGrid(screen.square);
   }
   set rowIndex(int coreRowIndex) {
-    verticalRowGridIndex = _Metric.get().coreCardGrid(screen.square) * coreRowIndex + _Metric.paddingGrid + _Metric.headerFooterGrid;
-    horizontalRowGridIndex = _Metric.get().coreCardGrid(screen.square) * coreRowIndex + _Metric.paddingGrid;
+    verticalRowGridIndex = Metric.get().coreCardGrid(screen.square) * coreRowIndex + Metric.paddingGrid + Metric.headerFooterGrid;
+    horizontalRowGridIndex = Metric.get().coreCardGrid(screen.square) * coreRowIndex + Metric.paddingGrid;
   }
 
   /// 列.
   int get columnIndex {
-    return (columnGridIndex - _Metric.paddingGrid - (_Metric.get().isVertical ? 0 : _Metric.headerFooterGrid)) ~/
-        _Metric.get().coreCardGrid(screen.square);
+    return (columnGridIndex - Metric.paddingGrid - (Metric.get().isVertical ? 0 : Metric.headerFooterGrid)) ~/
+        Metric.get().coreCardGrid(screen.square);
   }
   set columnIndex(int coreColumnIndex) {
-    verticalColumnGridIndex = _Metric.get().coreCardGrid(screen.square) * coreColumnIndex + _Metric.paddingGrid;
-    horizontalColumnGridIndex = _Metric.get().coreCardGrid(screen.square) * coreColumnIndex + _Metric.paddingGrid +
-        _Metric.headerFooterGrid;
+    verticalColumnGridIndex = Metric.get().coreCardGrid(screen.square) * coreColumnIndex + Metric.paddingGrid;
+    horizontalColumnGridIndex = Metric.get().coreCardGrid(screen.square) * coreColumnIndex + Metric.paddingGrid +
+        Metric.headerFooterGrid;
   }
 
   /// 跨行.
   int get rowSpan {
-    return rowGridSpan ~/ _Metric.get().coreCardGrid(screen.square);
+    return rowGridSpan ~/ Metric.get().coreCardGrid(screen.square);
   }
   set rowSpan(int coreRowSpan) {
-    rowGridSpan = _Metric.get().coreCardGrid(screen.square) * coreRowSpan;
+    rowGridSpan = Metric.get().coreCardGrid(screen.square) * coreRowSpan;
   }
 
   /// 跨列.
   int get columnSpan {
-    return columnGridSpan ~/ _Metric.get().coreCardGrid(screen.square);
+    return columnGridSpan ~/ Metric.get().coreCardGrid(screen.square);
   }
   set columnSpan(int coreColumnSpan) {
-    columnGridSpan = _Metric.get().coreCardGrid(screen.square) * coreColumnSpan;
+    columnGridSpan = Metric.get().coreCardGrid(screen.square) * coreColumnSpan;
   }
 
   /// 所在行范围. 对于不跨行的卡片, from == to == rowIndex.

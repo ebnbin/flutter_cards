@@ -11,25 +11,25 @@ class _GridForegroundPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     _paint.style = PaintingStyle.stroke;
     _paint.color = Colors.cyan;
-    for (int rowIndex = 0; rowIndex <= _Metric.get().verticalGrid; rowIndex += 1) {
-      Offset p1 = new Offset(_Metric.get().safeRect.left, _Metric.get().safeRect.top + rowIndex * _Metric.get().gridSize);
-      Offset p2 = new Offset(_Metric.get().safeRect.right, _Metric.get().safeRect.top + rowIndex * _Metric.get().gridSize);
+    for (int rowIndex = 0; rowIndex <= Metric.get().verticalGrid; rowIndex += 1) {
+      Offset p1 = new Offset(Metric.get().safeRect.left, Metric.get().safeRect.top + rowIndex * Metric.get().gridSize);
+      Offset p2 = new Offset(Metric.get().safeRect.right, Metric.get().safeRect.top + rowIndex * Metric.get().gridSize);
       canvas.drawLine(p1, p2, _paint);
     }
-    for (int columnIndex = 0; columnIndex <= _Metric.get().horizontalGrid; columnIndex += 1) {
-      Offset p1 = new Offset(_Metric.get().safeRect.left + columnIndex * _Metric.get().gridSize, _Metric.get().safeRect.top);
-      Offset p2 = new Offset(_Metric.get().safeRect.left + columnIndex * _Metric.get().gridSize, _Metric.get().safeRect.bottom);
+    for (int columnIndex = 0; columnIndex <= Metric.get().horizontalGrid; columnIndex += 1) {
+      Offset p1 = new Offset(Metric.get().safeRect.left + columnIndex * Metric.get().gridSize, Metric.get().safeRect.top);
+      Offset p2 = new Offset(Metric.get().safeRect.left + columnIndex * Metric.get().gridSize, Metric.get().safeRect.bottom);
       canvas.drawLine(p1, p2, _paint);
     }
     _paint.color = Colors.yellow;
     for (int rowIndex = 0; rowIndex <= _Game.get().screen.square; rowIndex += 1) {
-      Offset p1 = new Offset(_Metric.get().coreNoPaddingRect.left, _Metric.get().coreNoPaddingRect.top + rowIndex * _Metric.get().coreCardSize(_Game.get().screen.square));
-      Offset p2 = new Offset(_Metric.get().coreNoPaddingRect.right, _Metric.get().coreNoPaddingRect.top + rowIndex * _Metric.get().coreCardSize(_Game.get().screen.square));
+      Offset p1 = new Offset(Metric.get().coreNoPaddingRect.left, Metric.get().coreNoPaddingRect.top + rowIndex * Metric.get().coreCardSize(_Game.get().screen.square));
+      Offset p2 = new Offset(Metric.get().coreNoPaddingRect.right, Metric.get().coreNoPaddingRect.top + rowIndex * Metric.get().coreCardSize(_Game.get().screen.square));
       canvas.drawLine(p1, p2, _paint);
     }
     for (int columnIndex = 0; columnIndex <= _Game.get().screen.square; columnIndex += 1) {
-      Offset p1 = new Offset(_Metric.get().coreNoPaddingRect.left + columnIndex * _Metric.get().coreCardSize(_Game.get().screen.square), _Metric.get().coreNoPaddingRect.top);
-      Offset p2 = new Offset(_Metric.get().coreNoPaddingRect.left + columnIndex * _Metric.get().coreCardSize(_Game.get().screen.square), _Metric.get().coreNoPaddingRect.bottom);
+      Offset p1 = new Offset(Metric.get().coreNoPaddingRect.left + columnIndex * Metric.get().coreCardSize(_Game.get().screen.square), Metric.get().coreNoPaddingRect.top);
+      Offset p2 = new Offset(Metric.get().coreNoPaddingRect.left + columnIndex * Metric.get().coreCardSize(_Game.get().screen.square), Metric.get().coreNoPaddingRect.bottom);
       canvas.drawLine(p1, p2, _paint);
     }
   }
@@ -49,11 +49,11 @@ class _GridPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     _paint.style = PaintingStyle.fill;
     _paint.color = Colors.blue;
-    canvas.drawRect(_Metric.get().screenRect, _paint);
+    canvas.drawRect(Metric.get().screenRect, _paint);
     _paint.color = Colors.green;
-    canvas.drawRect(_Metric.get().safeRect, _paint);
+    canvas.drawRect(Metric.get().safeRect, _paint);
     _paint.color = Colors.red;
-    canvas.drawRect(_Metric.get().coreRect, _paint);
+    canvas.drawRect(Metric.get().coreRect, _paint);
   }
 
   @override

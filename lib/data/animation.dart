@@ -119,22 +119,20 @@ class _Animation<T extends _Card> {
       curve: Curves.easeInOut,
       onAnimating: (card, value) {
         if (value < 0.5) {
-          card.translateX = _AnimationCalc.ab(0.0, _Metric.get().coreCardSize(card.screen.square) * ltrb.x)
-              .calc(value);
-          card.translateY = _AnimationCalc.ab(0.0, _Metric.get().coreCardSize(card.screen.square) * ltrb.y)
-              .calc(value);
+          card.translateX = _AnimationCalc.ab(0.0, Metric.get().coreCardSize(card.screen.square) * ltrb.x).calc(value);
+          card.translateY = _AnimationCalc.ab(0.0, Metric.get().coreCardSize(card.screen.square) * ltrb.y).calc(value);
         } else {
-          card.translateX = _AnimationCalc.ab(-_Metric.get().coreCardSize(card.screen.square) * ltrb.x, 0.0)
+          card.translateX = _AnimationCalc.ab(-Metric.get().coreCardSize(card.screen.square) * ltrb.x, 0.0)
               .calc(value);
-          card.translateY = _AnimationCalc.ab(-_Metric.get().coreCardSize(card.screen.square) * ltrb.y, 0.0)
+          card.translateY = _AnimationCalc.ab(-Metric.get().coreCardSize(card.screen.square) * ltrb.y, 0.0)
               .calc(value);
         }
       },
       onHalf: (card) {
         card.rowIndex += ltrb.y;
         card.columnIndex += ltrb.x;
-        card.translateX = _AnimationCalc.ab(-_Metric.get().coreCardSize(card.screen.square) * ltrb.x, 0.0).calc(0.5);
-        card.translateY = _AnimationCalc.ab(-_Metric.get().coreCardSize(card.screen.square) * ltrb.y, 0.0).calc(0.5);
+        card.translateX = _AnimationCalc.ab(-Metric.get().coreCardSize(card.screen.square) * ltrb.x, 0.0).calc(0.5);
+        card.translateY = _AnimationCalc.ab(-Metric.get().coreCardSize(card.screen.square) * ltrb.y, 0.0).calc(0.5);
       },
     );
   }

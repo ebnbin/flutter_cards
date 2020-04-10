@@ -1,4 +1,5 @@
 import 'package:cards/data.dart';
+import 'package:cards/metric.dart';
 import 'package:flutter/material.dart' hide Card;
 
 /// 游戏页面.
@@ -12,9 +13,8 @@ class GamePage extends StatefulWidget {
 class _GamePageState extends State<GamePage> with TickerProviderStateMixin implements GameCallback {
   @override
   Widget build(BuildContext context) {
-    Game game = Game.get();
-    game.build();
-    return _buildGame(game);
+    Metric.build(context);
+    return _buildGame(Game.get());
   }
   
   Widget _buildGame(Game game) {
@@ -101,6 +101,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin imple
   @override
   void dispose() {
     Game.dispose();
+    Metric.dispose();
     super.dispose();
   }
 }
