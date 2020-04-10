@@ -110,7 +110,7 @@ class _Animation<T extends _Card> {
     int beginDelay = 0,
     int endDelay = 0,
     @required
-    _LTRB ltrb,
+    AxisDirection direction,
   }) {
     return _Animation<_SpriteCard>(card,
       duration: 500,
@@ -119,20 +119,24 @@ class _Animation<T extends _Card> {
       curve: Curves.easeInOut,
       onAnimating: (card, value) {
         if (value < 0.5) {
-          card.translateX = _AnimationCalc.ab(0.0, Metric.get().coreCardSize(card.screen.square) * ltrb.x).calc(value);
-          card.translateY = _AnimationCalc.ab(0.0, Metric.get().coreCardSize(card.screen.square) * ltrb.y).calc(value);
-        } else {
-          card.translateX = _AnimationCalc.ab(-Metric.get().coreCardSize(card.screen.square) * ltrb.x, 0.0)
+          card.translateX = _AnimationCalc.ab(0.0, Metric.get().coreCardSize(card.screen.square) * direction.x)
               .calc(value);
-          card.translateY = _AnimationCalc.ab(-Metric.get().coreCardSize(card.screen.square) * ltrb.y, 0.0)
+          card.translateY = _AnimationCalc.ab(0.0, Metric.get().coreCardSize(card.screen.square) * direction.y)
+              .calc(value);
+        } else {
+          card.translateX = _AnimationCalc.ab(-Metric.get().coreCardSize(card.screen.square) * direction.x, 0.0)
+              .calc(value);
+          card.translateY = _AnimationCalc.ab(-Metric.get().coreCardSize(card.screen.square) * direction.y, 0.0)
               .calc(value);
         }
       },
       onHalf: (card) {
-        card.rowIndex += ltrb.y;
-        card.columnIndex += ltrb.x;
-        card.translateX = _AnimationCalc.ab(-Metric.get().coreCardSize(card.screen.square) * ltrb.x, 0.0).calc(0.5);
-        card.translateY = _AnimationCalc.ab(-Metric.get().coreCardSize(card.screen.square) * ltrb.y, 0.0).calc(0.5);
+        card.rowIndex += direction.y;
+        card.columnIndex += direction.x;
+        card.translateX = _AnimationCalc.ab(-Metric.get().coreCardSize(card.screen.square) * direction.x, 0.0)
+            .calc(0.5);
+        card.translateY = _AnimationCalc.ab(-Metric.get().coreCardSize(card.screen.square) * direction.y, 0.0)
+            .calc(0.5);
       },
     );
   }

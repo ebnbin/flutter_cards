@@ -403,16 +403,6 @@ class _CoreCard extends _GridCard {
     columnGridSpan = Metric.get().coreCardGrid(screen.square) * coreColumnSpan;
   }
 
-  /// 所在行范围. 对于不跨行的卡片, from == to == rowIndex.
-  _CardRowColumnRange get rowRange {
-    return _CardRowColumnRange(rowIndex, rowIndex + rowSpan - 1);
-  }
-
-  /// 所在列范围. 对于不跨列的卡片, from == to == columnIndex.
-  _CardRowColumnRange get columnRange {
-    return _CardRowColumnRange(columnIndex, columnIndex + columnSpan - 1);
-  }
-
   //*******************************************************************************************************************
 //
 //  @override
@@ -428,8 +418,6 @@ class _SpriteCard extends _CoreCard {
   _SpriteCard(_GameScreen screen, {
     int rowIndex = 0,
     int columnIndex = 0,
-    int rowSpan = 1,
-    int columnSpan = 1,
     double translateX = 0.0,
     double translateY = 0.0,
     double rotateX = 0.0,
@@ -446,8 +434,10 @@ class _SpriteCard extends _CoreCard {
   }) : super(screen,
     rowIndex: rowIndex,
     columnIndex: columnIndex,
-    rowSpan: rowSpan,
-    columnSpan: columnSpan,
+    // 精灵卡片只能占用一行.
+    rowSpan: 1,
+    // 精灵卡片只能占用一列.
+    columnSpan: 1,
     translateX: translateX,
     translateY: translateY,
     rotateX: rotateX,
@@ -471,26 +461,10 @@ class _SpriteCard extends _CoreCard {
       if (playerCard == null) {
         return;
       }
-
-      switch (playerCard.adjacent(this)) {
-        case _LTRB.left:
-          _Animation.spriteExit(this).begin();
-          _Animation.spriteMove(playerCard, ltrb: _LTRB.left, beginDelay: 250).begin();
-          break;
-        case _LTRB.top:
-          _Animation.spriteExit(this).begin();
-          _Animation.spriteMove(playerCard, ltrb: _LTRB.top, beginDelay: 250).begin();
-          break;
-        case _LTRB.right:
-          _Animation.spriteExit(this).begin();
-          _Animation.spriteMove(playerCard, ltrb: _LTRB.right, beginDelay: 250).begin();
-          break;
-        case _LTRB.bottom:
-          _Animation.spriteExit(this).begin();
-          _Animation.spriteMove(playerCard, ltrb: _LTRB.bottom, beginDelay: 250).begin();
-          break;
-        default:
-          break;
+      AxisDirection direction = playerCard.adjacentDirection(this);
+      if (direction != null) {
+        _Animation.spriteExit(this).begin();
+        _Animation.spriteMove(playerCard, direction: direction, beginDelay: 250).begin();
       }
     };
   }
@@ -502,258 +476,135 @@ class _SpriteCard extends _CoreCard {
 
   //*******************************************************************************************************************
 
-  /// 从 [screen.spriteCards] 中返回当前卡片左边的卡片. 当卡片跨多行时可能存在多个符合条件的卡片. 如果没符合条件的卡片则返回空列表.
-  BuiltList<_SpriteCard> get left {
-    int targetColumn = columnRange.from - 1;
-    if (targetColumn < 0) {
-      return <_SpriteCard>[].toBuiltList();
-    }
-    _CardRowColumnRange targetRowRange = rowRange;
-    return gameScreen.spriteCards.where((element) {
-      if (!element.visible) {
-        return false;
-      }
-      return targetRowRange.contain(element.rowRange) && element.columnRange.containValue(targetColumn);
-    }).toBuiltList();
-  }
-
-  /// 从 [screen.spriteCards] 中返回当前卡片上边的卡片. 当卡片跨多行时可能存在多个符合条件的卡片. 如果没符合条件的卡片则返回空列表.
-  BuiltList<_SpriteCard> get top {
-    int targetRow = rowRange.from - 1;
-    if (targetRow < 0) {
-      return <_SpriteCard>[].toBuiltList();
-    }
-    _CardRowColumnRange targetColumnRange = columnRange;
-    return gameScreen.spriteCards.where((element) {
-      if (!element.visible) {
-        return false;
-      }
-      return element.rowRange.containValue(targetRow) && targetColumnRange.contain(element.columnRange);
-    }).toBuiltList();
-  }
-
-  /// 从 [screen.spriteCards] 中返回当前卡片右边的卡片. 当卡片跨多行时可能存在多个符合条件的卡片. 如果没符合条件的卡片则返回空列表.
-  BuiltList<_SpriteCard> get right {
-    int targetColumn = columnRange.to + 1;
-    if (targetColumn >= screen.square) {
-      return <_SpriteCard>[].toBuiltList();
-    }
-    _CardRowColumnRange targetRowRange = rowRange;
-    return gameScreen.spriteCards.where((element) {
-      if (!element.visible) {
-        return false;
-      }
-      return targetRowRange.contain(element.rowRange) && element.columnRange.containValue(targetColumn);
-    }).toBuiltList();
-  }
-
-  /// 从 [screen.spriteCards] 中返回当前卡片下边的卡片. 当卡片跨多行时可能存在多个符合条件的卡片. 如果没符合条件的卡片则返回空列表.
-  BuiltList<_SpriteCard> get bottom {
-    int targetRow = rowRange.to + 1;
-    if (targetRow >= screen.square) {
-      return <_SpriteCard>[].toBuiltList();
-    }
-    _CardRowColumnRange targetColumnRange = columnRange;
-    return gameScreen.spriteCards.where((element) {
-      if (!element.visible) {
-        return false;
-      }
-      return element.rowRange.containValue(targetRow) && targetColumnRange.contain(element.columnRange);
-    }).toBuiltList();
-  }
-
-  /// 从 [screen.spriteCards] 中返回当前卡片左边所有的卡片. 第一维度列表表示从右向左的各列, 第二维度列表表示该列符合条件的多个卡片.
-  BuiltList<BuiltList<_SpriteCard>> get leftAll {
-    _CardRowColumnRange targetColumnRange = _CardRowColumnRange(0, columnRange.from - 1);
-    if (!targetColumnRange.isValid()) {
-      return <BuiltList<_SpriteCard>>[].toBuiltList();
-    }
-    _CardRowColumnRange targetRowRange = rowRange;
-    List<_SpriteCard> spriteCards = <_SpriteCard>[]..addAll(gameScreen.spriteCards);
-    List<BuiltList<_SpriteCard>> list2 = <BuiltList<_SpriteCard>>[];
-    for (int targetColumn = targetColumnRange.to; targetColumn >= targetColumnRange.from; targetColumn--) {
-      List<_SpriteCard> list = <_SpriteCard>[];
-      spriteCards.toBuiltList().forEach((element) {
-        if (!element.visible) {
-          return;
-        }
-        if (targetRowRange.contain(element.rowRange) && element.columnRange.containValue(targetColumn)) {
-          list.add(element);
-          spriteCards.remove(element);
-        }
-      });
-      list2.add(list.toBuiltList());
-    }
-    return list2.toBuiltList();
-  }
-
-  /// 从 [screen.spriteCards] 中返回当前卡片上边所有的卡片. 第一维度列表表示从下向上的各列, 第二维度列表表示该列符合条件的多个卡片.
-  BuiltList<BuiltList<_SpriteCard>> get topAll {
-    _CardRowColumnRange targetRowRange = _CardRowColumnRange(0, rowRange.from - 1);
-    if (!targetRowRange.isValid()) {
-      return <BuiltList<_SpriteCard>>[].toBuiltList();
-    }
-    _CardRowColumnRange targetColumnRange = columnRange;
-    List<_SpriteCard> spriteCards = <_SpriteCard>[]..addAll(gameScreen.spriteCards);
-    List<BuiltList<_SpriteCard>> list2 = <BuiltList<_SpriteCard>>[];
-    for (int targetRow = targetRowRange.to; targetRow >= targetRowRange.from; targetRow--) {
-      List<_SpriteCard> list = <_SpriteCard>[];
-      spriteCards.toBuiltList().forEach((element) {
-        if (!element.visible) {
-          return;
-        }
-        if (element.rowRange.containValue(targetRow) && targetColumnRange.contain(element.columnRange)) {
-          list.add(element);
-          spriteCards.remove(element);
-        }
-      });
-      list2.add(list.toBuiltList());
-    }
-    return list2.toBuiltList();
-  }
-
-  /// 从 [screen.spriteCards] 中返回当前卡片右边所有的卡片. 第一维度列表表示从左向右的各列, 第二维度列表表示该列符合条件的多个卡片.
-  BuiltList<BuiltList<_SpriteCard>> get rightAll {
-    _CardRowColumnRange targetColumnRange = _CardRowColumnRange(columnRange.to + 1, screen.square - 1);
-    if (!targetColumnRange.isValid()) {
-      return <BuiltList<_SpriteCard>>[].toBuiltList();
-    }
-    _CardRowColumnRange targetRowRange = rowRange;
-    List<_SpriteCard> spriteCards = <_SpriteCard>[]..addAll(gameScreen.spriteCards);
-    List<BuiltList<_SpriteCard>> list2 = <BuiltList<_SpriteCard>>[];
-    for (int targetColumn = targetColumnRange.from; targetColumn <= targetColumnRange.to; targetColumn++) {
-      List<_SpriteCard> list = <_SpriteCard>[];
-      spriteCards.toBuiltList().forEach((element) {
-        if (!element.visible) {
-          return;
-        }
-        if (targetRowRange.contain(element.rowRange) &&
-            element.columnRange.containValue(targetColumn)) {
-          list.add(element);
-          spriteCards.remove(element);
-        }
-      });
-      list2.add(list.toBuiltList());
-    }
-    return list2.toBuiltList();
-  }
-
-  /// 从 [screen.spriteCards] 中返回当前卡片下边所有的卡片. 第一维度列表表示从上向下的各列, 第二维度列表表示该列符合条件的多个卡片.
-  BuiltList<BuiltList<_SpriteCard>> get bottomAll {
-    _CardRowColumnRange targetRowRange = _CardRowColumnRange(rowRange.to + 1, screen.square - 1);
-    if (!targetRowRange.isValid()) {
-      return <BuiltList<_SpriteCard>>[].toBuiltList();
-    }
-    _CardRowColumnRange targetColumnRange = columnRange;
-    List<_SpriteCard> spriteCards = <_SpriteCard>[]..addAll(gameScreen.spriteCards);
-    List<BuiltList<_SpriteCard>> list2 = <BuiltList<_SpriteCard>>[];
-    for (int targetRow = targetRowRange.from; targetRow <= targetRowRange.to; targetRow++) {
-      List<_SpriteCard> list = <_SpriteCard>[];
-      spriteCards.toBuiltList().forEach((element) {
-        if (!element.visible) {
-          return;
-        }
-        if (element.rowRange.containValue(targetRow) &&
-            targetColumnRange.contain(element.columnRange)) {
-          list.add(element);
-          spriteCards.remove(element);
-        }
-      });
-      list2.add(list.toBuiltList());
-    }
-    return list2.toBuiltList();
-  }
-
-  /// 根据 [ltrb] 返回指定方向的所有卡片.
-  BuiltList<BuiltList<_SpriteCard>> ltrbAll(_LTRB ltrb) {
-    switch (ltrb) {
-      case _LTRB.left:
-        return leftAll;
-      case _LTRB.top:
-        return topAll;
-      case _LTRB.right:
-        return rightAll;
-      case _LTRB.bottom:
-        return bottomAll;
+  /// 是否在指定方向 [direction] 边缘.
+  bool edge(AxisDirection direction) {
+    switch (direction) {
+      case AxisDirection.up:
+        return rowIndex <= 0;
+      case AxisDirection.right:
+        return columnIndex >= screen.square - 1;
+      case AxisDirection.down:
+        return rowIndex >= screen.square - 1;
+      case AxisDirection.left:
+        return columnIndex <= 0;
       default:
         throw Exception();
     }
   }
 
-  /// 是否在最左边.
-  bool edgeLeft() {
-    return columnRange.from == 0;
-  }
-
-  /// 是否在最上边.
-  bool edgeTop() {
-    return rowRange.from == 0;
-  }
-
-  /// 是否在最右边.
-  bool edgeRight() {
-    return columnRange.to == screen.square - 1;
-  }
-
-  /// 是否在最下边.
-  bool edgeBottom() {
-    return rowRange.to == screen.square - 1;
-  }
-
-  /// 是否在最 [ltrb] 边.
-  bool edgeLTRB(_LTRB ltrb) {
-    switch (ltrb) {
-      case _LTRB.left:
-        return edgeLeft();
-      case _LTRB.top:
-        return edgeTop();
-      case _LTRB.right:
-        return edgeRight();
-      case _LTRB.bottom:
-        return edgeBottom();
-      default:
-        throw Exception();
+  /// 从 [screen.spriteCards] 中返回当前卡片指定方向 [direction] 的卡片. 如果没符合条件的卡片则返回 null.
+  _SpriteCard adjacentCard(AxisDirection direction) {
+    if (edge(direction)) {
+      return null;
     }
+    return gameScreen.spriteCards.firstWhere((element) {
+      if (!element.visible) {
+        return false;
+      }
+      switch (direction) {
+        case AxisDirection.up:
+          return element.rowIndex == rowIndex - 1 && element.columnIndex == columnIndex;
+        case AxisDirection.right:
+          return element.rowIndex == rowIndex && element.columnIndex == columnIndex + 1;
+        case AxisDirection.down:
+          return element.rowIndex == rowIndex + 1 && element.columnIndex == columnIndex;
+        case AxisDirection.left:
+          return element.rowIndex == rowIndex && element.columnIndex == columnIndex - 1;
+        default:
+          return false;
+      }
+    }, orElse: () => null);
+  }
+
+  /// 返回 [card] 在当前卡片的相邻方向. 如果不在任何方向则返回 null.
+  AxisDirection adjacentDirection(_SpriteCard card) {
+    if (card == null) {
+      return null;
+    }
+    if (identical(adjacentCard(AxisDirection.up), card)) {
+      return AxisDirection.up;
+    }
+    if (identical(adjacentCard(AxisDirection.right), card)) {
+      return AxisDirection.right;
+    }
+    if (identical(adjacentCard(AxisDirection.down), card)) {
+      return AxisDirection.down;
+    }
+    if (identical(adjacentCard(AxisDirection.left), card)) {
+      return AxisDirection.left;
+    }
+    return null;
+  }
+
+  /// 从 [screen.spriteCards] 中返回当前卡片指定方向 [direction] 的所有卡片. 如果没符合条件的卡片则返回空列表.
+  BuiltList<_SpriteCard> adjacentCardAll(AxisDirection direction) {
+    List<_SpriteCard> list = <_SpriteCard>[];
+    if (!edge(direction)) {
+      List<_SpriteCard> spriteCards = gameScreen.spriteCards;
+      switch (direction) {
+        case AxisDirection.up:
+          for (int targetRow = rowIndex - 1; targetRow >= 0; targetRow--) {
+            spriteCards.forEach((element) {
+              if (!element.visible) {
+                return;
+              }
+              if (element.rowIndex == targetRow && element.columnIndex == columnIndex) {
+                list.add(element);
+              }
+            });
+          }
+          break;
+        case AxisDirection.right:
+          for (int targetColumn = columnIndex + 1; targetColumn <= screen.square - 1; targetColumn++) {
+            spriteCards.forEach((element) {
+              if (!element.visible) {
+                return;
+              }
+              if (element.rowIndex == rowIndex && element.columnIndex == targetColumn) {
+                list.add(element);
+              }
+            });
+          }
+          break;
+        case AxisDirection.down:
+          for (int targetRow = rowIndex + 1; targetRow <= screen.square - 1; targetRow++) {
+            spriteCards.forEach((element) {
+              if (!element.visible) {
+                return;
+              }
+              if (element.rowIndex == targetRow && element.columnIndex == columnIndex) {
+                list.add(element);
+              }
+            });
+          }
+          break;
+        case AxisDirection.left:
+          for (int targetColumn = columnIndex - 1; targetColumn >= 0; targetColumn--) {
+            spriteCards.forEach((element) {
+              if (!element.visible) {
+                return;
+              }
+              if (element.rowIndex == rowIndex && element.columnIndex == targetColumn) {
+                list.add(element);
+              }
+            });
+          }
+          break;
+        default:
+          throw Exception();
+      }
+    }
+    return list.build();
   }
 
   /// 如果指定方向在边缘, 按 [clockwise] 顺序返回第一个不是边缘的方向.
-  _LTRB nonEdgeFallback(_LTRB ltrb, {
+  AxisDirection nextNonEdge(AxisDirection direction, {
     bool clockwise = false,
   }) {
-    for (_LTRB currentLTRB in ltrb.turns(clockwise: clockwise)) {
-      if (!edgeLTRB(currentLTRB)) {
-        return currentLTRB;
+    for (AxisDirection currentDirection in direction.turns(clockwise: clockwise)) {
+      if (!edge(currentDirection)) {
+        return currentDirection;
       }
-    }
-    return ltrb;
-  }
-
-  /// 根据 [ltrb] 返回指定方向的所有卡片. 如果指定方向的卡片为空, 按 [clockwise] 顺序返回第一个有效方向的卡片.
-  BuiltList<BuiltList<_SpriteCard>> ltrbAllFallback(_LTRB ltrb, {
-    bool clockwise = false,
-  }) {
-    for (_LTRB currentLtrb in ltrb.turns(clockwise: clockwise)) {
-      BuiltList<BuiltList<_SpriteCard>> list = ltrbAll(currentLtrb);
-      if (list.isNotEmpty) {
-        return list;
-      }
-    }
-    return <BuiltList<_SpriteCard>>[].toBuiltList();
-  }
-
-  /// 返回 [card] 在当前卡片的相邻位置. 如果不在左上右下则返回 null.
-  _LTRB adjacent(_SpriteCard card) {
-    if (left.contains(card)) {
-      return _LTRB.left;
-    }
-    if (top.contains(card)) {
-      return _LTRB.top;
-    }
-    if (right.contains(card)) {
-      return _LTRB.right;
-    }
-    if (bottom.contains(card)) {
-      return _LTRB.bottom;
     }
     return null;
   }
@@ -782,8 +633,6 @@ class _PlayerCard extends _SpriteCard {
   }) : super(screen,
     rowIndex: rowIndex,
     columnIndex: columnIndex,
-    rowSpan: 1,
-    columnSpan: 1,
     translateX: translateX,
     translateY: translateY,
     rotateX: rotateX,
@@ -817,63 +666,29 @@ class _PlayerCard extends _SpriteCard {
 
 //*********************************************************************************************************************
 
-/// 卡片行列范围. 包含 [from] 和 [to]. [to] 必须大等于 [from], 否则 [isValid] 为 false.
-class _CardRowColumnRange {
-  _CardRowColumnRange(this.from, this.to);
-
-  final int from;
-  final int to;
-
-  bool contain(_CardRowColumnRange other) {
-    for (int i = from; i <= to; i++) {
-      for (int j = other.from; j <= other.to; j++) {
-        if (i == j) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
-  bool containValue(int value) {
-    return value >= from && value <= to;
-  }
-
-  bool isValid() {
-    return to >= from;
-  }
-}
-
-enum _LTRB {
-  left,
-  top,
-  right,
-  bottom,
-}
-
-extension _LTRBExtension on _LTRB {
+extension _AxisDirectionExtension on AxisDirection {
   /// 按照 [clockwise] 顺时针或逆时针顺序依次返回从当前方向开始的四个方向列表.
-  BuiltList<_LTRB> turns({
+  BuiltList<AxisDirection> turns({
     bool clockwise = false,
   }) {
-    List<_LTRB> list = _LTRB.values + _LTRB.values;
+    List<AxisDirection> list = AxisDirection.values + AxisDirection.values;
     if (!clockwise) {
       list = list.reversed.toList();
     }
     int start = list.indexOf(this);
-    return list.sublist(start, start + _LTRB.values.length).toBuiltList();
+    return list.sublist(start, start + AxisDirection.values.length).toBuiltList();
   }
 
   int get x {
     switch (this) {
-      case _LTRB.left:
-        return -1;
-      case _LTRB.top:
+      case AxisDirection.up:
         return 0;
-      case _LTRB.right:
+      case AxisDirection.right:
         return 1;
-      case _LTRB.bottom:
+      case AxisDirection.down:
         return 0;
+      case AxisDirection.left:
+        return -1;
       default:
         throw Exception();
     }
@@ -881,14 +696,14 @@ extension _LTRBExtension on _LTRB {
 
   int get y {
     switch (this) {
-      case _LTRB.left:
-        return 0;
-      case _LTRB.top:
+      case AxisDirection.up:
         return -1;
-      case _LTRB.right:
+      case AxisDirection.right:
         return 0;
-      case _LTRB.bottom:
+      case AxisDirection.down:
         return 1;
+      case AxisDirection.left:
+        return 0;
       default:
         throw Exception();
     }
