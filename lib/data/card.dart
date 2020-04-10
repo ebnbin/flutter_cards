@@ -21,9 +21,9 @@ class CardData {
 
   double get margin => _card.margin;
 
-  GestureLongPressCallback get onLongPress => _card.screen.onLongPress(_card);
+  GestureLongPressCallback get onLongPress => _card.onLongPress;
 
-  GestureTapCallback get onTap => _card.screen.onTap(_card);
+  GestureTapCallback get onTap => _card.onTap;
 
   double get opacity => _card.opacity;
 
@@ -69,6 +69,8 @@ class _Card implements Card {
     this.visible = true,
     this.touchable = true,
     this.gestureType = _CardGestureType.normal,
+    this.onTap,
+    this.onLongPress,
   }) {
     data = CardData._(this);
   }
@@ -237,6 +239,12 @@ class _Card implements Card {
 
   //*******************************************************************************************************************
 
+  GestureTapCallback onTap;
+
+  GestureLongPressCallback onLongPress;
+
+  //*******************************************************************************************************************
+
   @override
   CardData data;
 
@@ -276,6 +284,8 @@ class _CoreCard extends _Card {
     bool visible = true,
     bool touchable = true,
     _CardGestureType gestureType = _CardGestureType.normal,
+    GestureTapCallback onTap,
+    GestureLongPressCallback onLongPress,
   }) : super(screen,
     type: _CardType.core,
     translateX: translateX,
@@ -291,6 +301,8 @@ class _CoreCard extends _Card {
     visible: visible,
     touchable: touchable,
     gestureType: gestureType,
+    onTap: onTap,
+    onLongPress: onLongPress,
   ) {
     this.rowIndex = rowIndex;
     this.columnIndex = columnIndex;
@@ -375,6 +387,8 @@ class _SpriteCard extends _CoreCard {
     double radius = 4.0,
     double opacity = 1.0,
     _CardGestureType gestureType = _CardGestureType.normal,
+    GestureTapCallback onTap,
+    GestureLongPressCallback onLongPress,
   }) : super(screen,
     rowIndex: rowIndex,
     columnIndex: columnIndex,
@@ -395,6 +409,8 @@ class _SpriteCard extends _CoreCard {
     // 精灵卡片必须是可交互的.
     touchable: true,
     gestureType: gestureType,
+    onTap: onTap,
+    onLongPress: onLongPress,
   );
 
   _GameScreen get gameScreen => screen as _GameScreen;
@@ -644,6 +660,8 @@ class _PlayerCard extends _SpriteCard {
     double radius = 4.0,
     double opacity = 1.0,
     _CardGestureType gestureType = _CardGestureType.normal,
+    GestureTapCallback onTap,
+    GestureLongPressCallback onLongPress,
   }) : super(screen,
     rowIndex: rowIndex,
     columnIndex: columnIndex,
@@ -660,6 +678,8 @@ class _PlayerCard extends _SpriteCard {
     radius: radius,
     opacity: opacity,
     gestureType: gestureType,
+    onTap: onTap,
+    onLongPress: onLongPress,
   );
 
   /// 创建一个随机位置的玩家卡片.

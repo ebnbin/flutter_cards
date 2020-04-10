@@ -9,7 +9,7 @@ abstract class _Screen {
   });
 
   void init() {
-    testCards.add(_Card(this,
+    _Card sampleCard = _Card(this,
       type: _CardType.sample,
       verticalRowGridIndex: 1,
       verticalColumnGridIndex: 1,
@@ -19,7 +19,11 @@ abstract class _Screen {
       horizontalColumnGridIndex: 1,
       horizontalRowGridSpan: 10,
       horizontalColumnGridSpan: 15,
-    ));
+    );
+    sampleCard.onTap = () {
+      _Animation.sample(sampleCard).begin();
+    };
+    testCards.add(sampleCard);
     List<_CardType> cardTypes = <_CardType>[
       _CardType.dev0,
       _CardType.dev1,
@@ -29,7 +33,7 @@ abstract class _Screen {
       _CardType.dev5,
     ];
     for (int i = 0; i < 6; i++) {
-      testCards.add(_Card(this,
+      _Card devCard = _Card(this,
         type: cardTypes[i],
         verticalRowGridIndex: 80,
         verticalColumnGridIndex: 1 + i * 10,
@@ -39,7 +43,8 @@ abstract class _Screen {
         horizontalColumnGridIndex: 80,
         horizontalRowGridSpan: 10,
         horizontalColumnGridSpan: 10,
-      ));
+      );
+      testCards.add(devCard);
     }
   }
 
@@ -54,21 +59,6 @@ abstract class _Screen {
 
   /// 返回所有卡片.
   BuiltList<_Card> get cards;
-
-  //*******************************************************************************************************************
-
-  GestureTapCallback onTap(_Card card) {
-    if (card.type == _CardType.sample) {
-      return () {
-        _Animation.sample(card).begin();
-      };
-    }
-    return null;
-  }
-
-  GestureLongPressCallback onLongPress(_Card card) {
-    return null;
-  }
 }
 
 //*********************************************************************************************************************
@@ -110,20 +100,12 @@ class _GameScreen extends _Screen {
     spriteCards = List.filled(square * square, _SpriteCard.placeholder(this),
       growable: false,
     );
-  }
-
-  @override
-  onTap(_Card card) {
-    if (card.type == _CardType.dev0) {
-      return () {
-        addSpriteCards();
-      };
-    } else if (card.type == _CardType.dev1) {
-      return () {
-        removeSpriteCards();
-      };
-    }
-    return super.onTap(card);
+    testCards[1].onTap = () {
+      addSpriteCards();
+    };
+    testCards[2].onTap = () {
+      removeSpriteCards();
+    };
   }
 
   void addSpriteCards() {
