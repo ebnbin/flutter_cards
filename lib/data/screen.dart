@@ -4,9 +4,9 @@ part of '../data.dart';
 
 /// 屏幕.
 abstract class _Screen {
-  _Screen(this.type, {
+  _Screen({
     this.square,
-  }) : cards = List.filled(length(type, square), _Card.placeholder,
+  }) : cards = List.filled(length(square), _Card.placeholder,
     growable: false,
   ) {
     _GridCard sampleCard = _GridCard(this,
@@ -38,16 +38,13 @@ abstract class _Screen {
     }
   }
 
-  static int length(_ScreenType type, int square) {
+  static int length(int square) {
     int length = 0;
     length += square * square;
     length += 1; // sample.
     length += 6; // dev.
     return length;
   }
-
-  /// 屏幕类型.
-  final _ScreenType type;
 
   /// Core 卡片行列数. 2 ~ 6.
   final int square;
@@ -61,7 +58,6 @@ abstract class _Screen {
 /// 开屏.
 class _SplashScreen extends _Screen {
   _SplashScreen() : super(
-    _ScreenType.splash,
     square: 4,
   );
 }
@@ -72,7 +68,7 @@ class _SplashScreen extends _Screen {
 class _GameScreen extends _Screen {
   _GameScreen({
     int square,
-  }) : super(_ScreenType.game,
+  }) : super(
     square: square,
   ) {
     (cards[1] as _GridCard).onTap = () {
@@ -123,10 +119,4 @@ class _GameScreen extends _Screen {
       ).begin();
     });
   }
-}
-
-/// 屏幕类型.
-enum _ScreenType {
-  splash,
-  game,
 }
