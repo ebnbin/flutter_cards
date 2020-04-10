@@ -85,7 +85,7 @@ class _Game {
   bool _firstBuild = true;
 
   void build() {
-    _Metric.build();
+    _Metric.build(callback.context);
     if (_firstBuild) {
       _firstBuild = false;
       screen.init();
@@ -105,7 +105,6 @@ class _Game {
     if (_firstBuild) {
       return;
     }
-    _Metric.build();
     screen.init();
   }
 }

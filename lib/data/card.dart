@@ -369,38 +369,38 @@ class _CoreCard extends _GridCard {
   /// 行.
   int get rowIndex {
     return (rowGridIndex - _Metric.paddingGrid - (_Metric.get().isVertical ? _Metric.headerFooterGrid : 0)) ~/
-        _Metric.get().coreCardGrid;
+        _Metric.get().coreCardGrid(screen.square);
   }
   set rowIndex(int coreRowIndex) {
-    verticalRowGridIndex = _Metric.get().coreCardGrid * coreRowIndex + _Metric.paddingGrid + _Metric.headerFooterGrid;
-    horizontalRowGridIndex = _Metric.get().coreCardGrid * coreRowIndex + _Metric.paddingGrid;
+    verticalRowGridIndex = _Metric.get().coreCardGrid(screen.square) * coreRowIndex + _Metric.paddingGrid + _Metric.headerFooterGrid;
+    horizontalRowGridIndex = _Metric.get().coreCardGrid(screen.square) * coreRowIndex + _Metric.paddingGrid;
   }
 
   /// 列.
   int get columnIndex {
     return (columnGridIndex - _Metric.paddingGrid - (_Metric.get().isVertical ? 0 : _Metric.headerFooterGrid)) ~/
-        _Metric.get().coreCardGrid;
+        _Metric.get().coreCardGrid(screen.square);
   }
   set columnIndex(int coreColumnIndex) {
-    verticalColumnGridIndex = _Metric.get().coreCardGrid * coreColumnIndex + _Metric.paddingGrid;
-    horizontalColumnGridIndex = _Metric.get().coreCardGrid * coreColumnIndex + _Metric.paddingGrid +
+    verticalColumnGridIndex = _Metric.get().coreCardGrid(screen.square) * coreColumnIndex + _Metric.paddingGrid;
+    horizontalColumnGridIndex = _Metric.get().coreCardGrid(screen.square) * coreColumnIndex + _Metric.paddingGrid +
         _Metric.headerFooterGrid;
   }
 
   /// 跨行.
   int get rowSpan {
-    return rowGridSpan ~/ _Metric.get().coreCardGrid;
+    return rowGridSpan ~/ _Metric.get().coreCardGrid(screen.square);
   }
   set rowSpan(int coreRowSpan) {
-    rowGridSpan = _Metric.get().coreCardGrid * coreRowSpan;
+    rowGridSpan = _Metric.get().coreCardGrid(screen.square) * coreRowSpan;
   }
 
   /// 跨列.
   int get columnSpan {
-    return columnGridSpan ~/ _Metric.get().coreCardGrid;
+    return columnGridSpan ~/ _Metric.get().coreCardGrid(screen.square);
   }
   set columnSpan(int coreColumnSpan) {
-    columnGridSpan = _Metric.get().coreCardGrid * coreColumnSpan;
+    columnGridSpan = _Metric.get().coreCardGrid(screen.square) * coreColumnSpan;
   }
 
   /// 所在行范围. 对于不跨行的卡片, from == to == rowIndex.
@@ -507,7 +507,7 @@ class _SpriteCard extends _CoreCard {
   /// 从 [screen.spriteCards] 中返回当前卡片右边的卡片. 当卡片跨多行时可能存在多个符合条件的卡片. 如果没符合条件的卡片则返回空列表.
   BuiltList<_SpriteCard> get right {
     int targetColumn = columnRange.to + 1;
-    if (targetColumn >= _Metric.get().square) {
+    if (targetColumn >= screen.square) {
       return <_SpriteCard>[].toBuiltList();
     }
     _CardRowColumnRange targetRowRange = rowRange;
@@ -522,7 +522,7 @@ class _SpriteCard extends _CoreCard {
   /// 从 [screen.spriteCards] 中返回当前卡片下边的卡片. 当卡片跨多行时可能存在多个符合条件的卡片. 如果没符合条件的卡片则返回空列表.
   BuiltList<_SpriteCard> get bottom {
     int targetRow = rowRange.to + 1;
-    if (targetRow >= _Metric.get().square) {
+    if (targetRow >= screen.square) {
       return <_SpriteCard>[].toBuiltList();
     }
     _CardRowColumnRange targetColumnRange = columnRange;
@@ -586,7 +586,7 @@ class _SpriteCard extends _CoreCard {
 
   /// 从 [screen.spriteCards] 中返回当前卡片右边所有的卡片. 第一维度列表表示从左向右的各列, 第二维度列表表示该列符合条件的多个卡片.
   BuiltList<BuiltList<_SpriteCard>> get rightAll {
-    _CardRowColumnRange targetColumnRange = _CardRowColumnRange(columnRange.to + 1, _Metric.get().square - 1);
+    _CardRowColumnRange targetColumnRange = _CardRowColumnRange(columnRange.to + 1, screen.square - 1);
     if (!targetColumnRange.isValid()) {
       return <BuiltList<_SpriteCard>>[].toBuiltList();
     }
@@ -612,7 +612,7 @@ class _SpriteCard extends _CoreCard {
 
   /// 从 [screen.spriteCards] 中返回当前卡片下边所有的卡片. 第一维度列表表示从上向下的各列, 第二维度列表表示该列符合条件的多个卡片.
   BuiltList<BuiltList<_SpriteCard>> get bottomAll {
-    _CardRowColumnRange targetRowRange = _CardRowColumnRange(rowRange.to + 1, _Metric.get().square - 1);
+    _CardRowColumnRange targetRowRange = _CardRowColumnRange(rowRange.to + 1, screen.square - 1);
     if (!targetRowRange.isValid()) {
       return <BuiltList<_SpriteCard>>[].toBuiltList();
     }
@@ -725,8 +725,8 @@ class _PlayerCard extends _SpriteCard {
 
   /// 创建一个随机位置的玩家卡片.
   static _PlayerCard random(_GameScreen screen) {
-    int from = _Metric.get().square > 2 ? 1 : 0;
-    int to = _Metric.get().square > 2 ? (_Metric.get().square - 2) : (_Metric.get().square - 1);
+    int from = screen.square > 2 ? 1 : 0;
+    int to = screen.square > 2 ? (screen.square - 2) : (screen.square - 1);
     return _PlayerCard(screen,
       rowIndex: _random.nextIntFromTo(from, to),
       columnIndex: _random.nextIntFromTo(from, to),

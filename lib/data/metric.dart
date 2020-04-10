@@ -19,16 +19,13 @@ class _Metric {
 
   static Size sizeCache;
   static EdgeInsets paddingCache;
-  static int squareCache;
 
   static _Metric metricCache;
 
   /// 在 [_Game.build] 中调用.
-  static void build() {
-    MediaQueryData mediaQueryData = MediaQuery.of(_Game.get().callback.context);
-    if (sizeCache == mediaQueryData.size &&
-        paddingCache == mediaQueryData.padding &&
-        squareCache == _Game.get().screen.square) {
+  static void build(BuildContext context) {
+    MediaQueryData mediaQueryData = MediaQuery.of(context);
+    if (sizeCache == mediaQueryData.size && paddingCache == mediaQueryData.padding) {
       return;
     }
 
@@ -102,17 +99,19 @@ class _Metric {
       isVertical ? (screenRect.bottom - coreRect.bottom) : headerUnsafeRect.height,
     );
     /// Core 卡片网格数.
-    int coreCardGrid = coreNoPaddingGrid ~/ _Game.get().screen.square;
+    int Function(int square) coreCardGrid = (square) {
+      return coreNoPaddingGrid ~/ square;
+    };
     /// Core 卡片尺寸.
-    double coreCardSize = coreCardGrid * gridSize;
+    double Function(int square) coreCardSize = (square) {
+      return coreCardGrid(square) * gridSize;
+    };
 
     //*****************************************************************************************************************
 
     sizeCache = mediaQueryData.size;
     paddingCache = mediaQueryData.padding;
-    squareCache = _Game.get().screen.square;
     metricCache = _Metric(
-      _Game.get().screen.square,
       screenRect,
       isVertical,
       horizontalGrid,
@@ -139,13 +138,11 @@ class _Metric {
   /// 在 [_Game.dispose] 中调用.
   static void dispose() {
     metricCache = null;
-    squareCache = null;
     paddingCache = null;
     sizeCache = null;
   }
 
   _Metric(
-      this.square,
       this.screenRect,
       this.isVertical,
       this.horizontalGrid,
@@ -160,7 +157,6 @@ class _Metric {
       this.coreCardSize,
       );
 
-  final int square;
   final Rect screenRect;
   final bool isVertical;
   final int horizontalGrid;
@@ -171,6 +167,6 @@ class _Metric {
   final Rect coreNoPaddingRect;
   final Rect headerUnsafeRect;
   final Rect footerUnsafeRect;
-  final int coreCardGrid;
-  final double coreCardSize;
+  final int Function(int square) coreCardGrid;
+  final double Function(int square) coreCardSize;
 }

@@ -22,14 +22,14 @@ class _GridForegroundPainter extends CustomPainter {
       canvas.drawLine(p1, p2, _paint);
     }
     _paint.color = Colors.yellow;
-    for (int rowIndex = 0; rowIndex <= _Metric.get().square; rowIndex += 1) {
-      Offset p1 = new Offset(_Metric.get().coreNoPaddingRect.left, _Metric.get().coreNoPaddingRect.top + rowIndex * _Metric.get().coreCardSize);
-      Offset p2 = new Offset(_Metric.get().coreNoPaddingRect.right, _Metric.get().coreNoPaddingRect.top + rowIndex * _Metric.get().coreCardSize);
+    for (int rowIndex = 0; rowIndex <= _Game.get().screen.square; rowIndex += 1) {
+      Offset p1 = new Offset(_Metric.get().coreNoPaddingRect.left, _Metric.get().coreNoPaddingRect.top + rowIndex * _Metric.get().coreCardSize(_Game.get().screen.square));
+      Offset p2 = new Offset(_Metric.get().coreNoPaddingRect.right, _Metric.get().coreNoPaddingRect.top + rowIndex * _Metric.get().coreCardSize(_Game.get().screen.square));
       canvas.drawLine(p1, p2, _paint);
     }
-    for (int columnIndex = 0; columnIndex <= _Metric.get().square; columnIndex += 1) {
-      Offset p1 = new Offset(_Metric.get().coreNoPaddingRect.left + columnIndex * _Metric.get().coreCardSize, _Metric.get().coreNoPaddingRect.top);
-      Offset p2 = new Offset(_Metric.get().coreNoPaddingRect.left + columnIndex * _Metric.get().coreCardSize, _Metric.get().coreNoPaddingRect.bottom);
+    for (int columnIndex = 0; columnIndex <= _Game.get().screen.square; columnIndex += 1) {
+      Offset p1 = new Offset(_Metric.get().coreNoPaddingRect.left + columnIndex * _Metric.get().coreCardSize(_Game.get().screen.square), _Metric.get().coreNoPaddingRect.top);
+      Offset p2 = new Offset(_Metric.get().coreNoPaddingRect.left + columnIndex * _Metric.get().coreCardSize(_Game.get().screen.square), _Metric.get().coreNoPaddingRect.bottom);
       canvas.drawLine(p1, p2, _paint);
     }
   }
