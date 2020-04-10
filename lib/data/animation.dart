@@ -88,20 +88,22 @@ class _Animation<T extends _Card> {
   });
 
   /// 用于演示.
-  _Animation.sample(T card) : this(card,
-    duration: 1000,
-    curve: Curves.easeInOut,
-    onAnimating: (card, value) {
-      card.rotateY = _AnimationCalc.ab(0.0, _VisibleRotateXY.clockwise360.value).calc(value);
-      card.scaleX = _AnimationCalc.aba(1.0, 2.0).calc(value);
-      card.scaleY = _AnimationCalc.aba(1.0, 2.0).calc(value);
-      card.elevation = _AnimationCalc.aba(1.0, 4.0).calc(value);
-      card.radius = _AnimationCalc.aba(4.0, 16.0).calc(value);
-    },
-    onEnd: (card) {
-      card.rotateY = 0.0;
-    }
-  );
+  static _Animation<_GridCard> sample(_GridCard card) {
+    return _Animation<_GridCard>(card,
+      duration: 1000,
+      curve: Curves.easeInOut,
+      onAnimating: (card, value) {
+        card.rotateY = _AnimationCalc.ab(0.0, _VisibleRotateXY.clockwise360.value).calc(value);
+        card.scaleX = _AnimationCalc.aba(1.0, 2.0).calc(value);
+        card.scaleY = _AnimationCalc.aba(1.0, 2.0).calc(value);
+        card.elevation = _AnimationCalc.aba(1.0, 4.0).calc(value);
+        card.radius = _AnimationCalc.aba(4.0, 16.0).calc(value);
+      },
+      onEnd: (card) {
+        card.rotateY = 0.0;
+      },
+    );
+  }
 
   /// 精灵卡片移动.
   static _Animation<_SpriteCard> spriteMove(_SpriteCard card, {

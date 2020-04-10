@@ -6,10 +6,20 @@ part of '../data.dart';
 abstract class _Screen {
   _Screen(this.type, {
     this.square,
-  });
+  }) : cards = List.filled(length(type, square), _Card.placeholder,
+    growable: false,
+  );
+
+  static int length(_ScreenType type, int square) {
+    int length = 0;
+    length += square * square;
+    length += 1; // sample.
+    length += 6; // dev.
+    return length;
+  }
 
   void init() {
-    _Card sampleCard = _Card(this,
+    _GridCard sampleCard = _GridCard(this,
       verticalRowGridIndex: 1,
       verticalColumnGridIndex: 1,
       verticalRowGridSpan: 15,
@@ -22,9 +32,9 @@ abstract class _Screen {
     sampleCard.onTap = () {
       _Animation.sample(sampleCard).begin();
     };
-    testCards.add(sampleCard);
+    cards[0] = sampleCard;
     for (int i = 0; i < 6; i++) {
-      _Card devCard = _Card(this,
+      _GridCard devCard = _GridCard(this,
         verticalRowGridIndex: 80,
         verticalColumnGridIndex: 1 + i * 10,
         verticalRowGridSpan: 10,
@@ -34,7 +44,7 @@ abstract class _Screen {
         horizontalRowGridSpan: 10,
         horizontalColumnGridSpan: 10,
       );
-      testCards.add(devCard);
+      cards[i + 1] = devCard;
     }
   }
 
@@ -44,11 +54,8 @@ abstract class _Screen {
   /// Core 卡片行列数. 2 ~ 6.
   final int square;
 
-  /// 开发用.
-  List<_Card> testCards = <_Card>[];
-
-  /// 返回所有卡片.
-  BuiltList<_Card> get cards;
+  /// 所有卡片.
+  final List<_Card> cards;
 }
 
 //*********************************************************************************************************************
@@ -59,11 +66,6 @@ class _SplashScreen extends _Screen {
     _ScreenType.splash,
     square: 4,
   );
-
-  @override
-  BuiltList<_Card> get cards {
-    return (<_Card>[]..addAll(testCards)).build();
-  }
 }
 
 //*********************************************************************************************************************
@@ -77,37 +79,37 @@ class _GameScreen extends _Screen {
   );
 
   /// 精灵卡片.
-  List<_SpriteCard> spriteCards;
-
-  @override
-  BuiltList<_Card> get cards {
-    return (<_Card>[]..addAll(spriteCards)..addAll(testCards)).build();
+  List<_SpriteCard> get spriteCards {
+    List<_SpriteCard> list = <_SpriteCard>[];
+    cards.forEach((element) {
+      if (element is _SpriteCard) {
+        list.add(element);
+      }
+    });
+    return list;
   }
 
   @override
   void init() {
     super.init();
-    spriteCards = List.filled(square * square, _SpriteCard.placeholder(this),
-      growable: false,
-    );
-    testCards[1].onTap = () {
+    (cards[1] as _GridCard).onTap = () {
       addSpriteCards();
     };
-    testCards[2].onTap = () {
+    (cards[2] as _GridCard).onTap = () {
       removeSpriteCards();
     };
   }
 
   void addSpriteCards() {
-    int index = 0;
+    int index = 7;
     _PlayerCard playerCard = _PlayerCard.random(this);
-    spriteCards[index++] = playerCard;
+    cards[index++] = playerCard;
     for (int rowIndex = 0; rowIndex < square; rowIndex++) {
       for (int columnIndex = 0; columnIndex < square; columnIndex++) {
         if (rowIndex == playerCard.rowIndex && columnIndex == playerCard.columnIndex) {
           continue;
         }
-        spriteCards[index++] = _SpriteCard(this,
+        cards[index++] = _SpriteCard(this,
           rowIndex: rowIndex,
           columnIndex: columnIndex,
         );
@@ -122,7 +124,7 @@ class _GameScreen extends _Screen {
     spriteCards.build().forEach((spriteCard) {
       _Animation.spriteLastExit(spriteCard,
         endCallback: () {
-          spriteCards[spriteCard.index] = _SpriteCard.placeholder(this);
+          cards[spriteCard.index] = _SpriteCard.placeholder(this);
         },
       ).begin();
     });

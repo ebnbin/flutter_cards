@@ -7,27 +7,81 @@ class Card {
 
   final _Card _card;
 
-  bool get absorbPointer => _card.absorbPointer;
+  bool get absorbPointer {
+    if (_card is _GridCard) {
+      _GridCard gridCard = _card as _GridCard;
+      return gridCard.absorbPointer;
+    }
+    return null;
+  }
 
   Color get color => Colors.white;
 
-  double get elevation => _card.elevation;
+  double get elevation {
+    if (_card is _GridCard) {
+      _GridCard gridCard = _card as _GridCard;
+      return gridCard.elevation;
+    }
+    return null;
+  }
 
-  bool get ignorePointer => _card.ignorePointer;
+  bool get ignorePointer {
+    if (_card is _GridCard) {
+      _GridCard gridCard = _card as _GridCard;
+      return gridCard.ignorePointer;
+    }
+    return null;
+  }
 
-  double get margin => _card.margin;
+  double get margin {
+    if (_card is _GridCard) {
+      _GridCard gridCard = _card as _GridCard;
+      return gridCard.margin;
+    }
+    return null;
+  }
 
-  GestureLongPressCallback get onLongPress => _card.onLongPress;
+  GestureLongPressCallback get onLongPress {
+    if (_card is _GridCard) {
+      _GridCard gridCard = _card as _GridCard;
+      return gridCard.onLongPress;
+    }
+    return null;
+  }
 
-  GestureTapCallback get onTap => _card.onTap;
+  GestureTapCallback get onTap {
+    if (_card is _GridCard) {
+      _GridCard gridCard = _card as _GridCard;
+      return gridCard.onTap;
+    }
+    return null;
+  }
 
-  double get opacity => _card.opacity;
+  double get opacity {
+    if (_card is _GridCard) {
+      _GridCard gridCard = _card as _GridCard;
+      return gridCard.opacity;
+    }
+    return null;
+  }
 
-  double get radius => _card.radius;
+  double get radius {
+    if (_card is _GridCard) {
+      _GridCard gridCard = _card as _GridCard;
+      return gridCard.radius;
+    }
+    return null;
+  }
 
   Rect get rect => _card.rect;
 
-  Matrix4 get transform => _card.transform;
+  Matrix4 get transform {
+    if (_card is _GridCard) {
+      _GridCard gridCard = _card as _GridCard;
+      return gridCard.transform;
+    }
+    return null;
+  }
 
   bool Function(int zIndex) get zIndexVisible => _card.zIndexVisible;
 
@@ -39,9 +93,21 @@ class Card {
 
 //*********************************************************************************************************************
 
-/// 卡片.
 class _Card {
-  _Card(this.screen, {
+  const _Card();
+
+  static final _Card placeholder = const _Card();
+
+  Rect get rect => Rect.zero;
+
+  bool Function(int zIndex) get zIndexVisible => (_) => false;
+}
+
+//*********************************************************************************************************************
+
+/// 网格卡片.
+class _GridCard extends _Card {
+  _GridCard(this.screen, {
     this.verticalRowGridIndex = 0,
     this.verticalColumnGridIndex = 0,
     this.verticalRowGridSpan = 1,
@@ -68,6 +134,11 @@ class _Card {
   });
 
   final _Screen screen;
+
+  //*******************************************************************************************************************
+
+  /// 当前卡片在 [screen.cards] 中的 index.
+  int get index => screen.cards.indexOf(this);
 
   //*******************************************************************************************************************
 
@@ -238,7 +309,7 @@ class _Card {
 //*********************************************************************************************************************
 
 /// Core 卡片.
-class _CoreCard extends _Card {
+class _CoreCard extends _GridCard {
   _CoreCard(_Screen screen, {
     int rowIndex = 0,
     int columnIndex = 0,
@@ -389,11 +460,6 @@ class _SpriteCard extends _CoreCard {
 
   /// 占位卡片. [visible] 为 false.
   _SpriteCard.placeholder(_GameScreen screen) : this(screen);
-
-  //*******************************************************************************************************************
-
-  /// 当前卡片在 [screen.spriteCards] 中的 index.
-  int get index => gameScreen.spriteCards.indexOf(this);
 
   //*******************************************************************************************************************
 
