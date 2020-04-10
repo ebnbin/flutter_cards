@@ -96,11 +96,22 @@ class Card {
 class _Card {
   const _Card();
 
+  static const int placeholderIndex = -2;
+
   static final _Card placeholder = const _Card();
 
   Rect get rect => Rect.zero;
 
   bool Function(int zIndex) get zIndexVisible => (_) => false;
+
+  int get index => placeholderIndex;
+
+  //*******************************************************************************************************************
+
+  @override
+  String toString() {
+    return '$index';
+  }
 }
 
 //*********************************************************************************************************************
@@ -669,14 +680,6 @@ class _SpriteCard extends _CoreCard {
       return _LTRB.bottom;
     }
     return null;
-  }
-
-  //*******************************************************************************************************************
-
-  @override
-  String toString() {
-//    return '${super.toString()}\n$index';
-    return '$index';
   }
 }
 
