@@ -149,6 +149,16 @@ class _GridCard extends _Card {
       } else {
         _Animation.gridBig(this).begin();
       }
+      screen.cards.forEach((element) {
+        if (identical(this, element)) {
+          return;
+        }
+        if (big) {
+          _Animation.gridShow(element).begin();
+        } else {
+          _Animation.gridHide(element).begin();
+        }
+      });
     };
   }
 
@@ -344,6 +354,15 @@ class _GridCard extends _Card {
 //    return '$verticalRowGridIndex,$verticalColumnGridIndex,$verticalRowGridSpan,$verticalColumnGridSpan\n'
 //        '$horizontalRowGridIndex,$horizontalColumnGridIndex,$horizontalRowGridSpan,$horizontalColumnGridSpan';
 //  }
+
+  @override
+  String toString() {
+    String result = super.toString();
+    if (big) {
+      result += '\nBIG';
+    }
+    return result;
+  }
 }
 
 //*********************************************************************************************************************
@@ -486,6 +505,9 @@ class _SpriteCard extends _CoreCard {
     onLongPress: onLongPress,
   ) {
     this.onTap = () {
+      if (big) {
+        return;
+      }
       _PlayerCard playerCard = screen.playerCard;
       assert(playerCard != null);
       AxisDirection direction = playerCard.adjacentDirection(this);
