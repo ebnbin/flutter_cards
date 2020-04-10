@@ -2,12 +2,8 @@ part of '../data.dart';
 
 //*********************************************************************************************************************
 
-abstract class Card {
-  CardData get data;
-}
-
-class CardData {
-  CardData._(this._card);
+class Card {
+  Card._(this._card);
 
   final _Card _card;
 
@@ -44,7 +40,7 @@ class CardData {
 //*********************************************************************************************************************
 
 /// 卡片.
-class _Card implements Card {
+class _Card {
   _Card(this.screen, {
     this.verticalRowGridIndex = 0,
     this.verticalColumnGridIndex = 0,
@@ -69,9 +65,7 @@ class _Card implements Card {
     this.gestureType = _CardGestureType.normal,
     this.onTap,
     this.onLongPress,
-  }) {
-    data = CardData._(this);
-  }
+  });
 
   final _Screen screen;
 
@@ -231,11 +225,6 @@ class _Card implements Card {
   GestureTapCallback onTap;
 
   GestureLongPressCallback onLongPress;
-
-  //*******************************************************************************************************************
-
-  @override
-  CardData data;
 
   //*******************************************************************************************************************
 //

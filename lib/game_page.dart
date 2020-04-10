@@ -31,7 +31,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin imple
   }
 
   Widget _buildCard(Card card, int zIndex) {
-    if (card.data.zIndexVisible(zIndex)) {
+    if (card.zIndexVisible(zIndex)) {
       return _buildVisibleCard(card);
     } else {
       return _buildInvisibleCard();
@@ -40,36 +40,36 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin imple
 
   Widget _buildVisibleCard(Card card) {
     return Positioned.fromRect(
-      rect: card.data.rect,
+      rect: card.rect,
       child: Transform(
-        transform: card.data.transform,
+        transform: card.transform,
         alignment: Alignment.center,
         child: AbsorbPointer(
-          absorbing: card.data.absorbPointer,
+          absorbing: card.absorbPointer,
           child: IgnorePointer(
-            ignoring: card.data.ignorePointer,
+            ignoring: card.ignorePointer,
             child: Opacity(
-              opacity: card.data.opacity,
+              opacity: card.opacity,
               child: Container(
-                margin: EdgeInsets.all(card.data.margin),
+                margin: EdgeInsets.all(card.margin),
                 child: Material(
                   type: MaterialType.card,
-                  color: card.data.color,
-                  elevation: card.data.elevation,
+                  color: card.color,
+                  elevation: card.elevation,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(card.data.radius),
+                    borderRadius: BorderRadius.circular(card.radius),
                   ),
                   clipBehavior: Clip.antiAlias,
                   child: InkWell(
                     child: Center(
-                      child: Text('${card.data}',
+                      child: Text('$card',
                         style: TextStyle(
                           fontSize: 10.0,
                         ),
                       ),
                     ),
-                    onTap: card.data.onTap,
-                    onLongPress: card.data.onLongPress,
+                    onTap: card.onTap,
+                    onLongPress: card.onLongPress,
                   ),
                 ),
               ),

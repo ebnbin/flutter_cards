@@ -35,7 +35,9 @@ class GameData {
     _game.build();
   }
 
-  BuiltList<Card> get cards => _game.screen.cards;
+  BuiltList<Card> get cards => _game.screen.cards.map<Card>((card) {
+    return Card._(card);
+  }).toBuiltList();
 
   CustomPainter get foregroundPainter => _game.gridForegroundPainter;
 
