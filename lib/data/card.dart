@@ -142,7 +142,15 @@ class _GridCard extends _Card {
     this.gestureType = _CardGestureType.normal,
     this.onTap,
     this.onLongPress,
-  });
+  }) {
+    this.onLongPress = () {
+      if (big) {
+        _Animation.gridSmall(this).begin();
+      } else {
+        _Animation.gridBig(this).begin();
+      }
+    };
+  }
 
   final _Screen screen;
 
@@ -211,19 +219,36 @@ class _GridCard extends _Card {
   /// 当前屏幕旋转方向的网格跨行跨列取大值.
   int get maxGridSpan => max(rowGridSpan, columnGridSpan);
 
+  /// 当前是否是大卡片.
+  bool big = false;
+
+  Rect get smallRect {
+    return Rect.fromLTWH(
+      Metric.get().safeRect.left + columnGridIndex * Metric.get().gridSize,
+      Metric.get().safeRect.top + rowGridIndex * Metric.get().gridSize,
+      columnGridSpan * Metric.get().gridSize,
+      rowGridSpan * Metric.get().gridSize,
+    );
+  }
+
   /// 网格矩形.
-  Rect get rect => Rect.fromLTWH(
-    Metric.get().safeRect.left + columnGridIndex * Metric.get().gridSize,
-    Metric.get().safeRect.top + rowGridIndex * Metric.get().gridSize,
-    columnGridSpan * Metric.get().gridSize,
-    rowGridSpan * Metric.get().gridSize,
-  );
+  Rect get rect {
+    if (big) {
+      return Metric.get().coreNoPaddingRect;
+    } else {
+      return smallRect;
+    }
+  }
 
   //*******************************************************************************************************************
 
   /// Matrix4.setEntry(3, 2, value);
   double get matrix4Entry32 {
-    return Metric.coreNoPaddingGrid / maxGridSpan / 800.0;
+//    if (big) {
+//      return Metric.coreNoPaddingGrid / Metric.coreNoPaddingGrid / 800.0;
+//    } else {
+      return Metric.coreNoPaddingGrid / maxGridSpan / 800.0;
+//    }
   }
 
   double translateX;
@@ -236,10 +261,10 @@ class _GridCard extends _Card {
 
   Matrix4 get transform => Matrix4.identity()
     ..setEntry(3, 2, matrix4Entry32)
-    ..translate(translateX, translateY)
     ..rotateX(rotateX)
     ..rotateY(rotateY)
     ..rotateZ(rotateZ)
+    ..leftTranslate(translateX, translateY)
     ..scale(scaleX, scaleY);
 
   /// Z 方向高度. 建议范围 0.0 ~ 4.0.
@@ -277,7 +302,11 @@ class _GridCard extends _Card {
   };
 
   double get margin {
-    return 2.0 / (Metric.coreNoPaddingGrid / minGridSpan) * Metric.get().gridSize;
+    if (big) {
+      return 2.0 / 1.0 * Metric.get().gridSize;
+    } else {
+      return 2.0 / (Metric.coreNoPaddingGrid / minGridSpan) * Metric.get().gridSize;
+    }
   }
 
   /// 是否可点击 (卡片是否可交互). 初始化后不可改变.

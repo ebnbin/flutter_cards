@@ -266,6 +266,82 @@ class _Animation<T extends _Card> {
     );
   }
 
+  /// 小卡片 -> 大卡片.
+  static _Animation<_GridCard> gridBig(_GridCard card) {
+    double translateXSmall = Metric.get().coreNoPaddingRect.center.dx - card.smallRect.center.dx;
+    double translateYSmall = Metric.get().coreNoPaddingRect.center.dy - card.smallRect.center.dy;
+    double scaleXSmall = Metric.get().coreNoPaddingRect.width / card.smallRect.width;
+    double scaleYSmall = Metric.get().coreNoPaddingRect.height / card.smallRect.height;
+    return _Animation<_GridCard>(card,
+      duration: 500,
+      curve: Curves.easeInOut,
+      onAnimating: (card, value) {
+        if (value < 0.5) {
+          card.translateX = _AnimationCalc.ab(0.0, translateXSmall).calc(value);
+          card.translateY = _AnimationCalc.ab(0.0, translateYSmall).calc(value);
+          card.rotateX = _AnimationCalc.ab(0.0, _VisibleRotateXY.counterClockwise180.value).calc(value);
+          card.scaleX = _AnimationCalc.ab(1.0, scaleXSmall).calc(value);
+          card.scaleY = _AnimationCalc.ab(1.0, scaleYSmall).calc(value);
+          card.radius = _AnimationCalc.ab(4.0, 4.0).calc(value);
+          card.big = false;
+        } else {
+          card.translateX = _AnimationCalc.ab(-translateXSmall, 0.0).calc(value);
+          card.translateY = _AnimationCalc.ab(-translateYSmall, 0.0).calc(value);
+          card.rotateX = _AnimationCalc.ab(-_VisibleRotateXY.counterClockwise180.value, 0.0).calc(value);
+          card.scaleX = _AnimationCalc.ab(1.0 / scaleXSmall, 1.0).calc(value);
+          card.scaleY = _AnimationCalc.ab(1.0 / scaleYSmall, 1.0).calc(value);
+          card.radius = _AnimationCalc.ab(16.0, 16.0).calc(value);
+          card.big = true;
+        }
+      },
+      onBegin: (card) {
+        card.elevation = 4.0;
+      },
+      onHalf: (card) {
+      },
+      onEnd: (card) {
+      },
+    );
+  }
+
+  /// 大卡片 -> 小卡片.
+  static _Animation<_GridCard> gridSmall(_GridCard card) {
+    double translateXSmall = Metric.get().coreNoPaddingRect.center.dx - card.smallRect.center.dx;
+    double translateYSmall = Metric.get().coreNoPaddingRect.center.dy - card.smallRect.center.dy;
+    double scaleXSmall = Metric.get().coreNoPaddingRect.width / card.smallRect.width;
+    double scaleYSmall = Metric.get().coreNoPaddingRect.height / card.smallRect.height;
+    return _Animation<_GridCard>(card,
+      duration: 500,
+      curve: Curves.easeInOut,
+      onAnimating: (card, value) {
+        if (value < 0.5) {
+          card.translateX = _AnimationCalc.ab(0.0, -translateXSmall).calc(value);
+          card.translateY = _AnimationCalc.ab(0.0, -translateYSmall).calc(value);
+          card.rotateX = _AnimationCalc.ab(0.0, _VisibleRotateXY.clockwise180.value).calc(value);
+          card.scaleX = _AnimationCalc.ab(1.0, 1.0 / scaleXSmall).calc(value);
+          card.scaleY = _AnimationCalc.ab(1.0, 1.0 / scaleYSmall).calc(value);
+          card.radius = _AnimationCalc.ab(16.0, 16.0).calc(value);
+          card.big = true;
+        } else {
+          card.translateX = _AnimationCalc.ab(translateXSmall, 0.0).calc(value);
+          card.translateY = _AnimationCalc.ab(translateYSmall, 0.0).calc(value);
+          card.rotateX = _AnimationCalc.ab(-_VisibleRotateXY.clockwise180.value, 0.0).calc(value);
+          card.scaleX = _AnimationCalc.ab(scaleXSmall, 1.0).calc(value);
+          card.scaleY = _AnimationCalc.ab(scaleYSmall, 1.0).calc(value);
+          card.radius = _AnimationCalc.ab(4.0, 4.0).calc(value);
+          card.big = false;
+        }
+      },
+      onBegin: (card) {
+      },
+      onHalf: (card) {
+      },
+      onEnd: (card) {
+        card.elevation = 1.0;
+      },
+    );
+  }
+
   /// 动画应用到的卡片.
   final T card;
   /// 动画时长.
