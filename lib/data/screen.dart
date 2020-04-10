@@ -90,6 +90,13 @@ class _GameScreen extends _Screen {
     return list;
   }
 
+  /// 玩家卡片.
+  _PlayerCard get playerCard {
+    return cards.firstWhere((element) {
+      return element is _PlayerCard;
+    }) as _PlayerCard;
+  }
+
   void addSpriteCards() {
     int index = 7;
     _PlayerCard playerCard = _PlayerCard.random(this);

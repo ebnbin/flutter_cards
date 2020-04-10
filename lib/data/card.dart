@@ -465,7 +465,35 @@ class _SpriteCard extends _CoreCard {
     gestureType: gestureType,
     onTap: onTap,
     onLongPress: onLongPress,
-  );
+  ) {
+    this.onTap = () {
+      _PlayerCard playerCard = screen.playerCard;
+      if (playerCard == null) {
+        return;
+      }
+
+      switch (playerCard.adjacent(this)) {
+        case _LTRB.left:
+          _Animation.spriteExit(this).begin();
+          _Animation.spriteMove(playerCard, ltrb: _LTRB.left, beginDelay: 250).begin();
+          break;
+        case _LTRB.top:
+          _Animation.spriteExit(this).begin();
+          _Animation.spriteMove(playerCard, ltrb: _LTRB.top, beginDelay: 250).begin();
+          break;
+        case _LTRB.right:
+          _Animation.spriteExit(this).begin();
+          _Animation.spriteMove(playerCard, ltrb: _LTRB.right, beginDelay: 250).begin();
+          break;
+        case _LTRB.bottom:
+          _Animation.spriteExit(this).begin();
+          _Animation.spriteMove(playerCard, ltrb: _LTRB.bottom, beginDelay: 250).begin();
+          break;
+        default:
+          break;
+      }
+    };
+  }
 
   _GameScreen get gameScreen => screen as _GameScreen;
 
@@ -650,6 +678,54 @@ class _SpriteCard extends _CoreCard {
       default:
         throw Exception();
     }
+  }
+
+  /// 是否在最左边.
+  bool edgeLeft() {
+    return columnRange.from == 0;
+  }
+
+  /// 是否在最上边.
+  bool edgeTop() {
+    return rowRange.from == 0;
+  }
+
+  /// 是否在最右边.
+  bool edgeRight() {
+    return columnRange.to == screen.square - 1;
+  }
+
+  /// 是否在最下边.
+  bool edgeBottom() {
+    return rowRange.to == screen.square - 1;
+  }
+
+  /// 是否在最 [ltrb] 边.
+  bool edgeLTRB(_LTRB ltrb) {
+    switch (ltrb) {
+      case _LTRB.left:
+        return edgeLeft();
+      case _LTRB.top:
+        return edgeTop();
+      case _LTRB.right:
+        return edgeRight();
+      case _LTRB.bottom:
+        return edgeBottom();
+      default:
+        throw Exception();
+    }
+  }
+
+  /// 如果指定方向在边缘, 按 [clockwise] 顺序返回第一个不是边缘的方向.
+  _LTRB nonEdgeFallback(_LTRB ltrb, {
+    bool clockwise = false,
+  }) {
+    for (_LTRB currentLTRB in ltrb.turns(clockwise: clockwise)) {
+      if (!edgeLTRB(currentLTRB)) {
+        return currentLTRB;
+      }
+    }
+    return ltrb;
   }
 
   /// 根据 [ltrb] 返回指定方向的所有卡片. 如果指定方向的卡片为空, 按 [clockwise] 顺序返回第一个有效方向的卡片.
