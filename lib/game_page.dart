@@ -104,4 +104,10 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin imple
     Metric.dispose();
     super.dispose();
   }
+
+  @override
+  void notifyStateChanged() {
+    setState(() {
+    });
+  }
 }

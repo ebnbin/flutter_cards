@@ -3,9 +3,7 @@ part of '../data.dart';
 //*********************************************************************************************************************
 
 abstract class GameCallback implements TickerProvider {
-  BuildContext get context;
-
-  void setState(VoidCallback fn);
+  void notifyStateChanged();
 }
 
 //*********************************************************************************************************************

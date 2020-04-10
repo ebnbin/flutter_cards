@@ -295,8 +295,7 @@ class _Animation<T extends _Card> {
               break;
             case AnimationStatus.completed:
               onEnd?.call(card);
-              _Game.get().callback.setState(() {
-              });
+              _Game.get().callback.notifyStateChanged();
               animationController.dispose();
               Future.delayed(Duration(
                 milliseconds: endDelay,
@@ -311,16 +310,13 @@ class _Animation<T extends _Card> {
           if (!_half && curvedAnimation.value >= 0.5) {
             _half = true;
             onHalf?.call(card);
-            _Game.get().callback.setState(() {
-            });
+            _Game.get().callback.notifyStateChanged();
           }
           onAnimating?.call(card, curvedAnimation.value);
-          _Game.get().callback.setState(() {
-          });
+          _Game.get().callback.notifyStateChanged();
         });
       onBegin?.call(card);
-      _Game.get().callback.setState(() {
-      });
+      _Game.get().callback.notifyStateChanged();
       animationController.forward();
     });
   }
