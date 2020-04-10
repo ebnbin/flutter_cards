@@ -10,7 +10,6 @@ abstract class _Screen {
 
   void init() {
     _Card sampleCard = _Card(this,
-      type: _CardType.sample,
       verticalRowGridIndex: 1,
       verticalColumnGridIndex: 1,
       verticalRowGridSpan: 15,
@@ -24,17 +23,8 @@ abstract class _Screen {
       _Animation.sample(sampleCard).begin();
     };
     testCards.add(sampleCard);
-    List<_CardType> cardTypes = <_CardType>[
-      _CardType.dev0,
-      _CardType.dev1,
-      _CardType.dev2,
-      _CardType.dev3,
-      _CardType.dev4,
-      _CardType.dev5,
-    ];
     for (int i = 0; i < 6; i++) {
       _Card devCard = _Card(this,
-        type: cardTypes[i],
         verticalRowGridIndex: 80,
         verticalColumnGridIndex: 1 + i * 10,
         verticalRowGridSpan: 10,
@@ -130,9 +120,6 @@ class _GameScreen extends _Screen {
 
   void removeSpriteCards() {
     spriteCards.build().forEach((spriteCard) {
-      if (spriteCard.type == _CardType.placeholder) {
-        return;
-      }
       _Animation.spriteLastExit(spriteCard,
         endCallback: () {
           spriteCards[spriteCard.index] = _SpriteCard.placeholder(this);

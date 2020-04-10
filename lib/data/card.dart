@@ -46,8 +46,6 @@ class CardData {
 /// 卡片.
 class _Card implements Card {
   _Card(this.screen, {
-    @required
-    this.type,
     this.verticalRowGridIndex = 0,
     this.verticalColumnGridIndex = 0,
     this.verticalRowGridSpan = 1,
@@ -75,18 +73,9 @@ class _Card implements Card {
     data = CardData._(this);
   }
 
-  /// 占位卡片. [visible] 为 false.
-  _Card.placeholder(_Screen screen) : this(screen,
-    type: _CardType.placeholder,
-    visible: false,
-  );
-
   final _Screen screen;
 
   //*******************************************************************************************************************
-
-  /// 卡片类型.
-  final _CardType type;
 
   /// 竖屏网格行.
   int verticalRowGridIndex;
@@ -255,11 +244,6 @@ class _Card implements Card {
 //    return '$verticalRowGridIndex,$verticalColumnGridIndex,$verticalRowGridSpan,$verticalColumnGridSpan\n'
 //        '$horizontalRowGridIndex,$horizontalColumnGridIndex,$horizontalRowGridSpan,$horizontalColumnGridSpan';
 //  }
-
-  @override
-  String toString() {
-    return type.toString();
-  }
 }
 
 //*********************************************************************************************************************
@@ -287,7 +271,6 @@ class _CoreCard extends _Card {
     GestureTapCallback onTap,
     GestureLongPressCallback onLongPress,
   }) : super(screen,
-    type: _CardType.core,
     translateX: translateX,
     translateY: translateY,
     rotateX: rotateX,
