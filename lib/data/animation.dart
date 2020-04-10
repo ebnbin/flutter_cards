@@ -246,6 +246,26 @@ class _Animation<T extends _Card> {
     );
   }
 
+  /// 卡片不可点击.
+  static _Animation<_GridCard> gridTremble(_GridCard card, {
+    int duration = 250,
+    int beginDelay = 0,
+    int endDelay = 0,
+  }) {
+    return _Animation<_GridCard>(card,
+      duration: duration,
+      beginDelay: beginDelay,
+      endDelay: endDelay,
+      curve: Curves.easeInOut,
+      onAnimating: (card, value) {
+        card.rotateY = _AnimationCalc.aba(0.0, 1.0 / 8.0 * pi).calc(value);
+        card.scaleX = _AnimationCalc.aba(1.0, 7.0 / 8.0).calc(value);
+        card.scaleY = _AnimationCalc.aba(1.0, 7.0 / 8.0).calc(value);
+        card.elevation = _AnimationCalc.aba(1.0, 7.0 / 8.0).calc(value);
+      },
+    );
+  }
+
   /// 动画应用到的卡片.
   final T card;
   /// 动画时长.

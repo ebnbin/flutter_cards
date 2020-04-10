@@ -461,6 +461,7 @@ class _SpriteCard extends _CoreCard {
       assert(playerCard != null);
       AxisDirection direction = playerCard.adjacentDirection(this);
       if (direction == null) {
+        _Animation.gridTremble(this).begin();
         return;
       }
       AxisDirection nextDirection = playerCard.nextNonEdge(flipAxisDirection(direction), notDirection: direction);
