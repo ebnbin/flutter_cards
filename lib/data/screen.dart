@@ -51,6 +51,8 @@ abstract class _Screen {
 
   /// 所有卡片.
   final List<_Card> cards;
+
+  final _ActionQueue actionQueue = _ActionQueue();
 }
 
 //*********************************************************************************************************************

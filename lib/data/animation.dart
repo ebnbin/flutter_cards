@@ -84,7 +84,6 @@ class _Animation<T extends _Card> {
     this.onBegin,
     this.onHalf,
     this.onEnd,
-    this.endCallback,
   });
 
   /// 用于演示.
@@ -246,7 +245,6 @@ class _Animation<T extends _Card> {
         card.scaleY = 0.5;
         card.elevation = 0.5;
       },
-      endCallback: endCallback,
     );
   }
 
@@ -267,14 +265,16 @@ class _Animation<T extends _Card> {
   final void Function(T card) onHalf;
   /// 动画结束时回调 (只会回调一次).
   final void Function(T card) onEnd;
-  /// 动画结束后, 包括 [endDelay] 延迟后回调.
-  final VoidCallback endCallback;
 
   /// 动画是否过半.
   bool _half = false;
 
   /// 开始动画.
-  void begin() {
+  ///
+  /// [endCallback] 动画结束后, 包括 [endDelay] 延迟后回调.
+  void begin({
+    VoidCallback endCallback,
+  }) {
     Future.delayed(Duration(
       milliseconds: beginDelay,
     ), () {
@@ -322,6 +322,15 @@ class _Animation<T extends _Card> {
       onBegin?.call(card);
       _Game.get().callback.notifyStateChanged();
       animationController.forward();
+    });
+  }
+
+  /// 转化为 [_Action].
+  _Action action() {
+    return _Action((action) {
+      begin(endCallback: () {
+        action.end();
+      },);
     });
   }
 }

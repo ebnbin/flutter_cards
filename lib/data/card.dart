@@ -458,14 +458,36 @@ class _SpriteCard extends _CoreCard {
   ) {
     this.onTap = () {
       _PlayerCard playerCard = screen.playerCard;
-      if (playerCard == null) {
+      assert(playerCard != null);
+      AxisDirection direction = playerCard.adjacentDirection(this);
+      if (direction == null) {
         return;
       }
-      AxisDirection direction = playerCard.adjacentDirection(this);
-      if (direction != null) {
-        _Animation.spriteExit(this).begin();
-        _Animation.spriteMove(playerCard, direction: direction, beginDelay: 250).begin();
-      }
+      AxisDirection nextDirection = playerCard.nextNonEdge(flipAxisDirection(direction), notDirection: direction);
+      BuiltList<_SpriteCard> adjacentCardAll = playerCard.adjacentCardAll(nextDirection);
+      assert(adjacentCardAll.isNotEmpty);
+      _SpriteCard newCard = _SpriteCard(gameScreen,
+        rowIndex: adjacentCardAll.last.rowIndex,
+        columnIndex: adjacentCardAll.last.columnIndex,
+      );
+      int index = this.index;
+
+      List<_Action> actions0 = <_Action>[
+        _Animation.spriteExit(this).action(),
+        _Animation.spriteMove(playerCard, direction: direction, beginDelay: 250).action(),
+      ];
+      List<_Action> actions1 = <_Action>[
+        _Action.run((action) {
+          gameScreen.cards[index] = newCard;
+        }),
+      ];
+      adjacentCardAll.forEach((element) {
+        actions1.add(_Animation.spriteMove(element, direction: flipAxisDirection(nextDirection)).action());
+      });
+      actions1.add(_Animation.spriteEnter(newCard, beginDelay: 250).action());
+
+      screen.actionQueue.addList(actions0);
+      screen.actionQueue.addList(actions1);
     };
   }
 
@@ -599,10 +621,11 @@ class _SpriteCard extends _CoreCard {
 
   /// 如果指定方向在边缘, 按 [clockwise] 顺序返回第一个不是边缘的方向.
   AxisDirection nextNonEdge(AxisDirection direction, {
+    AxisDirection notDirection,
     bool clockwise = false,
   }) {
     for (AxisDirection currentDirection in direction.turns(clockwise: clockwise)) {
-      if (!edge(currentDirection)) {
+      if (currentDirection != notDirection && !edge(currentDirection)) {
         return currentDirection;
       }
     }
