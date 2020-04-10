@@ -10,24 +10,22 @@ abstract class GameCallback implements TickerProvider {
 
 //*********************************************************************************************************************
 
-abstract class Game {
+class Game {
   static void init(GameCallback callback) {
     _Game.init(callback);
   }
 
   static Game get() {
-    return _Game.get();
+    return Game._(_Game.get());
   }
 
   static void dispose() {
     _Game.dispose();
   }
 
-  GameData data;
-}
+  //*******************************************************************************************************************
 
-class GameData {
-  GameData._(this._game);
+  Game._(this._game);
 
   final _Game _game;
 
@@ -47,7 +45,7 @@ class GameData {
 //*********************************************************************************************************************
 
 /// 游戏数据.
-class _Game implements Game {
+class _Game {
   static _Game _game;
 
   static void init(GameCallback callback) {
@@ -73,7 +71,6 @@ class _Game implements Game {
   //*******************************************************************************************************************
 
   _Game(this.callback) {
-    data = GameData._(this);
     setScreen(_GameScreen(square: 6));
   }
 
@@ -111,9 +108,4 @@ class _Game implements Game {
     _Metric.build();
     screen.init();
   }
-
-  //*******************************************************************************************************************
-
-  @override
-  GameData data;
 }
