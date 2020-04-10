@@ -493,9 +493,6 @@ class _SpriteCard extends _CoreCard {
 
   _GameScreen get gameScreen => screen as _GameScreen;
 
-  /// 占位卡片. [visible] 为 false.
-  _SpriteCard.placeholder(_GameScreen screen) : this(screen);
-
   //*******************************************************************************************************************
 
   /// 是否在指定方向 [direction] 边缘.

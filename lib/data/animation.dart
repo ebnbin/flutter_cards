@@ -221,9 +221,7 @@ class _Animation<T extends _Card> {
   }
 
   /// 精灵卡片最后一次退出.
-  static _Animation<_SpriteCard> spriteLastExit(_SpriteCard card, {
-    VoidCallback endCallback,
-  }) {
+  static _Animation<_SpriteCard> spriteLastExit(_SpriteCard card) {
     double rotateY = _random.nextListItem(<double>[
       _InvisibleRotateXY.counterClockwise90.value,
       _InvisibleRotateXY.counterClockwise270.value,

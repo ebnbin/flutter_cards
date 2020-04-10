@@ -46,7 +46,7 @@ abstract class _Screen {
     return length;
   }
 
-  /// Core 卡片行列数. 2 ~ 6.
+  /// Core 卡片行列数. 3 ~ 5.
   final int square;
 
   /// 所有卡片.
@@ -120,12 +120,18 @@ class _GameScreen extends _Screen {
   }
 
   void removeSpriteCards() {
+    List<_Action> actions0 = <_Action>[];
     spriteCards.build().forEach((spriteCard) {
-      _Animation.spriteLastExit(spriteCard,
-        endCallback: () {
-          cards[spriteCard.index] = _SpriteCard.placeholder(this);
-        },
-      ).begin();
+      actions0.add(_Animation.spriteLastExit(spriteCard).action());
     });
+    List<_Action> actions1 = [
+      _Action.run((action) {
+        spriteCards.forEach((element) {
+          cards[element.index] = _Card.placeholder;
+        });
+      }),
+    ];
+    actionQueue.addList(actions0);
+    actionQueue.addList(actions1);
   }
 }
