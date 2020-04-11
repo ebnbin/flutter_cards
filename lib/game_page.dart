@@ -66,12 +66,29 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin imple
                   ),
                   clipBehavior: Clip.antiAlias,
                   child: InkWell(
-                    child: Center(
-                      child: Text('$card',
-                        style: TextStyle(
-                          fontSize: 10.0,
+                    child: Stack(
+                      children: <Widget>[
+                        Center(
+                          child: Image.asset('assets/steve.png',
+                            width: card.rect.width / 10.0 * 8.0,
+                            height: card.rect.height / 10.0 * 8.0,
+                            fit: BoxFit.contain,
+                          ),
                         ),
-                      ),
+                        Container(
+                          alignment: AlignmentDirectional.centerEnd,
+                          child: Image.asset('assets/diamond_sword.png',
+                            width: card.rect.width / 10.0 * 4.0,
+                            height: card.rect.height / 10.0 * 4.0,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                        Text('$card',
+                          style: TextStyle(
+                            fontSize: 10.0,
+                          ),
+                        ),
+                      ],
                     ),
                     onTap: card.onTap,
                     onLongPress: card.onLongPress,
