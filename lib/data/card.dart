@@ -150,6 +150,9 @@ class _GridCard extends _Card {
         _Animation.gridBig(this).begin();
       }
       screen.cards.forEach((element) {
+        if (element is! _GridCard) {
+          return;
+        }
         if (identical(this, element)) {
           return;
         }
