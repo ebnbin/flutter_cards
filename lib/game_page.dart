@@ -105,7 +105,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin imple
                           alignment: AlignmentDirectional.center,
                           margin: EdgeInsets.only(
                             left: card.rect.width / 60.0 * 0.0,
-                            top: card.rect.width / 60.0 * 16.0,
+                            top: card.rect.width / 60.0 * 15.0,
                           ),
                           child: Image.asset('assets/diamond_sword.png',
                             width: card.rect.width / 60.0 * 24.0,
@@ -117,7 +117,8 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin imple
                           width: card.rect.width / 60.0 * 9.0,
                           height: card.rect.width / 60.0 * 7.0,
                           margin: EdgeInsets.only(
-                            top: card.rect.width / 60.0 * 40.0,
+                            left: card.rect.width / 60.0 * 0.0,
+                            top: card.rect.width / 60.0 * 39.0,
                           ),
 //                          color: Colors.blue,
                           alignment: AlignmentDirectional.center,
@@ -136,7 +137,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin imple
                           alignment: AlignmentDirectional.center,
                           margin: EdgeInsets.only(
                             left: card.rect.width / 60.0 * 23.0,
-                            top: card.rect.width / 60.0 * 16.0,
+                            top: card.rect.width / 60.0 * 17.0,
                           ),
                           child: Image.asset('assets/shield.png',
                             width: card.rect.width / 60.0 * 24.0,
@@ -248,6 +249,23 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin imple
                             top: card.rect.width / 60.0 * 48.0,
                           ),
 //                          color: Colors.blue,
+                          alignment: AlignmentDirectional.center,
+                          child: Text('88',
+                            style: TextStyle(
+                              fontSize: card.rect.width / Metric.get().gridSize / (5.0 / 3.0),
+                              fontFamily: 'monospace',
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: card.rect.width / 60.0 * 9.0,
+                          height: card.rect.width / 60.0 * 7.0,
+                          margin: EdgeInsets.only(
+                            left: card.rect.width / 60.0 * 0.0,
+                            top: card.rect.width / 60.0 * 48.0,
+                          ),
+//                          color: Colors.yellow,
                           alignment: AlignmentDirectional.center,
                           child: Text('88',
                             style: TextStyle(
