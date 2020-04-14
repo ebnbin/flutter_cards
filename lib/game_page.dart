@@ -52,15 +52,17 @@ class GamePage2 extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: <Widget>[
-          Image.asset('assets/options_background.png',
-            scale: 256.0 / (min(Metric.get().screenRect.width, Metric.get().screenRect.height) / 62.0 * 16.0),
+          Image.asset('assets/stone_bricks.png',
+            scale: 256.0 / (min(Metric.get().screenRect.width, Metric.get().screenRect.height) / 62.0 * 16.0 / 2.0),
             width: Metric.get().screenRect.width,
             height: Metric.get().screenRect.height,
             repeat: ImageRepeat.repeat,
+            color: Colors.black.withAlpha(127),
+            colorBlendMode: BlendMode.darken,
           ),
           CustomPaint(
 //            painter: game.painter,
-            foregroundPainter: game.foregroundPainter,
+//            foregroundPainter: game.foregroundPainter,
             child: Stack(
               children: [0, 1, 2, 3, 4, 5].map<Widget>((zIndex) {
                 return Stack(

@@ -51,7 +51,7 @@ class Card {
     return null;
   }
 
-  Color get color => Colors.white;
+  Color get color => Colors.blueGrey.shade100;
 
   double get elevation {
     if (_card is _GridCard) {

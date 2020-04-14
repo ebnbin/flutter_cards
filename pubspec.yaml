@@ -75,10 +75,4 @@ flutter:
   # see https://flutter.dev/custom-fonts/#from-packages
 
   assets:
-    - assets/diamond_layer.png
-    - assets/diamond_sword.png
-    - assets/icons.png
-    - assets/icons2.png
-    - assets/options_background.png
-    - assets/shield.png
-    - assets/steve.png
+    - assets/
