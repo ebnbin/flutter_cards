@@ -4,52 +4,74 @@ import 'package:cards/data.dart';
 import 'package:cards/metric.dart';
 import 'package:flutter/material.dart' hide Card;
 
-class GamePage extends StatelessWidget {
+class GamePage extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => _GamePageState();
+}
+
+class _GamePageState extends State<GamePage> with TickerProviderStateMixin implements GameCallback {
   @override
   Widget build(BuildContext context) {
     Metric.build(context);
-    return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          Image.asset('assets/options_background.png',
-            scale: 256.0 / (min(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height) / 62.0 * 16.0),
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            repeat: ImageRepeat.repeat,
-          ),
-          GamePage2(),
-        ],
-      ),
-    );
+    return GamePage2(Game.get());
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Game.init(this);
+  }
+
+  @override
+  void dispose() {
+    Game.dispose();
+    super.dispose();
+  }
+
+  @override
+  void notifyStateChanged() {
+    setState(() {
+    });
   }
 }
 
 /// 游戏页面.
 ///
 /// 整个游戏只有单个页面. 游戏中所有元素都由卡片组成, 页面控制各种卡片的展示逻辑.
-class GamePage2 extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => _GamePage2State();
-}
+class GamePage2 extends StatelessWidget {
+  GamePage2(this.game);
 
-class _GamePage2State extends State<GamePage2> with TickerProviderStateMixin implements GameCallback {
+  final Game game;
+
   @override
   Widget build(BuildContext context) {
-    return _buildGame(Game.get());
+    return _buildGame(game);
   }
-  
+
   Widget _buildGame(Game game) {
-    return CustomPaint(
-//      painter: game.painter,
-      foregroundPainter: game.foregroundPainter,
-      child: Stack(
-        children: [0, 1, 2, 3, 4, 5].map<Widget>((zIndex) {
-          return Stack(
-            children: game.cards.map<Widget>((card) {
-              return _buildCard(card, zIndex);
-            }).toList(),
-          );
-        }).toList(),
+    return Scaffold(
+      body: Stack(
+        children: <Widget>[
+          Image.asset('assets/options_background.png',
+            scale: 256.0 / (min(Metric.get().screenRect.width, Metric.get().screenRect.height) / 62.0 * 16.0),
+            width: Metric.get().screenRect.width,
+            height: Metric.get().screenRect.height,
+            repeat: ImageRepeat.repeat,
+          ),
+          CustomPaint(
+//            painter: game.painter,
+            foregroundPainter: game.foregroundPainter,
+            child: Stack(
+              children: [0, 1, 2, 3, 4, 5].map<Widget>((zIndex) {
+                return Stack(
+                  children: game.cards.map<Widget>((card) {
+                    return _buildCard(card, zIndex);
+                  }).toList(),
+                );
+              }).toList(),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -317,24 +339,5 @@ class _GamePage2State extends State<GamePage2> with TickerProviderStateMixin imp
     return Positioned.fill(
       child: SizedBox.shrink(),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    Game.init(this);
-  }
-
-
-  @override
-  void dispose() {
-    Game.dispose();
-    super.dispose();
-  }
-
-  @override
-  void notifyStateChanged() {
-    setState(() {
-    });
   }
 }
