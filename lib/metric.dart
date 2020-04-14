@@ -134,13 +134,6 @@ class Metric {
     return metricCache;
   }
 
-  /// 在 [_Game.dispose] 中调用.
-  static void dispose() {
-    metricCache = null;
-    paddingCache = null;
-    sizeCache = null;
-  }
-
   Metric(
       this.screenRect,
       this.isVertical,

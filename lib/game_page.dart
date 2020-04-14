@@ -7,6 +7,7 @@ import 'package:flutter/material.dart' hide Card;
 class GamePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    Metric.build(context);
     return Scaffold(
       body: Stack(
         children: <Widget>[
@@ -34,7 +35,6 @@ class GamePage2 extends StatefulWidget {
 class _GamePage2State extends State<GamePage2> with TickerProviderStateMixin implements GameCallback {
   @override
   Widget build(BuildContext context) {
-    Metric.build(context);
     return _buildGame(Game.get());
   }
   
@@ -329,7 +329,6 @@ class _GamePage2State extends State<GamePage2> with TickerProviderStateMixin imp
   @override
   void dispose() {
     Game.dispose();
-    Metric.dispose();
     super.dispose();
   }
 
