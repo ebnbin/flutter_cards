@@ -1,16 +1,37 @@
+import 'dart:math';
+
 import 'package:cards/data.dart';
 import 'package:cards/metric.dart';
 import 'package:flutter/material.dart' hide Card;
 
+class GamePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Stack(
+        children: <Widget>[
+          Image.asset('assets/options_background.png',
+            scale: 256.0 / (min(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height) / 62.0 * 16.0),
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            repeat: ImageRepeat.repeat,
+          ),
+          GamePage2(),
+        ],
+      ),
+    );
+  }
+}
+
 /// 游戏页面.
 ///
 /// 整个游戏只有单个页面. 游戏中所有元素都由卡片组成, 页面控制各种卡片的展示逻辑.
-class GamePage extends StatefulWidget {
+class GamePage2 extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _GamePageState();
+  State<StatefulWidget> createState() => _GamePage2State();
 }
 
-class _GamePageState extends State<GamePage> with TickerProviderStateMixin implements GameCallback {
+class _GamePage2State extends State<GamePage2> with TickerProviderStateMixin implements GameCallback {
   @override
   Widget build(BuildContext context) {
     Metric.build(context);
@@ -18,19 +39,17 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin imple
   }
   
   Widget _buildGame(Game game) {
-    return Scaffold(
-      body: CustomPaint(
-        painter: game.painter,
-        foregroundPainter: game.foregroundPainter,
-        child: Stack(
-          children: [0, 1, 2, 3, 4, 5].map<Widget>((zIndex) {
-            return Stack(
-              children: game.cards.map<Widget>((card) {
-                return _buildCard(card, zIndex);
-              }).toList(),
-            );
-          }).toList(),
-        ),
+    return CustomPaint(
+//      painter: game.painter,
+      foregroundPainter: game.foregroundPainter,
+      child: Stack(
+        children: [0, 1, 2, 3, 4, 5].map<Widget>((zIndex) {
+          return Stack(
+            children: game.cards.map<Widget>((card) {
+              return _buildCard(card, zIndex);
+            }).toList(),
+          );
+        }).toList(),
       ),
     );
   }
