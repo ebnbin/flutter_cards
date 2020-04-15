@@ -8,18 +8,25 @@ class _Game {
   //*******************************************************************************************************************
 
   _Game(this.callback) {
+    gridPainter = _GridPainter(this);
     gridForegroundPainter = _GridForegroundPainter(this);
     screen = _GameScreen(this, square: 4);
   }
 
   final GameCallback callback;
 
-  final _GridPainter gridPainter = _GridPainter();
+  _GridPainter gridPainter;
   _GridForegroundPainter gridForegroundPainter;
 
   //*******************************************************************************************************************
 
+  Size sizeCache;
+  EdgeInsets paddingCache;
+
+  _Metric metric;
+
   void build(BuildContext context) {
+    _Metric.build(this, context);
   }
 
   //*******************************************************************************************************************

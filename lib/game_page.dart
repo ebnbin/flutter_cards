@@ -1,7 +1,4 @@
-import 'dart:math';
-
 import 'package:cards/data.dart';
-import 'package:cards/metric.dart';
 import 'package:flutter/material.dart' hide Card;
 
 class GamePage extends StatefulWidget {
@@ -12,7 +9,6 @@ class GamePage extends StatefulWidget {
 class _GamePageState extends State<GamePage> with TickerProviderStateMixin implements GameCallback {
   @override
   Widget build(BuildContext context) {
-    Metric.build(context);
     Game game = Game.build(context);
     return GamePage2(game);
   }
@@ -54,9 +50,9 @@ class GamePage2 extends StatelessWidget {
       body: Stack(
         children: <Widget>[
           Image.asset('assets/stone_bricks.png',
-            scale: 256.0 / (min(Metric.get().safeScreenRect.width, Metric.get().safeScreenRect.height) / 62.0 * 16.0 / 2.0),
-            width: Metric.get().screenRect.width,
-            height: Metric.get().screenRect.height,
+            scale: game.backgroundImageScale,
+            width: game.backgroundImageWidth,
+            height: game.backgroundImageHeight,
             repeat: ImageRepeat.repeat,
             color: Colors.black.withAlpha(127),
             colorBlendMode: BlendMode.darken,

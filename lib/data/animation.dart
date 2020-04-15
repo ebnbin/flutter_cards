@@ -118,23 +118,23 @@ class _Animation<T extends _Card> {
       curve: Curves.easeInOut,
       onAnimating: (card, value) {
         if (value < 0.5) {
-          card.translateX = _AnimationCalc.ab(0.0, Metric.get().coreCardSize(card.screen.square) * direction.x)
+          card.translateX = _AnimationCalc.ab(0.0, card.screen.game.metric.coreCardSize(card.screen.square) * direction.x)
               .calc(value);
-          card.translateY = _AnimationCalc.ab(0.0, Metric.get().coreCardSize(card.screen.square) * direction.y)
+          card.translateY = _AnimationCalc.ab(0.0, card.screen.game.metric.coreCardSize(card.screen.square) * direction.y)
               .calc(value);
         } else {
-          card.translateX = _AnimationCalc.ab(-Metric.get().coreCardSize(card.screen.square) * direction.x, 0.0)
+          card.translateX = _AnimationCalc.ab(-card.screen.game.metric.coreCardSize(card.screen.square) * direction.x, 0.0)
               .calc(value);
-          card.translateY = _AnimationCalc.ab(-Metric.get().coreCardSize(card.screen.square) * direction.y, 0.0)
+          card.translateY = _AnimationCalc.ab(-card.screen.game.metric.coreCardSize(card.screen.square) * direction.y, 0.0)
               .calc(value);
         }
       },
       onHalf: (card) {
         card.rowIndex += direction.y;
         card.columnIndex += direction.x;
-        card.translateX = _AnimationCalc.ab(-Metric.get().coreCardSize(card.screen.square) * direction.x, 0.0)
+        card.translateX = _AnimationCalc.ab(-card.screen.game.metric.coreCardSize(card.screen.square) * direction.x, 0.0)
             .calc(0.5);
-        card.translateY = _AnimationCalc.ab(-Metric.get().coreCardSize(card.screen.square) * direction.y, 0.0)
+        card.translateY = _AnimationCalc.ab(-card.screen.game.metric.coreCardSize(card.screen.square) * direction.y, 0.0)
             .calc(0.5);
       },
     );
@@ -268,10 +268,10 @@ class _Animation<T extends _Card> {
 
   /// 小卡片 -> 大卡片.
   static _Animation<_GridCard> gridBig(_GridCard card) {
-    double translateXSmall = Metric.get().coreNoPaddingRect.center.dx - card.smallRect.center.dx;
-    double translateYSmall = Metric.get().coreNoPaddingRect.center.dy - card.smallRect.center.dy;
-    double scaleXSmall = Metric.get().coreNoPaddingRect.width / card.smallRect.width;
-    double scaleYSmall = Metric.get().coreNoPaddingRect.height / card.smallRect.height;
+    double translateXSmall = card.screen.game.metric.coreNoPaddingRect.center.dx - card.smallRect.center.dx;
+    double translateYSmall = card.screen.game.metric.coreNoPaddingRect.center.dy - card.smallRect.center.dy;
+    double scaleXSmall = card.screen.game.metric.coreNoPaddingRect.width / card.smallRect.width;
+    double scaleYSmall = card.screen.game.metric.coreNoPaddingRect.height / card.smallRect.height;
     return _Animation<_GridCard>(card,
       duration: 500,
       curve: Curves.easeInOut,
@@ -306,10 +306,10 @@ class _Animation<T extends _Card> {
 
   /// 大卡片 -> 小卡片.
   static _Animation<_GridCard> gridSmall(_GridCard card) {
-    double translateXSmall = Metric.get().coreNoPaddingRect.center.dx - card.smallRect.center.dx;
-    double translateYSmall = Metric.get().coreNoPaddingRect.center.dy - card.smallRect.center.dy;
-    double scaleXSmall = Metric.get().coreNoPaddingRect.width / card.smallRect.width;
-    double scaleYSmall = Metric.get().coreNoPaddingRect.height / card.smallRect.height;
+    double translateXSmall = card.screen.game.metric.coreNoPaddingRect.center.dx - card.smallRect.center.dx;
+    double translateYSmall = card.screen.game.metric.coreNoPaddingRect.center.dy - card.smallRect.center.dy;
+    double scaleXSmall = card.screen.game.metric.coreNoPaddingRect.width / card.smallRect.width;
+    double scaleYSmall = card.screen.game.metric.coreNoPaddingRect.height / card.smallRect.height;
     return _Animation<_GridCard>(card,
       duration: 500,
       curve: Curves.easeInOut,

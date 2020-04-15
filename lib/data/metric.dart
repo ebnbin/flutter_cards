@@ -1,9 +1,9 @@
-import 'dart:math';
+part of '../data.dart';
 
-import 'package:flutter/material.dart';
+//*********************************************************************************************************************
 
 /// 网格标尺. 单例.
-class Metric {
+class _Metric {
   /// Padding 网格数.
   static const int paddingGrid = 1;
   /// Core 网格数 (不包含 padding).
@@ -17,14 +17,9 @@ class Metric {
   /// 安全网格数.
   static const int safeGrid = coreGrid + headerFooterGrid * 2;
 
-  static Size sizeCache;
-  static EdgeInsets paddingCache;
-
-  static Metric metricCache;
-
-  static void build(BuildContext context) {
+  static void build(_Game game, BuildContext context) {
     MediaQueryData mediaQueryData = MediaQuery.of(context);
-    if (sizeCache == mediaQueryData.size && paddingCache == mediaQueryData.padding) {
+    if (game.sizeCache == mediaQueryData.size && game.paddingCache == mediaQueryData.padding) {
       return;
     }
 
@@ -108,9 +103,9 @@ class Metric {
 
     //*****************************************************************************************************************
 
-    sizeCache = mediaQueryData.size;
-    paddingCache = mediaQueryData.padding;
-    metricCache = Metric(
+    game.sizeCache = mediaQueryData.size;
+    game.paddingCache = mediaQueryData.padding;
+    game.metric = _Metric(
       screenRect,
       safeScreenRect,
       isVertical,
@@ -127,15 +122,7 @@ class Metric {
     );
   }
 
-  /// 返回单例. 必须在第一次 [build] 后调用.
-  static Metric get() {
-    if (metricCache == null) {
-      throw Exception();
-    }
-    return metricCache;
-  }
-
-  Metric(
+  _Metric(
       this.screenRect,
       this.safeScreenRect,
       this.isVertical,

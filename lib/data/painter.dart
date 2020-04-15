@@ -3,35 +3,35 @@ part of '../data.dart';
 //*********************************************************************************************************************
 
 class _GridForegroundPainter extends CustomPainter {
-  _GridForegroundPainter(this._game);
+  _GridForegroundPainter(this.game);
 
   final Paint _paint = Paint();
 
-  final _Game _game;
+  final _Game game;
 
   @override
   void paint(Canvas canvas, Size size) {
     _paint.style = PaintingStyle.stroke;
     _paint.color = Colors.cyan;
-    for (int rowIndex = 0; rowIndex <= Metric.get().verticalGrid; rowIndex += 1) {
-      Offset p1 = new Offset(Metric.get().safeRect.left, Metric.get().safeRect.top + rowIndex * Metric.get().gridSize);
-      Offset p2 = new Offset(Metric.get().safeRect.right, Metric.get().safeRect.top + rowIndex * Metric.get().gridSize);
+    for (int rowIndex = 0; rowIndex <= game.metric.verticalGrid; rowIndex += 1) {
+      Offset p1 = new Offset(game.metric.safeRect.left, game.metric.safeRect.top + rowIndex * game.metric.gridSize);
+      Offset p2 = new Offset(game.metric.safeRect.right, game.metric.safeRect.top + rowIndex * game.metric.gridSize);
       canvas.drawLine(p1, p2, _paint);
     }
-    for (int columnIndex = 0; columnIndex <= Metric.get().horizontalGrid; columnIndex += 1) {
-      Offset p1 = new Offset(Metric.get().safeRect.left + columnIndex * Metric.get().gridSize, Metric.get().safeRect.top);
-      Offset p2 = new Offset(Metric.get().safeRect.left + columnIndex * Metric.get().gridSize, Metric.get().safeRect.bottom);
+    for (int columnIndex = 0; columnIndex <= game.metric.horizontalGrid; columnIndex += 1) {
+      Offset p1 = new Offset(game.metric.safeRect.left + columnIndex * game.metric.gridSize, game.metric.safeRect.top);
+      Offset p2 = new Offset(game.metric.safeRect.left + columnIndex * game.metric.gridSize, game.metric.safeRect.bottom);
       canvas.drawLine(p1, p2, _paint);
     }
     _paint.color = Colors.yellow;
-    for (int rowIndex = 0; rowIndex <= _game.screen.square; rowIndex += 1) {
-      Offset p1 = new Offset(Metric.get().coreNoPaddingRect.left, Metric.get().coreNoPaddingRect.top + rowIndex * Metric.get().coreCardSize(_game.screen.square));
-      Offset p2 = new Offset(Metric.get().coreNoPaddingRect.right, Metric.get().coreNoPaddingRect.top + rowIndex * Metric.get().coreCardSize(_game.screen.square));
+    for (int rowIndex = 0; rowIndex <= game.screen.square; rowIndex += 1) {
+      Offset p1 = new Offset(game.metric.coreNoPaddingRect.left, game.metric.coreNoPaddingRect.top + rowIndex * game.metric.coreCardSize(game.screen.square));
+      Offset p2 = new Offset(game.metric.coreNoPaddingRect.right, game.metric.coreNoPaddingRect.top + rowIndex * game.metric.coreCardSize(game.screen.square));
       canvas.drawLine(p1, p2, _paint);
     }
-    for (int columnIndex = 0; columnIndex <= _game.screen.square; columnIndex += 1) {
-      Offset p1 = new Offset(Metric.get().coreNoPaddingRect.left + columnIndex * Metric.get().coreCardSize(_game.screen.square), Metric.get().coreNoPaddingRect.top);
-      Offset p2 = new Offset(Metric.get().coreNoPaddingRect.left + columnIndex * Metric.get().coreCardSize(_game.screen.square), Metric.get().coreNoPaddingRect.bottom);
+    for (int columnIndex = 0; columnIndex <= game.screen.square; columnIndex += 1) {
+      Offset p1 = new Offset(game.metric.coreNoPaddingRect.left + columnIndex * game.metric.coreCardSize(game.screen.square), game.metric.coreNoPaddingRect.top);
+      Offset p2 = new Offset(game.metric.coreNoPaddingRect.left + columnIndex * game.metric.coreCardSize(game.screen.square), game.metric.coreNoPaddingRect.bottom);
       canvas.drawLine(p1, p2, _paint);
     }
   }
@@ -43,7 +43,9 @@ class _GridForegroundPainter extends CustomPainter {
 }
 
 class _GridPainter extends CustomPainter {
-  _GridPainter();
+  _GridPainter(this.game);
+
+  final _Game game;
 
   final Paint _paint = Paint();
 
@@ -51,11 +53,11 @@ class _GridPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     _paint.style = PaintingStyle.fill;
     _paint.color = Colors.blue;
-    canvas.drawRect(Metric.get().screenRect, _paint);
+    canvas.drawRect(game.metric.screenRect, _paint);
     _paint.color = Colors.green;
-    canvas.drawRect(Metric.get().safeRect, _paint);
+    canvas.drawRect(game.metric.safeRect, _paint);
     _paint.color = Colors.red;
-    canvas.drawRect(Metric.get().coreRect, _paint);
+    canvas.drawRect(game.metric.coreRect, _paint);
   }
 
   @override

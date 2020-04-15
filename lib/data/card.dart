@@ -103,7 +103,7 @@ class _GridCard extends _Card {
 
   /// 当前屏幕旋转方向的网格行.
   int get rowGridIndex {
-    return Metric.get().isVertical ? verticalRowGridIndex : horizontalRowGridIndex;
+    return screen.game.metric.isVertical ? verticalRowGridIndex : horizontalRowGridIndex;
   }
   set rowGridIndex(int rowIndex) {
     horizontalRowGridIndex = rowIndex;
@@ -112,7 +112,7 @@ class _GridCard extends _Card {
 
   /// 当前屏幕旋转方向的网格列.
   int get columnGridIndex {
-    return Metric.get().isVertical ? verticalColumnGridIndex : horizontalColumnGridIndex;
+    return screen.game.metric.isVertical ? verticalColumnGridIndex : horizontalColumnGridIndex;
   }
   set columnGridIndex(int columnIndex) {
     horizontalColumnGridIndex = columnIndex;
@@ -121,7 +121,7 @@ class _GridCard extends _Card {
 
   /// 当前屏幕旋转方向的网格跨行.
   int get rowGridSpan {
-    return Metric.get().isVertical ? verticalRowGridSpan : horizontalRowGridSpan;
+    return screen.game.metric.isVertical ? verticalRowGridSpan : horizontalRowGridSpan;
   }
   set rowGridSpan(int rowSpan) {
     horizontalRowGridSpan = rowSpan;
@@ -130,7 +130,7 @@ class _GridCard extends _Card {
 
   /// 当前屏幕旋转方向的网格跨列.
   int get columnGridSpan {
-    return Metric.get().isVertical ? verticalColumnGridSpan : horizontalColumnGridSpan;
+    return screen.game.metric.isVertical ? verticalColumnGridSpan : horizontalColumnGridSpan;
   }
   set columnGridSpan(int columnSpan) {
     horizontalColumnGridSpan = columnSpan;
@@ -147,17 +147,17 @@ class _GridCard extends _Card {
 
   Rect get smallRect {
     return Rect.fromLTWH(
-      Metric.get().safeRect.left + columnGridIndex * Metric.get().gridSize,
-      Metric.get().safeRect.top + rowGridIndex * Metric.get().gridSize,
-      columnGridSpan * Metric.get().gridSize,
-      rowGridSpan * Metric.get().gridSize,
+      screen.game.metric.safeRect.left + columnGridIndex * screen.game.metric.gridSize,
+      screen.game.metric.safeRect.top + rowGridIndex * screen.game.metric.gridSize,
+      columnGridSpan * screen.game.metric.gridSize,
+      rowGridSpan * screen.game.metric.gridSize,
     );
   }
 
   /// 网格矩形.
   Rect get rect {
     if (big) {
-      return Metric.get().coreNoPaddingRect;
+      return screen.game.metric.coreNoPaddingRect;
     } else {
       return smallRect;
     }
@@ -170,7 +170,7 @@ class _GridCard extends _Card {
 //    if (big) {
 //      return Metric.coreNoPaddingGrid / Metric.coreNoPaddingGrid / 800.0;
 //    } else {
-      return Metric.coreNoPaddingGrid / maxGridSpan / 800.0;
+      return _Metric.coreNoPaddingGrid / maxGridSpan / 800.0;
 //    }
   }
 
@@ -226,9 +226,9 @@ class _GridCard extends _Card {
 
   double get margin {
     if (big) {
-      return 2.0 / 1.0 * Metric.get().gridSize;
+      return 2.0 / 1.0 * screen.game.metric.gridSize;
     } else {
-      return 2.0 / (Metric.coreNoPaddingGrid / minGridSpan) * Metric.get().gridSize;
+      return 2.0 / (_Metric.coreNoPaddingGrid / minGridSpan) * screen.game.metric.gridSize;
     }
   }
 
@@ -329,39 +329,39 @@ class _CoreCard extends _GridCard {
 
   /// 行.
   int get rowIndex {
-    return (rowGridIndex - Metric.paddingGrid - (Metric.get().isVertical ? Metric.headerFooterGrid : 0)) ~/
-        Metric.get().coreCardGrid(screen.square);
+    return (rowGridIndex - _Metric.paddingGrid - (screen.game.metric.isVertical ? _Metric.headerFooterGrid : 0)) ~/
+        screen.game.metric.coreCardGrid(screen.square);
   }
   set rowIndex(int coreRowIndex) {
-    verticalRowGridIndex = Metric.get().coreCardGrid(screen.square) * coreRowIndex + Metric.paddingGrid + Metric.headerFooterGrid;
-    horizontalRowGridIndex = Metric.get().coreCardGrid(screen.square) * coreRowIndex + Metric.paddingGrid;
+    verticalRowGridIndex = screen.game.metric.coreCardGrid(screen.square) * coreRowIndex + _Metric.paddingGrid + _Metric.headerFooterGrid;
+    horizontalRowGridIndex = screen.game.metric.coreCardGrid(screen.square) * coreRowIndex + _Metric.paddingGrid;
   }
 
   /// 列.
   int get columnIndex {
-    return (columnGridIndex - Metric.paddingGrid - (Metric.get().isVertical ? 0 : Metric.headerFooterGrid)) ~/
-        Metric.get().coreCardGrid(screen.square);
+    return (columnGridIndex - _Metric.paddingGrid - (screen.game.metric.isVertical ? 0 : _Metric.headerFooterGrid)) ~/
+        screen.game.metric.coreCardGrid(screen.square);
   }
   set columnIndex(int coreColumnIndex) {
-    verticalColumnGridIndex = Metric.get().coreCardGrid(screen.square) * coreColumnIndex + Metric.paddingGrid;
-    horizontalColumnGridIndex = Metric.get().coreCardGrid(screen.square) * coreColumnIndex + Metric.paddingGrid +
-        Metric.headerFooterGrid;
+    verticalColumnGridIndex = screen.game.metric.coreCardGrid(screen.square) * coreColumnIndex + _Metric.paddingGrid;
+    horizontalColumnGridIndex = screen.game.metric.coreCardGrid(screen.square) * coreColumnIndex + _Metric.paddingGrid +
+        _Metric.headerFooterGrid;
   }
 
   /// 跨行.
   int get rowSpan {
-    return rowGridSpan ~/ Metric.get().coreCardGrid(screen.square);
+    return rowGridSpan ~/ screen.game.metric.coreCardGrid(screen.square);
   }
   set rowSpan(int coreRowSpan) {
-    rowGridSpan = Metric.get().coreCardGrid(screen.square) * coreRowSpan;
+    rowGridSpan = screen.game.metric.coreCardGrid(screen.square) * coreRowSpan;
   }
 
   /// 跨列.
   int get columnSpan {
-    return columnGridSpan ~/ Metric.get().coreCardGrid(screen.square);
+    return columnGridSpan ~/ screen.game.metric.coreCardGrid(screen.square);
   }
   set columnSpan(int coreColumnSpan) {
-    columnGridSpan = Metric.get().coreCardGrid(screen.square) * coreColumnSpan;
+    columnGridSpan = screen.game.metric.coreCardGrid(screen.square) * coreColumnSpan;
   }
 
   //*******************************************************************************************************************

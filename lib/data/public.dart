@@ -43,6 +43,18 @@ class Game {
   CustomPainter get foregroundPainter => _game.gridForegroundPainter;
 
   CustomPainter get painter => _game.gridPainter;
+
+  double get backgroundImageScale {
+    return 256.0 / (min(_game.metric.safeScreenRect.width, _game.metric.safeScreenRect.height) / 62.0 * 16.0 / 2.0);
+  }
+
+  double get backgroundImageWidth {
+    return _game.metric.screenRect.width;
+  }
+
+  double get backgroundImageHeight {
+    return _game.metric.screenRect.height;
+  }
 }
 
 //*********************************************************************************************************************
@@ -181,7 +193,7 @@ class Card {
     if (_card == null) {
       return 14.0;
     }
-    return rect.width / Metric.get().gridSize / (5.0 / 3.0);
+    return rect.width / _card.screen.game.metric.gridSize / (5.0 / 3.0);
   }
 
   Rect get spriteShieldRect {
