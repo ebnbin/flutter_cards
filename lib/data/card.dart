@@ -3,11 +3,11 @@ part of '../data.dart';
 //*********************************************************************************************************************
 
 class _Card {
-  const _Card();
+  _Card(this.screen);
+
+  final _Screen screen;
 
   static const int placeholderIndex = -2;
-
-  static final _Card placeholder = const _Card();
 
   Rect get rect => Rect.zero;
 
@@ -27,7 +27,7 @@ class _Card {
 
 /// 网格卡片.
 class _GridCard extends _Card {
-  _GridCard(this.screen, {
+  _GridCard(_Screen screen, {
     this.verticalRowGridIndex = 0,
     this.verticalColumnGridIndex = 0,
     this.verticalRowGridSpan = 1,
@@ -51,7 +51,7 @@ class _GridCard extends _Card {
     this.gestureType = _CardGestureType.normal,
     this.onTap,
     this.onLongPress,
-  }) {
+  }) : super(screen) {
     this.onLongPress = () {
       if (big) {
         _Animation.gridSmall(this).begin();
@@ -59,6 +59,9 @@ class _GridCard extends _Card {
         _Animation.gridBig(this).begin();
       }
       screen.cards.forEach((element) {
+        if (element == null) {
+          return;
+        }
         if (element is! _GridCard) {
           return;
         }
@@ -73,8 +76,6 @@ class _GridCard extends _Card {
       });
     };
   }
-
-  final _Screen screen;
 
   //*******************************************************************************************************************
 

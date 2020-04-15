@@ -9,16 +9,24 @@ abstract class GameCallback implements TickerProvider {
 //*********************************************************************************************************************
 
 class Game {
+  static _Game _instance;
+
   static void init(GameCallback callback) {
-    _Game.init(callback);
+    if (_instance != null) {
+      throw Exception();
+    }
+    _instance = _Game(callback);
   }
 
   static Game get() {
-    return Game._(_Game.get());
+    if (_instance == null) {
+      throw Exception();
+    }
+    return Game._(_instance);
   }
 
   static void dispose() {
-    _Game.dispose();
+    _instance = null;
   }
 
   //*******************************************************************************************************************
@@ -110,7 +118,12 @@ class Card {
     return null;
   }
 
-  Rect get rect => _card.rect;
+  Rect get rect {
+    if (_card == null) {
+      return Rect.zero;
+    }
+    return _card.rect;
+  }
 
   Matrix4 get transform {
     if (_card is _GridCard) {
@@ -120,10 +133,18 @@ class Card {
     return null;
   }
 
-  bool Function(int zIndex) get zIndexVisible => _card.zIndexVisible;
+  bool Function(int zIndex) get zIndexVisible {
+    if (_card == null) {
+      return (_) => false;
+    }
+    return _card.zIndexVisible;
+  }
 
   @override
   String toString() {
+    if (_card == null) {
+      return "";
+    }
     return _card.toString();
   }
 }

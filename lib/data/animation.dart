@@ -442,7 +442,7 @@ class _Animation<T extends _Card> {
         duration: Duration(
           milliseconds: duration,
         ),
-        vsync: _Game.get().callback,
+        vsync: card.screen.game.callback,
       );
       CurvedAnimation curvedAnimation = CurvedAnimation(
         parent: animationController,
@@ -459,7 +459,7 @@ class _Animation<T extends _Card> {
               break;
             case AnimationStatus.completed:
               onEnd?.call(card);
-              _Game.get().callback.notifyStateChanged();
+              card.screen.game.callback.notifyStateChanged();
               animationController.dispose();
               Future.delayed(Duration(
                 milliseconds: endDelay,
@@ -474,13 +474,13 @@ class _Animation<T extends _Card> {
           if (!_half && curvedAnimation.value >= 0.5) {
             _half = true;
             onHalf?.call(card);
-            _Game.get().callback.notifyStateChanged();
+            card.screen.game.callback.notifyStateChanged();
           }
           onAnimating?.call(card, curvedAnimation.value);
-          _Game.get().callback.notifyStateChanged();
+          card.screen.game.callback.notifyStateChanged();
         });
       onBegin?.call(card);
-      _Game.get().callback.notifyStateChanged();
+      card.screen.game.callback.notifyStateChanged();
       animationController.forward();
     });
   }

@@ -4,9 +4,9 @@ part of '../data.dart';
 
 /// 屏幕.
 abstract class _Screen {
-  _Screen({
+  _Screen(this.game, {
     this.square,
-  }) : cards = List.filled(length(square), _Card.placeholder,
+  }) : cards = List.filled(length(square), null,
     growable: false,
   ) {
     _GridCard sampleCard = _GridCard(this,
@@ -38,6 +38,8 @@ abstract class _Screen {
     }
   }
 
+  final _Game game;
+
   static int length(int square) {
     int length = 0;
     length += square * square;
@@ -59,7 +61,7 @@ abstract class _Screen {
 
 /// 开屏.
 class _SplashScreen extends _Screen {
-  _SplashScreen() : super(
+  _SplashScreen(_Game game) : super(game,
     square: 4,
   );
 }
@@ -68,9 +70,9 @@ class _SplashScreen extends _Screen {
 
 /// 一局游戏.
 class _GameScreen extends _Screen {
-  _GameScreen({
+  _GameScreen(_Game game, {
     int square,
-  }) : super(
+  }) : super(game,
     square: square,
   ) {
     (cards[1] as _GridCard).onTap = () {
@@ -127,7 +129,7 @@ class _GameScreen extends _Screen {
     List<_Action> actions1 = [
       _Action.run((action) {
         spriteCards.forEach((element) {
-          cards[element.index] = _Card.placeholder;
+          cards[element.index] = null;
         });
       }),
     ];

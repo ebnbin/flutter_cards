@@ -3,9 +3,11 @@ part of '../data.dart';
 //*********************************************************************************************************************
 
 class _GridForegroundPainter extends CustomPainter {
-  _GridForegroundPainter();
+  _GridForegroundPainter(this._game);
 
   final Paint _paint = Paint();
+
+  final _Game _game;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -22,14 +24,14 @@ class _GridForegroundPainter extends CustomPainter {
       canvas.drawLine(p1, p2, _paint);
     }
     _paint.color = Colors.yellow;
-    for (int rowIndex = 0; rowIndex <= _Game.get().screen.square; rowIndex += 1) {
-      Offset p1 = new Offset(Metric.get().coreNoPaddingRect.left, Metric.get().coreNoPaddingRect.top + rowIndex * Metric.get().coreCardSize(_Game.get().screen.square));
-      Offset p2 = new Offset(Metric.get().coreNoPaddingRect.right, Metric.get().coreNoPaddingRect.top + rowIndex * Metric.get().coreCardSize(_Game.get().screen.square));
+    for (int rowIndex = 0; rowIndex <= _game.screen.square; rowIndex += 1) {
+      Offset p1 = new Offset(Metric.get().coreNoPaddingRect.left, Metric.get().coreNoPaddingRect.top + rowIndex * Metric.get().coreCardSize(_game.screen.square));
+      Offset p2 = new Offset(Metric.get().coreNoPaddingRect.right, Metric.get().coreNoPaddingRect.top + rowIndex * Metric.get().coreCardSize(_game.screen.square));
       canvas.drawLine(p1, p2, _paint);
     }
-    for (int columnIndex = 0; columnIndex <= _Game.get().screen.square; columnIndex += 1) {
-      Offset p1 = new Offset(Metric.get().coreNoPaddingRect.left + columnIndex * Metric.get().coreCardSize(_Game.get().screen.square), Metric.get().coreNoPaddingRect.top);
-      Offset p2 = new Offset(Metric.get().coreNoPaddingRect.left + columnIndex * Metric.get().coreCardSize(_Game.get().screen.square), Metric.get().coreNoPaddingRect.bottom);
+    for (int columnIndex = 0; columnIndex <= _game.screen.square; columnIndex += 1) {
+      Offset p1 = new Offset(Metric.get().coreNoPaddingRect.left + columnIndex * Metric.get().coreCardSize(_game.screen.square), Metric.get().coreNoPaddingRect.top);
+      Offset p2 = new Offset(Metric.get().coreNoPaddingRect.left + columnIndex * Metric.get().coreCardSize(_game.screen.square), Metric.get().coreNoPaddingRect.bottom);
       canvas.drawLine(p1, p2, _paint);
     }
   }
