@@ -9,20 +9,16 @@ class GamePage extends StatefulWidget {
 class _GamePageState extends State<GamePage> with TickerProviderStateMixin implements GameCallback {
   @override
   Widget build(BuildContext context) {
-    Game game = Game.build(context);
+    Game game = _data.build(context);
     return GamePage2(game);
   }
+
+  Data _data;
 
   @override
   void initState() {
     super.initState();
-    Game.init(this);
-  }
-
-  @override
-  void dispose() {
-    Game.dispose();
-    super.dispose();
+    _data = Data(this);
   }
 
   @override

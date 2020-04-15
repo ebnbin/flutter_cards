@@ -7,13 +7,12 @@ class _Card {
 
   final _Screen screen;
 
-  static const int placeholderIndex = -2;
-
   Rect get rect => Rect.zero;
 
   bool Function(int zIndex) get zIndexVisible => (_) => false;
 
-  int get index => placeholderIndex;
+  /// 当前卡片在 [screen.cards] 中的 index.
+  int get index => screen.cards.indexOf(this);
 
   //*******************************************************************************************************************
 
@@ -76,11 +75,6 @@ class _GridCard extends _Card {
       });
     };
   }
-
-  //*******************************************************************************************************************
-
-  /// 当前卡片在 [screen.cards] 中的 index.
-  int get index => screen.cards.indexOf(this);
 
   //*******************************************************************************************************************
 

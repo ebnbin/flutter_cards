@@ -8,30 +8,18 @@ abstract class GameCallback implements TickerProvider {
 
 //*********************************************************************************************************************
 
+class Data {
+  final _Game _game;
+
+  Data(GameCallback callback) : _game = _Game(callback);
+
+  Game build(BuildContext context) {
+    _game.build(context);
+    return Game._(_game);
+  }
+}
+
 class Game {
-  static _Game _instance;
-
-  static void init(GameCallback callback) {
-    if (_instance != null) {
-      throw Exception();
-    }
-    _instance = _Game(callback);
-  }
-
-  static Game build(BuildContext context) {
-    if (_instance == null) {
-      throw Exception();
-    }
-    _instance.build(context);
-    return Game._(_instance);
-  }
-
-  static void dispose() {
-    _instance = null;
-  }
-
-  //*******************************************************************************************************************
-
   Game._(this._game);
 
   final _Game _game;
