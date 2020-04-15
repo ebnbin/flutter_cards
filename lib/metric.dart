@@ -112,6 +112,7 @@ class Metric {
     paddingCache = mediaQueryData.padding;
     metricCache = Metric(
       screenRect,
+      safeScreenRect,
       isVertical,
       horizontalGrid,
       verticalGrid,
@@ -136,6 +137,7 @@ class Metric {
 
   Metric(
       this.screenRect,
+      this.safeScreenRect,
       this.isVertical,
       this.horizontalGrid,
       this.verticalGrid,
@@ -150,6 +152,7 @@ class Metric {
       );
 
   final Rect screenRect;
+  final Rect safeScreenRect;
   final bool isVertical;
   final int horizontalGrid;
   final int verticalGrid;

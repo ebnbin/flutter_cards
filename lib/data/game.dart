@@ -9,7 +9,7 @@ class _Game {
 
   _Game(this.callback) {
     gridForegroundPainter = _GridForegroundPainter(this);
-    screen = _GameScreen(this, square: 3);
+    screen = _GameScreen(this, square: 4);
   }
 
   final GameCallback callback;

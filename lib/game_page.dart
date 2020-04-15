@@ -54,7 +54,7 @@ class GamePage2 extends StatelessWidget {
       body: Stack(
         children: <Widget>[
           Image.asset('assets/stone_bricks.png',
-            scale: 256.0 / (min(Metric.get().screenRect.width, Metric.get().screenRect.height) / 62.0 * 16.0 / 2.0),
+            scale: 256.0 / (min(Metric.get().safeScreenRect.width, Metric.get().safeScreenRect.height) / 62.0 * 16.0 / 2.0),
             width: Metric.get().screenRect.width,
             height: Metric.get().screenRect.height,
             repeat: ImageRepeat.repeat,
@@ -63,7 +63,7 @@ class GamePage2 extends StatelessWidget {
           ),
           CustomPaint(
 //            painter: game.painter,
-//            foregroundPainter: game.foregroundPainter,
+            foregroundPainter: game.foregroundPainter,
             child: Stack(
               children: [0, 1, 2, 3, 4, 5].map<Widget>((zIndex) {
                 return Stack(
@@ -112,210 +112,141 @@ class GamePage2 extends StatelessWidget {
                   child: InkWell(
                     child: Stack(
                       children: <Widget>[
-                        Container(
-                          width: card.rect.width / 60.0 * 48.0,
-                          height: card.rect.width / 60.0 * 48.0,
-//                          color: Colors.red,
-                          alignment: AlignmentDirectional.center,
-                          margin: EdgeInsets.only(
-                            left: card.rect.width / 60.0 * 4.0,
-                            top: card.rect.width / 60.0 * 4.0,
-                          ),
-                          child: Image.asset('assets/steve.png',
-                            width: card.rect.width / 60.0 * 48.0,
-                            height: card.rect.height / 60.0 * 48.0,
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-//                        Container(
-//                          width: card.rect.width / 60.0 * 48.0,
-//                          height: card.rect.width / 60.0 * 48.0,
-////                          color: Colors.red,
-//                          alignment: AlignmentDirectional.center,
-//                          margin: EdgeInsets.only(
-//                            left: card.rect.width / 60.0 * 4.0,
-//                            top: card.rect.width / 60.0 * 4.0,
-//                          ),
-//                          child: Image.asset('assets/diamond_layer.png',
-//                            width: card.rect.width / 60.0 * 48.0,
-//                            height: card.rect.height / 60.0 * 48.0,
-//                            fit: BoxFit.contain,
-//                          ),
-//                        ),
-                        Container(
-                          width: card.rect.width / 60.0 * 24.0,
-                          height: card.rect.width / 60.0 * 24.0,
-//                          color: Colors.green,
-                          alignment: AlignmentDirectional.center,
-                          margin: EdgeInsets.only(
-                            left: card.rect.width / 60.0 * 0.0,
-                            top: card.rect.width / 60.0 * 15.0,
-                          ),
-                          child: Image.asset('assets/diamond_sword.png',
-                            width: card.rect.width / 60.0 * 24.0,
-                            height: card.rect.height / 60.0 * 24.0,
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                        Container(
-                          width: card.rect.width / 60.0 * 9.0,
-                          height: card.rect.width / 60.0 * 7.0,
-                          margin: EdgeInsets.only(
-                            left: card.rect.width / 60.0 * 0.0,
-                            top: card.rect.width / 60.0 * 39.0,
-                          ),
-//                          color: Colors.blue,
-                          alignment: AlignmentDirectional.center,
-                          child: Text('88',
-                            style: TextStyle(
-                              fontSize: card.rect.width / Metric.get().gridSize / (5.0 / 3.0),
-                              fontFamily: 'monospace',
-                              fontWeight: FontWeight.bold,
+                        Positioned.fromRect(
+                          rect: card.spriteEntityRect,
+                          child: Container(
+                            color: Colors.red,
+                            child: Image.asset('assets/steve.png',
+                              fit: BoxFit.contain,
                             ),
                           ),
                         ),
-                        Container(
-                          width: card.rect.width / 60.0 * 24.0,
-                          height: card.rect.width / 60.0 * 24.0,
-//                          color: Colors.cyan,
-                          alignment: AlignmentDirectional.center,
-                          margin: EdgeInsets.only(
-                            left: card.rect.width / 60.0 * 23.0,
-                            top: card.rect.width / 60.0 * 17.0,
-                          ),
-                          child: Image.asset('assets/shield.png',
-                            width: card.rect.width / 60.0 * 24.0,
-                            height: card.rect.height / 60.0 * 24.0,
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                        Container(
-                          width: card.rect.width / 60.0 * 9.0,
-                          height: card.rect.width / 60.0 * 9.0,
-                          margin: EdgeInsets.only(
-                            left: card.rect.width / 60.0 * 47.0,
-                            top: card.rect.width / 60.0 * 8.0,
-                          ),
-//                          color: Colors.cyan,
-                          alignment: AlignmentDirectional.center,
-                          child: Image.asset('assets/icons.png',
-                            width: card.rect.width / 60.0 * 9.0,
-                            height: card.rect.height / 60.0 * 9.0,
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                        Container(
-                          width: card.rect.width / 60.0 * 21.0,
-                          height: card.rect.width / 60.0 * 7.0,
-                          margin: EdgeInsets.only(
-                            left: card.rect.width / 60.0 * 35.0,
-                            top: card.rect.width / 60.0 * 1.0,
-                          ),
-//                          color: Colors.pink,
-                          alignment: AlignmentDirectional.center,
-                          child: Text('88/88',
-                            style: TextStyle(
-                              fontSize: card.rect.width / Metric.get().gridSize / (5.0 / 3.0),
-                              fontFamily: 'monospace',
-                              fontWeight: FontWeight.bold,
+                        Positioned.fromRect(
+                          rect: card.spriteWeaponRect,
+                          child: Container(
+                            color: Colors.green,
+                            child: Image.asset('assets/diamond_sword.png',
+                              fit: BoxFit.contain,
                             ),
                           ),
                         ),
-                        Container(
-                          width: card.rect.width / 60.0 * 9.0,
-                          height: card.rect.width / 60.0 * 7.0,
-                          margin: EdgeInsets.only(
-                            left: card.rect.width / 60.0 * 47.0,
-                            top: card.rect.width / 60.0 * 28.0,
-                          ),
-//                          color: Colors.yellow,
-                          alignment: AlignmentDirectional.center,
-                          child: Text('88',
-                            style: TextStyle(
-                              fontSize: card.rect.width / Metric.get().gridSize / (5.0 / 3.0),
-                              fontFamily: 'monospace',
-                              fontWeight: FontWeight.bold,
+                        Positioned.fromRect(
+                          rect: card.spriteWeaponValueRect,
+                          child: Container(
+                            color: Colors.blue,
+                            alignment: AlignmentDirectional.center,
+                            child: Text('88',
+                              style: TextStyle(
+                                fontSize: card.spriteValueFontSize,
+                                fontFamily: 'monospace',
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ),
-                        Container(
-                          width: card.rect.width / 60.0 * 9.0,
-                          height: card.rect.width / 60.0 * 9.0,
-                          margin: EdgeInsets.only(
-                            left: card.rect.width / 60.0 * 0.0,
-                            top: card.rect.width / 60.0 * 1.0,
-                          ),
-//                          color: Colors.green,
-                          alignment: AlignmentDirectional.center,
-                          child: Image.asset('assets/icons2.png',
-                            width: card.rect.width / 60.0 * 9.0,
-                            height: card.rect.height / 60.0 * 9.0,
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                        Container(
-                          width: card.rect.width / 60.0 * 9.0,
-                          height: card.rect.width / 60.0 * 7.0,
-                          margin: EdgeInsets.only(
-                            left: card.rect.width / 60.0 * 9.0,
-                            top: card.rect.width / 60.0 * 1.0,
-                          ),
-//                          color: Colors.blue,
-                          alignment: AlignmentDirectional.center,
-                          child: Text('88',
-                            style: TextStyle(
-                              fontSize: card.rect.width / Metric.get().gridSize / (5.0 / 3.0),
-                              fontFamily: 'monospace',
-                              fontWeight: FontWeight.bold,
+                        Positioned.fromRect(
+                          rect: card.spriteShieldRect,
+                          child: Container(
+                            color: Colors.cyan,
+                            child: Image.asset('assets/shield.png',
+                              fit: BoxFit.contain,
                             ),
                           ),
                         ),
-                        Container(
-                          width: card.rect.width / 60.0 * 9.0,
-                          height: card.rect.width / 60.0 * 9.0,
-                          margin: EdgeInsets.only(
-                            left: card.rect.width / 60.0 * 47.0,
-                            top: card.rect.width / 60.0 * 46.0,
-                          ),
-//                          color: Colors.green,
-                          alignment: AlignmentDirectional.center,
-                          child: Image.asset('assets/icons2.png',
-                            width: card.rect.width / 60.0 * 9.0,
-                            height: card.rect.height / 60.0 * 9.0,
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                        Container(
-                          width: card.rect.width / 60.0 * 9.0,
-                          height: card.rect.width / 60.0 * 7.0,
-                          margin: EdgeInsets.only(
-                            left: card.rect.width / 60.0 * 38.0,
-                            top: card.rect.width / 60.0 * 48.0,
-                          ),
-//                          color: Colors.blue,
-                          alignment: AlignmentDirectional.center,
-                          child: Text('88',
-                            style: TextStyle(
-                              fontSize: card.rect.width / Metric.get().gridSize / (5.0 / 3.0),
-                              fontFamily: 'monospace',
-                              fontWeight: FontWeight.bold,
+                        Positioned.fromRect(
+                          rect: card.spriteShieldValueRect,
+                          child: Container(
+                            color: Colors.yellow,
+                            alignment: AlignmentDirectional.center,
+                            child: Text('88',
+                              style: TextStyle(
+                                fontSize: card.spriteValueFontSize,
+                                fontFamily: 'monospace',
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ),
-                        Container(
-                          width: card.rect.width / 60.0 * 9.0,
-                          height: card.rect.width / 60.0 * 7.0,
-                          margin: EdgeInsets.only(
-                            left: card.rect.width / 60.0 * 0.0,
-                            top: card.rect.width / 60.0 * 48.0,
+                        Positioned.fromRect(
+                          rect: card.spriteHealthRect,
+                          child: Container(
+                            color: Colors.cyan,
+                            child: Image.asset('assets/icons.png',
+                              fit: BoxFit.contain,
+                            ),
                           ),
-//                          color: Colors.yellow,
-                          alignment: AlignmentDirectional.center,
-                          child: Text('88',
-                            style: TextStyle(
-                              fontSize: card.rect.width / Metric.get().gridSize / (5.0 / 3.0),
-                              fontFamily: 'monospace',
-                              fontWeight: FontWeight.bold,
+                        ),
+                        Positioned.fromRect(
+                          rect: card.spriteHealthValueRect,
+                          child: Container(
+                            color: Colors.pink,
+                            alignment: AlignmentDirectional.center,
+                            child: Text('88/88',
+                              style: TextStyle(
+                                fontSize: card.spriteValueFontSize,
+                                fontFamily: 'monospace',
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Positioned.fromRect(
+                          rect: card.spriteHealthStateRect,
+                          child: Container(
+                            color: Colors.green,
+                            child: Image.asset('assets/icons2.png',
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        ),
+                        Positioned.fromRect(
+                          rect: card.spriteHealthStateValueRect,
+                          child: Container(
+                            color: Colors.blue,
+                            alignment: AlignmentDirectional.center,
+                            child: Text('88',
+                              style: TextStyle(
+                                fontSize: card.spriteValueFontSize,
+                                fontFamily: 'monospace',
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Positioned.fromRect(
+                          rect: card.spriteStateRect,
+                          child: Container(
+                            color: Colors.green,
+                            child: Image.asset('assets/icons2.png',
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        ),
+                        Positioned.fromRect(
+                          rect: card.spriteStateValueRect,
+                          child: Container(
+                            color: Colors.blue,
+                            alignment: AlignmentDirectional.center,
+                            child: Text('88',
+                              style: TextStyle(
+                                fontSize: card.spriteValueFontSize,
+                                fontFamily: 'monospace',
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Positioned.fromRect(
+                          rect: card.spriteAmountValueRect,
+                          child: Container(
+                            color: Colors.yellow,
+                            alignment: AlignmentDirectional.center,
+                            child: Text('88',
+                              style: TextStyle(
+                                fontSize: card.spriteValueFontSize,
+                                fontFamily: 'monospace',
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ),

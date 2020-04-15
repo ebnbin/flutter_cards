@@ -141,6 +141,157 @@ class Card {
     return _card.zIndexVisible;
   }
 
+  Rect get spriteEntityRect {
+    if (_card == null) {
+      return Rect.zero;
+    }
+    return Rect.fromLTWH(
+      rect.width / 60.0 * 4.0,
+      rect.width / 60.0 * 4.0,
+      rect.width / 60.0 * 48.0,
+      rect.width / 60.0 * 48.0,
+    );
+  }
+
+  Rect get spriteWeaponRect {
+    if (_card == null) {
+      return Rect.zero;
+    }
+    return Rect.fromLTWH(
+      rect.width / 60.0 * 0.0,
+      rect.width / 60.0 * 15.0,
+      rect.width / 60.0 * 24.0,
+      rect.width / 60.0 * 24.0,
+    );
+  }
+
+  Rect get spriteWeaponValueRect {
+    if (_card == null) {
+      return Rect.zero;
+    }
+    return Rect.fromLTWH(
+      rect.width / 60.0 * 0.0,
+      rect.width / 60.0 * 39.0,
+      rect.width / 60.0 * 9.0,
+      rect.width / 60.0 * 7.0,
+    );
+  }
+
+  double get spriteValueFontSize {
+    if (_card == null) {
+      return 14.0;
+    }
+    return rect.width / Metric.get().gridSize / (5.0 / 3.0);
+  }
+
+  Rect get spriteShieldRect {
+    if (_card == null) {
+      return Rect.zero;
+    }
+    return Rect.fromLTWH(
+      rect.width / 60.0 * 23.0,
+      rect.width / 60.0 * 17.0,
+      rect.width / 60.0 * 24.0,
+      rect.width / 60.0 * 24.0,
+    );
+  }
+
+  Rect get spriteShieldValueRect {
+    if (_card == null) {
+      return Rect.zero;
+    }
+    return Rect.fromLTWH(
+      rect.width / 60.0 * 47.0,
+      rect.width / 60.0 * 28.0,
+      rect.width / 60.0 * 9.0,
+      rect.width / 60.0 * 7.0,
+    );
+  }
+
+  Rect get spriteHealthRect {
+    if (_card == null) {
+      return Rect.zero;
+    }
+    return Rect.fromLTWH(
+      rect.width / 60.0 * 47.0,
+      rect.width / 60.0 * 8.0,
+      rect.width / 60.0 * 9.0,
+      rect.width / 60.0 * 9.0,
+    );
+  }
+
+  Rect get spriteHealthValueRect {
+    if (_card == null) {
+      return Rect.zero;
+    }
+    return Rect.fromLTWH(
+      rect.width / 60.0 * 35.0,
+      rect.width / 60.0 * 1.0,
+      rect.width / 60.0 * 21.0,
+      rect.width / 60.0 * 7.0,
+    );
+  }
+
+  Rect get spriteHealthStateRect {
+    if (_card == null) {
+      return Rect.zero;
+    }
+    return Rect.fromLTWH(
+      rect.width / 60.0 * 47.0,
+      rect.width / 60.0 * 46.0,
+      rect.width / 60.0 * 9.0,
+      rect.width / 60.0 * 9.0,
+    );
+  }
+
+  Rect get spriteHealthStateValueRect {
+    if (_card == null) {
+      return Rect.zero;
+    }
+    return Rect.fromLTWH(
+      rect.width / 60.0 * 38.0,
+      rect.width / 60.0 * 48.0,
+      rect.width / 60.0 * 9.0,
+      rect.width / 60.0 * 7.0,
+    );
+  }
+
+  Rect get spriteStateRect {
+    if (_card == null) {
+      return Rect.zero;
+    }
+    return Rect.fromLTWH(
+      rect.width / 60.0 * 0.0,
+      rect.width / 60.0 * 1.0,
+      rect.width / 60.0 * 9.0,
+      rect.width / 60.0 * 9.0,
+    );
+  }
+
+  Rect get spriteStateValueRect {
+    if (_card == null) {
+      return Rect.zero;
+    }
+    return Rect.fromLTWH(
+      rect.width / 60.0 * 9.0,
+      rect.width / 60.0 * 1.0,
+      rect.width / 60.0 * 9.0,
+      rect.width / 60.0 * 7.0,
+    );
+  }
+
+  Rect get spriteAmountValueRect {
+    if (_card == null) {
+      return Rect.zero;
+    }
+    return Rect.fromLTWH(
+      rect.width / 60.0 * 0.0,
+      rect.width / 60.0 * 48.0,
+      rect.width / 60.0 * 9.0,
+      rect.width / 60.0 * 7.0,
+    );
+  }
+
   @override
   String toString() {
     if (_card == null) {
