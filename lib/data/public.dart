@@ -18,10 +18,11 @@ class Game {
     _instance = _Game(callback);
   }
 
-  static Game get() {
+  static Game build(BuildContext context) {
     if (_instance == null) {
       throw Exception();
     }
+    _instance.build(context);
     return Game._(_instance);
   }
 

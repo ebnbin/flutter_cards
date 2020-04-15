@@ -13,7 +13,8 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin imple
   @override
   Widget build(BuildContext context) {
     Metric.build(context);
-    return GamePage2(Game.get());
+    Game game = Game.build(context);
+    return GamePage2(game);
   }
 
   @override
