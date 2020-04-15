@@ -161,11 +161,11 @@ class _GridCard extends _Card {
 
   /// Matrix4.setEntry(3, 2, value);
   double get matrix4Entry32 {
-//    if (big) {
-//      return Metric.coreNoPaddingGrid / Metric.coreNoPaddingGrid / 800.0;
-//    } else {
+    if (big) {
+      return _Metric.coreNoPaddingGrid / _Metric.coreNoPaddingGrid / 800.0;
+    } else {
       return _Metric.coreNoPaddingGrid / maxGridSpan / 800.0;
-//    }
+    }
   }
 
   double translateX;

@@ -55,7 +55,7 @@ class GamePage2 extends StatelessWidget {
           ),
           CustomPaint(
 //            painter: game.painter,
-            foregroundPainter: game.foregroundPainter,
+//            foregroundPainter: game.foregroundPainter,
             child: Stack(
               children: [0, 1, 2, 3, 4, 5].map<Widget>((zIndex) {
                 return Stack(
@@ -104,10 +104,20 @@ class GamePage2 extends StatelessWidget {
                   child: InkWell(
                     child: Stack(
                       children: <Widget>[
+                        Container(
+                          child: Image.asset('assets/white_wool.png',
+                            scale: game.backgroundImageScale / 2.0,
+                            width: game.backgroundImageWidth,
+                            height: game.backgroundImageHeight,
+                            repeat: ImageRepeat.repeat,
+                            color: Colors.black.withAlpha(127),
+                            colorBlendMode: BlendMode.darken,
+                          ),
+                        ),
                         Positioned.fromRect(
                           rect: card.spriteEntityRect,
                           child: Container(
-                            color: Colors.red,
+//                            color: Colors.red,
                             child: Image.asset('assets/steve.png',
                               fit: BoxFit.contain,
                             ),
@@ -116,129 +126,180 @@ class GamePage2 extends StatelessWidget {
                         Positioned.fromRect(
                           rect: card.spriteWeaponRect,
                           child: Container(
-                            color: Colors.green,
+//                            color: Colors.green,
                             child: Image.asset('assets/diamond_sword.png',
                               fit: BoxFit.contain,
                             ),
                           ),
                         ),
                         Positioned.fromRect(
-                          rect: card.spriteWeaponValueRect,
+                          rect: card.spriteWeaponValue0Rect,
                           child: Container(
-                            color: Colors.blue,
-                            alignment: AlignmentDirectional.center,
-                            child: Text('88',
-                              style: TextStyle(
-                                fontSize: card.spriteValueFontSize,
-                                fontFamily: 'monospace',
-                                fontWeight: FontWeight.bold,
-                              ),
+//                            color: Colors.yellow,
+                            child: Image.asset('assets/num_8.png',
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        ),
+                        Positioned.fromRect(
+                          rect: card.spriteWeaponValue1Rect,
+                          child: Container(
+//                            color: Colors.yellow,
+                            child: Image.asset('assets/num_8.png',
+                              fit: BoxFit.contain,
                             ),
                           ),
                         ),
                         Positioned.fromRect(
                           rect: card.spriteShieldRect,
                           child: Container(
-                            color: Colors.cyan,
+//                            color: Colors.cyan,
                             child: Image.asset('assets/shield.png',
                               fit: BoxFit.contain,
                             ),
                           ),
                         ),
                         Positioned.fromRect(
-                          rect: card.spriteShieldValueRect,
+                          rect: card.spriteShieldValue0Rect,
                           child: Container(
-                            color: Colors.yellow,
-                            alignment: AlignmentDirectional.center,
-                            child: Text('88',
-                              style: TextStyle(
-                                fontSize: card.spriteValueFontSize,
-                                fontFamily: 'monospace',
-                                fontWeight: FontWeight.bold,
-                              ),
+//                            color: Colors.yellow,
+                            child: Image.asset('assets/num_1.png',
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        ),
+                        Positioned.fromRect(
+                          rect: card.spriteShieldValue1Rect,
+                          child: Container(
+//                            color: Colors.yellow,
+                            child: Image.asset('assets/num_2.png',
+                              fit: BoxFit.contain,
                             ),
                           ),
                         ),
                         Positioned.fromRect(
                           rect: card.spriteHealthRect,
                           child: Container(
-                            color: Colors.cyan,
+//                            color: Colors.cyan,
                             child: Image.asset('assets/icons.png',
                               fit: BoxFit.contain,
                             ),
                           ),
                         ),
                         Positioned.fromRect(
-                          rect: card.spriteHealthValueRect,
+                          rect: card.spriteHealthValue0Rect,
                           child: Container(
-                            color: Colors.pink,
-                            alignment: AlignmentDirectional.center,
-                            child: Text('88/88',
-                              style: TextStyle(
-                                fontSize: card.spriteValueFontSize,
-                                fontFamily: 'monospace',
-                                fontWeight: FontWeight.bold,
-                              ),
+//                            color: Colors.yellow,
+                            child: Image.asset('assets/num_6.png',
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        ),
+                        Positioned.fromRect(
+                          rect: card.spriteHealthValue1Rect,
+                          child: Container(
+//                            color: Colors.yellow,
+                            child: Image.asset('assets/num_7.png',
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        ),
+                        Positioned.fromRect(
+                          rect: card.spriteHealthValue2Rect,
+                          child: Container(
+//                            color: Colors.yellow,
+                            child: Image.asset('assets/num_.png',
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        ),
+                        Positioned.fromRect(
+                          rect: card.spriteHealthValue3Rect,
+                          child: Container(
+//                            color: Colors.yellow,
+                            child: Image.asset('assets/num_8.png',
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        ),
+                        Positioned.fromRect(
+                          rect: card.spriteHealthValue4Rect,
+                          child: Container(
+//                            color: Colors.yellow,
+                            child: Image.asset('assets/num_9.png',
+                              fit: BoxFit.contain,
                             ),
                           ),
                         ),
                         Positioned.fromRect(
                           rect: card.spriteHealthStateRect,
                           child: Container(
-                            color: Colors.green,
+//                            color: Colors.green,
                             child: Image.asset('assets/icons2.png',
                               fit: BoxFit.contain,
                             ),
                           ),
                         ),
                         Positioned.fromRect(
-                          rect: card.spriteHealthStateValueRect,
+                          rect: card.spriteHealthStateValue0Rect,
                           child: Container(
-                            color: Colors.blue,
-                            alignment: AlignmentDirectional.center,
-                            child: Text('88',
-                              style: TextStyle(
-                                fontSize: card.spriteValueFontSize,
-                                fontFamily: 'monospace',
-                                fontWeight: FontWeight.bold,
-                              ),
+//                            color: Colors.yellow,
+                            child: Image.asset('assets/num_4.png',
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        ),
+                        Positioned.fromRect(
+                          rect: card.spriteHealthStateValue1Rect,
+                          child: Container(
+//                            color: Colors.yellow,
+                            child: Image.asset('assets/num_5.png',
+                              fit: BoxFit.contain,
                             ),
                           ),
                         ),
                         Positioned.fromRect(
                           rect: card.spriteStateRect,
                           child: Container(
-                            color: Colors.green,
+//                            color: Colors.green,
                             child: Image.asset('assets/icons2.png',
                               fit: BoxFit.contain,
                             ),
                           ),
                         ),
                         Positioned.fromRect(
-                          rect: card.spriteStateValueRect,
+                          rect: card.spriteStateValue0Rect,
                           child: Container(
-                            color: Colors.blue,
-                            alignment: AlignmentDirectional.center,
-                            child: Text('88',
-                              style: TextStyle(
-                                fontSize: card.spriteValueFontSize,
-                                fontFamily: 'monospace',
-                                fontWeight: FontWeight.bold,
-                              ),
+//                            color: Colors.yellow,
+                            child: Image.asset('assets/num_2.png',
+                              fit: BoxFit.contain,
                             ),
                           ),
                         ),
                         Positioned.fromRect(
-                          rect: card.spriteAmountValueRect,
+                          rect: card.spriteStateValue1Rect,
                           child: Container(
-                            color: Colors.yellow,
-                            alignment: AlignmentDirectional.center,
-                            child: Text('88',
-                              style: TextStyle(
-                                fontSize: card.spriteValueFontSize,
-                                fontFamily: 'monospace',
-                                fontWeight: FontWeight.bold,
-                              ),
+//                            color: Colors.yellow,
+                            child: Image.asset('assets/num_3.png',
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        ),
+                        Positioned.fromRect(
+                          rect: card.spriteAmountValue0Rect,
+                          child: Container(
+//                            color: Colors.yellow,
+                            child: Image.asset('assets/num_0.png',
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        ),
+                        Positioned.fromRect(
+                          rect: card.spriteAmountValue1Rect,
+                          child: Container(
+//                            color: Colors.pink,
+                            child: Image.asset('assets/num_1.png',
+                              fit: BoxFit.contain,
                             ),
                           ),
                         ),
