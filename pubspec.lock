@@ -29,13 +29,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.5"
-  built_collection:
-    dependency: "direct main"
-    description:
-      name: built_collection
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "4.3.2"
   charcode:
     dependency: transitive
     description:

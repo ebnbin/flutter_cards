@@ -423,7 +423,7 @@ class _SpriteCard extends _CoreCard {
         return;
       }
       AxisDirection nextDirection = playerCard.nextNonEdge(flipAxisDirection(direction), notDirection: direction);
-      BuiltList<_SpriteCard> adjacentCardAll = playerCard.adjacentCardAll(nextDirection);
+      List<_SpriteCard> adjacentCardAll = playerCard.adjacentCardAll(nextDirection);
       assert(adjacentCardAll.isNotEmpty);
       _SpriteCard newCard = _SpriteCard(gameScreen,
         rowIndex: adjacentCardAll.last.rowIndex,
@@ -515,7 +515,7 @@ class _SpriteCard extends _CoreCard {
   }
 
   /// 从 [screen.spriteCards] 中返回当前卡片指定方向 [direction] 的所有卡片. 如果没符合条件的卡片则返回空列表.
-  BuiltList<_SpriteCard> adjacentCardAll(AxisDirection direction) {
+  List<_SpriteCard> adjacentCardAll(AxisDirection direction) {
     List<_SpriteCard> list = <_SpriteCard>[];
     if (!edge(direction)) {
       List<_SpriteCard> spriteCards = gameScreen.spriteCards;
@@ -572,7 +572,7 @@ class _SpriteCard extends _CoreCard {
           throw Exception();
       }
     }
-    return list.build();
+    return List.unmodifiable(list);
   }
 
   /// 如果指定方向在边缘, 按 [clockwise] 顺序返回第一个不是边缘的方向.
@@ -647,7 +647,7 @@ class _PlayerCard extends _SpriteCard {
 
 extension _AxisDirectionExtension on AxisDirection {
   /// 按照 [clockwise] 顺时针或逆时针顺序依次返回从当前方向开始的四个方向列表.
-  BuiltList<AxisDirection> turns({
+  List<AxisDirection> turns({
     bool clockwise = false,
   }) {
     List<AxisDirection> list = AxisDirection.values + AxisDirection.values;
@@ -655,7 +655,7 @@ extension _AxisDirectionExtension on AxisDirection {
       list = list.reversed.toList();
     }
     int start = list.indexOf(this);
-    return list.sublist(start, start + AxisDirection.values.length).toBuiltList();
+    return List.unmodifiable(list.sublist(start, start + AxisDirection.values.length));
   }
 
   int get x {

@@ -123,7 +123,7 @@ class _GameScreen extends _Screen {
 
   void removeSpriteCards() {
     List<_Action> actions0 = <_Action>[];
-    spriteCards.build().forEach((spriteCard) {
+    List.unmodifiable(spriteCards).forEach((spriteCard) {
       actions0.add(_Animation.spriteLastExit(spriteCard).action());
     });
     List<_Action> actions1 = [

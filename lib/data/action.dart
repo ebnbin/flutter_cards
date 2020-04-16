@@ -23,7 +23,7 @@ class _ActionQueue {
       return;
     }
     actingActions = queue.removeFirst();
-    actingActions.build().forEach((element) {
+    List.unmodifiable(actingActions).forEach((element) {
       element.begin(this);
     });
   }

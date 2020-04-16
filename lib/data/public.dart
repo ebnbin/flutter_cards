@@ -24,9 +24,11 @@ class Game {
 
   final _Game _game;
 
-  BuiltList<Card> get cards => _game.screen.cards.map<Card>((card) {
-    return Card._(card);
-  }).toBuiltList();
+  List<Card> get cards {
+    return List.unmodifiable(_game.screen.cards.map<Card>((card) {
+      return Card._(card);
+    }));
+  }
 
   CustomPainter get foregroundPainter => _game.gridForegroundPainter;
 
