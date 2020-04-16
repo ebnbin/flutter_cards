@@ -114,9 +114,9 @@ class Card {
 
   double get radius {
     if (_card is _GridCard) {
-      _GridCard gridCard = _card as _GridCard;
-      return gridCard.radius;
-//      return 0.0;
+//      _GridCard gridCard = _card as _GridCard;
+//      return gridCard.radius;
+      return 0.0;
     }
     return null;
   }
@@ -174,8 +174,8 @@ class Card {
     return Rect.fromLTWH(
       rect.width / 60.0 * 1.0,
       rect.width / 60.0 * 40.0,
-      rect.width / 60.0 * 3.0,
-      rect.width / 60.0 * 5.0,
+      rect.width / 60.0 * 4.0,
+      rect.width / 60.0 * 6.0,
     );
   }
 
@@ -186,8 +186,8 @@ class Card {
     return Rect.fromLTWH(
       rect.width / 60.0 * 5.0,
       rect.width / 60.0 * 40.0,
-      rect.width / 60.0 * 3.0,
-      rect.width / 60.0 * 5.0,
+      rect.width / 60.0 * 4.0,
+      rect.width / 60.0 * 6.0,
     );
   }
 
@@ -203,7 +203,7 @@ class Card {
       return Rect.zero;
     }
     return Rect.fromLTWH(
-      rect.width / 60.0 * 23.0,
+      rect.width / 60.0 * 22.0,
       rect.width / 60.0 * 17.0,
       rect.width / 60.0 * 24.0,
       rect.width / 60.0 * 24.0,
@@ -215,10 +215,10 @@ class Card {
       return Rect.zero;
     }
     return Rect.fromLTWH(
-      rect.width / 60.0 * 48.0,
+      rect.width / 60.0 * 47.0,
       rect.width / 60.0 * 29.0,
-      rect.width / 60.0 * 3.0,
-      rect.width / 60.0 * 5.0,
+      rect.width / 60.0 * 4.0,
+      rect.width / 60.0 * 6.0,
     );
   }
 
@@ -227,10 +227,10 @@ class Card {
       return Rect.zero;
     }
     return Rect.fromLTWH(
-      rect.width / 60.0 * 52.0,
+      rect.width / 60.0 * 51.0,
       rect.width / 60.0 * 29.0,
-      rect.width / 60.0 * 3.0,
-      rect.width / 60.0 * 5.0,
+      rect.width / 60.0 * 4.0,
+      rect.width / 60.0 * 6.0,
     );
   }
 
@@ -240,7 +240,7 @@ class Card {
     }
     return Rect.fromLTWH(
       rect.width / 60.0 * 47.0,
-      rect.width / 60.0 * 8.0,
+      rect.width / 60.0 * 9.0,
       rect.width / 60.0 * 9.0,
       rect.width / 60.0 * 9.0,
     );
@@ -251,10 +251,10 @@ class Card {
       return Rect.zero;
     }
     return Rect.fromLTWH(
-      rect.width / 60.0 * 36.0,
+      rect.width / 60.0 * 35.0,
       rect.width / 60.0 * 2.0,
-      rect.width / 60.0 * 3.0,
-      rect.width / 60.0 * 5.0,
+      rect.width / 60.0 * 4.0,
+      rect.width / 60.0 * 6.0,
     );
   }
 
@@ -263,10 +263,10 @@ class Card {
       return Rect.zero;
     }
     return Rect.fromLTWH(
-      rect.width / 60.0 * 40.0,
+      rect.width / 60.0 * 39.0,
       rect.width / 60.0 * 2.0,
-      rect.width / 60.0 * 3.0,
-      rect.width / 60.0 * 5.0,
+      rect.width / 60.0 * 4.0,
+      rect.width / 60.0 * 6.0,
     );
   }
 
@@ -275,10 +275,10 @@ class Card {
       return Rect.zero;
     }
     return Rect.fromLTWH(
-      rect.width / 60.0 * 44.0,
+      rect.width / 60.0 * 43.0,
       rect.width / 60.0 * 2.0,
-      rect.width / 60.0 * 3.0,
-      rect.width / 60.0 * 5.0,
+      rect.width / 60.0 * 4.0,
+      rect.width / 60.0 * 6.0,
     );
   }
 
@@ -287,10 +287,10 @@ class Card {
       return Rect.zero;
     }
     return Rect.fromLTWH(
-      rect.width / 60.0 * 48.0,
+      rect.width / 60.0 * 47.0,
       rect.width / 60.0 * 2.0,
-      rect.width / 60.0 * 3.0,
-      rect.width / 60.0 * 5.0,
+      rect.width / 60.0 * 4.0,
+      rect.width / 60.0 * 6.0,
     );
   }
 
@@ -299,10 +299,10 @@ class Card {
       return Rect.zero;
     }
     return Rect.fromLTWH(
-      rect.width / 60.0 * 52.0,
+      rect.width / 60.0 * 51.0,
       rect.width / 60.0 * 2.0,
-      rect.width / 60.0 * 3.0,
-      rect.width / 60.0 * 5.0,
+      rect.width / 60.0 * 4.0,
+      rect.width / 60.0 * 6.0,
     );
   }
 
@@ -323,10 +323,10 @@ class Card {
       return Rect.zero;
     }
     return Rect.fromLTWH(
-      rect.width / 60.0 * 39.0,
-      rect.width / 60.0 * 49.0,
-      rect.width / 60.0 * 3.0,
-      rect.width / 60.0 * 5.0,
+      rect.width / 60.0 * 38.0,
+      rect.width / 60.0 * 48.0,
+      rect.width / 60.0 * 4.0,
+      rect.width / 60.0 * 6.0,
     );
   }
 
@@ -335,10 +335,10 @@ class Card {
       return Rect.zero;
     }
     return Rect.fromLTWH(
-      rect.width / 60.0 * 43.0,
-      rect.width / 60.0 * 49.0,
-      rect.width / 60.0 * 3.0,
-      rect.width / 60.0 * 5.0,
+      rect.width / 60.0 * 42.0,
+      rect.width / 60.0 * 48.0,
+      rect.width / 60.0 * 4.0,
+      rect.width / 60.0 * 6.0,
     );
   }
 
@@ -361,8 +361,8 @@ class Card {
     return Rect.fromLTWH(
       rect.width / 60.0 * 10.0,
       rect.width / 60.0 * 2.0,
-      rect.width / 60.0 * 3.0,
-      rect.width / 60.0 * 5.0,
+      rect.width / 60.0 * 4.0,
+      rect.width / 60.0 * 6.0,
     );
   }
   Rect get spriteStateValue1Rect {
@@ -372,8 +372,8 @@ class Card {
     return Rect.fromLTWH(
       rect.width / 60.0 * 14.0,
       rect.width / 60.0 * 2.0,
-      rect.width / 60.0 * 3.0,
-      rect.width / 60.0 * 5.0,
+      rect.width / 60.0 * 4.0,
+      rect.width / 60.0 * 6.0,
     );
   }
 
@@ -383,9 +383,9 @@ class Card {
     }
     return Rect.fromLTWH(
       rect.width / 60.0 * 1.0,
-      rect.width / 60.0 * 49.0,
-      rect.width / 60.0 * 3.0,
-      rect.width / 60.0 * 5.0,
+      rect.width / 60.0 * 48.0,
+      rect.width / 60.0 * 4.0,
+      rect.width / 60.0 * 6.0,
     );
   }
 
@@ -395,9 +395,9 @@ class Card {
     }
     return Rect.fromLTWH(
       rect.width / 60.0 * 5.0,
-      rect.width / 60.0 * 49.0,
-      rect.width / 60.0 * 3.0,
-      rect.width / 60.0 * 5.0,
+      rect.width / 60.0 * 48.0,
+      rect.width / 60.0 * 4.0,
+      rect.width / 60.0 * 6.0,
     );
   }
 
