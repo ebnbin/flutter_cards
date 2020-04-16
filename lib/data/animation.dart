@@ -21,58 +21,6 @@ class _AnimationCalc {
 
 //*********************************************************************************************************************
 
-/// 可见的 rotateX, rotateY 旋转角度. -360, -180, 180, 360.
-enum _VisibleRotateXY {
-  counterClockwise360,
-  counterClockwise180,
-  clockwise180,
-  clockwise360,
-}
-
-extension _VisibleRotateXYExtension on _VisibleRotateXY {
-  double get value {
-    switch (this) {
-      case _VisibleRotateXY.counterClockwise360:
-        return -2.0 * pi;
-      case _VisibleRotateXY.counterClockwise180:
-        return -pi;
-      case _VisibleRotateXY.clockwise180:
-        return pi;
-      case _VisibleRotateXY.clockwise360:
-        return 2.0 * pi;
-      default:
-        return 0.0;
-    }
-  }
-}
-
-/// 不可见的 rotateX, rotateY 旋转角度. -270, -90, 90, 270.
-enum _InvisibleRotateXY {
-  counterClockwise270,
-  counterClockwise90,
-  clockwise90,
-  clockwise270,
-}
-
-extension _InvisibleRotateXYExtension on _InvisibleRotateXY {
-  double get value {
-    switch (this) {
-      case _InvisibleRotateXY.counterClockwise270:
-        return -1.5 * pi;
-      case _InvisibleRotateXY.counterClockwise90:
-        return -0.5 * pi;
-      case _InvisibleRotateXY.clockwise90:
-        return 0.5 * pi;
-      case _InvisibleRotateXY.clockwise270:
-        return 1.5 * pi;
-      default:
-        return 0.0;
-    }
-  }
-}
-
-//*********************************************************************************************************************
-
 /// 卡片动画.
 class _Animation<T extends _Card> {
   _Animation(this.card, {
@@ -92,7 +40,7 @@ class _Animation<T extends _Card> {
       duration: 1000,
       curve: Curves.easeInOut,
       onAnimating: (card, value) {
-        card.rotateY = _AnimationCalc.ab(0.0, _VisibleRotateXY.clockwise360.value).calc(value);
+        card.rotateY = _AnimationCalc.ab(0.0, _VisibleAngle.clockwise360.value).calc(value);
         card.scaleX = _AnimationCalc.aba(1.0, 2.0).calc(value);
         card.scaleY = _AnimationCalc.aba(1.0, 2.0).calc(value);
         card.elevation = _AnimationCalc.aba(1.0, 4.0).calc(value);
@@ -152,14 +100,14 @@ class _Animation<T extends _Card> {
       endDelay: endDelay,
       curve: Curves.easeIn,
       onAnimating: (card, value) {
-        card.rotateY = _AnimationCalc.ab(_InvisibleRotateXY.clockwise90.value, 0.0).calc(value);
+        card.rotateY = _AnimationCalc.ab(_InvisibleAngle.clockwise90.value, 0.0).calc(value);
         card.scaleX = _AnimationCalc.ab(0.5, 1.0).calc(value);
         card.scaleY = _AnimationCalc.ab(0.5, 1.0).calc(value);
         card.elevation = _AnimationCalc.ab(0.5, 1.0).calc(value);
       },
       onBegin: (card) {
         card.visible = true;
-        card.rotateY = _InvisibleRotateXY.clockwise90.value;
+        card.rotateY = _InvisibleAngle.clockwise90.value;
         card.scaleX = 0.5;
         card.scaleY = 0.5;
         card.elevation = 0.5;
@@ -179,14 +127,14 @@ class _Animation<T extends _Card> {
       endDelay: endDelay,
       curve: Curves.easeOut,
       onAnimating: (card, value) {
-        card.rotateY = _AnimationCalc.ab(0.0, _InvisibleRotateXY.counterClockwise90.value).calc(value);
+        card.rotateY = _AnimationCalc.ab(0.0, _InvisibleAngle.counterClockwise90.value).calc(value);
         card.scaleX = _AnimationCalc.ab(1.0, 0.5).calc(value);
         card.scaleY = _AnimationCalc.ab(1.0, 0.5).calc(value);
         card.elevation = _AnimationCalc.ab(1.0, 0.5).calc(value);
       },
       onEnd: (card) {
         card.visible = false;
-        card.rotateY = _InvisibleRotateXY.counterClockwise90.value;
+        card.rotateY = _InvisibleAngle.counterClockwise90.value;
         card.scaleX = 0.5;
         card.scaleY = 0.5;
         card.elevation = 0.5;
@@ -197,8 +145,8 @@ class _Animation<T extends _Card> {
   /// 精灵卡片第一次进入.
   static _Animation<_SpriteCard> spriteFirstEnter(_SpriteCard card) {
     double rotateY = _random.nextListItem(<double>[
-      _InvisibleRotateXY.clockwise90.value,
-      _InvisibleRotateXY.clockwise270.value,
+      _InvisibleAngle.clockwise90.value,
+      _InvisibleAngle.clockwise270.value,
     ]);
     return _Animation<_SpriteCard>(card,
       duration: _random.nextIntFromTo(500, 1000),
@@ -223,8 +171,8 @@ class _Animation<T extends _Card> {
   /// 精灵卡片最后一次退出.
   static _Animation<_SpriteCard> spriteLastExit(_SpriteCard card) {
     double rotateY = _random.nextListItem(<double>[
-      _InvisibleRotateXY.counterClockwise90.value,
-      _InvisibleRotateXY.counterClockwise270.value,
+      _InvisibleAngle.counterClockwise90.value,
+      _InvisibleAngle.counterClockwise270.value,
     ]);
     return _Animation<_SpriteCard>(card,
       duration: _random.nextIntFromTo(500, 1000),
@@ -279,7 +227,7 @@ class _Animation<T extends _Card> {
         if (value < 0.5) {
           card.translateX = _AnimationCalc.ab(0.0, translateXSmall).calc(value);
           card.translateY = _AnimationCalc.ab(0.0, translateYSmall).calc(value);
-          card.rotateX = _AnimationCalc.ab(0.0, _VisibleRotateXY.counterClockwise180.value).calc(value);
+          card.rotateX = _AnimationCalc.ab(0.0, _VisibleAngle.counterClockwise180.value).calc(value);
           card.scaleX = _AnimationCalc.ab(1.0, scaleXSmall).calc(value);
           card.scaleY = _AnimationCalc.ab(1.0, scaleYSmall).calc(value);
           card.radius = _AnimationCalc.ab(4.0, 4.0).calc(value);
@@ -287,7 +235,7 @@ class _Animation<T extends _Card> {
         } else {
           card.translateX = _AnimationCalc.ab(-translateXSmall, 0.0).calc(value);
           card.translateY = _AnimationCalc.ab(-translateYSmall, 0.0).calc(value);
-          card.rotateX = _AnimationCalc.ab(-_VisibleRotateXY.counterClockwise180.value, 0.0).calc(value);
+          card.rotateX = _AnimationCalc.ab(-_VisibleAngle.counterClockwise180.value, 0.0).calc(value);
           card.scaleX = _AnimationCalc.ab(1.0 / scaleXSmall, 1.0).calc(value);
           card.scaleY = _AnimationCalc.ab(1.0 / scaleYSmall, 1.0).calc(value);
           card.radius = _AnimationCalc.ab(16.0, 16.0).calc(value);
@@ -317,7 +265,7 @@ class _Animation<T extends _Card> {
         if (value < 0.5) {
           card.translateX = _AnimationCalc.ab(0.0, -translateXSmall).calc(value);
           card.translateY = _AnimationCalc.ab(0.0, -translateYSmall).calc(value);
-          card.rotateX = _AnimationCalc.ab(0.0, _VisibleRotateXY.clockwise180.value).calc(value);
+          card.rotateX = _AnimationCalc.ab(0.0, _VisibleAngle.clockwise180.value).calc(value);
           card.scaleX = _AnimationCalc.ab(1.0, 1.0 / scaleXSmall).calc(value);
           card.scaleY = _AnimationCalc.ab(1.0, 1.0 / scaleYSmall).calc(value);
           card.radius = _AnimationCalc.ab(16.0, 16.0).calc(value);
@@ -325,7 +273,7 @@ class _Animation<T extends _Card> {
         } else {
           card.translateX = _AnimationCalc.ab(translateXSmall, 0.0).calc(value);
           card.translateY = _AnimationCalc.ab(translateYSmall, 0.0).calc(value);
-          card.rotateX = _AnimationCalc.ab(-_VisibleRotateXY.clockwise180.value, 0.0).calc(value);
+          card.rotateX = _AnimationCalc.ab(-_VisibleAngle.clockwise180.value, 0.0).calc(value);
           card.scaleX = _AnimationCalc.ab(scaleXSmall, 1.0).calc(value);
           card.scaleY = _AnimationCalc.ab(scaleYSmall, 1.0).calc(value);
           card.radius = _AnimationCalc.ab(4.0, 4.0).calc(value);
