@@ -580,8 +580,27 @@ class _SpriteCard extends _CoreCard {
     AxisDirection notDirection,
     bool clockwise = false,
   }) {
-    for (AxisDirection currentDirection in direction.turns(clockwise: clockwise)) {
-      if (currentDirection != notDirection && !edge(currentDirection)) {
+    /// 按照 [clockwise] 从当前方向依次返回除了 [except] 之外的所有方向列表.
+    ///
+    /// 例如:
+    ///
+    /// up.sequence(clockwise: true, except: null) = [up, right, down, left]
+    ///
+    /// left.sequence(clockwise: false, except: up) = [left, down, right]
+    List<AxisDirection> sequence(AxisDirection direction, {
+      bool clockwise = false,
+      AxisDirection except,
+    }) {
+      final List<AxisDirection> values = clockwise
+          ? AxisDirection.values
+          : List.unmodifiable(AxisDirection.values.reversed);
+      final int start = values.indexOf(direction);
+      return List.unmodifiable((values + values).sublist(start, start + values.length)
+        ..removeWhere((element) => element == except));
+    }
+
+    for (AxisDirection currentDirection in sequence(direction, clockwise: clockwise, except: notDirection)) {
+      if (!edge(currentDirection)) {
         return currentDirection;
       }
     }
@@ -640,52 +659,6 @@ class _PlayerCard extends _SpriteCard {
   @override
   String toString() {
     return '${super.toString()}\nPlayer';
-  }
-}
-
-//*********************************************************************************************************************
-
-extension _AxisDirectionExtension on AxisDirection {
-  /// 按照 [clockwise] 顺时针或逆时针顺序依次返回从当前方向开始的四个方向列表.
-  List<AxisDirection> turns({
-    bool clockwise = false,
-  }) {
-    List<AxisDirection> list = AxisDirection.values + AxisDirection.values;
-    if (!clockwise) {
-      list = list.reversed.toList();
-    }
-    int start = list.indexOf(this);
-    return List.unmodifiable(list.sublist(start, start + AxisDirection.values.length));
-  }
-
-  int get x {
-    switch (this) {
-      case AxisDirection.up:
-        return 0;
-      case AxisDirection.right:
-        return 1;
-      case AxisDirection.down:
-        return 0;
-      case AxisDirection.left:
-        return -1;
-      default:
-        throw Exception();
-    }
-  }
-
-  int get y {
-    switch (this) {
-      case AxisDirection.up:
-        return -1;
-      case AxisDirection.right:
-        return 0;
-      case AxisDirection.down:
-        return 1;
-      case AxisDirection.left:
-        return 0;
-      default:
-        throw Exception();
-    }
   }
 }
 

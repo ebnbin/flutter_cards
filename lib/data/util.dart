@@ -1,6 +1,45 @@
 part of '../data.dart';
 
 //*********************************************************************************************************************
+//*********************************************************************************************************************
+// 方向.
+
+extension _AxisDirectionExtension on AxisDirection {
+  /// 水平方向值.
+  int get x {
+    switch (this) {
+      case AxisDirection.up:
+        return 0;
+      case AxisDirection.right:
+        return 1;
+      case AxisDirection.down:
+        return 0;
+      case AxisDirection.left:
+        return -1;
+      default:
+        throw Exception();
+    }
+  }
+
+  /// 垂直方向值.
+  int get y {
+    switch (this) {
+      case AxisDirection.up:
+        return -1;
+      case AxisDirection.right:
+        return 0;
+      case AxisDirection.down:
+        return 1;
+      case AxisDirection.left:
+        return 0;
+      default:
+        throw Exception();
+    }
+  }
+}
+
+//*********************************************************************************************************************
+//*********************************************************************************************************************
 // 旋转角度.
 
 /// 可见的旋转角度. -360, -180, 180, 360.
