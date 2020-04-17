@@ -2,18 +2,8 @@ part of '../data.dart';
 
 //*********************************************************************************************************************
 
-class _Card2 extends _Card {
-  _Card2(_Screen screen) : super(screen);
-
-  Rect get rect => Rect.zero;
-
-  bool Function(int zIndex) get zIndexVisible => (_) => false;
-}
-
-//*********************************************************************************************************************
-
 /// 网格卡片.
-class _GridCard extends _Card2 {
+class _GridCard extends _Card {
   _GridCard(_Screen screen, {
     this.verticalRowGridIndex = 0,
     this.verticalColumnGridIndex = 0,
@@ -31,15 +21,18 @@ class _GridCard extends _Card2 {
     this.scaleX = 1.0,
     this.scaleY = 1.0,
     this.elevation = 1.0,
-    this.zIndex = 1,
+    int zIndex = 1,
     this.radius = 4.0,
     this.opacity = 1.0,
-    this.visible = true,
+    bool visible = true,
     this.touchable = true,
     this.gestureType = _CardGestureType.normal,
     this.onTap,
     this.onLongPress,
-  }) : super(screen) {
+  }) : super(screen,
+    zIndex: zIndex,
+    visible: visible,
+  ) {
     this.onLongPress = () {
       if (big) {
         animateSmall().begin();
@@ -138,7 +131,6 @@ class _GridCard extends _Card2 {
     );
   }
 
-  /// 网格矩形.
   Rect get rect {
     if (big) {
       return Metric.get().coreNoPaddingRect;
@@ -177,25 +169,11 @@ class _GridCard extends _Card2 {
   /// Z 方向高度. 建议范围 0.0 ~ 4.0.
   double elevation;
 
-  /// 范围 0 ~ 3.
-  int zIndex;
-
   /// 圆角.
   double radius;
 
   /// 透明度.
   double opacity;
-
-  /// 是否可见.
-  bool visible;
-
-  /// 在 [zIndex] 上是否可见.
-  ///
-  /// [zIndex] 范围 0 ~ 3.
-  bool Function(int zIndex) get zIndexVisible => (zIndex) {
-    assert(zIndex >= 0 && zIndex <= 3);
-    return visible && this.zIndex == zIndex;
-  };
 
   double get margin {
     if (big) {

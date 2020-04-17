@@ -117,10 +117,10 @@ class Card {
   }
 
   Rect get rect {
-    if (_card == null || _card is! _Card2) {
+    if (_card == null) {
       return Rect.zero;
     }
-    return (_card as _Card2).rect;
+    return (_card).rect;
   }
 
   Matrix4 get transform {
@@ -131,11 +131,14 @@ class Card {
     return null;
   }
 
+  /// 在 [zIndex] 上是否可见.
+  ///
+  /// [zIndex] 范围 0 ~ 3.
   bool Function(int zIndex) get zIndexVisible {
-    if (_card == null || _card is! _Card2) {
-      return (_) => false;
-    }
-    return (_card as _Card2).zIndexVisible;
+    return (zIndex) {
+      assert(zIndex >= 0 && zIndex <= 3);
+      return _card.visible && _card.zIndex == zIndex;
+    };
   }
 
   Rect get spriteEntityRect {
