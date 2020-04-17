@@ -228,7 +228,6 @@ class _Animation<T extends _Card> {
     this.curve = Curves.linear,
     this.onAnimating,
     this.onBegin,
-    this.onHalf,
     this.onEnd,
   });
 
@@ -242,11 +241,11 @@ class _Animation<T extends _Card> {
   final int endDelay;
   final Curve curve;
   /// 动画过程中回调
-  final void Function(T card, double value) onAnimating;
+  ///
+  /// [half] 第一次过半时为 true, 只会为 true 一次.
+  final void Function(T card, double value, bool half) onAnimating;
   /// 动画开始时回调 (只会回调一次).
   final void Function(T card) onBegin;
-  /// 动画过半时回调 (只会回调一次).
-  final void Function(T card) onHalf;
   /// 动画结束时回调 (只会回调一次).
   final void Function(T card) onEnd;
 
@@ -295,12 +294,11 @@ class _Animation<T extends _Card> {
           }
         })
         ..addListener(() {
-          if (!_half && curvedAnimation.value >= 0.5) {
+          bool half = !_half && curvedAnimation.value >= 0.5;
+          if (half) {
             _half = true;
-            onHalf?.call(card);
-            card.screen.game.callback.notifyStateChanged();
           }
-          onAnimating?.call(card, curvedAnimation.value);
+          onAnimating?.call(card, curvedAnimation.value, half);
           card.screen.game.callback.notifyStateChanged();
         });
       onBegin?.call(card);

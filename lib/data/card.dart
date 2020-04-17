@@ -194,7 +194,7 @@ abstract class _Card {
     return _Animation<_Card>(this,
       duration: 800,
       curve: Curves.easeInOut,
-      onAnimating: (card, value) {
+      onAnimating: (card, value, half) {
         card.rotateY = _ValueCalc.ab(0.0, _VisibleAngle.clockwise360.value).calc(value);
         card.scaleX = _ValueCalc.aba(1.0, 2.0).calc(value);
         card.scaleY = _ValueCalc.aba(1.0, 2.0).calc(value);
@@ -222,7 +222,7 @@ abstract class _Card {
       beginDelay: beginDelay,
       endDelay: endDelay,
       curve: Curves.easeOut,
-      onAnimating: (card, value) {
+      onAnimating: (card, value, half) {
         card.opacity = _ValueCalc.ab(1.0, 0.0).calc(value);
       },
     );
@@ -239,7 +239,7 @@ abstract class _Card {
       beginDelay: beginDelay,
       endDelay: endDelay,
       curve: Curves.easeIn,
-      onAnimating: (card, value) {
+      onAnimating: (card, value, half) {
         card.opacity = _ValueCalc.ab(0.0, 1.0).calc(value);
       },
     );
@@ -256,7 +256,10 @@ abstract class _Card {
       beginDelay: beginDelay,
       endDelay: endDelay,
       curve: Curves.easeInOut,
-      onAnimating: (card, value) {
+      onAnimating: (card, value, half) {
+        if (half) {
+          card.dimension = _CardDimension.vice;
+        }
         if (value < 0.5) {
           card.rotateX = _ValueCalc.ab(0.0, _VisibleAngle.counterClockwise180.value).calc(value);
           card.translateX = _ValueCalc.ab(0.0, card.viceRect.center.dx - card.mainRect.center.dx).calc(value);
@@ -274,14 +277,6 @@ abstract class _Card {
       },
       onBegin: (card) {
         card.zIndex = 2;
-      },
-      onHalf: (card) {
-        card.dimension = _CardDimension.vice;
-        card.rotateX = _ValueCalc.ab(_VisibleAngle.clockwise180.value, 0.0).calc(0.5);
-        card.translateX = _ValueCalc.ab(card.mainRect.center.dx - card.viceRect.center.dx, 0.0).calc(0.5);
-        card.translateY = _ValueCalc.ab(card.mainRect.center.dy - card.viceRect.center.dy, 0.0).calc(0.5);
-        card.scaleX = _ValueCalc.ab(card.mainRect.width / card.viceRect.width, 1.0).calc(0.5);
-        card.scaleY = _ValueCalc.ab(card.mainRect.height / card.viceRect.height, 1.0).calc(0.5);
       },
       onEnd: (card) {
         card.zIndex = 1;

@@ -105,7 +105,7 @@ class _GridCard2 extends _GridCard {
       beginDelay: beginDelay,
       endDelay: endDelay,
       curve: Curves.easeInOut,
-      onAnimating: (card, value) {
+      onAnimating: (card, value, half) {
         card.rotateY = _ValueCalc.aba(0.0, 1.0 / 8.0 * pi).calc(value);
         card.scaleX = _ValueCalc.aba(1.0, 7.0 / 8.0).calc(value);
         card.scaleY = _ValueCalc.aba(1.0, 7.0 / 8.0).calc(value);
@@ -129,7 +129,7 @@ class _GridCard2 extends _GridCard {
     return _Animation<_GridCard>(this,
       duration: 500,
       curve: Curves.easeInOut,
-      onAnimating: (card, value) {
+      onAnimating: (card, value, half) {
         if (value < 0.5) {
           card.translateX = _ValueCalc.ab(0.0, translateXSmall).calc(value);
           card.translateY = _ValueCalc.ab(0.0, translateYSmall).calc(value);
@@ -150,8 +150,6 @@ class _GridCard2 extends _GridCard {
         card.mainElevation = 4.0;
         card.zIndex = 3;
       },
-      onHalf: (card) {
-      },
       onEnd: (card) {
       },
     );
@@ -166,7 +164,7 @@ class _GridCard2 extends _GridCard {
     return _Animation<_GridCard>(this,
       duration: 500,
       curve: Curves.easeInOut,
-      onAnimating: (card, value) {
+      onAnimating: (card, value, half) {
         if (value < 0.5) {
           card.translateX = _ValueCalc.ab(0.0, -translateXSmall).calc(value);
           card.translateY = _ValueCalc.ab(0.0, -translateYSmall).calc(value);
@@ -184,8 +182,6 @@ class _GridCard2 extends _GridCard {
         }
       },
       onBegin: (card) {
-      },
-      onHalf: (card) {
       },
       onEnd: (card) {
         card.mainElevation = 1.0;
@@ -542,7 +538,11 @@ class _SpriteCard extends _CoreCard {
       beginDelay: beginDelay,
       endDelay: endDelay,
       curve: Curves.easeInOut,
-      onAnimating: (card, value) {
+      onAnimating: (card, value, half) {
+        if (half) {
+          card.rowIndex += direction.y;
+          card.columnIndex += direction.x;
+        }
         if (value < 0.5) {
           card.translateX = _ValueCalc.ab(0.0, Metric.get().squareSizeMap[card.screen.square] * direction.x)
               .calc(value);
@@ -554,14 +554,6 @@ class _SpriteCard extends _CoreCard {
           card.translateY = _ValueCalc.ab(-Metric.get().squareSizeMap[card.screen.square] * direction.y, 0.0)
               .calc(value);
         }
-      },
-      onHalf: (card) {
-        card.rowIndex += direction.y;
-        card.columnIndex += direction.x;
-        card.translateX = _ValueCalc.ab(-Metric.get().squareSizeMap[card.screen.square] * direction.x, 0.0)
-            .calc(0.5);
-        card.translateY = _ValueCalc.ab(-Metric.get().squareSizeMap[card.screen.square] * direction.y, 0.0)
-            .calc(0.5);
       },
     );
   }
@@ -577,7 +569,7 @@ class _SpriteCard extends _CoreCard {
       beginDelay: beginDelay,
       endDelay: endDelay,
       curve: Curves.easeIn,
-      onAnimating: (card, value) {
+      onAnimating: (card, value, half) {
         card.rotateY = _ValueCalc.ab(_InvisibleAngle.clockwise90.value, 0.0).calc(value);
         card.scaleX = _ValueCalc.ab(0.5, 1.0).calc(value);
         card.scaleY = _ValueCalc.ab(0.5, 1.0).calc(value);
@@ -608,7 +600,7 @@ class _SpriteCard extends _CoreCard {
       beginDelay: beginDelay,
       endDelay: endDelay,
       curve: Curves.easeOut,
-      onAnimating: (card, value) {
+      onAnimating: (card, value, half) {
         card.rotateY = _ValueCalc.ab(0.0, _InvisibleAngle.counterClockwise90.value).calc(value);
         card.scaleX = _ValueCalc.ab(1.0, 0.5).calc(value);
         card.scaleY = _ValueCalc.ab(1.0, 0.5).calc(value);
@@ -637,7 +629,7 @@ class _SpriteCard extends _CoreCard {
       duration: _random.nextIntFromTo(500, 1000),
       beginDelay: _random.nextIntFromTo(0, 500),
       curve: Curves.easeOut,
-      onAnimating: (card, value) {
+      onAnimating: (card, value, half) {
         card.rotateY = _ValueCalc.ab(rotateY, 0.0).calc(value);
         card.scaleX = _ValueCalc.ab(0.5, 1.0).calc(value);
         card.scaleY = _ValueCalc.ab(0.5, 1.0).calc(value);
@@ -664,7 +656,7 @@ class _SpriteCard extends _CoreCard {
       duration: _random.nextIntFromTo(500, 1000),
       beginDelay: _random.nextIntFromTo(0, 500),
       curve: Curves.easeIn,
-      onAnimating: (card, value) {
+      onAnimating: (card, value, half) {
         card.rotateY = _ValueCalc.ab(0.0, rotateY).calc(value);
         card.scaleX = _ValueCalc.ab(1.0, 0.5).calc(value);
         card.scaleY = _ValueCalc.ab(1.0, 0.5).calc(value);
