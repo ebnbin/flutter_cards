@@ -31,6 +31,7 @@ class _GridCard extends _Card2 {
     this.scaleX = 1.0,
     this.scaleY = 1.0,
     this.elevation = 1.0,
+    this.zIndex = 1,
     this.radius = 4.0,
     this.opacity = 1.0,
     this.visible = true,
@@ -176,19 +177,8 @@ class _GridCard extends _Card2 {
   /// Z 方向高度. 建议范围 0.0 ~ 4.0.
   double elevation;
 
-  /// 范围 0 ~ 5.
-  int get zIndex {
-    if (elevation < 1.0) {
-      return 0;
-    }
-    if (elevation == 1.0) {
-      return 1;
-    }
-    if (elevation > 4.0) {
-      return 5;
-    }
-    return elevation.ceil();
-  }
+  /// 范围 0 ~ 3.
+  int zIndex;
 
   /// 圆角.
   double radius;
@@ -201,9 +191,9 @@ class _GridCard extends _Card2 {
 
   /// 在 [zIndex] 上是否可见.
   ///
-  /// [zIndex] 范围 0 ~ 5.
+  /// [zIndex] 范围 0 ~ 3.
   bool Function(int zIndex) get zIndexVisible => (zIndex) {
-    assert(zIndex >= 0 && zIndex <= 5);
+    assert(zIndex >= 0 && zIndex <= 3);
     return visible && this.zIndex == zIndex;
   };
 
@@ -274,7 +264,11 @@ class _GridCard extends _Card2 {
         card.elevation = _ValueCalc.aba(1.0, 4.0).calc(value);
         card.radius = _ValueCalc.aba(4.0, 16.0).calc(value);
       },
+      onBegin: (card) {
+        card.zIndex = 2;
+      },
       onEnd: (card) {
+        card.zIndex = 1;
         card.rotateY = 0.0;
       },
     );
@@ -296,6 +290,12 @@ class _GridCard extends _Card2 {
         card.scaleX = _ValueCalc.aba(1.0, 7.0 / 8.0).calc(value);
         card.scaleY = _ValueCalc.aba(1.0, 7.0 / 8.0).calc(value);
         card.elevation = _ValueCalc.aba(1.0, 7.0 / 8.0).calc(value);
+      },
+      onBegin: (card) {
+        card.zIndex = 0;
+      },
+      onEnd: (card) {
+        card.zIndex = 1;
       },
     );
   }
@@ -330,6 +330,7 @@ class _GridCard extends _Card2 {
       },
       onBegin: (card) {
         card.elevation = 4.0;
+        card.zIndex = 3;
       },
       onHalf: (card) {
       },
@@ -372,6 +373,7 @@ class _GridCard extends _Card2 {
       },
       onEnd: (card) {
         card.elevation = 1.0;
+        card.zIndex = 1;
       },
     );
   }
@@ -460,6 +462,7 @@ class _CoreCard extends _GridCard {
     double scaleX = 1.0,
     double scaleY = 1.0,
     double elevation = 1.0,
+    int zIndex = 1,
     double radius = 4.0,
     double opacity = 1.0,
     bool visible = true,
@@ -476,6 +479,7 @@ class _CoreCard extends _GridCard {
     scaleX: scaleX,
     scaleY: scaleY,
     elevation: elevation,
+    zIndex: zIndex,
     radius: radius,
     opacity: opacity,
     visible: visible,
@@ -839,6 +843,10 @@ class _SpriteCard extends _CoreCard {
         card.scaleX = 0.5;
         card.scaleY = 0.5;
         card.elevation = 0.5;
+        card.zIndex = 0;
+      },
+      onEnd: (card) {
+        card.zIndex = 1;
       },
     );
   }
@@ -859,6 +867,9 @@ class _SpriteCard extends _CoreCard {
         card.scaleX = _ValueCalc.ab(1.0, 0.5).calc(value);
         card.scaleY = _ValueCalc.ab(1.0, 0.5).calc(value);
         card.elevation = _ValueCalc.ab(1.0, 0.5).calc(value);
+      },
+      onBegin: (card) {
+        card.zIndex = 0;
       },
       onEnd: (card) {
         card.visible = false;
@@ -892,6 +903,7 @@ class _SpriteCard extends _CoreCard {
         card.scaleX = 0.5;
         card.scaleY = 0.5;
         card.elevation = 0.5;
+        card.zIndex = 0;
       },
     );
   }
@@ -911,6 +923,9 @@ class _SpriteCard extends _CoreCard {
         card.scaleX = _ValueCalc.ab(1.0, 0.5).calc(value);
         card.scaleY = _ValueCalc.ab(1.0, 0.5).calc(value);
         card.elevation = _ValueCalc.ab(1.0, 0.5).calc(value);
+      },
+      onBegin: (card) {
+        card.zIndex = 0;
       },
       onEnd: (card) {
         card.visible = false;

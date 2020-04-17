@@ -45,8 +45,8 @@ abstract class _Screen {
 class _SplashScreen extends _Screen {
   _SplashScreen(_Game game) : super(game,
     square: 4,
-    /// Test: 1.
-    cardLength: 1,
+    /// Test: 2.
+    cardLength: 2,
   ) {
     _CoreCard card = _CoreCard(this,
       rowIndex: 1,
@@ -61,6 +61,21 @@ class _SplashScreen extends _Screen {
       game.callback.notifyStateChanged();
     };
     cards[0] = card;
+
+    _GridCard sampleCard = _GridCard(this,
+      verticalRowGridIndex: 1,
+      verticalColumnGridIndex: 1,
+      verticalRowGridSpan: 15,
+      verticalColumnGridSpan: 15,
+      horizontalRowGridIndex: 1,
+      horizontalColumnGridIndex: 1,
+      horizontalRowGridSpan: 15,
+      horizontalColumnGridSpan: 15,
+    );
+    sampleCard.onTap = () {
+      sampleCard.animateSample().begin();
+    };
+    cards[1] = sampleCard;
   }
 }
 

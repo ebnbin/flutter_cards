@@ -59,7 +59,7 @@ class GamePage2 extends StatelessWidget {
             painter: Metric.get().debugPainter,
             foregroundPainter: Metric.get().debugForegroundPainter,
             child: Stack(
-              children: [0, 1, 2, 3, 4, 5].map<Widget>((zIndex) {
+              children: [0, 1, 2, 3,].map<Widget>((zIndex) {
                 return Stack(
                   children: game.cards.map<Widget>((card) {
                     return _buildCard(card, zIndex);
