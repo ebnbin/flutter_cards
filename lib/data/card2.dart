@@ -85,16 +85,6 @@ class _GridCard2 extends _GridCard {
   }
 
   //*******************************************************************************************************************
-
-  double get margin {
-    if (dimension == _CardDimension.main) {
-      return 2.0 / (Metric.coreNoPaddingGrid / min(rowGridSpan, columnGridSpan)) * Metric.get().gridSize;
-    } else {
-      return 2.0 / 1.0 * Metric.get().gridSize;
-    }
-  }
-
-  //*******************************************************************************************************************
 //
 //  @override
 //  String toString() {

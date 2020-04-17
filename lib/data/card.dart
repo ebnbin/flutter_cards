@@ -17,6 +17,7 @@ abstract class _Card {
     this.scaleX = 1.0,
     this.scaleY = 1.0,
     this.opacity = 1.0,
+    this.mainMargin = 0.0,
     this.mainElevation = 1.0,
     this.mainRadius = 4.0,
     this.gestureType = _GestureType.normal,
@@ -57,7 +58,7 @@ abstract class _Card {
 
   /// 卡片尺寸.
   /// 
-  /// 可能因不同尺寸而变化的值: [rect], [elevation], [radius].
+  /// 可能因不同尺寸而变化的值: [rect], [margin], [elevation], [radius].
   _CardDimension dimension;
 
   /// 主尺寸定位矩形.
@@ -113,6 +114,23 @@ abstract class _Card {
 
   /// 透明度.
   double opacity;
+
+  /// 主尺寸外边距.
+  double mainMargin;
+
+  /// 渲染外边距.
+  double get margin {
+    switch (dimension) {
+      case _CardDimension.main:
+        return mainMargin;
+      case _CardDimension.vice:
+        return mainMargin;
+      case _CardDimension.full:
+        return 0.0;
+      default:
+        throw Exception();
+    }
+  }
 
   /// 主尺寸厚度. 建议范围 0.0 ~ 4.0.
   double mainElevation;
@@ -243,6 +261,7 @@ abstract class _GridCard extends _Card {
   _GridCard(_Screen screen, {
     int zIndex = 1,
     bool visible = true,
+    _CardDimension dimension = _CardDimension.main,
     double rotateX = 0.0,
     double rotateY = 0.0,
     double rotateZ = 0.0,
@@ -275,6 +294,8 @@ abstract class _GridCard extends _Card {
     scaleX: scaleX,
     scaleY: scaleY,
     opacity: opacity,
+    // 不可修改.
+    mainMargin: 0.0,
     mainElevation: mainElevation,
     mainRadius: mainRadius,
     gestureType: gestureType,
@@ -345,6 +366,18 @@ abstract class _GridCard extends _Card {
       columnGridSpan * Metric.get().gridSize,
       rowGridSpan * Metric.get().gridSize,
     );
+  }
+
+  @override
+  double get mainMargin {
+    // 60 分之 2.
+    Rect rect = this.rect;
+    return min(rect.width, rect.height) / Metric.coreNoPaddingGrid * 2.0;
+  }
+  @override
+  set mainMargin(double margin) {
+    // 不可修改.
+    throw Exception();
   }
 }
 
