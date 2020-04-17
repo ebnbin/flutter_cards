@@ -263,9 +263,9 @@ class _Metric {
 
 //*********************************************************************************************************************
 
-/// Debug 用网格标尺背景.
-class _MetricPainter extends CustomPainter {
-  _MetricPainter(this.game);
+/// 绘制 debug 背景.
+class _DebugPainter extends CustomPainter {
+  _DebugPainter(this.game);
 
   final _Game game;
 
@@ -288,15 +288,15 @@ class _MetricPainter extends CustomPainter {
   }
 }
 
-/// Debug 用网格标尺前景.
-class _MetricForegroundPainter extends CustomPainter {
+/// 绘制 debug 前景.
+class _DebugForegroundPainter extends CustomPainter {
   static final Map<int, Color> _colorMap = Map.unmodifiable({
     3: Colors.yellow,
     4: Colors.purple,
     5: Colors.white,
   });
 
-  _MetricForegroundPainter(this.game);
+  _DebugForegroundPainter(this.game);
 
   final _Game game;
 

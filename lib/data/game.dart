@@ -8,15 +8,15 @@ class _Game {
   //*******************************************************************************************************************
 
   _Game(this.callback) {
-    gridPainter = _MetricPainter(this);
-    gridForegroundPainter = _MetricForegroundPainter(this);
+    gridPainter = _DebugPainter(this);
+    gridForegroundPainter = _DebugForegroundPainter(this);
     screen = _GameScreen(this, square: 4);
   }
 
   final GameCallback callback;
 
-  _MetricPainter gridPainter;
-  _MetricForegroundPainter gridForegroundPainter;
+  _DebugPainter gridPainter;
+  _DebugForegroundPainter gridForegroundPainter;
 
   //*******************************************************************************************************************
 
