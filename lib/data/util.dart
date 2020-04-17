@@ -115,7 +115,7 @@ class _Metric {
   /// 方格数 to 方格网格数.
   ///
   /// Key 范围 3, 4, 5.
-  static final Map<int, int> squareGridMap = Map.unmodifiable({
+  static final Map<int, int> squareGridMap = Map<int, int>.unmodifiable({
     3: coreNoPaddingGrid ~/ 3,
     4: coreNoPaddingGrid ~/ 4,
     5: coreNoPaddingGrid ~/ 5,
@@ -234,7 +234,7 @@ class _Metric {
     /// 方格数 to 方格尺寸.
     ///
     /// Key 范围 3, 4, 5.
-    Map<int, double> squareSizeMap = Map.unmodifiable({
+    Map<int, double> squareSizeMap = Map<int, double>.unmodifiable({
       3: squareGridMap[3] * gridSize,
       4: squareGridMap[4] * gridSize,
       5: squareGridMap[5] * gridSize,
@@ -285,6 +285,88 @@ extension _RandomExtension on Random {
 
 //*********************************************************************************************************************
 //*********************************************************************************************************************
+// 事件.
+
+/// 事件队列.
+class _ActionQueue {
+  /// 事件队列. List 中的事件同时开始, list 中的最后一个结束的事件结束时整个 list 事件结束.
+  final Queue<List<_Action>> _queue = Queue();
+
+  /// 正在执行的事件.
+  List<_Action> _actingActions;
+
+  /// 从队列头部取出事件并处理.
+  void _handle() {
+    if (_actingActions != null || _queue.isEmpty) {
+      return;
+    }
+    _actingActions = _queue.removeFirst();
+    List<_Action>.unmodifiable(_actingActions).forEach((element) {
+      element._begin(this);
+    });
+  }
+
+  /// 添加事件并处理.
+  ///
+  /// [addFirst] 添加到队列头部或尾部.
+  void add(List<_Action> actions, {
+    bool addFirst = false,
+  }) {
+    if (actions == null || actions.isEmpty) {
+      return;
+    }
+    if (addFirst) {
+      _queue.addFirst(actions);
+    } else {
+      _queue.addLast(actions);
+    }
+    _handle();
+  }
+
+  /// 只能被 [_Action] 调用.
+  void _end(_Action action) {
+    if (_actingActions == null || !_actingActions.remove(action)) {
+      return;
+    }
+    if (_actingActions.isEmpty) {
+      _actingActions = null;
+      _handle();
+    }
+  }
+}
+
+/// 事件.
+class _Action {
+  _Action(this.onBegin);
+
+  /// 执行 [runnable] 后自动结束事件.
+  _Action.run(void Function(_Action action) runnable) : this((action) {
+    runnable(action);
+    action.end();
+  });
+
+  /// 事件开始执行回调.
+  final void Function(_Action action) onBegin;
+
+  _ActionQueue _actionQueue;
+
+  /// 只能被 [_ActionQueue] 调用.
+  void _begin(_ActionQueue actionQueue) {
+    assert(_actionQueue == null && actionQueue != null);
+    _actionQueue = actionQueue;
+    onBegin(this);
+  }
+
+  /// 事件结束时必需调用.
+  void end() {
+    assert(_actionQueue != null);
+    _actionQueue._end(this);
+    _actionQueue = null;
+  }
+}
+
+//*********************************************************************************************************************
+//*********************************************************************************************************************
 // Debug.
 
 /// 绘制 debug 背景.
@@ -314,7 +396,7 @@ class _DebugPainter extends CustomPainter {
 
 /// 绘制 debug 前景.
 class _DebugForegroundPainter extends CustomPainter {
-  static final Map<int, Color> _colorMap = Map.unmodifiable({
+  static final Map<int, Color> _colorMap = Map<int, Color>.unmodifiable({
     3: Colors.yellow,
     4: Colors.purple,
     5: Colors.white,

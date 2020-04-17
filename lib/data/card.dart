@@ -445,8 +445,8 @@ class _SpriteCard extends _CoreCard {
       });
       actions1.add(_Animation.spriteEnter(newCard, beginDelay: 250).action());
 
-      screen.actionQueue.addList(actions0);
-      screen.actionQueue.addList(actions1);
+      screen.actionQueue.add(actions0);
+      screen.actionQueue.add(actions1);
     };
   }
 

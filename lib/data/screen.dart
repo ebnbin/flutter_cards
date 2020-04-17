@@ -133,7 +133,7 @@ class _GameScreen extends _Screen {
         });
       }),
     ];
-    actionQueue.addList(actions0);
-    actionQueue.addList(actions1);
+    actionQueue.add(actions0);
+    actionQueue.add(actions1);
   }
 }
