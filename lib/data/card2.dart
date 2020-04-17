@@ -20,10 +20,10 @@ class _GridCard extends _Card {
     double translateY = 0.0,
     double scaleX = 1.0,
     double scaleY = 1.0,
-    this.elevation = 1.0,
     int zIndex = 1,
-    this.radius = 4.0,
+    double radius = 4.0,
     double opacity = 1.0,
+    double elevation = 1.0,
     bool visible = true,
     _GestureType gestureType = _GestureType.normal,
     void Function(_Card card) onTap,
@@ -31,7 +31,9 @@ class _GridCard extends _Card {
   }) : super(screen,
     zIndex: zIndex,
     visible: visible,
+    radius: radius,
     opacity: opacity,
+    elevation: elevation,
     rotateX: rotateX,
     rotateY: rotateY,
     rotateZ: rotateZ,
@@ -150,12 +152,6 @@ class _GridCard extends _Card {
   }
 
   //*******************************************************************************************************************
-
-  /// Z 方向高度. 建议范围 0.0 ~ 4.0.
-  double elevation;
-
-  /// 圆角.
-  double radius;
 
   double get margin {
     if (big) {

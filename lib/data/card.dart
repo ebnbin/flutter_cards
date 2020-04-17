@@ -17,6 +17,8 @@ abstract class _Card {
     this.scaleX = 1.0,
     this.scaleY = 1.0,
     this.opacity = 1.0,
+    this.elevation = 1.0,
+    this.radius = 4.0,
     this.gestureType = _GestureType.normal,
     this.onTap,
     this.onLongPress,
@@ -82,6 +84,12 @@ abstract class _Card {
 
   /// 透明度.
   double opacity;
+
+  /// 厚度. 建议范围 0.0 ~ 4.0.
+  double elevation;
+
+  /// 圆角. 建议范围 4.0.
+  double radius;
 
   //*******************************************************************************************************************
 
