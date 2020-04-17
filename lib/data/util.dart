@@ -262,6 +262,30 @@ class _Metric {
 }
 
 //*********************************************************************************************************************
+//*********************************************************************************************************************
+// 随机数.
+
+/// 随机数.
+final Random _random = Random();
+
+extension _RandomExtension on Random {
+  /// 包含 [from] 和 [to].
+  int nextIntFromTo(int from, int to) {
+    return this.nextInt(to - from + 1) + from;
+  }
+
+  /// 返回列表中随机的一个 item. 如果列表为空则返回 null.
+  T nextListItem<T>(List<T> list) {
+    if (list == null || list.isEmpty) {
+      return null;
+    }
+    return list[this.nextInt(list.length)];
+  }
+}
+
+//*********************************************************************************************************************
+//*********************************************************************************************************************
+// Debug.
 
 /// 绘制 debug 背景.
 class _DebugPainter extends CustomPainter {
@@ -370,27 +394,5 @@ class _DebugForegroundPainter extends CustomPainter {
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
     return false;
-  }
-}
-
-//*********************************************************************************************************************
-//*********************************************************************************************************************
-// 随机数.
-
-/// 随机数.
-final Random _random = Random();
-
-extension _RandomExtension on Random {
-  /// 包含 [from] 和 [to].
-  int nextIntFromTo(int from, int to) {
-    return this.nextInt(to - from + 1) + from;
-  }
-
-  /// 返回列表中随机的一个 item. 如果列表为空则返回 null.
-  T nextListItem<T>(List<T> list) {
-    if (list == null || list.isEmpty) {
-      return null;
-    }
-    return list[this.nextInt(list.length)];
   }
 }
