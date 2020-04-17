@@ -553,7 +553,7 @@ class _CoreCard extends _GridCard {
 
 /// 精灵卡片.
 class _SpriteCard extends _CoreCard {
-  _SpriteCard(_GameScreen screen, {
+  _SpriteCard(_SpriteScreen screen, {
     int rowIndex = 0,
     int columnIndex = 0,
     double translateX = 0.0,
@@ -608,7 +608,7 @@ class _SpriteCard extends _CoreCard {
       AxisDirection nextDirection = playerCard.nextNonEdge(flipAxisDirection(direction), notDirection: direction);
       List<_SpriteCard> adjacentCardAll = playerCard.adjacentCardAll(nextDirection);
       assert(adjacentCardAll.isNotEmpty);
-      _SpriteCard newCard = _SpriteCard(gameScreen,
+      _SpriteCard newCard = _SpriteCard(spriteScreen,
         rowIndex: adjacentCardAll.last.rowIndex,
         columnIndex: adjacentCardAll.last.columnIndex,
       );
@@ -620,7 +620,7 @@ class _SpriteCard extends _CoreCard {
       ];
       List<_Action> actions1 = <_Action>[
         _Action.run((action) {
-          gameScreen.cards[index] = newCard;
+          spriteScreen.cards[index] = newCard;
         }),
       ];
       adjacentCardAll.forEach((element) {
@@ -628,12 +628,12 @@ class _SpriteCard extends _CoreCard {
       });
       actions1.add(newCard.animateSpriteEnter(beginDelay: 250).action());
 
-      screen.actionQueue.add(actions0);
-      screen.actionQueue.add(actions1);
+      screen.game.actionQueue.add(actions0);
+      screen.game.actionQueue.add(actions1);
     };
   }
 
-  _GameScreen get gameScreen => screen as _GameScreen;
+  _SpriteScreen get spriteScreen => screen as _SpriteScreen;
 
   //*******************************************************************************************************************
 
@@ -658,7 +658,7 @@ class _SpriteCard extends _CoreCard {
     if (edge(direction)) {
       return null;
     }
-    return gameScreen.spriteCards.firstWhere((element) {
+    return spriteScreen.spriteCards.firstWhere((element) {
       if (!element.visible) {
         return false;
       }
@@ -701,7 +701,7 @@ class _SpriteCard extends _CoreCard {
   List<_SpriteCard> adjacentCardAll(AxisDirection direction) {
     List<_SpriteCard> list = <_SpriteCard>[];
     if (!edge(direction)) {
-      List<_SpriteCard> spriteCards = gameScreen.spriteCards;
+      List<_SpriteCard> spriteCards = spriteScreen.spriteCards;
       switch (direction) {
         case AxisDirection.up:
           for (int targetRow = rowIndex - 1; targetRow >= 0; targetRow--) {
@@ -939,7 +939,7 @@ class _SpriteCard extends _CoreCard {
 
 /// 玩家卡片.
 class _PlayerCard extends _SpriteCard {
-  _PlayerCard(_GameScreen screen, {
+  _PlayerCard(_SpriteScreen screen, {
     int rowIndex = 0,
     int columnIndex = 0,
     double translateX = 0.0,
@@ -974,7 +974,7 @@ class _PlayerCard extends _SpriteCard {
   );
 
   /// 创建一个随机位置的玩家卡片.
-  static _PlayerCard random(_GameScreen screen) {
+  static _PlayerCard random(_SpriteScreen screen) {
     int from = screen.square > 2 ? 1 : 0;
     int to = screen.square > 2 ? (screen.square - 2) : (screen.square - 1);
     return _PlayerCard(screen,
