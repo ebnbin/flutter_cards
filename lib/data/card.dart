@@ -114,6 +114,30 @@ abstract class _Card {
 
   //*******************************************************************************************************************
 
+  /// 演示动画.
+  _Animation<_Card> animateSample() {
+    return _Animation<_Card>(this,
+      duration: 800,
+      curve: Curves.easeInOut,
+      onAnimating: (card, value) {
+        card.rotateY = _ValueCalc.ab(0.0, _VisibleAngle.clockwise360.value).calc(value);
+        card.scaleX = _ValueCalc.aba(1.0, 2.0).calc(value);
+        card.scaleY = _ValueCalc.aba(1.0, 2.0).calc(value);
+        card.elevation = _ValueCalc.aba(1.0, 2.0).calc(value);
+        card.radius = _ValueCalc.aba(4.0, 8.0).calc(value);
+      },
+      onBegin: (card) {
+        card.zIndex = 2;
+      },
+      onEnd: (card) {
+        card.zIndex = 1;
+        card.rotateY = 0.0;
+      },
+    );
+  }
+
+  //*******************************************************************************************************************
+
   @override
   String toString() {
     return '$index';
