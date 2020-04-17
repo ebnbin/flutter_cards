@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart' hide Card;
 
-part 'data/animation.dart';
 part 'data/card.dart';
 part 'data/game.dart';
 part 'data/public.dart';
