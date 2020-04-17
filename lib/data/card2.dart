@@ -3,16 +3,16 @@ part of '../data.dart';
 //*********************************************************************************************************************
 
 /// 网格卡片.
-class _GridCard extends _Card {
-  _GridCard(_Screen screen, {
-    this.verticalRowGridIndex = 0,
-    this.verticalColumnGridIndex = 0,
-    this.verticalRowGridSpan = 1,
-    this.verticalColumnGridSpan = 1,
-    this.horizontalRowGridIndex = 0,
-    this.horizontalColumnGridIndex = 0,
-    this.horizontalRowGridSpan = 1,
-    this.horizontalColumnGridSpan = 1,
+class _GridCard2 extends _GridCard {
+  _GridCard2(_Screen screen, {
+    int verticalRowGridIndex = 0,
+    int verticalColumnGridIndex = 0,
+    int verticalRowGridSpan = 1,
+    int verticalColumnGridSpan = 1,
+    int horizontalRowGridIndex = 0,
+    int horizontalColumnGridIndex = 0,
+    int horizontalRowGridSpan = 1,
+    int horizontalColumnGridSpan = 1,
     double rotateX = 0.0,
     double rotateY = 0.0,
     double rotateZ = 0.0,
@@ -44,6 +44,14 @@ class _GridCard extends _Card {
     gestureType: gestureType,
     onTap: onTap,
     onLongPress: onLongPress,
+    verticalRowGridIndex: verticalRowGridIndex,
+    verticalColumnGridIndex: verticalColumnGridIndex,
+    verticalRowGridSpan: verticalRowGridSpan,
+    verticalColumnGridSpan: verticalColumnGridSpan,
+    horizontalRowGridIndex: horizontalRowGridIndex,
+    horizontalColumnGridIndex: horizontalColumnGridIndex,
+    horizontalRowGridSpan: horizontalRowGridSpan,
+    horizontalColumnGridSpan: horizontalColumnGridSpan,
   ) {
     this.onLongPress = (card) {
       if (big) {
@@ -78,64 +86,6 @@ class _GridCard extends _Card {
 
   //*******************************************************************************************************************
 
-  /// 竖屏网格行.
-  int verticalRowGridIndex;
-  /// 竖屏网格列.
-  int verticalColumnGridIndex;
-  /// 竖屏网格跨行.
-  int verticalRowGridSpan;
-  /// 竖屏网格跨列.
-  int verticalColumnGridSpan;
-  /// 横屏网格行.
-  int horizontalRowGridIndex;
-  /// 横屏网格列.
-  int horizontalColumnGridIndex;
-  /// 横屏网格跨行.
-  int horizontalRowGridSpan;
-  /// 横屏网格跨列.
-  int horizontalColumnGridSpan;
-
-  /// 当前屏幕旋转方向的网格行.
-  int get rowGridIndex {
-    return Metric.get().isVertical ? verticalRowGridIndex : horizontalRowGridIndex;
-  }
-  set rowGridIndex(int rowIndex) {
-    horizontalRowGridIndex = rowIndex;
-    verticalRowGridIndex = rowIndex;
-  }
-
-  /// 当前屏幕旋转方向的网格列.
-  int get columnGridIndex {
-    return Metric.get().isVertical ? verticalColumnGridIndex : horizontalColumnGridIndex;
-  }
-  set columnGridIndex(int columnIndex) {
-    horizontalColumnGridIndex = columnIndex;
-    verticalColumnGridIndex = columnIndex;
-  }
-
-  /// 当前屏幕旋转方向的网格跨行.
-  int get rowGridSpan {
-    return Metric.get().isVertical ? verticalRowGridSpan : horizontalRowGridSpan;
-  }
-  set rowGridSpan(int rowSpan) {
-    horizontalRowGridSpan = rowSpan;
-    verticalRowGridSpan = rowSpan;
-  }
-
-  /// 当前屏幕旋转方向的网格跨列.
-  int get columnGridSpan {
-    return Metric.get().isVertical ? verticalColumnGridSpan : horizontalColumnGridSpan;
-  }
-  set columnGridSpan(int columnSpan) {
-    horizontalColumnGridSpan = columnSpan;
-    verticalColumnGridSpan = columnSpan;
-  }
-
-  /// 当前屏幕旋转方向的网格跨行跨列取小值.
-  int get minGridSpan => min(rowGridSpan, columnGridSpan);
-  /// 当前屏幕旋转方向的网格跨行跨列取大值.
-  int get maxGridSpan => max(rowGridSpan, columnGridSpan);
-
   /// 当前是否是大卡片.
   bool big = false;
 
@@ -162,7 +112,7 @@ class _GridCard extends _Card {
     if (big) {
       return 2.0 / 1.0 * Metric.get().gridSize;
     } else {
-      return 2.0 / (Metric.coreNoPaddingGrid / minGridSpan) * Metric.get().gridSize;
+      return 2.0 / (Metric.coreNoPaddingGrid / min(rowGridSpan, columnGridSpan)) * Metric.get().gridSize;
     }
   }
 
@@ -228,7 +178,7 @@ class _GridCard extends _Card {
           card.scaleX = _ValueCalc.ab(1.0, scaleXSmall).calc(value);
           card.scaleY = _ValueCalc.ab(1.0, scaleYSmall).calc(value);
           card.radius = _ValueCalc.ab(4.0, 4.0).calc(value);
-          card.big = false;
+          (card as _GridCard2).big = false;
         } else {
           card.translateX = _ValueCalc.ab(-translateXSmall, 0.0).calc(value);
           card.translateY = _ValueCalc.ab(-translateYSmall, 0.0).calc(value);
@@ -236,7 +186,7 @@ class _GridCard extends _Card {
           card.scaleX = _ValueCalc.ab(1.0 / scaleXSmall, 1.0).calc(value);
           card.scaleY = _ValueCalc.ab(1.0 / scaleYSmall, 1.0).calc(value);
           card.radius = _ValueCalc.ab(16.0, 16.0).calc(value);
-          card.big = true;
+          (card as _GridCard2).big = true;
         }
       },
       onBegin: (card) {
@@ -267,7 +217,7 @@ class _GridCard extends _Card {
           card.scaleX = _ValueCalc.ab(1.0, 1.0 / scaleXSmall).calc(value);
           card.scaleY = _ValueCalc.ab(1.0, 1.0 / scaleYSmall).calc(value);
           card.radius = _ValueCalc.ab(16.0, 16.0).calc(value);
-          card.big = true;
+          (card as _GridCard2).big = true;
         } else {
           card.translateX = _ValueCalc.ab(translateXSmall, 0.0).calc(value);
           card.translateY = _ValueCalc.ab(translateYSmall, 0.0).calc(value);
@@ -275,7 +225,7 @@ class _GridCard extends _Card {
           card.scaleX = _ValueCalc.ab(scaleXSmall, 1.0).calc(value);
           card.scaleY = _ValueCalc.ab(scaleYSmall, 1.0).calc(value);
           card.radius = _ValueCalc.ab(4.0, 4.0).calc(value);
-          card.big = false;
+          (card as _GridCard2).big = false;
         }
       },
       onBegin: (card) {
@@ -293,7 +243,7 @@ class _GridCard extends _Card {
 //*********************************************************************************************************************
 
 /// Core 卡片.
-class _CoreCard extends _GridCard {
+class _CoreCard extends _GridCard2 {
   _CoreCard(_Screen screen, {
     int rowIndex = 0,
     int columnIndex = 0,

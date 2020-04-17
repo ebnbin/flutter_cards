@@ -76,8 +76,8 @@ class Card {
   }
 
   double get margin {
-    if (_card is _GridCard) {
-      _GridCard gridCard = _card as _GridCard;
+    if (_card is _GridCard2) {
+      _GridCard2 gridCard = _card as _GridCard2;
       return gridCard.margin;
     }
     return null;

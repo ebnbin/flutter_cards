@@ -2,7 +2,6 @@ part of '../data.dart';
 
 //*********************************************************************************************************************
 //*********************************************************************************************************************
-// 卡片.
 
 /// 卡片.
 abstract class _Card {
@@ -175,5 +174,106 @@ abstract class _Card {
   @override
   String toString() {
     return '$index';
+  }
+}
+
+//*********************************************************************************************************************
+//*********************************************************************************************************************
+
+/// 通过网格定位的卡片.
+abstract class _GridCard extends _Card {
+  _GridCard(_Screen screen, {
+    int zIndex = 1,
+    bool visible = true,
+    double rotateX = 0.0,
+    double rotateY = 0.0,
+    double rotateZ = 0.0,
+    double translateX = 0.0,
+    double translateY = 0.0,
+    double scaleX = 1.0,
+    double scaleY = 1.0,
+    double opacity = 1.0,
+    double elevation = 1.0,
+    double radius = 4.0,
+    _GestureType gestureType = _GestureType.normal,
+    void Function(_Card card) onTap,
+    void Function(_Card card) onLongPress,
+    this.verticalRowGridIndex = 0,
+    this.verticalColumnGridIndex = 0,
+    this.verticalRowGridSpan = 1,
+    this.verticalColumnGridSpan = 1,
+    this.horizontalRowGridIndex = 0,
+    this.horizontalColumnGridIndex = 0,
+    this.horizontalRowGridSpan = 1,
+    this.horizontalColumnGridSpan = 1,
+  }) : super(screen,
+    zIndex: zIndex,
+    visible: visible,
+    rotateX: rotateX,
+    rotateY: rotateY,
+    rotateZ: rotateZ,
+    translateX: translateX,
+    translateY: translateY,
+    scaleX: scaleX,
+    scaleY: scaleY,
+    opacity: opacity,
+    elevation: elevation,
+    radius: radius,
+    gestureType: gestureType,
+    onTap: onTap,
+    onLongPress: onLongPress,
+  );
+
+  /// 竖屏网格行.
+  int verticalRowGridIndex;
+  /// 竖屏网格列.
+  int verticalColumnGridIndex;
+  /// 竖屏网格跨行.
+  int verticalRowGridSpan;
+  /// 竖屏网格跨列.
+  int verticalColumnGridSpan;
+  /// 横屏网格行.
+  int horizontalRowGridIndex;
+  /// 横屏网格列.
+  int horizontalColumnGridIndex;
+  /// 横屏网格跨行.
+  int horizontalRowGridSpan;
+  /// 横屏网格跨列.
+  int horizontalColumnGridSpan;
+
+  /// 当前屏幕旋转方向的网格行.
+  int get rowGridIndex {
+    return Metric.get().isVertical ? verticalRowGridIndex : horizontalRowGridIndex;
+  }
+  set rowGridIndex(int rowGridIndex) {
+    verticalRowGridIndex = rowGridIndex;
+    horizontalRowGridIndex = rowGridIndex;
+  }
+
+  /// 当前屏幕旋转方向的网格列.
+  int get columnGridIndex {
+    return Metric.get().isVertical ? verticalColumnGridIndex : horizontalColumnGridIndex;
+  }
+  set columnGridIndex(int columnGridIndex) {
+    verticalColumnGridIndex = columnGridIndex;
+    horizontalColumnGridIndex = columnGridIndex;
+  }
+
+  /// 当前屏幕旋转方向的网格跨行.
+  int get rowGridSpan {
+    return Metric.get().isVertical ? verticalRowGridSpan : horizontalRowGridSpan;
+  }
+  set rowGridSpan(int rowGridSpan) {
+    verticalRowGridSpan = rowGridSpan;
+    horizontalRowGridSpan = rowGridSpan;
+  }
+
+  /// 当前屏幕旋转方向的网格跨列.
+  int get columnGridSpan {
+    return Metric.get().isVertical ? verticalColumnGridSpan : horizontalColumnGridSpan;
+  }
+  set columnGridSpan(int columnGridSpan) {
+    verticalColumnGridSpan = columnGridSpan;
+    horizontalColumnGridSpan = columnGridSpan;
   }
 }
