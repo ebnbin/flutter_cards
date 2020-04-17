@@ -30,9 +30,9 @@ class Game {
     }));
   }
 
-  CustomPainter get foregroundPainter => _game.gridForegroundPainter;
+  CustomPainter get foregroundPainter => _game.metric.debugForegroundPainter;
 
-  CustomPainter get painter => _game.gridPainter;
+  CustomPainter get painter => _game.metric.debugPainter;
 
   double get backgroundImageScale {
     return 256.0 / (min(_game.metric.safeScreenRect.width, _game.metric.safeScreenRect.height) / 62.0 * 16.0 / 2.0);
