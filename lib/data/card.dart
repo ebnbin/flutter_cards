@@ -136,6 +136,40 @@ abstract class _Card {
     );
   }
 
+  /// 透明度隐藏动画.
+  _Animation<_Card> animateHide({
+    int duration = 400,
+    int beginDelay = 0,
+    int endDelay = 0,
+  }) {
+    return _Animation(this,
+      duration: duration,
+      beginDelay: beginDelay,
+      endDelay: endDelay,
+      curve: Curves.easeOut,
+      onAnimating: (card, value) {
+        card.opacity = _ValueCalc.ab(1.0, 0.0).calc(value);
+      },
+    );
+  }
+
+  /// 透明度显示动画.
+  _Animation<_Card> animateShow({
+    int duration = 400,
+    int beginDelay = 0,
+    int endDelay = 0,
+  }) {
+    return _Animation(this,
+      duration: duration,
+      beginDelay: beginDelay,
+      endDelay: endDelay,
+      curve: Curves.easeIn,
+      onAnimating: (card, value) {
+        card.opacity = _ValueCalc.ab(0.0, 1.0).calc(value);
+      },
+    );
+  }
+
   //*******************************************************************************************************************
 
   @override
