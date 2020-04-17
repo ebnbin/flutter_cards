@@ -334,6 +334,18 @@ abstract class _GridCard extends _Card {
     verticalColumnGridSpan = columnGridSpan;
     horizontalColumnGridSpan = columnGridSpan;
   }
+
+  //*******************************************************************************************************************
+
+  @override
+  Rect get mainRect {
+    return Rect.fromLTWH(
+      Metric.get().safeRect.left + columnGridIndex * Metric.get().gridSize,
+      Metric.get().safeRect.top + rowGridIndex * Metric.get().gridSize,
+      columnGridSpan * Metric.get().gridSize,
+      rowGridSpan * Metric.get().gridSize,
+    );
+  }
 }
 
 //*********************************************************************************************************************

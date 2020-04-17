@@ -54,10 +54,10 @@ class _GridCard2 extends _GridCard {
     horizontalColumnGridSpan: horizontalColumnGridSpan,
   ) {
     this.onLongPress = (card) {
-      if (big) {
-        animateSmall().begin();
-      } else {
+      if (dimension == _CardDimension.main) {
         animateBig().begin();
+      } else {
+        animateSmall().begin();
       }
       screen.cards.forEach((element) {
         if (element == null) {
@@ -70,14 +70,14 @@ class _GridCard2 extends _GridCard {
           return;
         }
         _GridCard gridCard = element;
-        if (big) {
+        if (dimension == _CardDimension.main) {
+          gridCard.animateHide(
+            duration: 200,
+          ).begin();
+        } else {
           gridCard.animateShow(
             duration: 200,
             beginDelay: 200,
-          ).begin();
-        } else {
-          gridCard.animateHide(
-            duration: 200,
           ).begin();
         }
       });
@@ -86,33 +86,11 @@ class _GridCard2 extends _GridCard {
 
   //*******************************************************************************************************************
 
-  /// 当前是否是大卡片.
-  bool big = false;
-
-  Rect get smallRect {
-    return Rect.fromLTWH(
-      Metric.get().safeRect.left + columnGridIndex * Metric.get().gridSize,
-      Metric.get().safeRect.top + rowGridIndex * Metric.get().gridSize,
-      columnGridSpan * Metric.get().gridSize,
-      rowGridSpan * Metric.get().gridSize,
-    );
-  }
-
-  Rect get mainRect {
-    if (big) {
-      return Metric.get().coreNoPaddingRect;
-    } else {
-      return smallRect;
-    }
-  }
-
-  //*******************************************************************************************************************
-
   double get margin {
-    if (big) {
-      return 2.0 / 1.0 * Metric.get().gridSize;
-    } else {
+    if (dimension == _CardDimension.main) {
       return 2.0 / (Metric.coreNoPaddingGrid / min(rowGridSpan, columnGridSpan)) * Metric.get().gridSize;
+    } else {
+      return 2.0 / 1.0 * Metric.get().gridSize;
     }
   }
 
@@ -123,15 +101,6 @@ class _GridCard2 extends _GridCard {
 //    return '$verticalRowGridIndex,$verticalColumnGridIndex,$verticalRowGridSpan,$verticalColumnGridSpan\n'
 //        '$horizontalRowGridIndex,$horizontalColumnGridIndex,$horizontalRowGridSpan,$horizontalColumnGridSpan';
 //  }
-
-  @override
-  String toString() {
-    String result = super.toString();
-    if (big) {
-      result += '\nBIG';
-    }
-    return result;
-  }
 
   //*******************************************************************************************************************
 
@@ -163,10 +132,10 @@ class _GridCard2 extends _GridCard {
 
   /// 小卡片 -> 大卡片.
   _Animation<_GridCard> animateBig() {
-    double translateXSmall = Metric.get().coreNoPaddingRect.center.dx - smallRect.center.dx;
-    double translateYSmall = Metric.get().coreNoPaddingRect.center.dy - smallRect.center.dy;
-    double scaleXSmall = Metric.get().coreNoPaddingRect.width / smallRect.width;
-    double scaleYSmall = Metric.get().coreNoPaddingRect.height / smallRect.height;
+    double translateXSmall = Metric.get().coreNoPaddingRect.center.dx - mainRect.center.dx;
+    double translateYSmall = Metric.get().coreNoPaddingRect.center.dy - mainRect.center.dy;
+    double scaleXSmall = Metric.get().coreNoPaddingRect.width / mainRect.width;
+    double scaleYSmall = Metric.get().coreNoPaddingRect.height / mainRect.height;
     return _Animation<_GridCard>(this,
       duration: 500,
       curve: Curves.easeInOut,
@@ -177,16 +146,14 @@ class _GridCard2 extends _GridCard {
           card.rotateX = _ValueCalc.ab(0.0, _VisibleAngle.counterClockwise180.value).calc(value);
           card.scaleX = _ValueCalc.ab(1.0, scaleXSmall).calc(value);
           card.scaleY = _ValueCalc.ab(1.0, scaleYSmall).calc(value);
-          card.mainRadius = _ValueCalc.ab(4.0, 4.0).calc(value);
-          (card as _GridCard2).big = false;
+          card.dimension = _CardDimension.main;
         } else {
           card.translateX = _ValueCalc.ab(-translateXSmall, 0.0).calc(value);
           card.translateY = _ValueCalc.ab(-translateYSmall, 0.0).calc(value);
           card.rotateX = _ValueCalc.ab(-_VisibleAngle.counterClockwise180.value, 0.0).calc(value);
           card.scaleX = _ValueCalc.ab(1.0 / scaleXSmall, 1.0).calc(value);
           card.scaleY = _ValueCalc.ab(1.0 / scaleYSmall, 1.0).calc(value);
-          card.mainRadius = _ValueCalc.ab(16.0, 16.0).calc(value);
-          (card as _GridCard2).big = true;
+          card.dimension = _CardDimension.vice;
         }
       },
       onBegin: (card) {
@@ -202,10 +169,10 @@ class _GridCard2 extends _GridCard {
 
   /// 大卡片 -> 小卡片.
   _Animation<_GridCard> animateSmall() {
-    double translateXSmall = Metric.get().coreNoPaddingRect.center.dx - smallRect.center.dx;
-    double translateYSmall = Metric.get().coreNoPaddingRect.center.dy - smallRect.center.dy;
-    double scaleXSmall = Metric.get().coreNoPaddingRect.width / smallRect.width;
-    double scaleYSmall = Metric.get().coreNoPaddingRect.height / smallRect.height;
+    double translateXSmall = Metric.get().coreNoPaddingRect.center.dx - mainRect.center.dx;
+    double translateYSmall = Metric.get().coreNoPaddingRect.center.dy - mainRect.center.dy;
+    double scaleXSmall = Metric.get().coreNoPaddingRect.width / mainRect.width;
+    double scaleYSmall = Metric.get().coreNoPaddingRect.height / mainRect.height;
     return _Animation<_GridCard>(this,
       duration: 500,
       curve: Curves.easeInOut,
@@ -216,16 +183,14 @@ class _GridCard2 extends _GridCard {
           card.rotateX = _ValueCalc.ab(0.0, _VisibleAngle.clockwise180.value).calc(value);
           card.scaleX = _ValueCalc.ab(1.0, 1.0 / scaleXSmall).calc(value);
           card.scaleY = _ValueCalc.ab(1.0, 1.0 / scaleYSmall).calc(value);
-          card.mainRadius = _ValueCalc.ab(16.0, 16.0).calc(value);
-          (card as _GridCard2).big = true;
+          card.dimension = _CardDimension.vice;
         } else {
           card.translateX = _ValueCalc.ab(translateXSmall, 0.0).calc(value);
           card.translateY = _ValueCalc.ab(translateYSmall, 0.0).calc(value);
           card.rotateX = _ValueCalc.ab(-_VisibleAngle.clockwise180.value, 0.0).calc(value);
           card.scaleX = _ValueCalc.ab(scaleXSmall, 1.0).calc(value);
           card.scaleY = _ValueCalc.ab(scaleYSmall, 1.0).calc(value);
-          card.mainRadius = _ValueCalc.ab(4.0, 4.0).calc(value);
-          (card as _GridCard2).big = false;
+          card.dimension = _CardDimension.main;
         }
       },
       onBegin: (card) {
@@ -378,7 +343,7 @@ class _SpriteCard extends _CoreCard {
     onLongPress: onLongPress,
   ) {
     this.onTap = (card) {
-      if (big) {
+      if (dimension != _CardDimension.main) {
         return;
       }
       _PlayerCard playerCard = screen.playerCard;
