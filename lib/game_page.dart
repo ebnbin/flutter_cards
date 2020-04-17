@@ -1,4 +1,5 @@
 import 'package:cards/data.dart';
+import 'package:cards/metric.dart';
 import 'package:flutter/material.dart' hide Card;
 
 class GamePage extends StatefulWidget {
@@ -9,7 +10,8 @@ class GamePage extends StatefulWidget {
 class _GamePageState extends State<GamePage> with TickerProviderStateMixin implements GameCallback {
   @override
   Widget build(BuildContext context) {
-    Game game = _data.build(context);
+    Metric.build(context);
+    Game game = _data.build();
     return GamePage2(game);
   }
 
@@ -54,8 +56,8 @@ class GamePage2 extends StatelessWidget {
             colorBlendMode: BlendMode.darken,
           ),
           CustomPaint(
-//            painter: game.painter,
-//            foregroundPainter: game.foregroundPainter,
+            painter: Metric.get().debugPainter,
+            foregroundPainter: Metric.get().debugForegroundPainter,
             child: Stack(
               children: [0, 1, 2, 3, 4, 5].map<Widget>((zIndex) {
                 return Stack(

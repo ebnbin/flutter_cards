@@ -13,8 +13,7 @@ class Data {
 
   Data(GameCallback callback) : _game = _Game(callback);
 
-  Game build(BuildContext context) {
-    _game.build(context);
+  Game build() {
     return Game._(_game);
   }
 }
@@ -30,20 +29,16 @@ class Game {
     }));
   }
 
-  CustomPainter get foregroundPainter => _game.metric.debugForegroundPainter;
-
-  CustomPainter get painter => _game.metric.debugPainter;
-
   double get backgroundImageScale {
-    return 256.0 / (min(_game.metric.safeScreenRect.width, _game.metric.safeScreenRect.height) / 62.0 * 16.0 / 2.0);
+    return 256.0 / (min(Metric.get().safeScreenRect.width, Metric.get().safeScreenRect.height) / 62.0 * 16.0 / 2.0);
   }
 
   double get backgroundImageWidth {
-    return _game.metric.screenRect.width;
+    return Metric.get().screenRect.width;
   }
 
   double get backgroundImageHeight {
-    return _game.metric.screenRect.height;
+    return Metric.get().screenRect.height;
   }
 }
 
@@ -195,7 +190,7 @@ class Card {
     if (_card == null) {
       return 14.0;
     }
-    return rect.width / _card.screen.game.metric.gridSize / (5.0 / 3.0);
+    return rect.width / Metric.get().gridSize / (5.0 / 3.0);
   }
 
   Rect get spriteShieldRect {

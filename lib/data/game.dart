@@ -15,16 +15,5 @@ class _Game {
 
   //*******************************************************************************************************************
 
-  Size metricSizeCache;
-  EdgeInsets metricPaddingCache;
-
-  _Metric metric;
-
-  void build(BuildContext context) {
-    _Metric.build(this, context);
-  }
-
-  //*******************************************************************************************************************
-
   _Screen screen;
 }
