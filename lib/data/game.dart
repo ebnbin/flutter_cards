@@ -72,7 +72,7 @@ class _SplashScreen extends _Screen {
       horizontalRowGridSpan: 15,
       horizontalColumnGridSpan: 15,
       onTap: (card) {
-        (card as _GridCard).animateSample().begin();
+        card.animateSample().begin();
       },
     );
     cards[1] = sampleCard;
