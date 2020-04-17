@@ -131,14 +131,11 @@ class Card {
     return null;
   }
 
-  /// 在 [zIndex] 上是否可见.
-  ///
-  /// [zIndex] 范围 0 ~ 3.
   bool Function(int zIndex) get zIndexVisible {
-    return (zIndex) {
-      assert(zIndex >= 0 && zIndex <= 3);
-      return _card.visible && _card.zIndex == zIndex;
-    };
+    if (_card == null) {
+      return (_) => false;
+    }
+    return _card.zIndexVisible;
   }
 
   Rect get spriteEntityRect {

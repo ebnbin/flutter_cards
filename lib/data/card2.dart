@@ -13,25 +13,33 @@ class _GridCard extends _Card {
     this.horizontalColumnGridIndex = 0,
     this.horizontalRowGridSpan = 1,
     this.horizontalColumnGridSpan = 1,
-    this.translateX = 0.0,
-    this.translateY = 0.0,
-    this.rotateX = 0.0,
-    this.rotateY = 0.0,
-    this.rotateZ = 0.0,
-    this.scaleX = 1.0,
-    this.scaleY = 1.0,
+    double rotateX = 0.0,
+    double rotateY = 0.0,
+    double rotateZ = 0.0,
+    double translateX = 0.0,
+    double translateY = 0.0,
+    double scaleX = 1.0,
+    double scaleY = 1.0,
     this.elevation = 1.0,
     int zIndex = 1,
     this.radius = 4.0,
-    this.opacity = 1.0,
+    double opacity = 1.0,
     bool visible = true,
-    this.touchable = true,
-    this.gestureType = _CardGestureType.normal,
+    _GestureType gestureType = _GestureType.normal,
     this.onTap,
     this.onLongPress,
   }) : super(screen,
     zIndex: zIndex,
     visible: visible,
+    opacity: opacity,
+    rotateX: rotateX,
+    rotateY: rotateY,
+    rotateZ: rotateZ,
+    translateX: translateX,
+    translateY: translateY,
+    scaleX: scaleX,
+    scaleY: scaleY,
+    gestureType: gestureType,
   ) {
     this.onLongPress = () {
       if (big) {
@@ -141,39 +149,11 @@ class _GridCard extends _Card {
 
   //*******************************************************************************************************************
 
-  /// Matrix4.setEntry(3, 2, value);
-  double get matrix4Entry32 {
-    if (big) {
-      return Metric.coreNoPaddingGrid / Metric.coreNoPaddingGrid / 800.0;
-    } else {
-      return Metric.coreNoPaddingGrid / maxGridSpan / 800.0;
-    }
-  }
-
-  double translateX;
-  double translateY;
-  double rotateX;
-  double rotateY;
-  double rotateZ;
-  double scaleX;
-  double scaleY;
-
-  Matrix4 get transform => Matrix4.identity()
-    ..setEntry(3, 2, matrix4Entry32)
-    ..rotateX(rotateX)
-    ..rotateY(rotateY)
-    ..rotateZ(rotateZ)
-    ..leftTranslate(translateX, translateY)
-    ..scale(scaleX, scaleY);
-
   /// Z 方向高度. 建议范围 0.0 ~ 4.0.
   double elevation;
 
   /// 圆角.
   double radius;
-
-  /// 透明度.
-  double opacity;
 
   double get margin {
     if (big) {
@@ -181,28 +161,6 @@ class _GridCard extends _Card {
     } else {
       return 2.0 / (Metric.coreNoPaddingGrid / minGridSpan) * Metric.get().gridSize;
     }
-  }
-
-  /// 是否可点击 (卡片是否可交互). 初始化后不可改变.
-  final bool touchable;
-
-  /// 手势类型.
-  _CardGestureType gestureType;
-
-  /// 是否拦截手势.
-  bool get absorbPointer {
-    if (!touchable) {
-      return false;
-    }
-    return gestureType == _CardGestureType.absorb;
-  }
-
-  /// 是否忽略手势.
-  bool get ignorePointer {
-    if (!touchable) {
-      return true;
-    }
-    return gestureType == _CardGestureType.ignore;
   }
 
   //*******************************************************************************************************************
@@ -444,8 +402,7 @@ class _CoreCard extends _GridCard {
     double radius = 4.0,
     double opacity = 1.0,
     bool visible = true,
-    bool touchable = true,
-    _CardGestureType gestureType = _CardGestureType.normal,
+    _GestureType gestureType = _GestureType.normal,
     GestureTapCallback onTap,
     GestureLongPressCallback onLongPress,
   }) : super(screen,
@@ -461,7 +418,6 @@ class _CoreCard extends _GridCard {
     radius: radius,
     opacity: opacity,
     visible: visible,
-    touchable: touchable,
     gestureType: gestureType,
     onTap: onTap,
     onLongPress: onLongPress,
@@ -536,7 +492,7 @@ class _SpriteCard extends _CoreCard {
     double elevation = 1.0,
     double radius = 4.0,
     double opacity = 1.0,
-    _CardGestureType gestureType = _CardGestureType.normal,
+    _GestureType gestureType = _GestureType.normal,
     GestureTapCallback onTap,
     GestureLongPressCallback onLongPress,
   }) : super(screen,
@@ -558,8 +514,6 @@ class _SpriteCard extends _CoreCard {
     opacity: opacity,
     // 精灵卡片初始化时是不可见的, 通过动画出现.
     visible: false,
-    // 精灵卡片必需是可交互的.
-    touchable: true,
     gestureType: gestureType,
     onTap: onTap,
     onLongPress: onLongPress,
@@ -933,7 +887,7 @@ class _PlayerCard extends _SpriteCard {
     double elevation = 1.0,
     double radius = 4.0,
     double opacity = 1.0,
-    _CardGestureType gestureType = _CardGestureType.normal,
+    _GestureType gestureType = _GestureType.normal,
     GestureTapCallback onTap,
     GestureLongPressCallback onLongPress,
   }) : super(screen,
@@ -968,16 +922,4 @@ class _PlayerCard extends _SpriteCard {
   String toString() {
     return '${super.toString()}\nPlayer';
   }
-}
-
-//*********************************************************************************************************************
-
-/// 卡片手势类型.
-enum _CardGestureType {
-  /// 正常接收处理手势.
-  normal,
-  /// 拦截手势, 自己不处理, 下层 Widget 也无法处理.
-  absorb,
-  /// 忽略手势, 自己不处理, 下层 Widget 可以处理.
-  ignore,
 }
