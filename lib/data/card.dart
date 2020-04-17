@@ -8,6 +8,7 @@ abstract class _Card {
   _Card(this.screen, {
     this.zIndex = 1,
     this.visible = true,
+    this.dimension = _CardDimension.main,
     this.rotateX = 0.0,
     this.rotateY = 0.0,
     this.rotateZ = 0.0,
@@ -16,8 +17,8 @@ abstract class _Card {
     this.scaleX = 1.0,
     this.scaleY = 1.0,
     this.opacity = 1.0,
-    this.elevation = 1.0,
-    this.radius = 4.0,
+    this.mainElevation = 1.0,
+    this.mainRadius = 4.0,
     this.gestureType = _GestureType.normal,
     this.onTap,
     this.onLongPress,
@@ -54,8 +55,37 @@ abstract class _Card {
     };
   }
 
-  /// 定位矩形.
-  Rect get rect;
+  /// 卡片尺寸.
+  /// 
+  /// 可能因不同尺寸而变化的值: [rect], [elevation], [radius].
+  _CardDimension dimension;
+
+  /// 主尺寸定位矩形.
+  Rect get mainRect;
+
+  /// 副尺寸定位矩形.
+  Rect get viceRect {
+    return Metric.get().coreNoPaddingRect;
+  }
+
+  /// 全屏尺寸定位矩形.
+  Rect get fullRect {
+    return Metric.get().screenRect;
+  }
+
+  /// 渲染定位矩形.
+  Rect get rect {
+    switch (dimension) {
+      case _CardDimension.main:
+        return mainRect;
+      case _CardDimension.vice:
+        return viceRect;
+      case _CardDimension.full:
+        return fullRect;
+      default:
+        throw Exception();
+    }
+  }
 
   /// Matrix4.setEntry(3, 2, value). 数值只与卡片尺寸相关.
   double get matrix4Entry32 {
@@ -84,11 +114,39 @@ abstract class _Card {
   /// 透明度.
   double opacity;
 
-  /// 厚度. 建议范围 0.0 ~ 4.0.
-  double elevation;
+  /// 主尺寸厚度. 建议范围 0.0 ~ 4.0.
+  double mainElevation;
 
-  /// 圆角. 建议范围 4.0.
-  double radius;
+  /// 渲染厚度.
+  double get elevation {
+    switch (dimension) {
+      case _CardDimension.main:
+        return mainElevation;
+      case _CardDimension.vice:
+        return mainElevation * 4;
+      case _CardDimension.full:
+        return mainElevation * 4;
+      default:
+        throw Exception();
+    }
+  }
+
+  /// 主尺寸圆角. 建议范围 4.0.
+  double mainRadius;
+
+  /// 渲染圆角.
+  double get radius {
+    switch (dimension) {
+      case _CardDimension.main:
+        return mainRadius;
+      case _CardDimension.vice:
+        return mainRadius * 4;
+      case _CardDimension.full:
+        return mainRadius * 4;
+      default:
+        throw Exception();
+    }
+  }
 
   //*******************************************************************************************************************
 
@@ -122,8 +180,8 @@ abstract class _Card {
         card.rotateY = _ValueCalc.ab(0.0, _VisibleAngle.clockwise360.value).calc(value);
         card.scaleX = _ValueCalc.aba(1.0, 2.0).calc(value);
         card.scaleY = _ValueCalc.aba(1.0, 2.0).calc(value);
-        card.elevation = _ValueCalc.aba(1.0, 2.0).calc(value);
-        card.radius = _ValueCalc.aba(4.0, 8.0).calc(value);
+        card.mainElevation = _ValueCalc.aba(1.0, 2.0).calc(value);
+        card.mainRadius = _ValueCalc.aba(4.0, 8.0).calc(value);
       },
       onBegin: (card) {
         card.zIndex = 2;
@@ -193,8 +251,8 @@ abstract class _GridCard extends _Card {
     double scaleX = 1.0,
     double scaleY = 1.0,
     double opacity = 1.0,
-    double elevation = 1.0,
-    double radius = 4.0,
+    double mainElevation = 1.0,
+    double mainRadius = 4.0,
     _GestureType gestureType = _GestureType.normal,
     void Function(_Card card) onTap,
     void Function(_Card card) onLongPress,
@@ -217,8 +275,8 @@ abstract class _GridCard extends _Card {
     scaleX: scaleX,
     scaleY: scaleY,
     opacity: opacity,
-    elevation: elevation,
-    radius: radius,
+    mainElevation: mainElevation,
+    mainRadius: mainRadius,
     gestureType: gestureType,
     onTap: onTap,
     onLongPress: onLongPress,
@@ -276,4 +334,17 @@ abstract class _GridCard extends _Card {
     verticalColumnGridSpan = columnGridSpan;
     horizontalColumnGridSpan = columnGridSpan;
   }
+}
+
+//*********************************************************************************************************************
+//*********************************************************************************************************************
+
+/// 卡片尺寸.
+enum _CardDimension {
+  /// 主尺寸.
+  main,
+  /// 副尺寸. 始终为 square * square 大卡片.
+  vice,
+  /// 全屏尺寸.
+  full,
 }

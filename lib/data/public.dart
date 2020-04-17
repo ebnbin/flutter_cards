@@ -105,9 +105,9 @@ class Card {
 
   double get radius {
     if (_card is _GridCard) {
-//      _GridCard gridCard = _card as _GridCard;
-//      return gridCard.radius;
-      return 0.0;
+      _GridCard gridCard = _card as _GridCard;
+      return gridCard.radius;
+//      return 0.0;
     }
     return null;
   }

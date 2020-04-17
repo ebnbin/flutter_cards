@@ -31,9 +31,9 @@ class _GridCard2 extends _GridCard {
   }) : super(screen,
     zIndex: zIndex,
     visible: visible,
-    radius: radius,
+    mainRadius: radius,
     opacity: opacity,
-    elevation: elevation,
+    mainElevation: elevation,
     rotateX: rotateX,
     rotateY: rotateY,
     rotateZ: rotateZ,
@@ -98,7 +98,7 @@ class _GridCard2 extends _GridCard {
     );
   }
 
-  Rect get rect {
+  Rect get mainRect {
     if (big) {
       return Metric.get().coreNoPaddingRect;
     } else {
@@ -150,7 +150,7 @@ class _GridCard2 extends _GridCard {
         card.rotateY = _ValueCalc.aba(0.0, 1.0 / 8.0 * pi).calc(value);
         card.scaleX = _ValueCalc.aba(1.0, 7.0 / 8.0).calc(value);
         card.scaleY = _ValueCalc.aba(1.0, 7.0 / 8.0).calc(value);
-        card.elevation = _ValueCalc.aba(1.0, 7.0 / 8.0).calc(value);
+        card.mainElevation = _ValueCalc.aba(1.0, 7.0 / 8.0).calc(value);
       },
       onBegin: (card) {
         card.zIndex = 0;
@@ -177,7 +177,7 @@ class _GridCard2 extends _GridCard {
           card.rotateX = _ValueCalc.ab(0.0, _VisibleAngle.counterClockwise180.value).calc(value);
           card.scaleX = _ValueCalc.ab(1.0, scaleXSmall).calc(value);
           card.scaleY = _ValueCalc.ab(1.0, scaleYSmall).calc(value);
-          card.radius = _ValueCalc.ab(4.0, 4.0).calc(value);
+          card.mainRadius = _ValueCalc.ab(4.0, 4.0).calc(value);
           (card as _GridCard2).big = false;
         } else {
           card.translateX = _ValueCalc.ab(-translateXSmall, 0.0).calc(value);
@@ -185,12 +185,12 @@ class _GridCard2 extends _GridCard {
           card.rotateX = _ValueCalc.ab(-_VisibleAngle.counterClockwise180.value, 0.0).calc(value);
           card.scaleX = _ValueCalc.ab(1.0 / scaleXSmall, 1.0).calc(value);
           card.scaleY = _ValueCalc.ab(1.0 / scaleYSmall, 1.0).calc(value);
-          card.radius = _ValueCalc.ab(16.0, 16.0).calc(value);
+          card.mainRadius = _ValueCalc.ab(16.0, 16.0).calc(value);
           (card as _GridCard2).big = true;
         }
       },
       onBegin: (card) {
-        card.elevation = 4.0;
+        card.mainElevation = 4.0;
         card.zIndex = 3;
       },
       onHalf: (card) {
@@ -216,7 +216,7 @@ class _GridCard2 extends _GridCard {
           card.rotateX = _ValueCalc.ab(0.0, _VisibleAngle.clockwise180.value).calc(value);
           card.scaleX = _ValueCalc.ab(1.0, 1.0 / scaleXSmall).calc(value);
           card.scaleY = _ValueCalc.ab(1.0, 1.0 / scaleYSmall).calc(value);
-          card.radius = _ValueCalc.ab(16.0, 16.0).calc(value);
+          card.mainRadius = _ValueCalc.ab(16.0, 16.0).calc(value);
           (card as _GridCard2).big = true;
         } else {
           card.translateX = _ValueCalc.ab(translateXSmall, 0.0).calc(value);
@@ -224,7 +224,7 @@ class _GridCard2 extends _GridCard {
           card.rotateX = _ValueCalc.ab(-_VisibleAngle.clockwise180.value, 0.0).calc(value);
           card.scaleX = _ValueCalc.ab(scaleXSmall, 1.0).calc(value);
           card.scaleY = _ValueCalc.ab(scaleYSmall, 1.0).calc(value);
-          card.radius = _ValueCalc.ab(4.0, 4.0).calc(value);
+          card.mainRadius = _ValueCalc.ab(4.0, 4.0).calc(value);
           (card as _GridCard2).big = false;
         }
       },
@@ -233,7 +233,7 @@ class _GridCard2 extends _GridCard {
       onHalf: (card) {
       },
       onEnd: (card) {
-        card.elevation = 1.0;
+        card.mainElevation = 1.0;
         card.zIndex = 1;
       },
     );
@@ -626,14 +626,14 @@ class _SpriteCard extends _CoreCard {
         card.rotateY = _ValueCalc.ab(_InvisibleAngle.clockwise90.value, 0.0).calc(value);
         card.scaleX = _ValueCalc.ab(0.5, 1.0).calc(value);
         card.scaleY = _ValueCalc.ab(0.5, 1.0).calc(value);
-        card.elevation = _ValueCalc.ab(0.5, 1.0).calc(value);
+        card.mainElevation = _ValueCalc.ab(0.5, 1.0).calc(value);
       },
       onBegin: (card) {
         card.visible = true;
         card.rotateY = _InvisibleAngle.clockwise90.value;
         card.scaleX = 0.5;
         card.scaleY = 0.5;
-        card.elevation = 0.5;
+        card.mainElevation = 0.5;
         card.zIndex = 0;
       },
       onEnd: (card) {
@@ -657,7 +657,7 @@ class _SpriteCard extends _CoreCard {
         card.rotateY = _ValueCalc.ab(0.0, _InvisibleAngle.counterClockwise90.value).calc(value);
         card.scaleX = _ValueCalc.ab(1.0, 0.5).calc(value);
         card.scaleY = _ValueCalc.ab(1.0, 0.5).calc(value);
-        card.elevation = _ValueCalc.ab(1.0, 0.5).calc(value);
+        card.mainElevation = _ValueCalc.ab(1.0, 0.5).calc(value);
       },
       onBegin: (card) {
         card.zIndex = 0;
@@ -667,7 +667,7 @@ class _SpriteCard extends _CoreCard {
         card.rotateY = _InvisibleAngle.counterClockwise90.value;
         card.scaleX = 0.5;
         card.scaleY = 0.5;
-        card.elevation = 0.5;
+        card.mainElevation = 0.5;
       },
     );
   }
@@ -686,14 +686,14 @@ class _SpriteCard extends _CoreCard {
         card.rotateY = _ValueCalc.ab(rotateY, 0.0).calc(value);
         card.scaleX = _ValueCalc.ab(0.5, 1.0).calc(value);
         card.scaleY = _ValueCalc.ab(0.5, 1.0).calc(value);
-        card.elevation = _ValueCalc.ab(0.5, 1.0).calc(value);
+        card.mainElevation = _ValueCalc.ab(0.5, 1.0).calc(value);
       },
       onBegin: (card) {
         card.visible = true;
         card.rotateY = rotateY;
         card.scaleX = 0.5;
         card.scaleY = 0.5;
-        card.elevation = 0.5;
+        card.mainElevation = 0.5;
         card.zIndex = 0;
       },
     );
@@ -713,7 +713,7 @@ class _SpriteCard extends _CoreCard {
         card.rotateY = _ValueCalc.ab(0.0, rotateY).calc(value);
         card.scaleX = _ValueCalc.ab(1.0, 0.5).calc(value);
         card.scaleY = _ValueCalc.ab(1.0, 0.5).calc(value);
-        card.elevation = _ValueCalc.ab(1.0, 0.5).calc(value);
+        card.mainElevation = _ValueCalc.ab(1.0, 0.5).calc(value);
       },
       onBegin: (card) {
         card.zIndex = 0;
@@ -723,7 +723,7 @@ class _SpriteCard extends _CoreCard {
         card.rotateY = rotateY;
         card.scaleX = 0.5;
         card.scaleY = 0.5;
-        card.elevation = 0.5;
+        card.mainElevation = 0.5;
       },
     );
   }
