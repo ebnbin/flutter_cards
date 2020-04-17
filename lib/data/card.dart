@@ -53,9 +53,9 @@ class _GridCard extends _Card {
   }) : super(screen) {
     this.onLongPress = () {
       if (big) {
-        _Animation.gridSmall(this).begin();
+        animateSmall().begin();
       } else {
-        _Animation.gridBig(this).begin();
+        animateBig().begin();
       }
       screen.cards.forEach((element) {
         if (element == null) {
@@ -67,10 +67,11 @@ class _GridCard extends _Card {
         if (identical(this, element)) {
           return;
         }
+        _GridCard gridCard = element;
         if (big) {
-          _Animation.gridShow(element).begin();
+          gridCard.animateShow().begin();
         } else {
-          _Animation.gridHide(element).begin();
+          gridCard.animateHide().begin();
         }
       });
     };
@@ -270,6 +271,188 @@ class _GridCard extends _Card {
     }
     return result;
   }
+
+  //*******************************************************************************************************************
+
+  /// 用于演示.
+  _Animation<_GridCard> animateSample() {
+    return _Animation<_GridCard>(this,
+      duration: 1000,
+      curve: Curves.easeInOut,
+      onAnimating: (card, value) {
+        card.rotateY = _AnimationCalc.ab(0.0, _VisibleAngle.clockwise360.value).calc(value);
+        card.scaleX = _AnimationCalc.aba(1.0, 2.0).calc(value);
+        card.scaleY = _AnimationCalc.aba(1.0, 2.0).calc(value);
+        card.elevation = _AnimationCalc.aba(1.0, 4.0).calc(value);
+        card.radius = _AnimationCalc.aba(4.0, 16.0).calc(value);
+      },
+      onEnd: (card) {
+        card.rotateY = 0.0;
+      },
+    );
+  }
+
+  /// 卡片不可点击.
+  _Animation<_GridCard> animateTremble({
+    int duration = 250,
+    int beginDelay = 0,
+    int endDelay = 0,
+  }) {
+    return _Animation<_GridCard>(this,
+      duration: duration,
+      beginDelay: beginDelay,
+      endDelay: endDelay,
+      curve: Curves.easeInOut,
+      onAnimating: (card, value) {
+        card.rotateY = _AnimationCalc.aba(0.0, 1.0 / 8.0 * pi).calc(value);
+        card.scaleX = _AnimationCalc.aba(1.0, 7.0 / 8.0).calc(value);
+        card.scaleY = _AnimationCalc.aba(1.0, 7.0 / 8.0).calc(value);
+        card.elevation = _AnimationCalc.aba(1.0, 7.0 / 8.0).calc(value);
+      },
+    );
+  }
+
+  /// 小卡片 -> 大卡片.
+  _Animation<_GridCard> animateBig() {
+    double translateXSmall = screen.game.metric.coreNoPaddingRect.center.dx - smallRect.center.dx;
+    double translateYSmall = screen.game.metric.coreNoPaddingRect.center.dy - smallRect.center.dy;
+    double scaleXSmall = screen.game.metric.coreNoPaddingRect.width / smallRect.width;
+    double scaleYSmall = screen.game.metric.coreNoPaddingRect.height / smallRect.height;
+    return _Animation<_GridCard>(this,
+      duration: 500,
+      curve: Curves.easeInOut,
+      onAnimating: (card, value) {
+        if (value < 0.5) {
+          card.translateX = _AnimationCalc.ab(0.0, translateXSmall).calc(value);
+          card.translateY = _AnimationCalc.ab(0.0, translateYSmall).calc(value);
+          card.rotateX = _AnimationCalc.ab(0.0, _VisibleAngle.counterClockwise180.value).calc(value);
+          card.scaleX = _AnimationCalc.ab(1.0, scaleXSmall).calc(value);
+          card.scaleY = _AnimationCalc.ab(1.0, scaleYSmall).calc(value);
+          card.radius = _AnimationCalc.ab(4.0, 4.0).calc(value);
+          card.big = false;
+        } else {
+          card.translateX = _AnimationCalc.ab(-translateXSmall, 0.0).calc(value);
+          card.translateY = _AnimationCalc.ab(-translateYSmall, 0.0).calc(value);
+          card.rotateX = _AnimationCalc.ab(-_VisibleAngle.counterClockwise180.value, 0.0).calc(value);
+          card.scaleX = _AnimationCalc.ab(1.0 / scaleXSmall, 1.0).calc(value);
+          card.scaleY = _AnimationCalc.ab(1.0 / scaleYSmall, 1.0).calc(value);
+          card.radius = _AnimationCalc.ab(16.0, 16.0).calc(value);
+          card.big = true;
+        }
+      },
+      onBegin: (card) {
+        card.elevation = 4.0;
+      },
+      onHalf: (card) {
+      },
+      onEnd: (card) {
+      },
+    );
+  }
+
+  /// 大卡片 -> 小卡片.
+  _Animation<_GridCard> animateSmall() {
+    double translateXSmall = screen.game.metric.coreNoPaddingRect.center.dx - smallRect.center.dx;
+    double translateYSmall = screen.game.metric.coreNoPaddingRect.center.dy - smallRect.center.dy;
+    double scaleXSmall = screen.game.metric.coreNoPaddingRect.width / smallRect.width;
+    double scaleYSmall = screen.game.metric.coreNoPaddingRect.height / smallRect.height;
+    return _Animation<_GridCard>(this,
+      duration: 500,
+      curve: Curves.easeInOut,
+      onAnimating: (card, value) {
+        if (value < 0.5) {
+          card.translateX = _AnimationCalc.ab(0.0, -translateXSmall).calc(value);
+          card.translateY = _AnimationCalc.ab(0.0, -translateYSmall).calc(value);
+          card.rotateX = _AnimationCalc.ab(0.0, _VisibleAngle.clockwise180.value).calc(value);
+          card.scaleX = _AnimationCalc.ab(1.0, 1.0 / scaleXSmall).calc(value);
+          card.scaleY = _AnimationCalc.ab(1.0, 1.0 / scaleYSmall).calc(value);
+          card.radius = _AnimationCalc.ab(16.0, 16.0).calc(value);
+          card.big = true;
+        } else {
+          card.translateX = _AnimationCalc.ab(translateXSmall, 0.0).calc(value);
+          card.translateY = _AnimationCalc.ab(translateYSmall, 0.0).calc(value);
+          card.rotateX = _AnimationCalc.ab(-_VisibleAngle.clockwise180.value, 0.0).calc(value);
+          card.scaleX = _AnimationCalc.ab(scaleXSmall, 1.0).calc(value);
+          card.scaleY = _AnimationCalc.ab(scaleYSmall, 1.0).calc(value);
+          card.radius = _AnimationCalc.ab(4.0, 4.0).calc(value);
+          card.big = false;
+        }
+      },
+      onBegin: (card) {
+      },
+      onHalf: (card) {
+      },
+      onEnd: (card) {
+        card.elevation = 1.0;
+      },
+    );
+  }
+
+  /// 卡片隐藏.
+  _Animation<_GridCard> animateHide({
+    int duration = 500,
+    int beginDelay = 0,
+    int endDelay = 0,
+  }) {
+    return _Animation<_GridCard>(this,
+      duration: duration,
+      beginDelay: beginDelay,
+      endDelay: endDelay,
+      curve: Curves.easeOut,
+      onAnimating: (card, value) {
+//        card.rotateX = _AnimationCalc.ab(0.0, _InvisibleRotateXY.counterClockwise90.value).calc(value);
+//        card.scaleX = _AnimationCalc.ab(1.0, 0.5).calc(value);
+//        card.scaleY = _AnimationCalc.ab(1.0, 0.5).calc(value);
+//        card.elevation = _AnimationCalc.ab(1.0, 0.5).calc(value);
+        if (value < 0.5) {
+          card.opacity = _AnimationCalc.ab(1.0, 0.0).calc(value * 2.0);
+        }
+      },
+      onHalf: (card) {
+        card.opacity = 0.0;
+      },
+      onEnd: (card) {
+//        card.visible = false;
+//        card.rotateX = _InvisibleRotateXY.counterClockwise90.value;
+//        card.scaleX = 0.5;
+//        card.scaleY = 0.5;
+//        card.elevation = 0.5;
+      },
+    );
+  }
+
+  /// 卡片显示.
+  _Animation<_GridCard> animateShow({
+    int duration = 500,
+    int beginDelay = 0,
+    int endDelay = 0,
+  }) {
+    return _Animation<_GridCard>(this,
+      duration: duration,
+      beginDelay: beginDelay,
+      endDelay: endDelay,
+      curve: Curves.easeIn,
+      onAnimating: (card, value) {
+//        card.rotateX = _AnimationCalc.ab(_InvisibleRotateXY.clockwise90.value, 0.0).calc(value);
+//        card.scaleX = _AnimationCalc.ab(0.5, 1.0).calc(value);
+//        card.scaleY = _AnimationCalc.ab(0.5, 1.0).calc(value);
+//        card.elevation = _AnimationCalc.ab(0.5, 1.0).calc(value);
+        if (value >= 0.5) {
+          card.opacity = _AnimationCalc.ab(0.0, 1.0).calc(value * 2.0 - 1.0);
+        }
+      },
+      onBegin: (card) {
+//        card.visible = true;
+//        card.rotateX = _InvisibleRotateXY.clockwise90.value;
+//        card.scaleX = 0.5;
+//        card.scaleY = 0.5;
+//        card.elevation = 0.5;
+      },
+      onEnd: (card) {
+        card.opacity = 1.0;
+      },
+    );
+  }
 }
 
 //*********************************************************************************************************************
@@ -419,7 +602,7 @@ class _SpriteCard extends _CoreCard {
       assert(playerCard != null);
       AxisDirection direction = playerCard.adjacentDirection(this);
       if (direction == null) {
-        _Animation.gridTremble(this).begin();
+        animateTremble().begin();
         return;
       }
       AxisDirection nextDirection = playerCard.nextNonEdge(flipAxisDirection(direction), notDirection: direction);
@@ -432,8 +615,8 @@ class _SpriteCard extends _CoreCard {
       int index = this.index;
 
       List<_Action> actions0 = <_Action>[
-        _Animation.spriteExit(this).action(),
-        _Animation.spriteMove(playerCard, direction: direction, beginDelay: 250).action(),
+        animateSpriteExit().action(),
+        playerCard.animateSpriteMove(direction: direction, beginDelay: 250).action(),
       ];
       List<_Action> actions1 = <_Action>[
         _Action.run((action) {
@@ -441,9 +624,9 @@ class _SpriteCard extends _CoreCard {
         }),
       ];
       adjacentCardAll.forEach((element) {
-        actions1.add(_Animation.spriteMove(element, direction: flipAxisDirection(nextDirection)).action());
+        actions1.add(element.animateSpriteMove(direction: flipAxisDirection(nextDirection)).action());
       });
-      actions1.add(_Animation.spriteEnter(newCard, beginDelay: 250).action());
+      actions1.add(newCard.animateSpriteEnter(beginDelay: 250).action());
 
       screen.actionQueue.add(actions0);
       screen.actionQueue.add(actions1);
@@ -605,6 +788,150 @@ class _SpriteCard extends _CoreCard {
       }
     }
     return null;
+  }
+
+  //*******************************************************************************************************************
+
+  /// 精灵卡片移动.
+  _Animation<_SpriteCard> animateSpriteMove({
+    int beginDelay = 0,
+    int endDelay = 0,
+    @required
+    AxisDirection direction,
+  }) {
+    return _Animation<_SpriteCard>(this,
+      duration: 500,
+      beginDelay: beginDelay,
+      endDelay: endDelay,
+      curve: Curves.easeInOut,
+      onAnimating: (card, value) {
+        if (value < 0.5) {
+          card.translateX = _AnimationCalc.ab(0.0, card.screen.game.metric.squareSizeMap[card.screen.square] * direction.x)
+              .calc(value);
+          card.translateY = _AnimationCalc.ab(0.0, card.screen.game.metric.squareSizeMap[card.screen.square] * direction.y)
+              .calc(value);
+        } else {
+          card.translateX = _AnimationCalc.ab(-card.screen.game.metric.squareSizeMap[card.screen.square] * direction.x, 0.0)
+              .calc(value);
+          card.translateY = _AnimationCalc.ab(-card.screen.game.metric.squareSizeMap[card.screen.square] * direction.y, 0.0)
+              .calc(value);
+        }
+      },
+      onHalf: (card) {
+        card.rowIndex += direction.y;
+        card.columnIndex += direction.x;
+        card.translateX = _AnimationCalc.ab(-card.screen.game.metric.squareSizeMap[card.screen.square] * direction.x, 0.0)
+            .calc(0.5);
+        card.translateY = _AnimationCalc.ab(-card.screen.game.metric.squareSizeMap[card.screen.square] * direction.y, 0.0)
+            .calc(0.5);
+      },
+    );
+  }
+
+  /// 精灵卡片进入.
+  _Animation<_SpriteCard> animateSpriteEnter({
+    int duration = 500,
+    int beginDelay = 0,
+    int endDelay = 0,
+  }) {
+    return _Animation<_SpriteCard>(this,
+      duration: duration,
+      beginDelay: beginDelay,
+      endDelay: endDelay,
+      curve: Curves.easeIn,
+      onAnimating: (card, value) {
+        card.rotateY = _AnimationCalc.ab(_InvisibleAngle.clockwise90.value, 0.0).calc(value);
+        card.scaleX = _AnimationCalc.ab(0.5, 1.0).calc(value);
+        card.scaleY = _AnimationCalc.ab(0.5, 1.0).calc(value);
+        card.elevation = _AnimationCalc.ab(0.5, 1.0).calc(value);
+      },
+      onBegin: (card) {
+        card.visible = true;
+        card.rotateY = _InvisibleAngle.clockwise90.value;
+        card.scaleX = 0.5;
+        card.scaleY = 0.5;
+        card.elevation = 0.5;
+      },
+    );
+  }
+
+  /// 精灵卡片退出.
+  _Animation<_SpriteCard> animateSpriteExit({
+    int duration = 500,
+    int beginDelay = 0,
+    int endDelay = 0,
+  }) {
+    return _Animation<_SpriteCard>(this,
+      duration: duration,
+      beginDelay: beginDelay,
+      endDelay: endDelay,
+      curve: Curves.easeOut,
+      onAnimating: (card, value) {
+        card.rotateY = _AnimationCalc.ab(0.0, _InvisibleAngle.counterClockwise90.value).calc(value);
+        card.scaleX = _AnimationCalc.ab(1.0, 0.5).calc(value);
+        card.scaleY = _AnimationCalc.ab(1.0, 0.5).calc(value);
+        card.elevation = _AnimationCalc.ab(1.0, 0.5).calc(value);
+      },
+      onEnd: (card) {
+        card.visible = false;
+        card.rotateY = _InvisibleAngle.counterClockwise90.value;
+        card.scaleX = 0.5;
+        card.scaleY = 0.5;
+        card.elevation = 0.5;
+      },
+    );
+  }
+
+  /// 精灵卡片第一次进入.
+  _Animation<_SpriteCard> animateSpriteFirstEnter() {
+    double rotateY = _random.nextListItem(<double>[
+      _InvisibleAngle.clockwise90.value,
+      _InvisibleAngle.clockwise270.value,
+    ]);
+    return _Animation<_SpriteCard>(this,
+      duration: _random.nextIntFromTo(500, 1000),
+      beginDelay: _random.nextIntFromTo(0, 500),
+      curve: Curves.easeOut,
+      onAnimating: (card, value) {
+        card.rotateY = _AnimationCalc.ab(rotateY, 0.0).calc(value);
+        card.scaleX = _AnimationCalc.ab(0.5, 1.0).calc(value);
+        card.scaleY = _AnimationCalc.ab(0.5, 1.0).calc(value);
+        card.elevation = _AnimationCalc.ab(0.5, 1.0).calc(value);
+      },
+      onBegin: (card) {
+        card.visible = true;
+        card.rotateY = rotateY;
+        card.scaleX = 0.5;
+        card.scaleY = 0.5;
+        card.elevation = 0.5;
+      },
+    );
+  }
+
+  /// 精灵卡片最后一次退出.
+  _Animation<_SpriteCard> animateSpriteLastExit() {
+    double rotateY = _random.nextListItem(<double>[
+      _InvisibleAngle.counterClockwise90.value,
+      _InvisibleAngle.counterClockwise270.value,
+    ]);
+    return _Animation<_SpriteCard>(this,
+      duration: _random.nextIntFromTo(500, 1000),
+      beginDelay: _random.nextIntFromTo(0, 500),
+      curve: Curves.easeIn,
+      onAnimating: (card, value) {
+        card.rotateY = _AnimationCalc.ab(0.0, rotateY).calc(value);
+        card.scaleX = _AnimationCalc.ab(1.0, 0.5).calc(value);
+        card.scaleY = _AnimationCalc.ab(1.0, 0.5).calc(value);
+        card.elevation = _AnimationCalc.ab(1.0, 0.5).calc(value);
+      },
+      onEnd: (card) {
+        card.visible = false;
+        card.rotateY = rotateY;
+        card.scaleX = 0.5;
+        card.scaleY = 0.5;
+        card.elevation = 0.5;
+      },
+    );
   }
 }
 

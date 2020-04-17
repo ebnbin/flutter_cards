@@ -20,7 +20,7 @@ abstract class _Screen {
       horizontalColumnGridSpan: 15,
     );
     sampleCard.onTap = () {
-      _Animation.sample(sampleCard).begin();
+      sampleCard.animateSample().begin();
     };
     cards[0] = sampleCard;
     for (int i = 0; i < 6; i++) {
@@ -117,14 +117,14 @@ class _GameScreen extends _Screen {
       }
     }
     spriteCards.forEach((spriteCard) {
-      _Animation.spriteFirstEnter(spriteCard).begin();
+      spriteCard.animateSpriteFirstEnter().begin();
     });
   }
 
   void removeSpriteCards() {
     List<_Action> actions0 = <_Action>[];
     List.unmodifiable(spriteCards).forEach((spriteCard) {
-      actions0.add(_Animation.spriteLastExit(spriteCard).action());
+      actions0.add(spriteCard.animateSpriteLastExit().action());
     });
     List<_Action> actions1 = [
       _Action.run((action) {
