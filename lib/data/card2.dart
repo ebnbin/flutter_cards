@@ -32,7 +32,7 @@ class _GridCard2 extends _GridCard {
     zIndex: zIndex,
     visible: visible,
     mainRadius: radius,
-    opacity: opacity,
+    mainOpacity: opacity,
     mainElevation: elevation,
     rotateX: rotateX,
     rotateY: rotateY,

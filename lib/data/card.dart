@@ -9,6 +9,8 @@ abstract class _Card {
     this.zIndex = 1,
     this.visible = true,
     this.dimension = _CardDimension.main,
+    this.vice = false,
+    this.vicing = false,
     this.rotateX = 0.0,
     this.rotateY = 0.0,
     this.rotateZ = 0.0,
@@ -16,7 +18,7 @@ abstract class _Card {
     this.translateY = 0.0,
     this.scaleX = 1.0,
     this.scaleY = 1.0,
-    this.opacity = 1.0,
+    this.mainOpacity = 1.0,
     this.mainMargin = 0.0,
     this.mainElevation = 1.0,
     this.mainRadius = 4.0,
@@ -60,6 +62,14 @@ abstract class _Card {
   /// 
   /// 可能因不同尺寸而变化的值: [rect], [margin], [elevation], [radius].
   _CardDimension dimension;
+
+  /// 值为 false 表示 [screen.viceOpacity] 为 0.0 时显示, 为 1.0 时隐藏, 值为 true 时相反.
+  ///
+  /// 简单来说, false 表示显示副尺寸卡片时隐藏, true 表示显示副尺寸卡片时显示.
+  bool vice;
+
+  /// 值为 true 表示当前正在执行副尺寸动画, [opacity] 始终取 [mainOpacity].
+  bool vicing;
 
   /// 主尺寸定位矩形.
   Rect get mainRect;
@@ -112,8 +122,16 @@ abstract class _Card {
       ..scale(scaleX, scaleY);
   }
 
-  /// 透明度.
-  double opacity;
+  /// 自身透明度.
+  double mainOpacity;
+
+  /// 渲染透明度.
+  double get opacity {
+    if (vicing) {
+      return mainOpacity;
+    }
+    return (vice ? screen.viceOpacity : (1.0 - screen.viceOpacity)) * mainOpacity;
+  }
 
   /// 主尺寸外边距.
   double mainMargin;
@@ -178,6 +196,10 @@ abstract class _Card {
 
   /// 是否忽略手势.
   bool get ignorePointer {
+    if (opacity <= 0.0) {
+      // 透明时忽略手势.
+      return true;
+    }
     return gestureType == _GestureType.ignore;
   }
 
@@ -223,7 +245,7 @@ abstract class _Card {
       endDelay: endDelay,
       curve: Curves.easeOut,
       onAnimating: (card, value, half) {
-        card.opacity = _ValueCalc.ab(1.0, 0.0).calc(value);
+        card.mainOpacity = _ValueCalc.ab(1.0, 0.0).calc(value);
       },
     );
   }
@@ -240,12 +262,14 @@ abstract class _Card {
       endDelay: endDelay,
       curve: Curves.easeIn,
       onAnimating: (card, value, half) {
-        card.opacity = _ValueCalc.ab(0.0, 1.0).calc(value);
+        card.mainOpacity = _ValueCalc.ab(0.0, 1.0).calc(value);
       },
     );
   }
 
   /// 主尺寸 -> 副尺寸动画.
+  ///
+  /// 前 0.5 时隐藏其他卡片.
   _Animation<_Card> animateMainToVice({
     int duration = 400,
     int beginDelay = 0,
@@ -259,6 +283,7 @@ abstract class _Card {
       onAnimating: (card, value, half) {
         if (half) {
           card.dimension = _CardDimension.vice;
+          card.screen.viceOpacity = 1.0;
         }
         if (value < 0.5) {
           card.rotateX = _ValueCalc.ab(0.0, _VisibleAngle.counterClockwise180.value).calc(value);
@@ -266,6 +291,8 @@ abstract class _Card {
           card.translateY = _ValueCalc.ab(0.0, card.viceRect.center.dy - card.mainRect.center.dy).calc(value);
           card.scaleX = _ValueCalc.ab(1.0, card.viceRect.width / card.mainRect.width).calc(value);
           card.scaleY = _ValueCalc.ab(1.0, card.viceRect.height / card.mainRect.height).calc(value);
+          // 改变其他所有卡片透明度.
+          card.screen.viceOpacity = _ValueCalc.ab(0.0, 1.0).calc(value * 2.0);
         } else {
           card.rotateX = _ValueCalc.ab(_VisibleAngle.clockwise180.value, 0.0).calc(value);
           card.translateX = _ValueCalc.ab(card.mainRect.center.dx - card.viceRect.center.dx, 0.0).calc(value);
@@ -277,11 +304,14 @@ abstract class _Card {
       },
       onBegin: (card) {
         card.zIndex = 2;
+        card.vicing = true;
       },
     );
   }
 
   /// 副尺寸 -> 主尺寸动画.
+  ///
+  /// 后 0.5 时显示其他卡片.
   _Animation<_Card> animateViceToMain({
     int duration = 400,
     int beginDelay = 0,
@@ -308,11 +338,14 @@ abstract class _Card {
           card.translateY = _ValueCalc.ab(card.viceRect.center.dy - card.mainRect.center.dy, 0.0).calc(value);
           card.scaleX = _ValueCalc.ab(card.viceRect.width / card.mainRect.width, 1.0).calc(value);
           card.scaleY = _ValueCalc.ab(card.viceRect.height / card.mainRect.height, 1.0).calc(value);
+          // 改变其他所有卡片透明度.
+          card.screen.viceOpacity = _ValueCalc.ab(1.0, 0.0).calc(value * 2.0 - 1.0);
         }
         card.mainElevation = _ValueCalc.ab(4.0, 1.0).calc(value);
       },
       onEnd: (card) {
         card.zIndex = 1;
+        card.vicing = false;
       },
     );
   }
@@ -334,6 +367,8 @@ abstract class _GridCard extends _Card {
     int zIndex = 1,
     bool visible = true,
     _CardDimension dimension = _CardDimension.main,
+    bool vice = false,
+    bool vicing = false,
     double rotateX = 0.0,
     double rotateY = 0.0,
     double rotateZ = 0.0,
@@ -341,7 +376,7 @@ abstract class _GridCard extends _Card {
     double translateY = 0.0,
     double scaleX = 1.0,
     double scaleY = 1.0,
-    double opacity = 1.0,
+    double mainOpacity = 1.0,
     double mainElevation = 1.0,
     double mainRadius = 4.0,
     _GestureType gestureType = _GestureType.normal,
@@ -358,6 +393,9 @@ abstract class _GridCard extends _Card {
   }) : super(screen,
     zIndex: zIndex,
     visible: visible,
+    dimension: dimension,
+    vice: vice,
+    vicing: vicing,
     rotateX: rotateX,
     rotateY: rotateY,
     rotateZ: rotateZ,
@@ -365,7 +403,7 @@ abstract class _GridCard extends _Card {
     translateY: translateY,
     scaleX: scaleX,
     scaleY: scaleY,
-    opacity: opacity,
+    mainOpacity: mainOpacity,
     // 不可修改.
     mainMargin: 0.0,
     mainElevation: mainElevation,

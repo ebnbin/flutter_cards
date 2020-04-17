@@ -39,6 +39,11 @@ abstract class _Screen {
 
   /// 所有卡片.
   final List<_Card> cards;
+
+  /// 值为 0.0 表示当前显示主尺寸卡片, 值为 1.0 表示当前显示副尺寸卡片.
+  ///
+  /// 在副尺寸动画中改变值. 显示副尺寸卡片时其他卡片需要隐藏.
+  double viceOpacity = 0.0;
 }
 
 /// 开屏.
