@@ -117,10 +117,10 @@ class Card {
   }
 
   Rect get rect {
-    if (_card == null) {
+    if (_card == null || _card is! _Card2) {
       return Rect.zero;
     }
-    return _card.rect;
+    return (_card as _Card2).rect;
   }
 
   Matrix4 get transform {
@@ -132,10 +132,10 @@ class Card {
   }
 
   bool Function(int zIndex) get zIndexVisible {
-    if (_card == null) {
+    if (_card == null || _card is! _Card2) {
       return (_) => false;
     }
-    return _card.zIndexVisible;
+    return (_card as _Card2).zIndexVisible;
   }
 
   Rect get spriteEntityRect {
