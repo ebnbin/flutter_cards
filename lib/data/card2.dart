@@ -2,199 +2,8 @@ part of '../data.dart';
 
 //*********************************************************************************************************************
 
-/// 网格卡片.
-class _GridCard2 extends _GridCard {
-  _GridCard2(_Screen screen, {
-    int verticalRowGridIndex = 0,
-    int verticalColumnGridIndex = 0,
-    int verticalRowGridSpan = 1,
-    int verticalColumnGridSpan = 1,
-    int horizontalRowGridIndex = 0,
-    int horizontalColumnGridIndex = 0,
-    int horizontalRowGridSpan = 1,
-    int horizontalColumnGridSpan = 1,
-    double rotateX = 0.0,
-    double rotateY = 0.0,
-    double rotateZ = 0.0,
-    double translateX = 0.0,
-    double translateY = 0.0,
-    double scaleX = 1.0,
-    double scaleY = 1.0,
-    int zIndex = 1,
-    double radius = 4.0,
-    double opacity = 1.0,
-    double elevation = 1.0,
-    bool visible = true,
-    _GestureType gestureType = _GestureType.normal,
-    void Function(_Card card) onTap,
-    void Function(_Card card) onLongPress,
-  }) : super(screen,
-    zIndex: zIndex,
-    visible: visible,
-    mainRadius: radius,
-    mainOpacity: opacity,
-    mainElevation: elevation,
-    rotateX: rotateX,
-    rotateY: rotateY,
-    rotateZ: rotateZ,
-    translateX: translateX,
-    translateY: translateY,
-    scaleX: scaleX,
-    scaleY: scaleY,
-    gestureType: gestureType,
-    onTap: onTap,
-    onLongPress: onLongPress,
-    verticalRowGridIndex: verticalRowGridIndex,
-    verticalColumnGridIndex: verticalColumnGridIndex,
-    verticalRowGridSpan: verticalRowGridSpan,
-    verticalColumnGridSpan: verticalColumnGridSpan,
-    horizontalRowGridIndex: horizontalRowGridIndex,
-    horizontalColumnGridIndex: horizontalColumnGridIndex,
-    horizontalRowGridSpan: horizontalRowGridSpan,
-    horizontalColumnGridSpan: horizontalColumnGridSpan,
-  ) {
-//    this.onLongPress = (card) {
-//      if (dimension == _CardDimension.main) {
-//        animateBig().begin();
-//      } else {
-//        animateSmall().begin();
-//      }
-//      screen.cards.forEach((element) {
-//        if (element == null) {
-//          return;
-//        }
-//        if (element is! _GridCard) {
-//          return;
-//        }
-//        if (identical(this, element)) {
-//          return;
-//        }
-//        _GridCard gridCard = element;
-//        if (dimension == _CardDimension.main) {
-//          gridCard.animateHide(
-//            duration: 200,
-//          ).begin();
-//        } else {
-//          gridCard.animateShow(
-//            duration: 200,
-//            beginDelay: 200,
-//          ).begin();
-//        }
-//      });
-//    };
-  }
-
-  //*******************************************************************************************************************
-//
-//  @override
-//  String toString() {
-//    return '$verticalRowGridIndex,$verticalColumnGridIndex,$verticalRowGridSpan,$verticalColumnGridSpan\n'
-//        '$horizontalRowGridIndex,$horizontalColumnGridIndex,$horizontalRowGridSpan,$horizontalColumnGridSpan';
-//  }
-
-  //*******************************************************************************************************************
-
-  /// 卡片不可点击.
-  _Animation<_GridCard> animateTremble({
-    int duration = 250,
-    int beginDelay = 0,
-    int endDelay = 0,
-  }) {
-    return _Animation<_GridCard>(this,
-      duration: duration,
-      beginDelay: beginDelay,
-      endDelay: endDelay,
-      curve: Curves.easeInOut,
-      onAnimating: (card, value, half) {
-        card.rotateY = _ValueCalc.aba(0.0, 1.0 / 8.0 * pi).calc(value);
-        card.scaleX = _ValueCalc.aba(1.0, 7.0 / 8.0).calc(value);
-        card.scaleY = _ValueCalc.aba(1.0, 7.0 / 8.0).calc(value);
-        card.mainElevation = _ValueCalc.aba(1.0, 7.0 / 8.0).calc(value);
-      },
-      onBegin: (card) {
-        card.zIndex = 0;
-      },
-      onEnd: (card) {
-        card.zIndex = 1;
-      },
-    );
-  }
-
-  /// 小卡片 -> 大卡片.
-  _Animation<_GridCard> animateBig() {
-    double translateXSmall = Metric.get().coreNoPaddingRect.center.dx - mainRect.center.dx;
-    double translateYSmall = Metric.get().coreNoPaddingRect.center.dy - mainRect.center.dy;
-    double scaleXSmall = Metric.get().coreNoPaddingRect.width / mainRect.width;
-    double scaleYSmall = Metric.get().coreNoPaddingRect.height / mainRect.height;
-    return _Animation<_GridCard>(this,
-      duration: 500,
-      curve: Curves.easeInOut,
-      onAnimating: (card, value, half) {
-        if (value < 0.5) {
-          card.translateX = _ValueCalc.ab(0.0, translateXSmall).calc(value);
-          card.translateY = _ValueCalc.ab(0.0, translateYSmall).calc(value);
-          card.rotateX = _ValueCalc.ab(0.0, _VisibleAngle.counterClockwise180.value).calc(value);
-          card.scaleX = _ValueCalc.ab(1.0, scaleXSmall).calc(value);
-          card.scaleY = _ValueCalc.ab(1.0, scaleYSmall).calc(value);
-          card.dimension = _CardDimension.main;
-        } else {
-          card.translateX = _ValueCalc.ab(-translateXSmall, 0.0).calc(value);
-          card.translateY = _ValueCalc.ab(-translateYSmall, 0.0).calc(value);
-          card.rotateX = _ValueCalc.ab(-_VisibleAngle.counterClockwise180.value, 0.0).calc(value);
-          card.scaleX = _ValueCalc.ab(1.0 / scaleXSmall, 1.0).calc(value);
-          card.scaleY = _ValueCalc.ab(1.0 / scaleYSmall, 1.0).calc(value);
-          card.dimension = _CardDimension.vice;
-        }
-      },
-      onBegin: (card) {
-        card.mainElevation = 4.0;
-        card.zIndex = 3;
-      },
-      onEnd: (card) {
-      },
-    );
-  }
-
-  /// 大卡片 -> 小卡片.
-  _Animation<_GridCard> animateSmall() {
-    double translateXSmall = Metric.get().coreNoPaddingRect.center.dx - mainRect.center.dx;
-    double translateYSmall = Metric.get().coreNoPaddingRect.center.dy - mainRect.center.dy;
-    double scaleXSmall = Metric.get().coreNoPaddingRect.width / mainRect.width;
-    double scaleYSmall = Metric.get().coreNoPaddingRect.height / mainRect.height;
-    return _Animation<_GridCard>(this,
-      duration: 500,
-      curve: Curves.easeInOut,
-      onAnimating: (card, value, half) {
-        if (value < 0.5) {
-          card.translateX = _ValueCalc.ab(0.0, -translateXSmall).calc(value);
-          card.translateY = _ValueCalc.ab(0.0, -translateYSmall).calc(value);
-          card.rotateX = _ValueCalc.ab(0.0, _VisibleAngle.clockwise180.value).calc(value);
-          card.scaleX = _ValueCalc.ab(1.0, 1.0 / scaleXSmall).calc(value);
-          card.scaleY = _ValueCalc.ab(1.0, 1.0 / scaleYSmall).calc(value);
-          card.dimension = _CardDimension.vice;
-        } else {
-          card.translateX = _ValueCalc.ab(translateXSmall, 0.0).calc(value);
-          card.translateY = _ValueCalc.ab(translateYSmall, 0.0).calc(value);
-          card.rotateX = _ValueCalc.ab(-_VisibleAngle.clockwise180.value, 0.0).calc(value);
-          card.scaleX = _ValueCalc.ab(scaleXSmall, 1.0).calc(value);
-          card.scaleY = _ValueCalc.ab(scaleYSmall, 1.0).calc(value);
-          card.dimension = _CardDimension.main;
-        }
-      },
-      onBegin: (card) {
-      },
-      onEnd: (card) {
-        card.mainElevation = 1.0;
-        card.zIndex = 1;
-      },
-    );
-  }
-}
-
-//*********************************************************************************************************************
-
 /// Core 卡片.
-class _CoreCard extends _GridCard2 {
+class _CoreCard extends _GridCard {
   _CoreCard(_Screen screen, {
     int rowIndex = 0,
     int columnIndex = 0,
@@ -207,10 +16,10 @@ class _CoreCard extends _GridCard2 {
     double rotateZ = 0.0,
     double scaleX = 1.0,
     double scaleY = 1.0,
-    double elevation = 1.0,
+    double mainElevation = 1.0,
     int zIndex = 1,
-    double radius = 4.0,
-    double opacity = 1.0,
+    double mainRadius = 4.0,
+    double mainOpacity = 1.0,
     bool visible = true,
     _GestureType gestureType = _GestureType.normal,
     void Function(_Card card) onTap,
@@ -223,10 +32,10 @@ class _CoreCard extends _GridCard2 {
     rotateZ: rotateZ,
     scaleX: scaleX,
     scaleY: scaleY,
-    elevation: elevation,
+    mainElevation: mainElevation,
     zIndex: zIndex,
-    radius: radius,
-    opacity: opacity,
+    mainRadius: mainRadius,
+    mainOpacity: mainOpacity,
     visible: visible,
     gestureType: gestureType,
     onTap: onTap,
@@ -319,9 +128,9 @@ class _SpriteCard extends _CoreCard {
     rotateZ: rotateZ,
     scaleX: scaleX,
     scaleY: scaleY,
-    elevation: elevation,
-    radius: radius,
-    opacity: opacity,
+    mainElevation: elevation,
+    mainRadius: radius,
+    mainOpacity: opacity,
     // 精灵卡片初始化时是不可见的, 通过动画出现.
     visible: false,
     gestureType: gestureType,

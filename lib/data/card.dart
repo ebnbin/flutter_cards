@@ -233,40 +233,6 @@ abstract class _Card {
     );
   }
 
-  /// 透明度隐藏动画.
-  _Animation<_Card> animateHide({
-    int duration = 400,
-    int beginDelay = 0,
-    int endDelay = 0,
-  }) {
-    return _Animation<_Card>(this,
-      duration: duration,
-      beginDelay: beginDelay,
-      endDelay: endDelay,
-      curve: Curves.easeOut,
-      onAnimating: (card, value, half) {
-        card.mainOpacity = _ValueCalc.ab(1.0, 0.0).calc(value);
-      },
-    );
-  }
-
-  /// 透明度显示动画.
-  _Animation<_Card> animateShow({
-    int duration = 400,
-    int beginDelay = 0,
-    int endDelay = 0,
-  }) {
-    return _Animation<_Card>(this,
-      duration: duration,
-      beginDelay: beginDelay,
-      endDelay: endDelay,
-      curve: Curves.easeIn,
-      onAnimating: (card, value, half) {
-        card.mainOpacity = _ValueCalc.ab(0.0, 1.0).calc(value);
-      },
-    );
-  }
-
   /// 主尺寸 -> 副尺寸动画.
   ///
   /// 前 0.5 时隐藏其他卡片.
@@ -350,6 +316,32 @@ abstract class _Card {
     );
   }
 
+  /// 颤抖动画, 用于点击了不可点击的卡片.
+  _Animation<_Card> animateTremble({
+    int duration = 200,
+    int beginDelay = 0,
+    int endDelay = 0,
+  }) {
+    return _Animation<_Card>(this,
+      duration: duration,
+      beginDelay: beginDelay,
+      endDelay: endDelay,
+      curve: Curves.easeInOut,
+      onAnimating: (card, value, half) {
+        card.rotateY = _ValueCalc.aba(0.0, 1.0 / 8.0 * pi).calc(value);
+        card.scaleX = _ValueCalc.aba(1.0, 7.0 / 8.0).calc(value);
+        card.scaleY = _ValueCalc.aba(1.0, 7.0 / 8.0).calc(value);
+        card.mainElevation = _ValueCalc.aba(1.0, 7.0 / 8.0).calc(value);
+      },
+      onBegin: (card) {
+        card.zIndex = 0;
+      },
+      onEnd: (card) {
+        card.zIndex = 1;
+      },
+    );
+  }
+
   //*******************************************************************************************************************
 
   @override
@@ -362,7 +354,7 @@ abstract class _Card {
 //*********************************************************************************************************************
 
 /// 通过网格定位的卡片.
-abstract class _GridCard extends _Card {
+class _GridCard extends _Card {
   _GridCard(_Screen screen, {
     int zIndex = 1,
     bool visible = true,
@@ -498,7 +490,7 @@ abstract class _GridCard extends _Card {
 enum _CardDimension {
   /// 主尺寸.
   main,
-  /// 副尺寸. 始终为 square * square 大卡片.
+  /// 副尺寸. 目前始终为 square * square 大卡片.
   vice,
   /// 全屏尺寸.
   full,

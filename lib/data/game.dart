@@ -67,7 +67,7 @@ class _SplashScreen extends _Screen {
     );
     cards[0] = card;
 
-    _GridCard sampleCard = _GridCard2(this,
+    _GridCard sampleCard = _GridCard(this,
       verticalRowGridIndex: 1,
       verticalColumnGridIndex: 1,
       verticalRowGridSpan: 15,
@@ -97,7 +97,7 @@ class _SpriteScreen extends _Screen {
     /// Test: 2.
     cardLength: square * square + 2,
   ) {
-    cards[16] = _GridCard2(this,
+    cards[16] = _GridCard(this,
       verticalRowGridIndex: 80,
       verticalColumnGridIndex: 1,
       verticalRowGridSpan: 10,
@@ -107,7 +107,7 @@ class _SpriteScreen extends _Screen {
       horizontalRowGridSpan: 10,
       horizontalColumnGridSpan: 10,
     );
-    cards[17] = _GridCard2(this,
+    cards[17] = _GridCard(this,
       verticalRowGridIndex: 80,
       verticalColumnGridIndex: 11,
       verticalRowGridSpan: 10,

@@ -96,6 +96,9 @@ class GamePage2 extends StatelessWidget {
               child: Container(
                 margin: EdgeInsets.all(card.margin),
                 child: Material(
+                  animationDuration: Duration(
+                    milliseconds: 0,
+                  ),
                   type: MaterialType.card,
                   color: card.color,
                   elevation: card.elevation,
