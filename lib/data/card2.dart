@@ -53,35 +53,35 @@ class _GridCard2 extends _GridCard {
     horizontalRowGridSpan: horizontalRowGridSpan,
     horizontalColumnGridSpan: horizontalColumnGridSpan,
   ) {
-    this.onLongPress = (card) {
-      if (dimension == _CardDimension.main) {
-        animateBig().begin();
-      } else {
-        animateSmall().begin();
-      }
-      screen.cards.forEach((element) {
-        if (element == null) {
-          return;
-        }
-        if (element is! _GridCard) {
-          return;
-        }
-        if (identical(this, element)) {
-          return;
-        }
-        _GridCard gridCard = element;
-        if (dimension == _CardDimension.main) {
-          gridCard.animateHide(
-            duration: 200,
-          ).begin();
-        } else {
-          gridCard.animateShow(
-            duration: 200,
-            beginDelay: 200,
-          ).begin();
-        }
-      });
-    };
+//    this.onLongPress = (card) {
+//      if (dimension == _CardDimension.main) {
+//        animateBig().begin();
+//      } else {
+//        animateSmall().begin();
+//      }
+//      screen.cards.forEach((element) {
+//        if (element == null) {
+//          return;
+//        }
+//        if (element is! _GridCard) {
+//          return;
+//        }
+//        if (identical(this, element)) {
+//          return;
+//        }
+//        _GridCard gridCard = element;
+//        if (dimension == _CardDimension.main) {
+//          gridCard.animateHide(
+//            duration: 200,
+//          ).begin();
+//        } else {
+//          gridCard.animateShow(
+//            duration: 200,
+//            beginDelay: 200,
+//          ).begin();
+//        }
+//      });
+//    };
   }
 
   //*******************************************************************************************************************

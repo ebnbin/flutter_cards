@@ -72,8 +72,11 @@ class _SplashScreen extends _Screen {
       horizontalRowGridSpan: 15,
       horizontalColumnGridSpan: 15,
       onTap: (card) {
-        card.animateSample().begin();
+        card.animateMainToVice().begin();
       },
+      onLongPress: (card) {
+        card.animateViceToMain().begin();
+      }
     );
     cards[1] = sampleCard;
   }

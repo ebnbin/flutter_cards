@@ -278,6 +278,39 @@ abstract class _Card {
       onBegin: (card) {
         card.zIndex = 2;
       },
+    );
+  }
+
+  /// 副尺寸 -> 主尺寸动画.
+  _Animation<_Card> animateViceToMain({
+    int duration = 400,
+    int beginDelay = 0,
+    int endDelay = 0,
+  }) {
+    return _Animation<_Card>(this,
+      duration: duration,
+      beginDelay: beginDelay,
+      endDelay: endDelay,
+      curve: Curves.easeInOut,
+      onAnimating: (card, value, half) {
+        if (half) {
+          card.dimension = _CardDimension.main;
+        }
+        if (value < 0.5) {
+          card.rotateX = _ValueCalc.ab(0.0, _VisibleAngle.clockwise180.value).calc(value);
+          card.translateX = _ValueCalc.ab(0.0, card.mainRect.center.dx - card.viceRect.center.dx).calc(value);
+          card.translateY = _ValueCalc.ab(0.0, card.mainRect.center.dy - card.viceRect.center.dy).calc(value);
+          card.scaleX = _ValueCalc.ab(1.0, card.mainRect.width / card.viceRect.width).calc(value);
+          card.scaleY = _ValueCalc.ab(1.0, card.mainRect.height / card.viceRect.height).calc(value);
+        } else {
+          card.rotateX = _ValueCalc.ab(_VisibleAngle.counterClockwise180.value, 0.0).calc(value);
+          card.translateX = _ValueCalc.ab(card.viceRect.center.dx - card.mainRect.center.dx, 0.0).calc(value);
+          card.translateY = _ValueCalc.ab(card.viceRect.center.dy - card.mainRect.center.dy, 0.0).calc(value);
+          card.scaleX = _ValueCalc.ab(card.viceRect.width / card.mainRect.width, 1.0).calc(value);
+          card.scaleY = _ValueCalc.ab(card.viceRect.height / card.mainRect.height, 1.0).calc(value);
+        }
+        card.mainElevation = _ValueCalc.ab(4.0, 1.0).calc(value);
+      },
       onEnd: (card) {
         card.zIndex = 1;
       },
