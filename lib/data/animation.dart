@@ -2,25 +2,6 @@ part of '../data.dart';
 
 //*********************************************************************************************************************
 
-/// 根据 [Animation.value] 计算当前值.
-class _AnimationCalc {
-  _AnimationCalc(this.calc);
-
-  /// a -> b.
-  _AnimationCalc.ab(double a, double b) : this((value) {
-    return a + (b - a) * value;
-  });
-
-  /// a -> b -> a.
-  _AnimationCalc.aba(double a, double b) : this((value) {
-    return a + (b - a) * (1.0 - (2.0 * value - 1.0).abs());
-  });
-
-  final double Function(double value) calc;
-}
-
-//*********************************************************************************************************************
-
 /// 卡片动画.
 class _Animation<T extends _Card> {
   _Animation(this.card, {

@@ -280,11 +280,11 @@ class _GridCard extends _Card {
       duration: 1000,
       curve: Curves.easeInOut,
       onAnimating: (card, value) {
-        card.rotateY = _AnimationCalc.ab(0.0, _VisibleAngle.clockwise360.value).calc(value);
-        card.scaleX = _AnimationCalc.aba(1.0, 2.0).calc(value);
-        card.scaleY = _AnimationCalc.aba(1.0, 2.0).calc(value);
-        card.elevation = _AnimationCalc.aba(1.0, 4.0).calc(value);
-        card.radius = _AnimationCalc.aba(4.0, 16.0).calc(value);
+        card.rotateY = _ValueCalc.ab(0.0, _VisibleAngle.clockwise360.value).calc(value);
+        card.scaleX = _ValueCalc.aba(1.0, 2.0).calc(value);
+        card.scaleY = _ValueCalc.aba(1.0, 2.0).calc(value);
+        card.elevation = _ValueCalc.aba(1.0, 4.0).calc(value);
+        card.radius = _ValueCalc.aba(4.0, 16.0).calc(value);
       },
       onEnd: (card) {
         card.rotateY = 0.0;
@@ -304,10 +304,10 @@ class _GridCard extends _Card {
       endDelay: endDelay,
       curve: Curves.easeInOut,
       onAnimating: (card, value) {
-        card.rotateY = _AnimationCalc.aba(0.0, 1.0 / 8.0 * pi).calc(value);
-        card.scaleX = _AnimationCalc.aba(1.0, 7.0 / 8.0).calc(value);
-        card.scaleY = _AnimationCalc.aba(1.0, 7.0 / 8.0).calc(value);
-        card.elevation = _AnimationCalc.aba(1.0, 7.0 / 8.0).calc(value);
+        card.rotateY = _ValueCalc.aba(0.0, 1.0 / 8.0 * pi).calc(value);
+        card.scaleX = _ValueCalc.aba(1.0, 7.0 / 8.0).calc(value);
+        card.scaleY = _ValueCalc.aba(1.0, 7.0 / 8.0).calc(value);
+        card.elevation = _ValueCalc.aba(1.0, 7.0 / 8.0).calc(value);
       },
     );
   }
@@ -323,20 +323,20 @@ class _GridCard extends _Card {
       curve: Curves.easeInOut,
       onAnimating: (card, value) {
         if (value < 0.5) {
-          card.translateX = _AnimationCalc.ab(0.0, translateXSmall).calc(value);
-          card.translateY = _AnimationCalc.ab(0.0, translateYSmall).calc(value);
-          card.rotateX = _AnimationCalc.ab(0.0, _VisibleAngle.counterClockwise180.value).calc(value);
-          card.scaleX = _AnimationCalc.ab(1.0, scaleXSmall).calc(value);
-          card.scaleY = _AnimationCalc.ab(1.0, scaleYSmall).calc(value);
-          card.radius = _AnimationCalc.ab(4.0, 4.0).calc(value);
+          card.translateX = _ValueCalc.ab(0.0, translateXSmall).calc(value);
+          card.translateY = _ValueCalc.ab(0.0, translateYSmall).calc(value);
+          card.rotateX = _ValueCalc.ab(0.0, _VisibleAngle.counterClockwise180.value).calc(value);
+          card.scaleX = _ValueCalc.ab(1.0, scaleXSmall).calc(value);
+          card.scaleY = _ValueCalc.ab(1.0, scaleYSmall).calc(value);
+          card.radius = _ValueCalc.ab(4.0, 4.0).calc(value);
           card.big = false;
         } else {
-          card.translateX = _AnimationCalc.ab(-translateXSmall, 0.0).calc(value);
-          card.translateY = _AnimationCalc.ab(-translateYSmall, 0.0).calc(value);
-          card.rotateX = _AnimationCalc.ab(-_VisibleAngle.counterClockwise180.value, 0.0).calc(value);
-          card.scaleX = _AnimationCalc.ab(1.0 / scaleXSmall, 1.0).calc(value);
-          card.scaleY = _AnimationCalc.ab(1.0 / scaleYSmall, 1.0).calc(value);
-          card.radius = _AnimationCalc.ab(16.0, 16.0).calc(value);
+          card.translateX = _ValueCalc.ab(-translateXSmall, 0.0).calc(value);
+          card.translateY = _ValueCalc.ab(-translateYSmall, 0.0).calc(value);
+          card.rotateX = _ValueCalc.ab(-_VisibleAngle.counterClockwise180.value, 0.0).calc(value);
+          card.scaleX = _ValueCalc.ab(1.0 / scaleXSmall, 1.0).calc(value);
+          card.scaleY = _ValueCalc.ab(1.0 / scaleYSmall, 1.0).calc(value);
+          card.radius = _ValueCalc.ab(16.0, 16.0).calc(value);
           card.big = true;
         }
       },
@@ -361,20 +361,20 @@ class _GridCard extends _Card {
       curve: Curves.easeInOut,
       onAnimating: (card, value) {
         if (value < 0.5) {
-          card.translateX = _AnimationCalc.ab(0.0, -translateXSmall).calc(value);
-          card.translateY = _AnimationCalc.ab(0.0, -translateYSmall).calc(value);
-          card.rotateX = _AnimationCalc.ab(0.0, _VisibleAngle.clockwise180.value).calc(value);
-          card.scaleX = _AnimationCalc.ab(1.0, 1.0 / scaleXSmall).calc(value);
-          card.scaleY = _AnimationCalc.ab(1.0, 1.0 / scaleYSmall).calc(value);
-          card.radius = _AnimationCalc.ab(16.0, 16.0).calc(value);
+          card.translateX = _ValueCalc.ab(0.0, -translateXSmall).calc(value);
+          card.translateY = _ValueCalc.ab(0.0, -translateYSmall).calc(value);
+          card.rotateX = _ValueCalc.ab(0.0, _VisibleAngle.clockwise180.value).calc(value);
+          card.scaleX = _ValueCalc.ab(1.0, 1.0 / scaleXSmall).calc(value);
+          card.scaleY = _ValueCalc.ab(1.0, 1.0 / scaleYSmall).calc(value);
+          card.radius = _ValueCalc.ab(16.0, 16.0).calc(value);
           card.big = true;
         } else {
-          card.translateX = _AnimationCalc.ab(translateXSmall, 0.0).calc(value);
-          card.translateY = _AnimationCalc.ab(translateYSmall, 0.0).calc(value);
-          card.rotateX = _AnimationCalc.ab(-_VisibleAngle.clockwise180.value, 0.0).calc(value);
-          card.scaleX = _AnimationCalc.ab(scaleXSmall, 1.0).calc(value);
-          card.scaleY = _AnimationCalc.ab(scaleYSmall, 1.0).calc(value);
-          card.radius = _AnimationCalc.ab(4.0, 4.0).calc(value);
+          card.translateX = _ValueCalc.ab(translateXSmall, 0.0).calc(value);
+          card.translateY = _ValueCalc.ab(translateYSmall, 0.0).calc(value);
+          card.rotateX = _ValueCalc.ab(-_VisibleAngle.clockwise180.value, 0.0).calc(value);
+          card.scaleX = _ValueCalc.ab(scaleXSmall, 1.0).calc(value);
+          card.scaleY = _ValueCalc.ab(scaleYSmall, 1.0).calc(value);
+          card.radius = _ValueCalc.ab(4.0, 4.0).calc(value);
           card.big = false;
         }
       },
@@ -400,12 +400,12 @@ class _GridCard extends _Card {
       endDelay: endDelay,
       curve: Curves.easeOut,
       onAnimating: (card, value) {
-//        card.rotateX = _AnimationCalc.ab(0.0, _InvisibleRotateXY.counterClockwise90.value).calc(value);
-//        card.scaleX = _AnimationCalc.ab(1.0, 0.5).calc(value);
-//        card.scaleY = _AnimationCalc.ab(1.0, 0.5).calc(value);
-//        card.elevation = _AnimationCalc.ab(1.0, 0.5).calc(value);
+//        card.rotateX = _ValueCalc.ab(0.0, _InvisibleRotateXY.counterClockwise90.value).calc(value);
+//        card.scaleX = _ValueCalc.ab(1.0, 0.5).calc(value);
+//        card.scaleY = _ValueCalc.ab(1.0, 0.5).calc(value);
+//        card.elevation = _ValueCalc.ab(1.0, 0.5).calc(value);
         if (value < 0.5) {
-          card.opacity = _AnimationCalc.ab(1.0, 0.0).calc(value * 2.0);
+          card.opacity = _ValueCalc.ab(1.0, 0.0).calc(value * 2.0);
         }
       },
       onHalf: (card) {
@@ -433,12 +433,12 @@ class _GridCard extends _Card {
       endDelay: endDelay,
       curve: Curves.easeIn,
       onAnimating: (card, value) {
-//        card.rotateX = _AnimationCalc.ab(_InvisibleRotateXY.clockwise90.value, 0.0).calc(value);
-//        card.scaleX = _AnimationCalc.ab(0.5, 1.0).calc(value);
-//        card.scaleY = _AnimationCalc.ab(0.5, 1.0).calc(value);
-//        card.elevation = _AnimationCalc.ab(0.5, 1.0).calc(value);
+//        card.rotateX = _ValueCalc.ab(_InvisibleRotateXY.clockwise90.value, 0.0).calc(value);
+//        card.scaleX = _ValueCalc.ab(0.5, 1.0).calc(value);
+//        card.scaleY = _ValueCalc.ab(0.5, 1.0).calc(value);
+//        card.elevation = _ValueCalc.ab(0.5, 1.0).calc(value);
         if (value >= 0.5) {
-          card.opacity = _AnimationCalc.ab(0.0, 1.0).calc(value * 2.0 - 1.0);
+          card.opacity = _ValueCalc.ab(0.0, 1.0).calc(value * 2.0 - 1.0);
         }
       },
       onBegin: (card) {
@@ -806,23 +806,23 @@ class _SpriteCard extends _CoreCard {
       curve: Curves.easeInOut,
       onAnimating: (card, value) {
         if (value < 0.5) {
-          card.translateX = _AnimationCalc.ab(0.0, card.screen.game.metric.squareSizeMap[card.screen.square] * direction.x)
+          card.translateX = _ValueCalc.ab(0.0, card.screen.game.metric.squareSizeMap[card.screen.square] * direction.x)
               .calc(value);
-          card.translateY = _AnimationCalc.ab(0.0, card.screen.game.metric.squareSizeMap[card.screen.square] * direction.y)
+          card.translateY = _ValueCalc.ab(0.0, card.screen.game.metric.squareSizeMap[card.screen.square] * direction.y)
               .calc(value);
         } else {
-          card.translateX = _AnimationCalc.ab(-card.screen.game.metric.squareSizeMap[card.screen.square] * direction.x, 0.0)
+          card.translateX = _ValueCalc.ab(-card.screen.game.metric.squareSizeMap[card.screen.square] * direction.x, 0.0)
               .calc(value);
-          card.translateY = _AnimationCalc.ab(-card.screen.game.metric.squareSizeMap[card.screen.square] * direction.y, 0.0)
+          card.translateY = _ValueCalc.ab(-card.screen.game.metric.squareSizeMap[card.screen.square] * direction.y, 0.0)
               .calc(value);
         }
       },
       onHalf: (card) {
         card.rowIndex += direction.y;
         card.columnIndex += direction.x;
-        card.translateX = _AnimationCalc.ab(-card.screen.game.metric.squareSizeMap[card.screen.square] * direction.x, 0.0)
+        card.translateX = _ValueCalc.ab(-card.screen.game.metric.squareSizeMap[card.screen.square] * direction.x, 0.0)
             .calc(0.5);
-        card.translateY = _AnimationCalc.ab(-card.screen.game.metric.squareSizeMap[card.screen.square] * direction.y, 0.0)
+        card.translateY = _ValueCalc.ab(-card.screen.game.metric.squareSizeMap[card.screen.square] * direction.y, 0.0)
             .calc(0.5);
       },
     );
@@ -840,10 +840,10 @@ class _SpriteCard extends _CoreCard {
       endDelay: endDelay,
       curve: Curves.easeIn,
       onAnimating: (card, value) {
-        card.rotateY = _AnimationCalc.ab(_InvisibleAngle.clockwise90.value, 0.0).calc(value);
-        card.scaleX = _AnimationCalc.ab(0.5, 1.0).calc(value);
-        card.scaleY = _AnimationCalc.ab(0.5, 1.0).calc(value);
-        card.elevation = _AnimationCalc.ab(0.5, 1.0).calc(value);
+        card.rotateY = _ValueCalc.ab(_InvisibleAngle.clockwise90.value, 0.0).calc(value);
+        card.scaleX = _ValueCalc.ab(0.5, 1.0).calc(value);
+        card.scaleY = _ValueCalc.ab(0.5, 1.0).calc(value);
+        card.elevation = _ValueCalc.ab(0.5, 1.0).calc(value);
       },
       onBegin: (card) {
         card.visible = true;
@@ -867,10 +867,10 @@ class _SpriteCard extends _CoreCard {
       endDelay: endDelay,
       curve: Curves.easeOut,
       onAnimating: (card, value) {
-        card.rotateY = _AnimationCalc.ab(0.0, _InvisibleAngle.counterClockwise90.value).calc(value);
-        card.scaleX = _AnimationCalc.ab(1.0, 0.5).calc(value);
-        card.scaleY = _AnimationCalc.ab(1.0, 0.5).calc(value);
-        card.elevation = _AnimationCalc.ab(1.0, 0.5).calc(value);
+        card.rotateY = _ValueCalc.ab(0.0, _InvisibleAngle.counterClockwise90.value).calc(value);
+        card.scaleX = _ValueCalc.ab(1.0, 0.5).calc(value);
+        card.scaleY = _ValueCalc.ab(1.0, 0.5).calc(value);
+        card.elevation = _ValueCalc.ab(1.0, 0.5).calc(value);
       },
       onEnd: (card) {
         card.visible = false;
@@ -893,10 +893,10 @@ class _SpriteCard extends _CoreCard {
       beginDelay: _random.nextIntFromTo(0, 500),
       curve: Curves.easeOut,
       onAnimating: (card, value) {
-        card.rotateY = _AnimationCalc.ab(rotateY, 0.0).calc(value);
-        card.scaleX = _AnimationCalc.ab(0.5, 1.0).calc(value);
-        card.scaleY = _AnimationCalc.ab(0.5, 1.0).calc(value);
-        card.elevation = _AnimationCalc.ab(0.5, 1.0).calc(value);
+        card.rotateY = _ValueCalc.ab(rotateY, 0.0).calc(value);
+        card.scaleX = _ValueCalc.ab(0.5, 1.0).calc(value);
+        card.scaleY = _ValueCalc.ab(0.5, 1.0).calc(value);
+        card.elevation = _ValueCalc.ab(0.5, 1.0).calc(value);
       },
       onBegin: (card) {
         card.visible = true;
@@ -919,10 +919,10 @@ class _SpriteCard extends _CoreCard {
       beginDelay: _random.nextIntFromTo(0, 500),
       curve: Curves.easeIn,
       onAnimating: (card, value) {
-        card.rotateY = _AnimationCalc.ab(0.0, rotateY).calc(value);
-        card.scaleX = _AnimationCalc.ab(1.0, 0.5).calc(value);
-        card.scaleY = _AnimationCalc.ab(1.0, 0.5).calc(value);
-        card.elevation = _AnimationCalc.ab(1.0, 0.5).calc(value);
+        card.rotateY = _ValueCalc.ab(0.0, rotateY).calc(value);
+        card.scaleX = _ValueCalc.ab(1.0, 0.5).calc(value);
+        card.scaleY = _ValueCalc.ab(1.0, 0.5).calc(value);
+        card.elevation = _ValueCalc.ab(1.0, 0.5).calc(value);
       },
       onEnd: (card) {
         card.visible = false;
