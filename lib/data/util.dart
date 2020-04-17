@@ -262,6 +262,118 @@ class _Metric {
 }
 
 //*********************************************************************************************************************
+
+/// Debug 用网格标尺背景.
+class _MetricPainter extends CustomPainter {
+  _MetricPainter(this.game);
+
+  final _Game game;
+
+  final Paint _paint = Paint();
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    _paint.style = PaintingStyle.fill;
+    _paint.color = Colors.blue;
+    canvas.drawRect(game.metric.screenRect, _paint);
+    _paint.color = Colors.green;
+    canvas.drawRect(game.metric.safeRect, _paint);
+    _paint.color = Colors.red;
+    canvas.drawRect(game.metric.coreRect, _paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return false;
+  }
+}
+
+/// Debug 用网格标尺前景.
+class _MetricForegroundPainter extends CustomPainter {
+  static final Map<int, Color> _colorMap = Map.unmodifiable({
+    3: Colors.yellow,
+    4: Colors.purple,
+    5: Colors.white,
+  });
+
+  _MetricForegroundPainter(this.game);
+
+  final _Game game;
+
+  final Paint _paint = Paint();
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    _paint.style = PaintingStyle.stroke;
+    _paint.color = Colors.cyan;
+    // 行.
+    for (int rowIndex = 0; rowIndex <= game.metric.verticalSafeGrid; rowIndex++) {
+      canvas.drawLine(
+        Offset(
+          game.metric.safeRect.left,
+          game.metric.safeRect.top + rowIndex * game.metric.gridSize,
+        ),
+        Offset(
+          game.metric.safeRect.right,
+          game.metric.safeRect.top + rowIndex * game.metric.gridSize,
+        ),
+        _paint,
+      );
+    }
+    // 列.
+    for (int columnIndex = 0; columnIndex <= game.metric.horizontalSafeGrid; columnIndex++) {
+      canvas.drawLine(
+        Offset(
+          game.metric.safeRect.left + columnIndex * game.metric.gridSize,
+          game.metric.safeRect.top,
+        ),
+        Offset(
+          game.metric.safeRect.left + columnIndex * game.metric.gridSize,
+          game.metric.safeRect.bottom,
+        ),
+        _paint,
+      );
+    }
+    for (int square = 3; square <= 5; square++) {
+      _paint.color = _colorMap[square];
+      // 行.
+      for (int rowIndex = 0; rowIndex <= square; rowIndex++) {
+        canvas.drawLine(
+          Offset(
+            game.metric.coreNoPaddingRect.left,
+            game.metric.coreNoPaddingRect.top + rowIndex * game.metric.squareSizeMap[square],
+          ),
+          Offset(
+            game.metric.coreNoPaddingRect.right,
+            game.metric.coreNoPaddingRect.top + rowIndex * game.metric.squareSizeMap[square],
+          ),
+          _paint,
+        );
+      }
+      // 列.
+      for (int columnIndex = 0; columnIndex <= square; columnIndex++) {
+        canvas.drawLine(
+          Offset(
+            game.metric.coreNoPaddingRect.left + columnIndex * game.metric.squareSizeMap[square],
+            game.metric.coreNoPaddingRect.top,
+          ),
+          Offset(
+            game.metric.coreNoPaddingRect.left + columnIndex * game.metric.squareSizeMap[square],
+            game.metric.coreNoPaddingRect.bottom,
+          ),
+          _paint,
+        );
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return false;
+  }
+}
+
+//*********************************************************************************************************************
 //*********************************************************************************************************************
 // 随机数.
 
