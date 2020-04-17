@@ -84,19 +84,15 @@ class Card {
   }
 
   GestureLongPressCallback get onLongPress {
-    if (_card is _GridCard) {
-      _GridCard gridCard = _card as _GridCard;
-      return gridCard.onLongPress;
-    }
-    return null;
+    return _card.onLongPress == null ? null : () {
+      _card.onLongPress(_card);
+    };
   }
 
   GestureTapCallback get onTap {
-    if (_card is _GridCard) {
-      _GridCard gridCard = _card as _GridCard;
-      return gridCard.onTap;
-    }
-    return null;
+    return _card.onTap == null ? null : () {
+      _card.onTap(_card);
+    };
   }
 
   double get opacity {

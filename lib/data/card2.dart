@@ -26,8 +26,8 @@ class _GridCard extends _Card {
     double opacity = 1.0,
     bool visible = true,
     _GestureType gestureType = _GestureType.normal,
-    this.onTap,
-    this.onLongPress,
+    void Function(_Card card) onTap,
+    void Function(_Card card) onLongPress,
   }) : super(screen,
     zIndex: zIndex,
     visible: visible,
@@ -40,8 +40,10 @@ class _GridCard extends _Card {
     scaleX: scaleX,
     scaleY: scaleY,
     gestureType: gestureType,
+    onTap: onTap,
+    onLongPress: onLongPress,
   ) {
-    this.onLongPress = () {
+    this.onLongPress = (card) {
       if (big) {
         animateSmall().begin();
       } else {
@@ -162,12 +164,6 @@ class _GridCard extends _Card {
       return 2.0 / (Metric.coreNoPaddingGrid / minGridSpan) * Metric.get().gridSize;
     }
   }
-
-  //*******************************************************************************************************************
-
-  GestureTapCallback onTap;
-
-  GestureLongPressCallback onLongPress;
 
   //*******************************************************************************************************************
 //
@@ -403,8 +399,8 @@ class _CoreCard extends _GridCard {
     double opacity = 1.0,
     bool visible = true,
     _GestureType gestureType = _GestureType.normal,
-    GestureTapCallback onTap,
-    GestureLongPressCallback onLongPress,
+    void Function(_Card card) onTap,
+    void Function(_Card card) onLongPress,
   }) : super(screen,
     translateX: translateX,
     translateY: translateY,
@@ -493,8 +489,8 @@ class _SpriteCard extends _CoreCard {
     double radius = 4.0,
     double opacity = 1.0,
     _GestureType gestureType = _GestureType.normal,
-    GestureTapCallback onTap,
-    GestureLongPressCallback onLongPress,
+    void Function(_Card card) onTap,
+    void Function(_Card card) onLongPress,
   }) : super(screen,
     rowIndex: rowIndex,
     columnIndex: columnIndex,
@@ -518,7 +514,7 @@ class _SpriteCard extends _CoreCard {
     onTap: onTap,
     onLongPress: onLongPress,
   ) {
-    this.onTap = () {
+    this.onTap = (card) {
       if (big) {
         return;
       }
@@ -888,8 +884,8 @@ class _PlayerCard extends _SpriteCard {
     double radius = 4.0,
     double opacity = 1.0,
     _GestureType gestureType = _GestureType.normal,
-    GestureTapCallback onTap,
-    GestureLongPressCallback onLongPress,
+    void Function(_Card card) onTap,
+    void Function(_Card card) onLongPress,
   }) : super(screen,
     rowIndex: rowIndex,
     columnIndex: columnIndex,

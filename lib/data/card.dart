@@ -18,6 +18,8 @@ abstract class _Card {
     this.scaleY = 1.0,
     this.opacity = 1.0,
     this.gestureType = _GestureType.normal,
+    this.onTap,
+    this.onLongPress,
   });
 
   final _Screen screen;
@@ -95,6 +97,12 @@ abstract class _Card {
   bool get ignorePointer {
     return gestureType == _GestureType.ignore;
   }
+
+  /// 点击事件.
+  void Function(_Card card) onTap;
+
+  /// 长按事件.
+  void Function(_Card card) onLongPress;
 
   //*******************************************************************************************************************
 

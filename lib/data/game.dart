@@ -53,13 +53,13 @@ class _SplashScreen extends _Screen {
       columnIndex: 0,
       rowSpan: 1,
       columnSpan: 3,
+      onTap: (card) {
+        game.screen = _SpriteScreen(game,
+          square: 4,
+        );
+        game.callback.notifyStateChanged();
+      },
     );
-    card.onTap = () {
-      game.screen = _SpriteScreen(game,
-        square: 4,
-      );
-      game.callback.notifyStateChanged();
-    };
     cards[0] = card;
 
     _GridCard sampleCard = _GridCard(this,
@@ -71,10 +71,10 @@ class _SplashScreen extends _Screen {
       horizontalColumnGridIndex: 1,
       horizontalRowGridSpan: 15,
       horizontalColumnGridSpan: 15,
+      onTap: (card) {
+        (card as _GridCard).animateSample().begin();
+      },
     );
-    sampleCard.onTap = () {
-      sampleCard.animateSample().begin();
-    };
     cards[1] = sampleCard;
   }
 }
