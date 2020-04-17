@@ -324,38 +324,38 @@ class _CoreCard extends _GridCard {
   /// 行.
   int get rowIndex {
     return (rowGridIndex - _Metric.paddingGrid - (screen.game.metric.isVertical ? _Metric.headerFooterGrid : 0)) ~/
-        screen.game.metric.coreCardGrid(screen.square);
+        _Metric.squareGridMap[screen.square];
   }
   set rowIndex(int coreRowIndex) {
-    verticalRowGridIndex = screen.game.metric.coreCardGrid(screen.square) * coreRowIndex + _Metric.paddingGrid + _Metric.headerFooterGrid;
-    horizontalRowGridIndex = screen.game.metric.coreCardGrid(screen.square) * coreRowIndex + _Metric.paddingGrid;
+    verticalRowGridIndex = _Metric.squareGridMap[screen.square] * coreRowIndex + _Metric.paddingGrid + _Metric.headerFooterGrid;
+    horizontalRowGridIndex = _Metric.squareGridMap[screen.square] * coreRowIndex + _Metric.paddingGrid;
   }
 
   /// 列.
   int get columnIndex {
     return (columnGridIndex - _Metric.paddingGrid - (screen.game.metric.isVertical ? 0 : _Metric.headerFooterGrid)) ~/
-        screen.game.metric.coreCardGrid(screen.square);
+        _Metric.squareGridMap[screen.square];
   }
   set columnIndex(int coreColumnIndex) {
-    verticalColumnGridIndex = screen.game.metric.coreCardGrid(screen.square) * coreColumnIndex + _Metric.paddingGrid;
-    horizontalColumnGridIndex = screen.game.metric.coreCardGrid(screen.square) * coreColumnIndex + _Metric.paddingGrid +
+    verticalColumnGridIndex = _Metric.squareGridMap[screen.square] * coreColumnIndex + _Metric.paddingGrid;
+    horizontalColumnGridIndex = _Metric.squareGridMap[screen.square] * coreColumnIndex + _Metric.paddingGrid +
         _Metric.headerFooterGrid;
   }
 
   /// 跨行.
   int get rowSpan {
-    return rowGridSpan ~/ screen.game.metric.coreCardGrid(screen.square);
+    return rowGridSpan ~/ _Metric.squareGridMap[screen.square];
   }
   set rowSpan(int coreRowSpan) {
-    rowGridSpan = screen.game.metric.coreCardGrid(screen.square) * coreRowSpan;
+    rowGridSpan = _Metric.squareGridMap[screen.square] * coreRowSpan;
   }
 
   /// 跨列.
   int get columnSpan {
-    return columnGridSpan ~/ screen.game.metric.coreCardGrid(screen.square);
+    return columnGridSpan ~/ _Metric.squareGridMap[screen.square];
   }
   set columnSpan(int coreColumnSpan) {
-    columnGridSpan = screen.game.metric.coreCardGrid(screen.square) * coreColumnSpan;
+    columnGridSpan = _Metric.squareGridMap[screen.square] * coreColumnSpan;
   }
 
   //*******************************************************************************************************************

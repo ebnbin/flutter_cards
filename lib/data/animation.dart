@@ -66,23 +66,23 @@ class _Animation<T extends _Card> {
       curve: Curves.easeInOut,
       onAnimating: (card, value) {
         if (value < 0.5) {
-          card.translateX = _AnimationCalc.ab(0.0, card.screen.game.metric.coreCardSize(card.screen.square) * direction.x)
+          card.translateX = _AnimationCalc.ab(0.0, card.screen.game.metric.squareSizeMap[card.screen.square] * direction.x)
               .calc(value);
-          card.translateY = _AnimationCalc.ab(0.0, card.screen.game.metric.coreCardSize(card.screen.square) * direction.y)
+          card.translateY = _AnimationCalc.ab(0.0, card.screen.game.metric.squareSizeMap[card.screen.square] * direction.y)
               .calc(value);
         } else {
-          card.translateX = _AnimationCalc.ab(-card.screen.game.metric.coreCardSize(card.screen.square) * direction.x, 0.0)
+          card.translateX = _AnimationCalc.ab(-card.screen.game.metric.squareSizeMap[card.screen.square] * direction.x, 0.0)
               .calc(value);
-          card.translateY = _AnimationCalc.ab(-card.screen.game.metric.coreCardSize(card.screen.square) * direction.y, 0.0)
+          card.translateY = _AnimationCalc.ab(-card.screen.game.metric.squareSizeMap[card.screen.square] * direction.y, 0.0)
               .calc(value);
         }
       },
       onHalf: (card) {
         card.rowIndex += direction.y;
         card.columnIndex += direction.x;
-        card.translateX = _AnimationCalc.ab(-card.screen.game.metric.coreCardSize(card.screen.square) * direction.x, 0.0)
+        card.translateX = _AnimationCalc.ab(-card.screen.game.metric.squareSizeMap[card.screen.square] * direction.x, 0.0)
             .calc(0.5);
-        card.translateY = _AnimationCalc.ab(-card.screen.game.metric.coreCardSize(card.screen.square) * direction.y, 0.0)
+        card.translateY = _AnimationCalc.ab(-card.screen.game.metric.squareSizeMap[card.screen.square] * direction.y, 0.0)
             .calc(0.5);
       },
     );

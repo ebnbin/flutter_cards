@@ -2,7 +2,7 @@ part of '../data.dart';
 
 //*********************************************************************************************************************
 
-/// 网格标尺. 单例.
+/// 网格标尺.
 class _Metric {
   /// Padding 网格数.
   static const int paddingGrid = 1;
@@ -16,10 +16,51 @@ class _Metric {
   static const int headerFooterGrid = headerFooterNoPaddingGrid + paddingGrid * 2;
   /// 安全网格数.
   static const int safeGrid = coreGrid + headerFooterGrid * 2;
+  /// 方格数 to 方格网格数.
+  ///
+  /// Key 范围 3, 4, 5.
+  static final Map<int, int> squareGridMap = Map.unmodifiable({
+    3: coreNoPaddingGrid ~/ 3,
+    4: coreNoPaddingGrid ~/ 4,
+    5: coreNoPaddingGrid ~/ 5,
+  });
 
+  const _Metric(
+      this.screenRect,
+      this.safeScreenRect,
+      this.isVertical,
+      this.horizontalSafeGrid,
+      this.verticalSafeGrid,
+      this.gridSize,
+      this.safeRect,
+      this.coreRect,
+      this.coreNoPaddingRect,
+      this.headerRect,
+      this.footerRect,
+      this.headerUnsafeRect,
+      this.footerUnsafeRect,
+      this.squareSizeMap,
+      );
+
+  final Rect screenRect;
+  final Rect safeScreenRect;
+  final bool isVertical;
+  final int horizontalSafeGrid;
+  final int verticalSafeGrid;
+  final double gridSize;
+  final Rect safeRect;
+  final Rect coreRect;
+  final Rect coreNoPaddingRect;
+  final Rect headerRect;
+  final Rect footerRect;
+  final Rect headerUnsafeRect;
+  final Rect footerUnsafeRect;
+  final Map<int, double> squareSizeMap;
+
+  /// 在 [_Game.build] 中调用.
   static void build(_Game game, BuildContext context) {
     MediaQueryData mediaQueryData = MediaQuery.of(context);
-    if (game.sizeCache == mediaQueryData.size && game.paddingCache == mediaQueryData.padding) {
+    if (game.metricSizeCache == mediaQueryData.size && game.metricPaddingCache == mediaQueryData.padding) {
       return;
     }
 
@@ -37,19 +78,21 @@ class _Metric {
       screenRect.right - mediaQueryData.padding.right,
       screenRect.bottom - mediaQueryData.padding.bottom,
     );
-    /// 是否竖屏. [MediaQueryData.orientation].
+    /// 是否竖屏.
+    ///
+    /// [MediaQueryData.orientation].
     bool isVertical = screenRect.width <= screenRect.height;
-    /// 水平方向网格数.
-    int horizontalGrid = isVertical ? coreGrid : safeGrid;
-    /// 垂直方向网格数.
-    int verticalGrid = isVertical ? safeGrid : coreGrid;
+    /// 水平方向安全网格数.
+    int horizontalSafeGrid = isVertical ? coreGrid : safeGrid;
+    /// 垂直方向安全网格数.
+    int verticalSafeGrid = isVertical ? safeGrid : coreGrid;
     /// 网格尺寸.
-    double gridSize = min(safeScreenRect.width / horizontalGrid, safeScreenRect.height / verticalGrid);
+    double gridSize = min(safeScreenRect.width / horizontalSafeGrid, safeScreenRect.height / verticalSafeGrid);
     /// 安全矩形.
     Rect safeRect = Rect.fromCenter(
       center: safeScreenRect.center,
-      width: horizontalGrid * gridSize,
-      height: verticalGrid * gridSize,
+      width: horizontalSafeGrid * gridSize,
+      height: verticalSafeGrid * gridSize,
     );
     /// Core 矩形.
     Rect coreRect = Rect.fromCenter(
@@ -92,63 +135,32 @@ class _Metric {
       isVertical ? headerUnsafeRect.width : (screenRect.right - coreRect.right),
       isVertical ? (screenRect.bottom - coreRect.bottom) : headerUnsafeRect.height,
     );
-    /// Core 卡片网格数.
-    int Function(int square) coreCardGrid = (square) {
-      return coreNoPaddingGrid ~/ square;
-    };
-    /// Core 卡片尺寸.
-    double Function(int square) coreCardSize = (square) {
-      return coreCardGrid(square) * gridSize;
-    };
+    /// 方格数 to 方格尺寸.
+    ///
+    /// Key 范围 3, 4, 5.
+    Map<int, double> squareSizeMap = Map.unmodifiable({
+      3: squareGridMap[3] * gridSize,
+      4: squareGridMap[4] * gridSize,
+      5: squareGridMap[5] * gridSize,
+    });
 
-    //*****************************************************************************************************************
-
-    game.sizeCache = mediaQueryData.size;
-    game.paddingCache = mediaQueryData.padding;
+    game.metricSizeCache = mediaQueryData.size;
+    game.metricPaddingCache = mediaQueryData.padding;
     game.metric = _Metric(
       screenRect,
       safeScreenRect,
       isVertical,
-      horizontalGrid,
-      verticalGrid,
+      horizontalSafeGrid,
+      verticalSafeGrid,
       gridSize,
       safeRect,
       coreRect,
       coreNoPaddingRect,
+      headerRect,
+      footerRect,
       headerUnsafeRect,
       footerUnsafeRect,
-      coreCardGrid,
-      coreCardSize,
+      squareSizeMap,
     );
   }
-
-  _Metric(
-      this.screenRect,
-      this.safeScreenRect,
-      this.isVertical,
-      this.horizontalGrid,
-      this.verticalGrid,
-      this.gridSize,
-      this.safeRect,
-      this.coreRect,
-      this.coreNoPaddingRect,
-      this.headerUnsafeRect,
-      this.footerUnsafeRect,
-      this.coreCardGrid,
-      this.coreCardSize,
-      );
-
-  final Rect screenRect;
-  final Rect safeScreenRect;
-  final bool isVertical;
-  final int horizontalGrid;
-  final int verticalGrid;
-  final double gridSize;
-  final Rect safeRect;
-  final Rect coreRect;
-  final Rect coreNoPaddingRect;
-  final Rect headerUnsafeRect;
-  final Rect footerUnsafeRect;
-  final int Function(int square) coreCardGrid;
-  final double Function(int square) coreCardSize;
 }

@@ -20,8 +20,8 @@ class _Game {
 
   //*******************************************************************************************************************
 
-  Size sizeCache;
-  EdgeInsets paddingCache;
+  Size metricSizeCache;
+  EdgeInsets metricPaddingCache;
 
   _Metric metric;
 
