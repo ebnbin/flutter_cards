@@ -84,10 +84,50 @@ class _GameWidget extends StatelessWidget {
   /// 卡片.
   Widget _buildCard(BuildContext context, int zIndex, Card card) {
     if (card.zIndexVisible(zIndex)) {
-      return GamePage2(card);
+      VisibleCard visibleCard = card.buildVisibleCard();
+      Card2 card2 = card.buildCard2();
+      return _buildVisibleCard(visibleCard, card2);
     } else {
       return _buildInvisibleCard();
     }
+  }
+
+  /// 可见的卡片.
+  Widget _buildVisibleCard(VisibleCard visibleCard, Card2 card2) {
+    return Positioned.fromRect(
+      rect: visibleCard.rect,
+      child: Transform(
+        transform: visibleCard.transform,
+        alignment: Alignment.center,
+        child: AbsorbPointer(
+          absorbing: visibleCard.absorbPointer,
+          child: IgnorePointer(
+            ignoring: visibleCard.ignorePointer,
+            child: Opacity(
+              opacity: visibleCard.opacity,
+              child: _buildGridCardOr(visibleCard, card2),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+  
+  Widget _buildGridCardOr(VisibleCard visibleCard, Card2 card2) {
+    if (visibleCard.isGridCard) {
+      GridCard gridCard = visibleCard.buildGridCard();
+      return _buildGridCard(gridCard, card2);
+    } else {
+      return CustomPaint();
+    }
+  }
+
+  /// 根据网格定位的卡片, 渲染为 Material 卡片.
+  Widget _buildGridCard(GridCard gridCard, Card2 card2) {
+    return Container(
+      margin: EdgeInsets.all(gridCard.margin),
+      child: GamePage2(card2),
+    );
   }
 
   /// 不可见的卡片.

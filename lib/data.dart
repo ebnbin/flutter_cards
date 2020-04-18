@@ -46,3 +46,65 @@ class Game {
     }));
   }
 }
+
+//*********************************************************************************************************************
+//*********************************************************************************************************************
+
+/// 卡片.
+class Card {
+  Card._(this._card);
+
+  /// 可能为 null.
+  final _Card _card;
+
+  /// True 为可见卡片, false 为不可见卡片.
+  bool Function(int zIndex) get zIndexVisible {
+    if (_card == null) {
+      return (_) => false;
+    }
+    return _card.zIndexVisible;
+  }
+
+  VisibleCard buildVisibleCard() {
+    return VisibleCard._(_card);
+  }
+
+  Card2 buildCard2() {
+    return Card2._(_card);
+  }
+}
+
+/// 可见的卡片.
+class VisibleCard {
+  VisibleCard._(this._card);
+
+  /// 不可能为 null.
+  final _Card _card;
+
+  Rect get rect => _card.rect;
+
+  Matrix4 get transform => _card.transform;
+
+  bool get absorbPointer => _card.absorbPointer;
+
+  bool get ignorePointer => _card.ignorePointer;
+
+  double get opacity => _card.opacity;
+  
+  bool get isGridCard {
+    return _card is _GridCard;
+  }
+  
+  GridCard buildGridCard() {
+    return GridCard._(_card as _GridCard);
+  }
+}
+
+/// 根据网格定位的卡片, 渲染为 Material 卡片.
+class GridCard {
+  GridCard._(this._gridCard);
+  
+  final _GridCard _gridCard;
+
+  double get margin => _gridCard.margin;
+}

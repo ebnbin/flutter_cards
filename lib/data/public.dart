@@ -2,18 +2,10 @@ part of '../data.dart';
 
 //*********************************************************************************************************************
 
-class Card {
-  Card._(this._card);
+class Card2 {
+  Card2._(this._card);
 
   final _Card _card;
-
-  bool get absorbPointer {
-    if (_card is _GridCard) {
-      _GridCard gridCard = _card as _GridCard;
-      return gridCard.absorbPointer;
-    }
-    return null;
-  }
 
   Color get color => Colors.blueGrey.shade100;
 
@@ -21,22 +13,6 @@ class Card {
     if (_card is _GridCard) {
       _GridCard gridCard = _card as _GridCard;
       return gridCard.elevation;
-    }
-    return null;
-  }
-
-  bool get ignorePointer {
-    if (_card is _GridCard) {
-      _GridCard gridCard = _card as _GridCard;
-      return gridCard.ignorePointer;
-    }
-    return null;
-  }
-
-  double get margin {
-    if (_card is _GridCard) {
-      _GridCard gridCard = _card as _GridCard;
-      return gridCard.margin;
     }
     return null;
   }
@@ -53,14 +29,6 @@ class Card {
     };
   }
 
-  double get opacity {
-    if (_card is _GridCard) {
-      _GridCard gridCard = _card as _GridCard;
-      return gridCard.opacity;
-    }
-    return null;
-  }
-
   double get radius {
     if (_card is _GridCard) {
       _GridCard gridCard = _card as _GridCard;
@@ -75,14 +43,6 @@ class Card {
       return Rect.zero;
     }
     return (_card).rect;
-  }
-
-  Matrix4 get transform {
-    if (_card is _GridCard) {
-      _GridCard gridCard = _card as _GridCard;
-      return gridCard.transform;
-    }
-    return null;
   }
 
   bool Function(int zIndex) get zIndexVisible {

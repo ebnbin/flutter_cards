@@ -136,6 +136,7 @@ abstract class _Card {
   /// 主尺寸外边距.
   double mainMargin;
 
+  /// TODO _GridCard 才有 margin.
   /// 渲染外边距.
   double get margin {
     switch (dimension) {
