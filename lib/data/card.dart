@@ -667,52 +667,59 @@ class _SpriteCard extends _CoreCard {
   /// 卡片点击.
   static void actOnTap(_SpriteCard spriteCard) {
     spriteCard.screen.game.actionQueue.post<_SpriteCard>(spriteCard, (thisRef, action) {
-      if (thisRef.dimension == _CardDimension.main) {
-        _PlayerCard playerCard = thisRef.spriteScreen.playerCard;
-        AxisDirection direction = playerCard.adjacentDirection(thisRef);
-        if (direction == null) {
-          thisRef.screen.game.actionQueue.add(<_Action>[
-            thisRef.animateTremble().action(),
-          ]);
-        } else {
-          AxisDirection nextDirection = playerCard.nextNonEdgeDirection(flipAxisDirection(direction));
-          List<_SpriteCard> adjacentCardAll = playerCard.adjacentCardAll(nextDirection);
-          _SpriteCard newSpriteCard = _SpriteCard(thisRef.spriteScreen,
-            rowIndex: adjacentCardAll.last.rowIndex,
-            columnIndex: adjacentCardAll.last.columnIndex,
-          );
-          int index = thisRef.index;
-
-          List<_Action> actions = <_Action>[];
-          actions.add(_Action.run((action) {
-            thisRef.spriteScreen.cards[index] = newSpriteCard;
-          }));
-          actions.addAll(adjacentCardAll.map<_Action>((element) {
-            return element.animateSpriteMove(direction: flipAxisDirection(nextDirection)).action();
-          }).toList());
-          actions.add(newSpriteCard.animateSpriteEnter(
-            beginDelay: 200,
-          ).action());
-          thisRef.screen.game.actionQueue.add(actions,
-            addFirst: true,
-          );
-          thisRef.screen.game.actionQueue.add(<_Action>[
-            thisRef.animateSpriteExit().action(),
-            playerCard.animateSpriteMove(
-              direction: direction,
-              beginDelay: 200,
-            ).action(),
-          ],
-            addFirst: true,
-          );
-        }
+      if (thisRef.index < 0) {
+        return;
       }
+      if (thisRef.dimension != _CardDimension.main) {
+        return;
+      }
+      _PlayerCard playerCard = thisRef.spriteScreen.playerCard;
+      AxisDirection direction = playerCard.adjacentDirection(thisRef);
+      if (direction == null) {
+        thisRef.screen.game.actionQueue.add(<_Action>[
+          thisRef.animateTremble().action(),
+        ]);
+        return;
+      }
+      AxisDirection nextDirection = playerCard.nextNonEdgeDirection(flipAxisDirection(direction));
+      List<_SpriteCard> adjacentCardAll = playerCard.adjacentCardAll(nextDirection);
+      _SpriteCard newSpriteCard = _SpriteCard(thisRef.spriteScreen,
+        rowIndex: adjacentCardAll.last.rowIndex,
+        columnIndex: adjacentCardAll.last.columnIndex,
+      );
+      int index = thisRef.index;
+
+      List<_Action> actions = <_Action>[];
+      actions.add(_Action.run((action) {
+        thisRef.spriteScreen.cards[index] = newSpriteCard;
+      }));
+      actions.addAll(adjacentCardAll.map<_Action>((element) {
+        return element.animateSpriteMove(direction: flipAxisDirection(nextDirection)).action();
+      }).toList());
+      actions.add(newSpriteCard.animateSpriteEnter(
+        beginDelay: 200,
+      ).action());
+      thisRef.screen.game.actionQueue.add(actions,
+        addFirst: true,
+      );
+      thisRef.screen.game.actionQueue.add(<_Action>[
+        thisRef.animateSpriteExit().action(),
+        playerCard.animateSpriteMove(
+          direction: direction,
+          beginDelay: 200,
+        ).action(),
+      ],
+        addFirst: true,
+      );
     });
   }
 
   /// 卡片长按.
   static void actOnLongPress(_SpriteCard spriteCard) {
     spriteCard.screen.game.actionQueue.post<_SpriteCard>(spriteCard, (thisRef, action) {
+      if (thisRef.index < 0) {
+        return;
+      }
       if (thisRef.dimension == _CardDimension.main) {
         thisRef.screen.game.actionQueue.add(<_Action>[
           thisRef.animateMainToVice().action(),
