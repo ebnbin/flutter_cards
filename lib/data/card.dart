@@ -486,6 +486,124 @@ class _GridCard extends _Card {
 //*********************************************************************************************************************
 //*********************************************************************************************************************
 
+/// 通过方格定位的卡片.
+class _CoreCard extends _GridCard {
+  _CoreCard(_Screen screen, {
+    int zIndex = 1,
+    bool visible = true,
+    _CardDimension dimension = _CardDimension.main,
+    bool vice = false,
+    bool vicing = false,
+    double rotateX = 0.0,
+    double rotateY = 0.0,
+    double rotateZ = 0.0,
+    double translateX = 0.0,
+    double translateY = 0.0,
+    double scaleX = 1.0,
+    double scaleY = 1.0,
+    double mainOpacity = 1.0,
+    double mainElevation = 1.0,
+    double mainRadius = 4.0,
+    _GestureType gestureType = _GestureType.normal,
+    void Function(_Card card) onTap,
+    void Function(_Card card) onLongPress,
+    int rowIndex = 0,
+    int columnIndex = 0,
+    int rowSpan = 1,
+    int columnSpan = 1,
+  }) : super(screen,
+    zIndex: zIndex,
+    visible: visible,
+    dimension: dimension,
+    vice: vice,
+    vicing: vicing,
+    rotateX: rotateX,
+    rotateY: rotateY,
+    rotateZ: rotateZ,
+    translateX: translateX,
+    translateY: translateY,
+    scaleX: scaleX,
+    scaleY: scaleY,
+    mainOpacity: mainOpacity,
+    mainElevation: mainElevation,
+    mainRadius: mainRadius,
+    gestureType: gestureType,
+    onTap: onTap,
+    onLongPress: onLongPress,
+  ) {
+    this.rowIndex = rowIndex;
+    this.columnIndex = columnIndex;
+    this.rowSpan = rowSpan;
+    this.columnSpan = columnSpan;
+  }
+
+  set verticalRowGridIndex(int verticalRowGridIndex) {
+    throw Exception();
+  }
+  set verticalColumnGridIndex(int verticalColumnGridIndex) {
+    throw Exception();
+  }
+  set verticalRowGridSpan(int verticalRowGridSpan) {
+    throw Exception();
+  }
+  set verticalColumnGridSpan(int verticalColumnGridSpan) {
+    throw Exception();
+  }
+  set horizontalRowGridIndex(int horizontalRowGridIndex) {
+    throw Exception();
+  }
+  set horizontalColumnGridIndex(int horizontalColumnGridIndex) {
+    throw Exception();
+  }
+  set horizontalRowGridSpan(int horizontalRowGridSpan) {
+    throw Exception();
+  }
+  set horizontalColumnGridSpan(int horizontalColumnGridSpan) {
+    throw Exception();
+  }
+
+  /// 行.
+  int get rowIndex {
+    return (rowGridIndex - Metric.paddingGrid - (Metric.get().isVertical ? Metric.headerFooterGrid : 0)) ~/
+        Metric.squareGridMap[screen.square];
+  }
+  set rowIndex(int rowIndex) {
+    super.verticalRowGridIndex = Metric.squareGridMap[screen.square] * rowIndex + Metric.paddingGrid +
+        Metric.headerFooterGrid;
+    super.horizontalRowGridIndex = Metric.squareGridMap[screen.square] * rowIndex + Metric.paddingGrid;
+  }
+
+  /// 列.
+  int get columnIndex {
+    return (columnGridIndex - Metric.paddingGrid - (Metric.get().isVertical ? 0 : Metric.headerFooterGrid)) ~/
+        Metric.squareGridMap[screen.square];
+  }
+  set columnIndex(int columnIndex) {
+    super.verticalColumnGridIndex = Metric.squareGridMap[screen.square] * columnIndex + Metric.paddingGrid;
+    super.horizontalColumnGridIndex = Metric.squareGridMap[screen.square] * columnIndex + Metric.paddingGrid +
+        Metric.headerFooterGrid;
+  }
+
+  /// 跨行.
+  int get rowSpan {
+    return rowGridSpan ~/ Metric.squareGridMap[screen.square];
+  }
+  set rowSpan(int rowSpan) {
+    super.verticalRowGridSpan = super.horizontalRowGridSpan = Metric.squareGridMap[screen.square] * rowSpan;
+  }
+
+  /// 跨列.
+  int get columnSpan {
+    return columnGridSpan ~/ Metric.squareGridMap[screen.square];
+  }
+  set columnSpan(int columnSpan) {
+    super.verticalColumnGridSpan = super.horizontalColumnGridSpan = Metric.squareGridMap[screen.square] * columnSpan;
+  }
+}
+
+//*********************************************************************************************************************
+//*********************************************************************************************************************
+
 /// 卡片尺寸.
 enum _CardDimension {
   /// 主尺寸.
