@@ -120,7 +120,8 @@ class _GameWidget extends StatelessWidget {
       ),
     );
   }
-  
+
+  /// TODO.
   Widget _buildGridCardOr(VisibleCard visibleCard, Card2 card2) {
     if (visibleCard.isGridCard) {
       GridCard gridCard = visibleCard.buildGridCard();
@@ -140,11 +141,15 @@ class _GameWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(gridCard.radius),
         clipBehavior: Clip.hardEdge,
         animationDuration: Duration.zero,
-        child: Stack(
-          children: <Widget>[
-            _buildGridCardBackground(gridCard),
-            GamePage2(card2),
-          ],
+        child: GestureDetector(
+          child: Stack(
+            children: <Widget>[
+              _buildGridCardBackground(gridCard),
+              GamePage2(card2),
+            ],
+          ),
+          onTap: gridCard.onTap,
+          onLongPress: gridCard.onLongPress,
         ),
       ),
     );

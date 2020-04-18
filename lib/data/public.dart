@@ -7,49 +7,11 @@ class Card2 {
 
   final _Card _card;
 
-  Color get color => Colors.blueGrey.shade100;
-
-  double get elevation {
-    if (_card is _GridCard) {
-      _GridCard gridCard = _card as _GridCard;
-      return gridCard.elevation;
-    }
-    return null;
-  }
-
-  GestureLongPressCallback get onLongPress {
-    return _card.onLongPress == null ? null : () {
-      _card.onLongPress(_card);
-    };
-  }
-
-  GestureTapCallback get onTap {
-    return _card.onTap == null ? null : () {
-      _card.onTap(_card);
-    };
-  }
-
-  double get radius {
-    if (_card is _GridCard) {
-      _GridCard gridCard = _card as _GridCard;
-      return gridCard.radius;
-//      return 0.0;
-    }
-    return null;
-  }
-
   Rect get rect {
     if (_card == null) {
       return Rect.zero;
     }
     return (_card).rect;
-  }
-
-  bool Function(int zIndex) get zIndexVisible {
-    if (_card == null) {
-      return (_) => false;
-    }
-    return _card.zIndexVisible;
   }
 
   Rect get spriteEntityRect {

@@ -121,4 +121,16 @@ class GridCard {
     }
     return _gridCard.radius;
   }
+
+  GestureTapCallback get onTap {
+    return _gridCard.onTap == null ? null : () {
+      _gridCard.onTap(_gridCard);
+    };
+  }
+
+  GestureLongPressCallback get onLongPress {
+    return _gridCard.onLongPress == null ? null : () {
+      _gridCard.onLongPress(_gridCard);
+    };
+  }
 }
