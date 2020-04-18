@@ -106,6 +106,9 @@ class _SpriteScreen extends _Screen {
       horizontalColumnGridIndex: 80,
       horizontalRowGridSpan: 10,
       horizontalColumnGridSpan: 10,
+      onTap: (card) {
+        addSpriteCards();
+      },
     );
     cards[17] = _GridCard(this,
       verticalRowGridIndex: 80,
@@ -116,6 +119,9 @@ class _SpriteScreen extends _Screen {
       horizontalColumnGridIndex: 80,
       horizontalRowGridSpan: 10,
       horizontalColumnGridSpan: 10,
+      onTap: (card) {
+        removeSpriteCards();
+      },
     );
   }
 
@@ -148,5 +154,45 @@ class _SpriteScreen extends _Screen {
       }
       return true;
     }));
+  }
+
+  /// 添加精灵卡片.
+  void addSpriteCards() {
+    game.actionQueue.add([
+      _Action.run((action) {
+        _PlayerCard playerCard = _PlayerCard.random(this);
+        cards[0] = playerCard;
+        int index = 1;
+        for (int rowIndex = 0; rowIndex < square; rowIndex++) {
+          for (int columnIndex = 0; columnIndex < square; columnIndex++) {
+            if (rowIndex == playerCard.rowIndex && columnIndex == playerCard.columnIndex) {
+              continue;
+            }
+            _SpriteCard spriteCard = _SpriteCard(this,
+              rowIndex: rowIndex,
+              columnIndex: columnIndex,
+            );
+            cards[index++] = spriteCard;
+          }
+        }
+      }),
+    ]);
+    game.actionQueue.add(spriteCards().map<_Action>((element) {
+      return element.animateSpriteFirstEnter().action();
+    }).toList());
+  }
+
+  /// 移除精灵卡片.
+  void removeSpriteCards() {
+    game.actionQueue.add(spriteCards().map<_Action>((element) {
+      return element.animateSpriteLastExit().action();
+    }).toList());
+    game.actionQueue.add(<_Action>[
+      _Action.run((action) {
+        spriteCards().forEach((element) {
+          cards[element.index] = null;
+        });
+      }),
+    ]);
   }
 }

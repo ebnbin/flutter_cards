@@ -625,8 +625,10 @@ class _SpriteCard extends _CoreCard {
     _GestureType gestureType = _GestureType.normal,
     void Function(_Card card) onTap,
     void Function(_Card card) onLongPress,
-    int rowIndex = 0,
-    int columnIndex = 0,
+    @required
+    int rowIndex,
+    @required
+    int columnIndex,
   }) : super(screen,
     zIndex: zIndex,
     visible: visible,
@@ -654,18 +656,6 @@ class _SpriteCard extends _CoreCard {
     /// 固定为 1.
     columnSpan: 1,
   );
-
-  set vice(bool vice) {
-    throw Exception();
-  }
-
-  set rowSpan(int rowSpan) {
-    throw Exception();
-  }
-
-  set columnSpan(int columnSpan) {
-    throw Exception();
-  }
 
   /// 强转为 [_SpriteScreen].
   _SpriteScreen get spriteScreen {
@@ -902,6 +892,10 @@ class _SpriteCard extends _CoreCard {
     int beginDelayRandomRange = 200,
     int endDelay = 0,
   }) {
+    double rotateYA = _random.nextListItem(<_InvisibleAngle>[
+      _InvisibleAngle.clockwise90,
+      _InvisibleAngle.clockwise270,
+    ]).value;
     return _Animation<_SpriteCard>(this,
       duration: _random.nextIntCenterRange(durationRandomCenter, durationRandomRange),
       beginDelay: _random.nextIntCenterRange(beginDelayRandomCenter, beginDelayRandomRange),
@@ -912,10 +906,7 @@ class _SpriteCard extends _CoreCard {
           card.zIndex = 0;
           card.visible = true;
         }
-        card.rotateY = _ValueCalc.ab(_random.nextListItem(<_InvisibleAngle>[
-          _InvisibleAngle.clockwise90,
-          _InvisibleAngle.clockwise270,
-        ]).value, 0.0).calc(value);
+        card.rotateY = _ValueCalc.ab(rotateYA, 0.0).calc(value);
         card.scaleX = _ValueCalc.ab(0.5, 1.0).calc(value);
         card.scaleY = _ValueCalc.ab(0.5, 1.0).calc(value);
         card.mainElevation = _ValueCalc.ab(0.5, 1.0).calc(value);
@@ -934,6 +925,10 @@ class _SpriteCard extends _CoreCard {
     int beginDelayRandomRange = 200,
     int endDelay = 0,
   }) {
+    double rotateYB = _random.nextListItem(<_InvisibleAngle>[
+      _InvisibleAngle.counterClockwise90,
+      _InvisibleAngle.counterClockwise270,
+    ]).value;
     return _Animation<_SpriteCard>(this,
       duration: _random.nextIntCenterRange(durationRandomCenter, durationRandomRange),
       beginDelay: _random.nextIntCenterRange(beginDelayRandomCenter, beginDelayRandomRange),
@@ -943,10 +938,7 @@ class _SpriteCard extends _CoreCard {
         if (first) {
           card.zIndex = 0;
         }
-        card.rotateY = _ValueCalc.ab(0.0, _random.nextListItem(<_InvisibleAngle>[
-          _InvisibleAngle.counterClockwise90,
-          _InvisibleAngle.counterClockwise270,
-        ]).value).calc(value);
+        card.rotateY = _ValueCalc.ab(0.0, rotateYB).calc(value);
         card.scaleX = _ValueCalc.ab(1.0, 0.5).calc(value);
         card.scaleY = _ValueCalc.ab(1.0, 0.5).calc(value);
         card.mainElevation = _ValueCalc.ab(1.0, 0.5).calc(value);
@@ -982,8 +974,10 @@ class _PlayerCard extends _SpriteCard {
     _GestureType gestureType = _GestureType.normal,
     void Function(_Card card) onTap,
     void Function(_Card card) onLongPress,
-    int rowIndex = 0,
-    int columnIndex = 0,
+    @required
+    int rowIndex,
+    @required
+    int columnIndex,
   }) : super(screen,
     zIndex: zIndex,
     visible: visible,
