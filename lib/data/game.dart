@@ -107,7 +107,7 @@ class _SpriteScreen extends _Screen {
       horizontalRowGridSpan: 10,
       horizontalColumnGridSpan: 10,
       onTap: (card) {
-        addSpriteCards(this);
+        actAddSpriteCards(this);
       },
     );
     cards[17] = _GridCard(this,
@@ -120,7 +120,7 @@ class _SpriteScreen extends _Screen {
       horizontalRowGridSpan: 10,
       horizontalColumnGridSpan: 10,
       onTap: (card) {
-        removeSpriteCards(this);
+        actRemoveSpriteCards(this);
       },
     );
   }
@@ -157,7 +157,7 @@ class _SpriteScreen extends _Screen {
   }
 
   /// 添加精灵卡片.
-  static void addSpriteCards(_SpriteScreen spriteScreen) {
+  static void actAddSpriteCards(_SpriteScreen spriteScreen) {
     spriteScreen.game.actionQueue.post<_SpriteScreen>(spriteScreen, (thisRef, action) {
       _PlayerCard playerCard = _PlayerCard.random(thisRef);
       thisRef.cards[0] = playerCard;
@@ -183,7 +183,7 @@ class _SpriteScreen extends _Screen {
   }
 
   /// 移除精灵卡片.
-  static void removeSpriteCards(_SpriteScreen spriteScreen) {
+  static void actRemoveSpriteCards(_SpriteScreen spriteScreen) {
     spriteScreen.game.actionQueue.post<_SpriteScreen>(spriteScreen, (thisRef, action) {
       thisRef.game.actionQueue.add(<_Action>[
         _Action.run((action) {
