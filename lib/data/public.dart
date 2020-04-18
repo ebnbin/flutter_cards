@@ -2,48 +2,6 @@ part of '../data.dart';
 
 //*********************************************************************************************************************
 
-abstract class GameCallback implements TickerProvider {
-  void notifyStateChanged();
-}
-
-//*********************************************************************************************************************
-
-class Data {
-  final _Game _game;
-
-  Data(GameCallback callback) : _game = _Game(callback);
-
-  Game build(BuildContext context) {
-    return Game._(_game);
-  }
-}
-
-class Game {
-  Game._(this._game);
-
-  final _Game _game;
-
-  List<Card> get cards {
-    return List.unmodifiable(_game.screen.cards.map<Card>((card) {
-      return Card._(card);
-    }));
-  }
-
-  double get backgroundImageScale {
-    return 48.0 / (min(Metric.get().safeScreenRect.width, Metric.get().safeScreenRect.height) / 62.0 * 16.0 / 2.0);
-  }
-
-  double get backgroundImageWidth {
-    return Metric.get().screenRect.width;
-  }
-
-  double get backgroundImageHeight {
-    return Metric.get().screenRect.height;
-  }
-}
-
-//*********************************************************************************************************************
-
 class Card {
   Card._(this._card);
 

@@ -13,7 +13,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin imple
   @override
   Widget build(BuildContext context) {
     Metric.build(context);
-    Game game = _data.build(context);
+    Game game = _data.buildGame(context);
     return Scaffold(
       body: _GameWidget(game),
     );
@@ -69,10 +69,11 @@ class _GameWidget extends StatelessWidget {
 
   /// 全部卡片.
   Widget _buildCards(BuildContext context) {
+    List<Card> cards = game.buildCards(context);
     return Stack(
       children: <int>[0, 1, 2, 3,].map<Widget>((zIndex) {
         return Stack(
-          children: game.cards.map<Widget>((card) {
+          children: cards.map<Widget>((card) {
             return _buildCard(context, zIndex, card);
           }).toList(),
         );
