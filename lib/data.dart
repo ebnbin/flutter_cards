@@ -133,4 +133,21 @@ class GridCard {
       _gridCard.onLongPress(_gridCard);
     };
   }
+
+  bool get isSpriteCard {
+    return _gridCard is _SpriteCard;
+  }
+
+  SpriteCard buildSpriteCard() {
+    return SpriteCard._(this, _gridCard as _SpriteCard);
+  }
+}
+
+/// 精灵卡片.
+class SpriteCard {
+  SpriteCard._(this.gridCard, this._spriteCard);
+
+  final GridCard gridCard;
+
+  final _SpriteCard _spriteCard;
 }

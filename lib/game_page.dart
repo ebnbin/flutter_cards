@@ -145,7 +145,7 @@ class _GameWidget extends StatelessWidget {
           child: Stack(
             children: <Widget>[
               _buildGridCardBackground(gridCard),
-              GamePage2(card2),
+              _buildSpriteCardOr(gridCard, card2),
             ],
           ),
           onTap: gridCard.onTap,
@@ -171,6 +171,21 @@ class _GameWidget extends StatelessWidget {
         repeat: ImageRepeat.repeat,
       ),
     );
+  }
+
+  /// TODO.
+  Widget _buildSpriteCardOr(GridCard gridCard, Card2 card2) {
+    if (gridCard.isSpriteCard) {
+      SpriteCard spriteCard = gridCard.buildSpriteCard();
+      return _buildSpriteCard(spriteCard, card2);
+    } else {
+      return CustomPaint();
+    }
+  }
+
+  /// 精灵卡片.
+  Widget _buildSpriteCard(SpriteCard spriteCard, Card2 card2) {
+    return GamePage2(card2);
   }
 
   /// 不可见的卡片.
