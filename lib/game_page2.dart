@@ -3,37 +3,13 @@ import 'package:cards/metric.dart';
 import 'package:flutter/material.dart' hide Card;
 
 class GamePage2 extends StatelessWidget {
-  GamePage2(this.game);
+  GamePage2(this.card);
 
-  final Game game;
+  final Card card;
 
   @override
   Widget build(BuildContext context) {
-    return _buildGame(game);
-  }
-
-  Widget _buildGame(Game game) {
-    return CustomPaint(
-//      painter: Metric.get().debugPainter,
-//      foregroundPainter: Metric.get().debugForegroundPainter,
-      child: Stack(
-        children: [0, 1, 2, 3,].map<Widget>((zIndex) {
-          return Stack(
-            children: game.cards.map<Widget>((card) {
-              return _buildCard(card, zIndex);
-            }).toList(),
-          );
-        }).toList(),
-      ),
-    );
-  }
-
-  Widget _buildCard(Card card, int zIndex) {
-    if (card.zIndexVisible(zIndex)) {
-      return _buildVisibleCard(card);
-    } else {
-      return _buildInvisibleCard();
-    }
+    return _buildVisibleCard(card);
   }
 
   Widget _buildVisibleCard(Card card) {
@@ -69,9 +45,9 @@ class GamePage2 extends StatelessWidget {
                           child: Opacity(
                             opacity: 0.75,
                             child: Image.asset('assets/oak_planks.png',
-                              scale: game.backgroundImageScale,
-                              width: game.backgroundImageWidth,
-                              height: game.backgroundImageHeight,
+                              scale: Metric.get().imageScale(96, 16.0),
+                              width: Metric.get().screenRect.width,
+                              height: Metric.get().screenRect.height,
                               repeat: ImageRepeat.repeat,
                               color: Colors.black.withAlpha(63),
                               colorBlendMode: BlendMode.darken,
@@ -314,12 +290,6 @@ class GamePage2 extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildInvisibleCard() {
-    return Positioned.fill(
-      child: SizedBox.shrink(),
     );
   }
 }

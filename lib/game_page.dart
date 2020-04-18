@@ -45,7 +45,11 @@ class _GameWidget extends StatelessWidget {
     return Stack(
       children: <Widget>[
         _buildBackground(context),
-        GamePage2(game),
+        CustomPaint(
+//          painter: Metric.get().debugPainter,
+          foregroundPainter: Metric.get().debugForegroundPainter,
+          child: _buildCards(context),
+        ),
       ],
     );
   }
@@ -57,9 +61,38 @@ class _GameWidget extends StatelessWidget {
       scale: Metric.get().imageScale(48, 8.0),
       width: Metric.get().screenRect.width,
       height: Metric.get().screenRect.height,
-      color: Colors.black.withAlpha(127),
+      color: Colors.black.withOpacity(0.5),
       colorBlendMode: BlendMode.darken,
       repeat: ImageRepeat.repeat,
+    );
+  }
+
+  /// 全部卡片.
+  Widget _buildCards(BuildContext context) {
+    return Stack(
+      children: <int>[0, 1, 2, 3,].map<Widget>((zIndex) {
+        return Stack(
+          children: game.cards.map<Widget>((card) {
+            return _buildCard(context, zIndex, card);
+          }).toList(),
+        );
+      }).toList(),
+    );
+  }
+
+  /// 卡片.
+  Widget _buildCard(BuildContext context, int zIndex, Card card) {
+    if (card.zIndexVisible(zIndex)) {
+      return GamePage2(card);
+    } else {
+      return _buildInvisibleCard();
+    }
+  }
+
+  /// 不可见的卡片.
+  Widget _buildInvisibleCard() {
+    return Positioned.fill(
+      child: CustomPaint(),
     );
   }
 }
