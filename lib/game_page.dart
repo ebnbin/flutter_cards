@@ -44,4 +44,9 @@ class _GameWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GamePage2(game);
   }
+
+  /// 背景
+  Widget _buildBackground(BuildContext context) {
+    return Container();
+  }
 }
