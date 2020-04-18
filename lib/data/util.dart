@@ -175,6 +175,20 @@ class _ActionQueue {
     _handle();
   }
 
+  /// 延迟到 [_Action] 被执行时可以访问调用者引用.
+  ///
+  /// [thisRef] 调用者引用.
+  ///
+  /// [runnable] 执行后自动结束事件.
+  void post<T>(T thisRef, void Function(T thisRef, _Action action) runnable) {
+    add([
+      _Action.run((action) {
+        runnable(action._thisRef, action);
+        action._thisRef = null;
+      }).._thisRef = thisRef,
+    ]);
+  }
+
   /// 只能被 [_Action] 调用.
   void _end(_Action action) {
     if (_actingActions == null || !_actingActions.remove(action)) {
@@ -201,6 +215,9 @@ class _Action {
   final void Function(_Action action) onBegin;
 
   _ActionQueue _actionQueue;
+
+  /// 只能被 [_ActionQueue] 调用.
+  dynamic _thisRef;
 
   /// 只能被 [_ActionQueue] 调用.
   void _begin(_ActionQueue actionQueue) {
