@@ -80,69 +80,6 @@ class _SpriteCard2 extends _SpriteCard {
 
   //*******************************************************************************************************************
 
-  /// 精灵卡片移动.
-  _Animation<_SpriteCard> animateSpriteMove({
-    int beginDelay = 0,
-    int endDelay = 0,
-    @required
-    AxisDirection direction,
-  }) {
-    return _Animation<_SpriteCard>(this,
-      duration: 500,
-      beginDelay: beginDelay,
-      endDelay: endDelay,
-      curve: Curves.easeInOut,
-      onAnimating: (card, value, half) {
-        if (half) {
-          card.rowIndex += direction.y;
-          card.columnIndex += direction.x;
-        }
-        if (value < 0.5) {
-          card.translateX = _ValueCalc.ab(0.0, Metric.get().squareSizeMap[card.screen.square] * direction.x)
-              .calc(value);
-          card.translateY = _ValueCalc.ab(0.0, Metric.get().squareSizeMap[card.screen.square] * direction.y)
-              .calc(value);
-        } else {
-          card.translateX = _ValueCalc.ab(-Metric.get().squareSizeMap[card.screen.square] * direction.x, 0.0)
-              .calc(value);
-          card.translateY = _ValueCalc.ab(-Metric.get().squareSizeMap[card.screen.square] * direction.y, 0.0)
-              .calc(value);
-        }
-      },
-    );
-  }
-
-  /// 精灵卡片进入.
-  _Animation<_SpriteCard> animateSpriteEnter({
-    int duration = 500,
-    int beginDelay = 0,
-    int endDelay = 0,
-  }) {
-    return _Animation<_SpriteCard>(this,
-      duration: duration,
-      beginDelay: beginDelay,
-      endDelay: endDelay,
-      curve: Curves.easeIn,
-      onAnimating: (card, value, half) {
-        card.rotateY = _ValueCalc.ab(_InvisibleAngle.clockwise90.value, 0.0).calc(value);
-        card.scaleX = _ValueCalc.ab(0.5, 1.0).calc(value);
-        card.scaleY = _ValueCalc.ab(0.5, 1.0).calc(value);
-        card.mainElevation = _ValueCalc.ab(0.5, 1.0).calc(value);
-      },
-      onBegin: (card) {
-        card.visible = true;
-        card.rotateY = _InvisibleAngle.clockwise90.value;
-        card.scaleX = 0.5;
-        card.scaleY = 0.5;
-        card.mainElevation = 0.5;
-        card.zIndex = 0;
-      },
-      onEnd: (card) {
-        card.zIndex = 1;
-      },
-    );
-  }
-
   /// 精灵卡片退出.
   _Animation<_SpriteCard> animateSpriteExit({
     int duration = 500,

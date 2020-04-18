@@ -608,9 +608,9 @@ class _CoreCard extends _GridCard {
 class _SpriteCard extends _CoreCard {
   _SpriteCard(_SpriteScreen screen, {
     int zIndex = 1,
-    bool visible = true,
+    /// 默认不可见, 通过动画进入.
+    bool visible = false,
     _CardDimension dimension = _CardDimension.main,
-    bool vice = false,
     bool vicing = false,
     double rotateX = 0.0,
     double rotateY = 0.0,
@@ -631,7 +631,8 @@ class _SpriteCard extends _CoreCard {
     zIndex: zIndex,
     visible: visible,
     dimension: dimension,
-    vice: vice,
+    /// 固定为主尺寸卡片.
+    vice: false,
     vicing: vicing,
     rotateX: rotateX,
     rotateY: rotateY,
@@ -648,11 +649,23 @@ class _SpriteCard extends _CoreCard {
     onLongPress: onLongPress,
     rowIndex: rowIndex,
     columnIndex: columnIndex,
-    // 固定为 1.
+    /// 固定为 1.
     rowSpan: 1,
-    // 固定为 1.
+    /// 固定为 1.
     columnSpan: 1,
   );
+
+  set vice(bool vice) {
+    throw Exception();
+  }
+
+  set rowSpan(int rowSpan) {
+    throw Exception();
+  }
+
+  set columnSpan(int columnSpan) {
+    throw Exception();
+  }
 
   /// 强转为 [_SpriteScreen].
   _SpriteScreen get spriteScreen {
@@ -792,6 +805,72 @@ class _SpriteCard extends _CoreCard {
   }
 
   //*******************************************************************************************************************
+
+  /// 精灵卡片移动动画.
+  ///
+  /// [direction] 移动方向.
+  _Animation<_SpriteCard> animateSpriteMove({
+    int duration = 400,
+    int beginDelay = 0,
+    int endDelay = 0,
+    @required
+    AxisDirection direction,
+  }) {
+    return _Animation<_SpriteCard>(this,
+      duration: duration,
+      beginDelay: beginDelay,
+      endDelay: endDelay,
+      curve: Curves.easeInOut,
+      onAnimating: (card, value, half) {
+        if (half) {
+          card.rowIndex += direction.y;
+          card.columnIndex += direction.x;
+        }
+        if (value < 0.5) {
+          card.translateX = _ValueCalc.ab(0.0, Metric.get().squareSizeMap[card.screen.square] * direction.x)
+              .calc(value);
+          card.translateY = _ValueCalc.ab(0.0, Metric.get().squareSizeMap[card.screen.square] * direction.y)
+              .calc(value);
+        } else {
+          card.translateX = _ValueCalc.ab(Metric.get().squareSizeMap[card.screen.square] * -direction.x, 0.0)
+              .calc(value);
+          card.translateY = _ValueCalc.ab(Metric.get().squareSizeMap[card.screen.square] * -direction.y, 0.0)
+              .calc(value);
+        }
+      },
+    );
+  }
+
+  /// 精灵卡片进入动画.
+  _Animation<_SpriteCard> animateSpriteEnter({
+    int duration = 400,
+    int beginDelay = 0,
+    int endDelay = 0,
+  }) {
+    return _Animation<_SpriteCard>(this,
+      duration: duration,
+      beginDelay: beginDelay,
+      endDelay: endDelay,
+      curve: Curves.easeIn,
+      onAnimating: (card, value, half) {
+        card.rotateY = _ValueCalc.ab(_InvisibleAngle.clockwise90.value, 0.0).calc(value);
+        card.scaleX = _ValueCalc.ab(0.5, 1.0).calc(value);
+        card.scaleY = _ValueCalc.ab(0.5, 1.0).calc(value);
+        card.mainElevation = _ValueCalc.ab(0.5, 1.0).calc(value);
+      },
+      onBegin: (card) {
+        card.visible = true;
+        card.zIndex = 0;
+        card.rotateY = _InvisibleAngle.clockwise90.value;
+        card.scaleX = 0.5;
+        card.scaleY = 0.5;
+        card.mainElevation = 0.5;
+      },
+      onEnd: (card) {
+        card.zIndex = 1;
+      },
+    );
+  }
 }
 
 //*********************************************************************************************************************
