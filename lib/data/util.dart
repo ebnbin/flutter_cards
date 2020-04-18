@@ -120,6 +120,12 @@ extension _RandomExtension on Random {
     return this.nextInt(to - from + 1) + from;
   }
 
+  /// [center] - [range] 到 [center] + [range].
+  int nextIntCenterRange(int center, int range) {
+    assert(range >= 0);
+    return this.nextIntFromTo(center - range, center + range);
+  }
+
   /// 返回列表中随机的一个 item. 如果列表为空则返回 null.
   T nextListItem<T>(List<T> list) {
     if (list == null || list.isEmpty) {

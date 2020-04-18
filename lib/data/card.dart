@@ -854,8 +854,8 @@ class _SpriteCard extends _CoreCard {
       curve: Curves.easeIn,
       listener: (card, value, first, half, last) {
         if (first) {
-          card.visible = true;
           card.zIndex = 0;
+          card.visible = true;
         }
         card.rotateY = _ValueCalc.ab(_InvisibleAngle.clockwise90.value, 0.0).calc(value);
         card.scaleX = _ValueCalc.ab(0.5, 1.0).calc(value);
@@ -863,6 +863,95 @@ class _SpriteCard extends _CoreCard {
         card.mainElevation = _ValueCalc.ab(0.5, 1.0).calc(value);
         if (last) {
           card.zIndex = 1;
+        }
+      },
+    );
+  }
+
+  /// 精灵卡片退出动画.
+  _Animation<_SpriteCard> animateSpriteExit({
+    int duration = 400,
+    int beginDelay = 0,
+    int endDelay = 0,
+  }) {
+    return _Animation<_SpriteCard>(this,
+      duration: duration,
+      beginDelay: beginDelay,
+      endDelay: endDelay,
+      curve: Curves.easeOut,
+      listener: (card, value, first, half, last) {
+        if (first) {
+          card.zIndex = 0;
+        }
+        card.rotateY = _ValueCalc.ab(0.0, _InvisibleAngle.counterClockwise90.value).calc(value);
+        card.scaleX = _ValueCalc.ab(1.0, 0.5).calc(value);
+        card.scaleY = _ValueCalc.ab(1.0, 0.5).calc(value);
+        card.mainElevation = _ValueCalc.ab(1.0, 0.5).calc(value);
+        if (last) {
+          card.visible = false;
+        }
+      },
+    );
+  }
+
+  /// 精灵卡片第一次进入动画.
+  _Animation<_SpriteCard> animateSpriteFirstEnter({
+    int durationRandomCenter = 600,
+    int durationRandomRange = 200,
+    int beginDelayRandomCenter = 200,
+    int beginDelayRandomRange = 200,
+    int endDelay = 0,
+  }) {
+    return _Animation<_SpriteCard>(this,
+      duration: _random.nextIntCenterRange(durationRandomCenter, durationRandomRange),
+      beginDelay: _random.nextIntCenterRange(beginDelayRandomCenter, beginDelayRandomRange),
+      endDelay: endDelay,
+      curve: Curves.easeIn,
+      listener: (card, value, first, half, last) {
+        if (first) {
+          card.zIndex = 0;
+          card.visible = true;
+        }
+        card.rotateY = _ValueCalc.ab(_random.nextListItem(<_InvisibleAngle>[
+          _InvisibleAngle.clockwise90,
+          _InvisibleAngle.clockwise270,
+        ]).value, 0.0).calc(value);
+        card.scaleX = _ValueCalc.ab(0.5, 1.0).calc(value);
+        card.scaleY = _ValueCalc.ab(0.5, 1.0).calc(value);
+        card.mainElevation = _ValueCalc.ab(0.5, 1.0).calc(value);
+        if (last) {
+          card.zIndex = 1;
+        }
+      },
+    );
+  }
+
+  /// 精灵卡片最后一次退出动画.
+  _Animation<_SpriteCard> animateSpriteLastExit({
+    int durationRandomCenter = 600,
+    int durationRandomRange = 200,
+    int beginDelayRandomCenter = 200,
+    int beginDelayRandomRange = 200,
+    int endDelay = 0,
+  }) {
+    return _Animation<_SpriteCard>(this,
+      duration: _random.nextIntCenterRange(durationRandomCenter, durationRandomRange),
+      beginDelay: _random.nextIntCenterRange(beginDelayRandomCenter, beginDelayRandomRange),
+      endDelay: endDelay,
+      curve: Curves.easeOut,
+      listener: (card, value, first, half, last) {
+        if (first) {
+          card.zIndex = 0;
+        }
+        card.rotateY = _ValueCalc.ab(0.0, _random.nextListItem(<_InvisibleAngle>[
+          _InvisibleAngle.counterClockwise90,
+          _InvisibleAngle.counterClockwise270,
+        ]).value).calc(value);
+        card.scaleX = _ValueCalc.ab(1.0, 0.5).calc(value);
+        card.scaleY = _ValueCalc.ab(1.0, 0.5).calc(value);
+        card.mainElevation = _ValueCalc.ab(1.0, 0.5).calc(value);
+        if (last) {
+          card.visible = false;
         }
       },
     );
