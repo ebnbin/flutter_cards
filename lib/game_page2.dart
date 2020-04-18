@@ -13,30 +13,18 @@ class GamePage2 extends StatelessWidget {
   }
 
   Widget _buildGame(Game game) {
-    return Stack(
-      children: <Widget>[
-        Image.asset('assets2/stone_bricks.png',
-          scale: game.backgroundImageScale,
-          width: game.backgroundImageWidth,
-          height: game.backgroundImageHeight,
-          repeat: ImageRepeat.repeat,
-          color: Colors.black.withAlpha(127),
-          colorBlendMode: BlendMode.darken,
-        ),
-        CustomPaint(
-//          painter: Metric.get().debugPainter,
-          foregroundPainter: Metric.get().debugForegroundPainter,
-          child: Stack(
-            children: [0, 1, 2, 3,].map<Widget>((zIndex) {
-              return Stack(
-                children: game.cards.map<Widget>((card) {
-                  return _buildCard(card, zIndex);
-                }).toList(),
-              );
+    return CustomPaint(
+//      painter: Metric.get().debugPainter,
+//      foregroundPainter: Metric.get().debugForegroundPainter,
+      child: Stack(
+        children: [0, 1, 2, 3,].map<Widget>((zIndex) {
+          return Stack(
+            children: game.cards.map<Widget>((card) {
+              return _buildCard(card, zIndex);
             }).toList(),
-          ),
-        ),
-      ],
+          );
+        }).toList(),
+      ),
     );
   }
 
@@ -49,6 +37,7 @@ class GamePage2 extends StatelessWidget {
   }
 
   Widget _buildVisibleCard(Card card) {
+    Color c = Colors.blueGrey.shade100;
     return Positioned.fromRect(
       rect: card.rect,
       child: Transform(
@@ -77,14 +66,18 @@ class GamePage2 extends StatelessWidget {
                     child: Stack(
                       children: <Widget>[
                         Container(
-                          child: Image.asset('assets2/white_wool.png',
-                            scale: game.backgroundImageScale / 2.0,
-                            width: game.backgroundImageWidth,
-                            height: game.backgroundImageHeight,
-                            repeat: ImageRepeat.repeat,
-                            color: Colors.black.withAlpha(127),
-                            colorBlendMode: BlendMode.darken,
+                          child: Opacity(
+                            opacity: 0.75,
+                            child: Image.asset('assets/oak_planks.png',
+                              scale: game.backgroundImageScale,
+                              width: game.backgroundImageWidth,
+                              height: game.backgroundImageHeight,
+                              repeat: ImageRepeat.repeat,
+                              color: Colors.black.withAlpha(63),
+                              colorBlendMode: BlendMode.darken,
+                            ),
                           ),
+                          color: Colors.black,
                         ),
                         Positioned.fromRect(
                           rect: card.spriteEntityRect,
@@ -110,7 +103,7 @@ class GamePage2 extends StatelessWidget {
 //                            color: Colors.yellow,
                             child: Image.asset('assets2/digit_8.png',
                               fit: BoxFit.contain,
-                              color: Colors.black,
+                              color: c,
                               colorBlendMode: BlendMode.srcATop,
                             ),
                           ),
@@ -121,7 +114,7 @@ class GamePage2 extends StatelessWidget {
 //                            color: Colors.pink,
                             child: Image.asset('assets2/digit_8.png',
                               fit: BoxFit.contain,
-                              color: Colors.black,
+                              color: c,
                               colorBlendMode: BlendMode.srcATop,
                             ),
                           ),
@@ -141,7 +134,7 @@ class GamePage2 extends StatelessWidget {
 //                            color: Colors.yellow,
                             child: Image.asset('assets2/digit_1.png',
                               fit: BoxFit.contain,
-                              color: Colors.black,
+                              color: c,
                               colorBlendMode: BlendMode.srcATop,
                             ),
                           ),
@@ -152,7 +145,7 @@ class GamePage2 extends StatelessWidget {
 //                            color: Colors.pink,
                             child: Image.asset('assets2/digit_2.png',
                               fit: BoxFit.contain,
-                              color: Colors.black,
+                              color: c,
                               colorBlendMode: BlendMode.srcATop,
                             ),
                           ),
@@ -172,7 +165,7 @@ class GamePage2 extends StatelessWidget {
 //                            color: Colors.yellow,
                             child: Image.asset('assets2/digit_6.png',
                               fit: BoxFit.contain,
-                              color: Colors.black,
+                              color: c,
                               colorBlendMode: BlendMode.srcATop,
                             ),
                           ),
@@ -183,7 +176,7 @@ class GamePage2 extends StatelessWidget {
 //                            color: Colors.pink,
                             child: Image.asset('assets2/digit_7.png',
                               fit: BoxFit.contain,
-                              color: Colors.black,
+                              color: c,
                               colorBlendMode: BlendMode.srcATop,
                             ),
                           ),
@@ -194,7 +187,7 @@ class GamePage2 extends StatelessWidget {
 //                            color: Colors.yellow,
                             child: Image.asset('assets2/digit_slash.png',
                               fit: BoxFit.contain,
-                              color: Colors.black,
+                              color: c,
                               colorBlendMode: BlendMode.srcATop,
                             ),
                           ),
@@ -205,7 +198,7 @@ class GamePage2 extends StatelessWidget {
 //                            color: Colors.pink,
                             child: Image.asset('assets2/digit_8.png',
                               fit: BoxFit.contain,
-                              color: Colors.black,
+                              color: c,
                               colorBlendMode: BlendMode.srcATop,
                             ),
                           ),
@@ -216,7 +209,7 @@ class GamePage2 extends StatelessWidget {
 //                            color: Colors.yellow,
                             child: Image.asset('assets2/digit_9.png',
                               fit: BoxFit.contain,
-                              color: Colors.black,
+                              color: c,
                               colorBlendMode: BlendMode.srcATop,
                             ),
                           ),
@@ -236,7 +229,7 @@ class GamePage2 extends StatelessWidget {
 //                            color: Colors.yellow,
                             child: Image.asset('assets2/digit_4.png',
                               fit: BoxFit.contain,
-                              color: Colors.black,
+                              color: c,
                               colorBlendMode: BlendMode.srcATop,
                             ),
                           ),
@@ -247,7 +240,7 @@ class GamePage2 extends StatelessWidget {
 //                            color: Colors.pink,
                             child: Image.asset('assets2/digit_5.png',
                               fit: BoxFit.contain,
-                              color: Colors.black,
+                              color: c,
                               colorBlendMode: BlendMode.srcATop,
                             ),
                           ),
@@ -267,7 +260,7 @@ class GamePage2 extends StatelessWidget {
 //                            color: Colors.yellow,
                             child: Image.asset('assets2/digit_2.png',
                               fit: BoxFit.contain,
-                              color: Colors.black,
+                              color: c,
                               colorBlendMode: BlendMode.srcATop,
                             ),
                           ),
@@ -278,7 +271,7 @@ class GamePage2 extends StatelessWidget {
 //                            color: Colors.pink,
                             child: Image.asset('assets2/digit_3.png',
                               fit: BoxFit.contain,
-                              color: Colors.black,
+                              color: c,
                               colorBlendMode: BlendMode.srcATop,
                             ),
                           ),
@@ -289,7 +282,7 @@ class GamePage2 extends StatelessWidget {
 //                            color: Colors.yellow,
                             child: Image.asset('assets2/digit_0.png',
                               fit: BoxFit.contain,
-                              color: Colors.black,
+                              color: c,
                               colorBlendMode: BlendMode.srcATop,
                             ),
                           ),
@@ -300,7 +293,7 @@ class GamePage2 extends StatelessWidget {
 //                            color: Colors.pink,
                             child: Image.asset('assets2/digit_1.png',
                               fit: BoxFit.contain,
-                              color: Colors.black,
+                              color: c,
                               colorBlendMode: BlendMode.srcATop,
                             ),
                           ),

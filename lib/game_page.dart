@@ -42,11 +42,24 @@ class _GameWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GamePage2(game);
+    return Stack(
+      children: <Widget>[
+        _buildBackground(context),
+        GamePage2(game),
+      ],
+    );
   }
 
   /// 背景
   Widget _buildBackground(BuildContext context) {
-    return Container();
+    return Image.asset(
+      'assets/stone_bricks.png',
+      scale: Metric.get().imageScale(48, 8.0),
+      width: Metric.get().screenRect.width,
+      height: Metric.get().screenRect.height,
+      color: Colors.black.withAlpha(127),
+      colorBlendMode: BlendMode.darken,
+      repeat: ImageRepeat.repeat,
+    );
   }
 }

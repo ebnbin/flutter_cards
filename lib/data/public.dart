@@ -30,7 +30,7 @@ class Game {
   }
 
   double get backgroundImageScale {
-    return 256.0 / (min(Metric.get().safeScreenRect.width, Metric.get().safeScreenRect.height) / 62.0 * 16.0 / 2.0);
+    return 48.0 / (min(Metric.get().safeScreenRect.width, Metric.get().safeScreenRect.height) / 62.0 * 16.0 / 2.0);
   }
 
   double get backgroundImageWidth {

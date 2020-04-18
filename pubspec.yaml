@@ -68,4 +68,5 @@ flutter:
   # see https://flutter.dev/custom-fonts/#from-packages
 
   assets:
+    - assets/
     - assets2/

@@ -56,6 +56,7 @@ class Metric {
       this.squareSizeMap,
       this.debugPainter,
       this.debugForegroundPainter,
+      this.imageScale,
       );
 
   final Rect screenRect;
@@ -74,6 +75,7 @@ class Metric {
   final Map<int, double> squareSizeMap;
   final CustomPainter debugPainter;
   final CustomPainter debugForegroundPainter;
+  final double Function(int imageSize, double grid) imageScale;
 
   /// 在 [State.build] 中调用.
   static void build(BuildContext context) {
@@ -216,6 +218,14 @@ class Metric {
         }
       }
     });
+    /// 计算图片缩放.
+    ///
+    /// [imageSize] 图片大小 (像素).
+    ///
+    /// [grid] 网格数.
+    double Function(int imageSize, double grid) imageScale = (imageSize, grid) {
+      return imageSize / (isVertical ? safeScreenRect.width : safeScreenRect.height) * coreGrid / grid;
+    };
 
     _sizeCache = mediaQueryData.size;
     _paddingCache = mediaQueryData.padding;
@@ -236,6 +246,7 @@ class Metric {
       squareSizeMap,
       debugPainter,
       debugForegroundPainter,
+      imageScale,
     );
   }
 }
