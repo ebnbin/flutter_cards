@@ -90,11 +90,11 @@ class VisibleCard {
   bool get ignorePointer => _card.ignorePointer;
 
   double get opacity => _card.opacity;
-  
+
   bool get isGridCard {
     return _card is _GridCard;
   }
-  
+
   GridCard buildGridCard() {
     return GridCard._(_card as _GridCard);
   }
@@ -103,8 +103,20 @@ class VisibleCard {
 /// 根据网格定位的卡片, 渲染为 Material 卡片.
 class GridCard {
   GridCard._(this._gridCard);
-  
+
   final _GridCard _gridCard;
 
   double get margin => _gridCard.margin;
+
+  double get elevation => _gridCard.elevation;
+
+  /// 是否启用圆角.
+  static const bool _enableRadius = true;
+
+  double get radius {
+    if (!_enableRadius) {
+      return 0.0;
+    }
+    return _gridCard.radius;
+  }
 }

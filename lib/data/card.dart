@@ -154,6 +154,7 @@ abstract class _Card {
   /// 主尺寸厚度. 建议范围 0.0 ~ 4.0.
   double mainElevation;
 
+  /// TODO _GridCard 才有 elevation.
   /// 渲染厚度.
   double get elevation {
     switch (dimension) {
@@ -171,6 +172,7 @@ abstract class _Card {
   /// 主尺寸圆角. 建议范围 4.0.
   double mainRadius;
 
+  /// TODO _GridCard 才有 radius.
   /// 渲染圆角.
   double get radius {
     switch (dimension) {

@@ -47,7 +47,7 @@ class _GameWidget extends StatelessWidget {
         _buildBackground(context),
         CustomPaint(
 //          painter: Metric.get().debugPainter,
-          foregroundPainter: Metric.get().debugForegroundPainter,
+//          foregroundPainter: Metric.get().debugForegroundPainter,
           child: _buildCards(context),
         ),
       ],
@@ -126,7 +126,14 @@ class _GameWidget extends StatelessWidget {
   Widget _buildGridCard(GridCard gridCard, Card2 card2) {
     return Container(
       margin: EdgeInsets.all(gridCard.margin),
-      child: GamePage2(card2),
+      child: Material(
+        elevation: gridCard.elevation,
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(gridCard.radius),
+        clipBehavior: Clip.hardEdge,
+        animationDuration: Duration.zero,
+        child: GamePage2(card2),
+      ),
     );
   }
 
