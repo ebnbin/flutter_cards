@@ -604,6 +604,199 @@ class _CoreCard extends _GridCard {
 //*********************************************************************************************************************
 //*********************************************************************************************************************
 
+/// 精灵卡片.
+class _SpriteCard extends _CoreCard {
+  _SpriteCard(_SpriteScreen screen, {
+    int zIndex = 1,
+    bool visible = true,
+    _CardDimension dimension = _CardDimension.main,
+    bool vice = false,
+    bool vicing = false,
+    double rotateX = 0.0,
+    double rotateY = 0.0,
+    double rotateZ = 0.0,
+    double translateX = 0.0,
+    double translateY = 0.0,
+    double scaleX = 1.0,
+    double scaleY = 1.0,
+    double mainOpacity = 1.0,
+    double mainElevation = 1.0,
+    double mainRadius = 4.0,
+    _GestureType gestureType = _GestureType.normal,
+    void Function(_Card card) onTap,
+    void Function(_Card card) onLongPress,
+    int rowIndex = 0,
+    int columnIndex = 0,
+  }) : super(screen,
+    zIndex: zIndex,
+    visible: visible,
+    dimension: dimension,
+    vice: vice,
+    vicing: vicing,
+    rotateX: rotateX,
+    rotateY: rotateY,
+    rotateZ: rotateZ,
+    translateX: translateX,
+    translateY: translateY,
+    scaleX: scaleX,
+    scaleY: scaleY,
+    mainOpacity: mainOpacity,
+    mainElevation: mainElevation,
+    mainRadius: mainRadius,
+    gestureType: gestureType,
+    onTap: onTap,
+    onLongPress: onLongPress,
+    rowIndex: rowIndex,
+    columnIndex: columnIndex,
+    // 固定为 1.
+    rowSpan: 1,
+    // 固定为 1.
+    columnSpan: 1,
+  );
+
+  /// 强转为 [_SpriteScreen].
+  _SpriteScreen get spriteScreen {
+    return screen as _SpriteScreen;
+  }
+
+  /// 是否在指定方向边缘.
+  bool edge(AxisDirection direction) {
+    switch (direction) {
+      case AxisDirection.up:
+        return rowIndex <= 0;
+      case AxisDirection.right:
+        return columnIndex >= screen.square - 1;
+      case AxisDirection.down:
+        return rowIndex >= screen.square - 1;
+      case AxisDirection.left:
+        return columnIndex <= 0;
+      default:
+        throw Exception();
+    }
+  }
+
+  /// 返回在指定方向上与当前卡片相邻的卡片. 如果没有符合条件的卡片则返回 null. 不会返回 [visible] 为 false 的卡片.
+  ///
+  /// 例如 direction = left 表示返回当前卡片左边相邻的卡片.
+  _SpriteCard adjacentCard(AxisDirection direction) {
+    assert(direction != null);
+    if (edge(direction)) {
+      return null;
+    }
+    return spriteScreen.spriteCards(
+      exceptCard: this,
+      exceptInvisible: true,
+    ).singleWhere((element) {
+      switch (direction) {
+        case AxisDirection.up:
+          return element.rowIndex == rowIndex - 1 && element.columnIndex == columnIndex;
+        case AxisDirection.right:
+          return element.rowIndex == rowIndex && element.columnIndex == columnIndex + 1;
+        case AxisDirection.down:
+          return element.rowIndex == rowIndex + 1 && element.columnIndex == columnIndex;
+        case AxisDirection.left:
+          return element.rowIndex == rowIndex && element.columnIndex == columnIndex - 1;
+        default:
+          throw Exception();
+      }
+    }, orElse: () => null);
+  }
+
+  /// 返回指定卡片与当前卡片的相对相邻位置. 如果不相邻则返回 null.
+  ///
+  /// 例如指定卡片在当前卡片的左边相邻则返回 left.
+  AxisDirection adjacentDirection(_SpriteCard card) {
+    assert(card != null);
+    if (identical(card, adjacentCard(AxisDirection.up))) {
+      return AxisDirection.up;
+    }
+    if (identical(card, adjacentCard(AxisDirection.right))) {
+      return AxisDirection.right;
+    }
+    if (identical(card, adjacentCard(AxisDirection.down))) {
+      return AxisDirection.down;
+    }
+    if (identical(card, adjacentCard(AxisDirection.left))) {
+      return AxisDirection.left;
+    }
+    return null;
+  }
+
+  /// 返回当前卡片指定方向上的所有卡片. 如果没有符合条件的卡片则返回空列表. 不会返回 [visible] 为 false 的卡片.
+  ///
+  /// 例如 direction = left 表示返回当前卡片左边一格, 左边两格, 左边三格... 的列表.
+  List<_SpriteCard> adjacentCardAll(AxisDirection direction) {
+    assert(direction != null);
+    if (edge(direction)) {
+      return List<_SpriteCard>.unmodifiable(<_SpriteCard>[]);
+    }
+
+    List<_SpriteCard> result = <_SpriteCard>[];
+    List<_SpriteCard> spriteCards = spriteScreen.spriteCards(
+      exceptCard: this,
+      exceptInvisible: true,
+    );
+
+    /// 添加 [spriteCards] 中指定行列的卡片到 [result] 中.
+    void addSpriteCard(int targetRowIndex, int targetColumnIndex) {
+      result.addNotNull(spriteCards.singleWhere((element) {
+        return element.rowIndex == targetRowIndex && element.columnIndex == targetColumnIndex;
+      }, orElse: () => null));
+    }
+
+    switch (direction) {
+      case AxisDirection.up:
+        for (int targetRowIndex = rowIndex - 1; targetRowIndex >= 0; targetRowIndex--) {
+          addSpriteCard(targetRowIndex, columnIndex);
+        }
+        break;
+      case AxisDirection.right:
+        for (int targetColumnIndex = columnIndex + 1; targetColumnIndex <= screen.square - 1; targetColumnIndex++) {
+          addSpriteCard(rowIndex, targetColumnIndex);
+        }
+        break;
+      case AxisDirection.down:
+        for (int targetRowIndex = rowIndex + 1; targetRowIndex <= screen.square - 1; targetRowIndex++) {
+          addSpriteCard(targetRowIndex, columnIndex);
+        }
+        break;
+      case AxisDirection.left:
+        for (int targetColumnIndex = columnIndex - 1; targetColumnIndex >= 0; targetColumnIndex--) {
+          addSpriteCard(rowIndex, targetColumnIndex);
+        }
+        break;
+      default:
+        throw Exception();
+    }
+    return List<_SpriteCard>.unmodifiable(result);
+  }
+
+  /// 按照 [clockwise] 顺时针或逆时针方向从当前方向依次寻找下一个不是边缘的方向, 不会返回与 [direction] 相反的方向.
+  ///
+  /// 例如: direction = left, clockwise = false, 当前卡片在左下角, 则按照 left (在边缘), down (在边缘), right (与 left 相反),
+  /// up 顺序, 返回第一个符合条件的方向 up.
+  AxisDirection nextNonEdgeDirection(AxisDirection direction, {
+    bool clockwise = false,
+  }) {
+    assert(direction != null);
+    List<AxisDirection> directions = clockwise
+        ? AxisDirection.values
+        : List.unmodifiable(AxisDirection.values.reversed);
+    int start = directions.indexOf(direction);
+    for (AxisDirection nextDirection in (directions + directions).sublist(start, start + directions.length)) {
+      if (nextDirection != flipAxisDirection(direction) && !edge(nextDirection)) {
+        return nextDirection;
+      }
+    }
+    throw Exception();
+  }
+
+  //*******************************************************************************************************************
+}
+
+//*********************************************************************************************************************
+//*********************************************************************************************************************
+
 /// 卡片尺寸.
 enum _CardDimension {
   /// 主尺寸.

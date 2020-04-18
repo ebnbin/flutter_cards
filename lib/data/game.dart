@@ -127,9 +127,26 @@ class _SpriteScreen extends _Screen {
   }
 
   /// 从 [cards] 返回全部 [_SpriteCard].
-  List<_SpriteCard> get spriteCards {
+  ///
+  /// [exceptCard] 排除的卡片. 可以为 null.
+  ///
+  /// [exceptInvisible] 是否排除不可见的卡片.
+  List<_SpriteCard> spriteCards({
+    _SpriteCard exceptCard,
+    bool exceptInvisible = false,
+  }) {
     return List<_SpriteCard>.unmodifiable(cards.where((element) {
-      return element is _SpriteCard;
+      if (element is! _SpriteCard) {
+        return false;
+      }
+      _SpriteCard spriteCard = element as _SpriteCard;
+      if (identical(spriteCard, exceptCard)) {
+        return false;
+      }
+      if (exceptInvisible && !spriteCard.visible) {
+        return false;
+      }
+      return true;
     }));
   }
 }
