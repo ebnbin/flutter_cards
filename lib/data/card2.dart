@@ -91,21 +91,21 @@ class _SpriteCard2 extends _SpriteCard {
       beginDelay: beginDelay,
       endDelay: endDelay,
       curve: Curves.easeOut,
-      onAnimating: (card, value, half) {
+      listener: (card, value, first, half, last) {
+        if (first) {
+          card.zIndex = 0;
+        }
+        if (last) {
+          card.visible = false;
+          card.rotateY = _InvisibleAngle.counterClockwise90.value;
+          card.scaleX = 0.5;
+          card.scaleY = 0.5;
+          card.mainElevation = 0.5;
+        }
         card.rotateY = _ValueCalc.ab(0.0, _InvisibleAngle.counterClockwise90.value).calc(value);
         card.scaleX = _ValueCalc.ab(1.0, 0.5).calc(value);
         card.scaleY = _ValueCalc.ab(1.0, 0.5).calc(value);
         card.mainElevation = _ValueCalc.ab(1.0, 0.5).calc(value);
-      },
-      onBegin: (card) {
-        card.zIndex = 0;
-      },
-      onEnd: (card) {
-        card.visible = false;
-        card.rotateY = _InvisibleAngle.counterClockwise90.value;
-        card.scaleX = 0.5;
-        card.scaleY = 0.5;
-        card.mainElevation = 0.5;
       },
     );
   }
@@ -120,19 +120,19 @@ class _SpriteCard2 extends _SpriteCard {
       duration: _random.nextIntFromTo(500, 1000),
       beginDelay: _random.nextIntFromTo(0, 500),
       curve: Curves.easeOut,
-      onAnimating: (card, value, half) {
+      listener: (card, value, first, half, last) {
+        if (first) {
+          card.visible = true;
+          card.rotateY = rotateY;
+          card.scaleX = 0.5;
+          card.scaleY = 0.5;
+          card.mainElevation = 0.5;
+          card.zIndex = 0;
+        }
         card.rotateY = _ValueCalc.ab(rotateY, 0.0).calc(value);
         card.scaleX = _ValueCalc.ab(0.5, 1.0).calc(value);
         card.scaleY = _ValueCalc.ab(0.5, 1.0).calc(value);
         card.mainElevation = _ValueCalc.ab(0.5, 1.0).calc(value);
-      },
-      onBegin: (card) {
-        card.visible = true;
-        card.rotateY = rotateY;
-        card.scaleX = 0.5;
-        card.scaleY = 0.5;
-        card.mainElevation = 0.5;
-        card.zIndex = 0;
       },
     );
   }
@@ -147,21 +147,21 @@ class _SpriteCard2 extends _SpriteCard {
       duration: _random.nextIntFromTo(500, 1000),
       beginDelay: _random.nextIntFromTo(0, 500),
       curve: Curves.easeIn,
-      onAnimating: (card, value, half) {
+      listener: (card, value, first, half, last) {
+        if (first) {
+          card.zIndex = 0;
+        }
+        if (last) {
+          card.visible = false;
+          card.rotateY = rotateY;
+          card.scaleX = 0.5;
+          card.scaleY = 0.5;
+          card.mainElevation = 0.5;
+        }
         card.rotateY = _ValueCalc.ab(0.0, rotateY).calc(value);
         card.scaleX = _ValueCalc.ab(1.0, 0.5).calc(value);
         card.scaleY = _ValueCalc.ab(1.0, 0.5).calc(value);
         card.mainElevation = _ValueCalc.ab(1.0, 0.5).calc(value);
-      },
-      onBegin: (card) {
-        card.zIndex = 0;
-      },
-      onEnd: (card) {
-        card.visible = false;
-        card.rotateY = rotateY;
-        card.scaleX = 0.5;
-        card.scaleY = 0.5;
-        card.mainElevation = 0.5;
       },
     );
   }

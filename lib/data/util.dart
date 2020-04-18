@@ -233,16 +233,17 @@ class _ValueCalc {
 }
 
 /// 卡片动画.
+///
+/// TODO 动画 value < 0.0 或 > 1.0 的情况.
 class _Animation<T extends _Card> {
   _Animation(this.card, {
     this.duration = 0,
     this.beginDelay = 0,
     this.endDelay = 0,
     this.curve = Curves.linear,
-    this.onAnimating,
-    this.onBegin,
-    this.onEnd,
-  });
+    @required
+    this.listener,
+  }) : assert(listener != null);
 
   /// 动画应用到的卡片.
   final T card;
@@ -253,16 +254,19 @@ class _Animation<T extends _Card> {
   /// [onEnd] 之后延迟.
   final int endDelay;
   final Curve curve;
-  /// 动画过程中回调
-  ///
-  /// [half] 第一次过半时为 true, 只会为 true 一次.
-  final void Function(T card, double value, bool half) onAnimating;
-  /// 动画开始时回调 (只会回调一次).
-  final void Function(T card) onBegin;
-  /// 动画结束时回调 (只会回调一次).
-  final void Function(T card) onEnd;
 
-  /// 动画是否过半.
+  /// 动画监听器.
+  ///
+  /// [first] 第一次调用时为 true, 只会为 true 一次.
+  /// 
+  /// [half] 第一次过半调用时为 true, 只会为 true 一次.
+  /// 
+  /// [last] 最后一次调用时为 true, 只会为 true 一次.
+  final void Function(T card, double value, bool first, bool half, bool last) listener;
+
+  /// 动画第一次回调.
+  bool _first = false;
+  /// 动画第一次过半回调.
   bool _half = false;
 
   /// 开始动画.
@@ -294,12 +298,11 @@ class _Animation<T extends _Card> {
             case AnimationStatus.reverse:
               break;
             case AnimationStatus.completed:
-              onEnd?.call(card);
-              card.screen.game.callback.notifyStateChanged();
               animationController.dispose();
               Future.delayed(Duration(
                 milliseconds: endDelay,
               ), () {
+                _first = false;
                 _half = false;
                 endCallback?.call();
               });
@@ -307,15 +310,18 @@ class _Animation<T extends _Card> {
           }
         })
         ..addListener(() {
+          bool first = !_first;
+          if (first) {
+            _first = true;
+          }
           bool half = !_half && curvedAnimation.value >= 0.5;
           if (half) {
             _half = true;
           }
-          onAnimating?.call(card, curvedAnimation.value, half);
+          bool last = curvedAnimation.status == AnimationStatus.completed;
+          listener.call(card, curvedAnimation.value, first, half, last);
           card.screen.game.callback.notifyStateChanged();
         });
-      onBegin?.call(card);
-      card.screen.game.callback.notifyStateChanged();
       animationController.forward();
     });
   }

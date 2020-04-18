@@ -216,19 +216,19 @@ abstract class _Card {
     return _Animation<_Card>(this,
       duration: 800,
       curve: Curves.easeInOut,
-      onAnimating: (card, value, half) {
+      listener: (card, value, first, half, last) {
+        if (first) {
+          card.zIndex = 2;
+        }
         card.rotateY = _ValueCalc.ab(0.0, _VisibleAngle.clockwise360.value).calc(value);
         card.scaleX = _ValueCalc.aba(1.0, 2.0).calc(value);
         card.scaleY = _ValueCalc.aba(1.0, 2.0).calc(value);
         card.mainElevation = _ValueCalc.aba(1.0, 2.0).calc(value);
         card.mainRadius = _ValueCalc.aba(4.0, 8.0).calc(value);
-      },
-      onBegin: (card) {
-        card.zIndex = 2;
-      },
-      onEnd: (card) {
-        card.zIndex = 1;
-        card.rotateY = 0.0;
+        if (last) {
+          card.zIndex = 1;
+          card.rotateY = 0.0;
+        }
       },
     );
   }
@@ -246,10 +246,10 @@ abstract class _Card {
       beginDelay: beginDelay,
       endDelay: endDelay,
       curve: Curves.easeInOut,
-      onAnimating: (card, value, half) {
-        if (half) {
-          card.dimension = _CardDimension.vice;
-          card.screen.viceOpacity = 1.0;
+      listener: (card, value, first, half, last) {
+        if (first) {
+          card.zIndex = 2;
+          card.vicing = true;
         }
         if (value < 0.5) {
           card.rotateX = _ValueCalc.ab(0.0, _VisibleAngle.counterClockwise180.value).calc(value);
@@ -267,10 +267,10 @@ abstract class _Card {
           card.scaleY = _ValueCalc.ab(card.mainRect.height / card.viceRect.height, 1.0).calc(value);
         }
         card.mainElevation = _ValueCalc.ab(1.0, 4.0).calc(value);
-      },
-      onBegin: (card) {
-        card.zIndex = 2;
-        card.vicing = true;
+        if (half) {
+          card.dimension = _CardDimension.vice;
+          card.screen.viceOpacity = 1.0;
+        }
       },
     );
   }
@@ -288,10 +288,7 @@ abstract class _Card {
       beginDelay: beginDelay,
       endDelay: endDelay,
       curve: Curves.easeInOut,
-      onAnimating: (card, value, half) {
-        if (half) {
-          card.dimension = _CardDimension.main;
-        }
+      listener: (card, value, first, half, last) {
         if (value < 0.5) {
           card.rotateX = _ValueCalc.ab(0.0, _VisibleAngle.clockwise180.value).calc(value);
           card.translateX = _ValueCalc.ab(0.0, card.mainRect.center.dx - card.viceRect.center.dx).calc(value);
@@ -308,10 +305,13 @@ abstract class _Card {
           card.screen.viceOpacity = _ValueCalc.ab(1.0, 0.0).calc(value * 2.0 - 1.0);
         }
         card.mainElevation = _ValueCalc.ab(4.0, 1.0).calc(value);
-      },
-      onEnd: (card) {
-        card.zIndex = 1;
-        card.vicing = false;
+        if (half) {
+          card.dimension = _CardDimension.main;
+        }
+        if (last) {
+          card.zIndex = 1;
+          card.vicing = false;
+        }
       },
     );
   }
@@ -327,17 +327,17 @@ abstract class _Card {
       beginDelay: beginDelay,
       endDelay: endDelay,
       curve: Curves.easeInOut,
-      onAnimating: (card, value, half) {
+      listener: (card, value, first, half, last) {
+        if (first) {
+          card.zIndex = 0;
+        }
         card.rotateY = _ValueCalc.aba(0.0, 1.0 / 8.0 * pi).calc(value);
         card.scaleX = _ValueCalc.aba(1.0, 7.0 / 8.0).calc(value);
         card.scaleY = _ValueCalc.aba(1.0, 7.0 / 8.0).calc(value);
         card.mainElevation = _ValueCalc.aba(1.0, 7.0 / 8.0).calc(value);
-      },
-      onBegin: (card) {
-        card.zIndex = 0;
-      },
-      onEnd: (card) {
-        card.zIndex = 1;
+        if (last) {
+          card.zIndex = 1;
+        }
       },
     );
   }
@@ -821,11 +821,7 @@ class _SpriteCard extends _CoreCard {
       beginDelay: beginDelay,
       endDelay: endDelay,
       curve: Curves.easeInOut,
-      onAnimating: (card, value, half) {
-        if (half) {
-          card.rowIndex += direction.y;
-          card.columnIndex += direction.x;
-        }
+      listener: (card, value, first, half, last) {
         if (value < 0.5) {
           card.translateX = _ValueCalc.ab(0.0, Metric.get().squareSizeMap[card.screen.square] * direction.x)
               .calc(value);
@@ -836,6 +832,10 @@ class _SpriteCard extends _CoreCard {
               .calc(value);
           card.translateY = _ValueCalc.ab(Metric.get().squareSizeMap[card.screen.square] * -direction.y, 0.0)
               .calc(value);
+        }
+        if (half) {
+          card.rowIndex += direction.y;
+          card.columnIndex += direction.x;
         }
       },
     );
@@ -852,22 +852,18 @@ class _SpriteCard extends _CoreCard {
       beginDelay: beginDelay,
       endDelay: endDelay,
       curve: Curves.easeIn,
-      onAnimating: (card, value, half) {
+      listener: (card, value, first, half, last) {
+        if (first) {
+          card.visible = true;
+          card.zIndex = 0;
+        }
         card.rotateY = _ValueCalc.ab(_InvisibleAngle.clockwise90.value, 0.0).calc(value);
         card.scaleX = _ValueCalc.ab(0.5, 1.0).calc(value);
         card.scaleY = _ValueCalc.ab(0.5, 1.0).calc(value);
         card.mainElevation = _ValueCalc.ab(0.5, 1.0).calc(value);
-      },
-      onBegin: (card) {
-        card.visible = true;
-        card.zIndex = 0;
-        card.rotateY = _InvisibleAngle.clockwise90.value;
-        card.scaleX = 0.5;
-        card.scaleY = 0.5;
-        card.mainElevation = 0.5;
-      },
-      onEnd: (card) {
-        card.zIndex = 1;
+        if (last) {
+          card.zIndex = 1;
+        }
       },
     );
   }
