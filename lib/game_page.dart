@@ -45,10 +45,13 @@ class _GameWidget extends StatelessWidget {
     return Stack(
       children: <Widget>[
         _buildBackground(context),
-        CustomPaint(
-//          painter: Metric.get().debugPainter,
-//          foregroundPainter: Metric.get().debugForegroundPainter,
-          child: _buildCards(context),
+        Positioned.fromRelativeRect(
+          rect: RelativeRect.fill,
+          child: CustomPaint(
+//            painter: Metric.get().debugPainter,
+//            foregroundPainter: Metric.get().debugForegroundPainter,
+            child: _buildCards(context),
+          ),
         ),
       ],
     );
@@ -56,14 +59,19 @@ class _GameWidget extends StatelessWidget {
 
   /// 背景
   Widget _buildBackground(BuildContext context) {
-    return Image.asset(
-      'assets/stone_bricks.png',
-      scale: Metric.get().imageScale(48, 8.0),
-      width: Metric.get().screenRect.width,
-      height: Metric.get().screenRect.height,
-      color: Colors.black.withOpacity(0.5),
-      colorBlendMode: BlendMode.darken,
-      repeat: ImageRepeat.repeat,
+    return Positioned.fromRelativeRect(
+      rect: RelativeRect.fill,
+      child: Image.asset(
+        'assets/stone_bricks.png',
+        scale: Metric.get().imageScale(48, 8.0),
+        /// 不需要设置宽高.
+//        width: ,
+//        height: ,
+        color: Colors.black.withOpacity(0.5),
+        colorBlendMode: BlendMode.darken,
+        fit: BoxFit.none,
+        repeat: ImageRepeat.repeat,
+      ),
     );
   }
 
@@ -132,7 +140,30 @@ class _GameWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(gridCard.radius),
         clipBehavior: Clip.hardEdge,
         animationDuration: Duration.zero,
-        child: GamePage2(card2),
+        child: Stack(
+          children: <Widget>[
+            _buildGridCardBackground(gridCard),
+            GamePage2(card2),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// 网格卡片背景.
+  Widget _buildGridCardBackground(GridCard gridCard) {
+    return Positioned.fromRelativeRect(
+      rect: RelativeRect.fill,
+      child: Image.asset(
+        'assets/oak_planks.png',
+        scale: Metric.get().imageScale(96, 16.0),
+        /// 不需要设置宽高.
+//        width: ,
+//        height: ,
+        color: Colors.black.withOpacity(0.25),
+        colorBlendMode: BlendMode.darken,
+        fit: BoxFit.none,
+        repeat: ImageRepeat.repeat,
       ),
     );
   }

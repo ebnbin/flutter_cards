@@ -97,7 +97,7 @@ class _SpriteScreen extends _Screen {
     /// Test: 2.
     cardLength: square * square + 2,
   ) {
-    cards[16] = _GridCard(this,
+    cards[cards.length - 2] = _GridCard(this,
       verticalRowGridIndex: 80,
       verticalColumnGridIndex: 1,
       verticalRowGridSpan: 10,
@@ -110,7 +110,7 @@ class _SpriteScreen extends _Screen {
         actAddSpriteCards(this);
       },
     );
-    cards[17] = _GridCard(this,
+    cards[cards.length - 1] = _GridCard(this,
       verticalRowGridIndex: 80,
       verticalColumnGridIndex: 11,
       verticalRowGridSpan: 10,

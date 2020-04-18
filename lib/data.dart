@@ -96,13 +96,15 @@ class VisibleCard {
   }
 
   GridCard buildGridCard() {
-    return GridCard._(_card as _GridCard);
+    return GridCard._(this, _card as _GridCard);
   }
 }
 
 /// 根据网格定位的卡片, 渲染为 Material 卡片.
 class GridCard {
-  GridCard._(this._gridCard);
+  GridCard._(this.visibleCard, this._gridCard);
+
+  final VisibleCard visibleCard;
 
   final _GridCard _gridCard;
 
