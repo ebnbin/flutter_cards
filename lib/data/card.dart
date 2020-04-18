@@ -961,6 +961,109 @@ class _SpriteCard extends _CoreCard {
 //*********************************************************************************************************************
 //*********************************************************************************************************************
 
+/// 玩家卡片.
+class _PlayerCard extends _SpriteCard {
+  _PlayerCard(_SpriteScreen screen, {
+    int zIndex = 1,
+    /// 默认不可见, 通过动画进入.
+    bool visible = false,
+    _CardDimension dimension = _CardDimension.main,
+    bool vicing = false,
+    double rotateX = 0.0,
+    double rotateY = 0.0,
+    double rotateZ = 0.0,
+    double translateX = 0.0,
+    double translateY = 0.0,
+    double scaleX = 1.0,
+    double scaleY = 1.0,
+    double mainOpacity = 1.0,
+    double mainElevation = 1.0,
+    double mainRadius = 4.0,
+    _GestureType gestureType = _GestureType.normal,
+    void Function(_Card card) onTap,
+    void Function(_Card card) onLongPress,
+    int rowIndex = 0,
+    int columnIndex = 0,
+  }) : super(screen,
+    zIndex: zIndex,
+    visible: visible,
+    dimension: dimension,
+    vicing: vicing,
+    rotateX: rotateX,
+    rotateY: rotateY,
+    rotateZ: rotateZ,
+    translateX: translateX,
+    translateY: translateY,
+    scaleX: scaleX,
+    scaleY: scaleY,
+    mainOpacity: mainOpacity,
+    mainElevation: mainElevation,
+    mainRadius: mainRadius,
+    gestureType: gestureType,
+    onTap: onTap,
+    onLongPress: onLongPress,
+    rowIndex: rowIndex,
+    columnIndex: columnIndex,
+  );
+
+  /// 随机非边缘位置.
+  ///
+  /// 3 * 3 始终在中间一格, 4 * 4 中间 4 格之一随机, 5 * 5 中间 9 格之一随机.
+  static int _randomRowColumnIndex(_SpriteScreen screen) {
+    return _random.nextIntFromTo(1, screen.square - 2);
+  }
+
+  /// [_randomRowColumnIndex].
+  _PlayerCard.random(_SpriteScreen screen, {
+    int zIndex = 1,
+    /// 默认不可见, 通过动画进入.
+    bool visible = false,
+    _CardDimension dimension = _CardDimension.main,
+    bool vicing = false,
+    double rotateX = 0.0,
+    double rotateY = 0.0,
+    double rotateZ = 0.0,
+    double translateX = 0.0,
+    double translateY = 0.0,
+    double scaleX = 1.0,
+    double scaleY = 1.0,
+    double mainOpacity = 1.0,
+    double mainElevation = 1.0,
+    double mainRadius = 4.0,
+    _GestureType gestureType = _GestureType.normal,
+    void Function(_Card card) onTap,
+    void Function(_Card card) onLongPress,
+  }) : this(screen,
+    zIndex: zIndex,
+    visible: visible,
+    dimension: dimension,
+    vicing: vicing,
+    rotateX: rotateX,
+    rotateY: rotateY,
+    rotateZ: rotateZ,
+    translateX: translateX,
+    translateY: translateY,
+    scaleX: scaleX,
+    scaleY: scaleY,
+    mainOpacity: mainOpacity,
+    mainElevation: mainElevation,
+    mainRadius: mainRadius,
+    gestureType: gestureType,
+    onTap: onTap,
+    onLongPress: onLongPress,
+    rowIndex: _randomRowColumnIndex(screen),
+    columnIndex: _randomRowColumnIndex(screen),
+  );
+
+  @override
+  String toString() {
+    return '${super.toString()}\nPlayer';
+  }
+}
+
+//*********************************************************************************************************************
+//*********************************************************************************************************************
+
 /// 卡片尺寸.
 enum _CardDimension {
   /// 主尺寸.
