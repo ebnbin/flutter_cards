@@ -13,7 +13,7 @@ class Data {
 
   Data(GameCallback callback) : _game = _Game(callback);
 
-  Game build() {
+  Game build(BuildContext context) {
     return Game._(_game);
   }
 }
