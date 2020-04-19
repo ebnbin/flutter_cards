@@ -129,12 +129,37 @@ class GridCard {
     };
   }
 
+  bool get isSplashTitleCard {
+    return _gridCard is _SplashTitleCard;
+  }
+
+  SplashTitleCard buildSplashTitleCard() {
+    return SplashTitleCard._(this);
+  }
+
   bool get isSpriteCard {
     return _gridCard is _SpriteCard;
   }
 
   SpriteCard buildSpriteCard() {
     return SpriteCard._(this, _gridCard as _SpriteCard);
+  }
+}
+
+/// 开屏 Cards 标题.
+class SplashTitleCard {
+  SplashTitleCard._(this.gridCard);
+
+  final GridCard gridCard;
+
+  /// 定位矩形.
+  Rect get rect {
+    return Rect.fromLTWH(
+      gridCard.visibleCard.rect.width / 45.0 * 7,
+      gridCard.visibleCard.rect.width / 45.0 * 3,
+      gridCard.visibleCard.rect.width / 45.0 * 30.0,
+      gridCard.visibleCard.rect.width / 45.0 * 8.0,
+    );
   }
 }
 

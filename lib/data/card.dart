@@ -1031,6 +1031,61 @@ class _SpriteCard extends _CoreCard {
 //*********************************************************************************************************************
 //*********************************************************************************************************************
 
+/// 开屏 Cards 标题.
+class _SplashTitleCard extends _CoreCard {
+  _SplashTitleCard(_SplashScreen screen, {
+    int zIndex = 1,
+    bool visible = true,
+    _CardDimension dimension = _CardDimension.main,
+    bool vice = false,
+    bool vicing = false,
+    double rotateX = 0.0,
+    double rotateY = 0.0,
+    double rotateZ = 0.0,
+    double translateX = 0.0,
+    double translateY = 0.0,
+    double scaleX = 1.0,
+    double scaleY = 1.0,
+    double mainOpacity = 1.0,
+    double mainElevation = 1.0,
+    double mainRadius = 4.0,
+    _GestureType gestureType = _GestureType.normal,
+    void Function(_Card card) onTap,
+    void Function(_Card card) onLongPress,
+  }) : super(screen,
+    zIndex: zIndex,
+    visible: visible,
+    dimension: dimension,
+    vice: vice,
+    vicing: vicing,
+    rotateX: rotateX,
+    rotateY: rotateY,
+    rotateZ: rotateZ,
+    translateX: translateX,
+    translateY: translateY,
+    scaleX: scaleX,
+    scaleY: scaleY,
+    mainOpacity: mainOpacity,
+    mainElevation: mainElevation,
+    mainRadius: mainRadius,
+    gestureType: gestureType,
+    onTap: onTap,
+    onLongPress: onLongPress,
+    rowIndex: 1,
+    columnIndex: 0,
+    rowSpan: 1,
+    columnSpan: 3,
+  ) {
+    this.onTap = (card) {
+    };
+    this.onLongPress = (card) {
+    };
+  }
+}
+
+//*********************************************************************************************************************
+//*********************************************************************************************************************
+
 /// 玩家卡片.
 class _PlayerCard extends _SpriteCard {
   _PlayerCard(_SpriteScreen screen, {

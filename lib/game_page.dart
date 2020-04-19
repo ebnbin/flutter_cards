@@ -143,7 +143,7 @@ class _GameWidget extends StatelessWidget {
           child: Stack(
             children: <Widget>[
               _buildGridCardBackground(gridCard),
-              _buildSpriteCardOr(gridCard),
+              _buildGridCardChildren(gridCard),
             ],
           ),
           onTap: gridCard.onTap,
@@ -171,14 +171,26 @@ class _GameWidget extends StatelessWidget {
     );
   }
 
-  /// TODO.
-  Widget _buildSpriteCardOr(GridCard gridCard) {
+  Widget _buildGridCardChildren(GridCard gridCard) {
+    if (gridCard.isSplashTitleCard) {
+      SplashTitleCard splashTitleCard = gridCard.buildSplashTitleCard();
+      return _buildSplashTitleCard(splashTitleCard);
+    }
     if (gridCard.isSpriteCard) {
       SpriteCard spriteCard = gridCard.buildSpriteCard();
       return _buildSpriteCard(spriteCard);
-    } else {
-      return CustomPaint();
     }
+    return CustomPaint();
+  }
+
+  /// 开屏 Cards 标题.
+  Widget _buildSplashTitleCard(SplashTitleCard splashTitleCard) {
+    return Positioned.fromRect(
+      rect: splashTitleCard.rect,
+      child: Image.asset('assets/cards.png',
+        fit: BoxFit.contain,
+      ),
+    );
   }
 
   /// 精灵卡片.
@@ -190,16 +202,14 @@ class _GameWidget extends StatelessWidget {
           /// 主体 (中间).
           Positioned.fromRect(
             rect: spriteCard.bodyRect,
-            child: Image.asset(
-              'assets/steve.png',
+            child: Image.asset('assets/steve.png',
               fit: BoxFit.contain,
             ),
           ),
           /// 数量 (左下角).
           Positioned.fromRect(
             rect: spriteCard.amountDigit0Rect,
-            child: Image.asset(
-              'assets/digit_0.png',
+            child: Image.asset('assets/digit_0.png',
               color: spriteCard.digitColor,
               colorBlendMode: BlendMode.srcIn,
               fit: BoxFit.contain,
@@ -207,8 +217,7 @@ class _GameWidget extends StatelessWidget {
           ),
           Positioned.fromRect(
             rect: spriteCard.amountDigit1Rect,
-            child: Image.asset(
-              'assets/digit_0.png',
+            child: Image.asset('assets/digit_0.png',
               color: spriteCard.digitColor,
               colorBlendMode: BlendMode.srcIn,
               fit: BoxFit.contain,
@@ -217,15 +226,13 @@ class _GameWidget extends StatelessWidget {
           /// 生命值 (右上角).
           Positioned.fromRect(
             rect: spriteCard.healthRect,
-            child: Image.asset(
-              'assets/health.png',
+            child: Image.asset('assets/health.png',
               fit: BoxFit.contain,
             ),
           ),
           Positioned.fromRect(
             rect: spriteCard.healthDigit0Rect,
-            child: Image.asset(
-              'assets/digit_0.png',
+            child: Image.asset('assets/digit_0.png',
               color: spriteCard.digitColor,
               colorBlendMode: BlendMode.srcIn,
               fit: BoxFit.contain,
@@ -233,8 +240,7 @@ class _GameWidget extends StatelessWidget {
           ),
           Positioned.fromRect(
             rect: spriteCard.healthDigit1Rect,
-            child: Image.asset(
-              'assets/digit_0.png',
+            child: Image.asset('assets/digit_0.png',
               color: spriteCard.digitColor,
               colorBlendMode: BlendMode.srcIn,
               fit: BoxFit.contain,
@@ -242,8 +248,7 @@ class _GameWidget extends StatelessWidget {
           ),
           Positioned.fromRect(
             rect: spriteCard.healthDigit2Rect,
-            child: Image.asset(
-              'assets/digit_slash.png',
+            child: Image.asset('assets/digit_slash.png',
               color: spriteCard.digitColor,
               colorBlendMode: BlendMode.srcIn,
               fit: BoxFit.contain,
@@ -251,8 +256,7 @@ class _GameWidget extends StatelessWidget {
           ),
           Positioned.fromRect(
             rect: spriteCard.healthDigit3Rect,
-            child: Image.asset(
-              'assets/digit_0.png',
+            child: Image.asset('assets/digit_0.png',
               color: spriteCard.digitColor,
               colorBlendMode: BlendMode.srcIn,
               fit: BoxFit.contain,
@@ -260,8 +264,7 @@ class _GameWidget extends StatelessWidget {
           ),
           Positioned.fromRect(
             rect: spriteCard.healthDigit4Rect,
-            child: Image.asset(
-              'assets/digit_0.png',
+            child: Image.asset('assets/digit_0.png',
               color: spriteCard.digitColor,
               colorBlendMode: BlendMode.srcIn,
               fit: BoxFit.contain,
@@ -270,15 +273,13 @@ class _GameWidget extends StatelessWidget {
           /// 武器 (左边, 右手).
           Positioned.fromRect(
             rect: spriteCard.weaponRect,
-            child: Image.asset(
-              'assets/diamond_sword.png',
+            child: Image.asset('assets/diamond_sword.png',
               fit: BoxFit.contain,
             ),
           ),
           Positioned.fromRect(
             rect: spriteCard.weaponDigit0Rect,
-            child: Image.asset(
-              'assets/digit_0.png',
+            child: Image.asset('assets/digit_0.png',
               color: spriteCard.digitColor,
               colorBlendMode: BlendMode.srcIn,
               fit: BoxFit.contain,
@@ -286,8 +287,7 @@ class _GameWidget extends StatelessWidget {
           ),
           Positioned.fromRect(
             rect: spriteCard.weaponDigit1Rect,
-            child: Image.asset(
-              'assets/digit_0.png',
+            child: Image.asset('assets/digit_0.png',
               color: spriteCard.digitColor,
               colorBlendMode: BlendMode.srcIn,
               fit: BoxFit.contain,
@@ -296,15 +296,13 @@ class _GameWidget extends StatelessWidget {
           /// 盾牌 (右边, 左手).
           Positioned.fromRect(
             rect: spriteCard.shieldRect,
-            child: Image.asset(
-              'assets/shield.png',
+            child: Image.asset('assets/shield.png',
               fit: BoxFit.contain,
             ),
           ),
           Positioned.fromRect(
             rect: spriteCard.shieldDigit0Rect,
-            child: Image.asset(
-              'assets/digit_0.png',
+            child: Image.asset('assets/digit_0.png',
               color: spriteCard.digitColor,
               colorBlendMode: BlendMode.srcIn,
               fit: BoxFit.contain,
@@ -312,8 +310,7 @@ class _GameWidget extends StatelessWidget {
           ),
           Positioned.fromRect(
             rect: spriteCard.shieldDigit1Rect,
-            child: Image.asset(
-              'assets/digit_0.png',
+            child: Image.asset('assets/digit_0.png',
               color: spriteCard.digitColor,
               colorBlendMode: BlendMode.srcIn,
               fit: BoxFit.contain,
@@ -322,15 +319,13 @@ class _GameWidget extends StatelessWidget {
           /// 效果 (右下角).
           Positioned.fromRect(
             rect: spriteCard.effectRect,
-            child: Image.asset(
-              'assets/poison.png',
+            child: Image.asset('assets/poison.png',
               fit: BoxFit.contain,
             ),
           ),
           Positioned.fromRect(
             rect: spriteCard.effectDigit0Rect,
-            child: Image.asset(
-              'assets/digit_0.png',
+            child: Image.asset('assets/digit_0.png',
               color: spriteCard.digitColor,
               colorBlendMode: BlendMode.srcIn,
               fit: BoxFit.contain,
@@ -338,8 +333,7 @@ class _GameWidget extends StatelessWidget {
           ),
           Positioned.fromRect(
             rect: spriteCard.effectDigit1Rect,
-            child: Image.asset(
-              'assets/digit_0.png',
+            child: Image.asset('assets/digit_0.png',
               color: spriteCard.digitColor,
               colorBlendMode: BlendMode.srcIn,
               fit: BoxFit.contain,
@@ -348,15 +342,13 @@ class _GameWidget extends StatelessWidget {
           /// 能力 (左上角).
           Positioned.fromRect(
             rect: spriteCard.powerRect,
-            child: Image.asset(
-              'assets/absorption.png',
+            child: Image.asset('assets/absorption.png',
               fit: BoxFit.contain,
             ),
           ),
           Positioned.fromRect(
             rect: spriteCard.powerDigit0Rect,
-            child: Image.asset(
-              'assets/digit_0.png',
+            child: Image.asset('assets/digit_0.png',
               color: spriteCard.digitColor,
               colorBlendMode: BlendMode.srcIn,
               fit: BoxFit.contain,
@@ -364,8 +356,7 @@ class _GameWidget extends StatelessWidget {
           ),
           Positioned.fromRect(
             rect: spriteCard.powerDigit1Rect,
-            child: Image.asset(
-              'assets/digit_0.png',
+            child: Image.asset('assets/digit_0.png',
               color: spriteCard.digitColor,
               colorBlendMode: BlendMode.srcIn,
               fit: BoxFit.contain,
