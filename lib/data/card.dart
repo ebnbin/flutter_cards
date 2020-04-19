@@ -4,27 +4,33 @@ part of '../data.dart';
 //*********************************************************************************************************************
 
 /// 卡片.
-abstract class _Card {
-  _Card(this.screen, {
+abstract class _Card extends _Box {
+  _Card(_Screen screen, {
+    double rotateX = 0.0,
+    double rotateY = 0.0,
+    double rotateZ = 0.0,
+    double translateX = 0.0,
+    double translateY = 0.0,
+    double scaleX = 1.0,
+    double scaleY = 1.0,
     this.zIndex = 1,
     this.visible = true,
     this.dimension = _CardDimension.main,
     this.vice = false,
     this.vicing = false,
-    this.rotateX = 0.0,
-    this.rotateY = 0.0,
-    this.rotateZ = 0.0,
-    this.translateX = 0.0,
-    this.translateY = 0.0,
-    this.scaleX = 1.0,
-    this.scaleY = 1.0,
     this.mainOpacity = 1.0,
     this.gestureType = _GestureType.normal,
     this.onTap,
     this.onLongPress,
-  });
-
-  final _Screen screen;
+  }) : super(screen,
+    rotateX: rotateX,
+    rotateY: rotateY,
+    rotateZ: rotateZ,
+    translateX: translateX,
+    translateY: translateY,
+    scaleX: scaleX,
+    scaleY: scaleY,
+  );
 
   /// 当前卡片在 [screen.cards] 中的索引.
   int get index {
@@ -69,32 +75,8 @@ abstract class _Card {
   /// 值为 true 表示当前正在执行副尺寸动画, [opacity] 始终取 [mainOpacity].
   bool vicing;
 
-  /// 定位矩形.
+  @override
   Rect get rect;
-
-  /// Matrix4.setEntry(3, 2, value). 数值只与卡片尺寸相关.
-  double get matrix4Entry32 {
-    // 数值越大, 3d 旋转镜头越近, 效果越明显, 但越容易绘制异常.
-    return 0.4 / max(rect.width, rect.height);
-  }
-
-  double rotateX;
-  double rotateY;
-  double rotateZ;
-  double translateX;
-  double translateY;
-  double scaleX;
-  double scaleY;
-
-  /// 卡片变换.
-  Matrix4 get transform {
-    return Matrix4.identity()..setEntry(3, 2, matrix4Entry32)
-      ..rotateX(rotateX)
-      ..rotateY(rotateY)
-      ..rotateZ(rotateZ)
-      ..leftTranslate(translateX, translateY)
-      ..scale(scaleX, scaleY);
-  }
 
   /// 自身透明度.
   double mainOpacity;
@@ -176,11 +158,6 @@ extension _RadiusTypeExtensions on _RadiusType {
 /// 通过网格定位的卡片.
 class _GridCard extends _Card {
   _GridCard(_Screen screen, {
-    int zIndex = 1,
-    bool visible = true,
-    _CardDimension dimension = _CardDimension.main,
-    bool vice = false,
-    bool vicing = false,
     double rotateX = 0.0,
     double rotateY = 0.0,
     double rotateZ = 0.0,
@@ -188,6 +165,11 @@ class _GridCard extends _Card {
     double translateY = 0.0,
     double scaleX = 1.0,
     double scaleY = 1.0,
+    int zIndex = 1,
+    bool visible = true,
+    _CardDimension dimension = _CardDimension.main,
+    bool vice = false,
+    bool vicing = false,
     double mainOpacity = 1.0,
     _GestureType gestureType = _GestureType.normal,
     void Function(_Card card) onTap,
@@ -203,11 +185,6 @@ class _GridCard extends _Card {
     this.mainElevation = 2.0,
     this.radiusType = _RadiusType.small,
   }) : super(screen,
-    zIndex: zIndex,
-    visible: visible,
-    dimension: dimension,
-    vice: vice,
-    vicing: vicing,
     rotateX: rotateX,
     rotateY: rotateY,
     rotateZ: rotateZ,
@@ -215,6 +192,11 @@ class _GridCard extends _Card {
     translateY: translateY,
     scaleX: scaleX,
     scaleY: scaleY,
+    zIndex: zIndex,
+    visible: visible,
+    dimension: dimension,
+    vice: vice,
+    vicing: vicing,
     mainOpacity: mainOpacity,
     gestureType: gestureType,
     onTap: onTap,
@@ -606,11 +588,6 @@ class _GridCard extends _Card {
 /// 通过方格定位的卡片.
 class _CoreCard extends _GridCard {
   _CoreCard(_Screen screen, {
-    int zIndex = 1,
-    bool visible = true,
-    _CardDimension dimension = _CardDimension.main,
-    bool vice = false,
-    bool vicing = false,
     double rotateX = 0.0,
     double rotateY = 0.0,
     double rotateZ = 0.0,
@@ -618,6 +595,11 @@ class _CoreCard extends _GridCard {
     double translateY = 0.0,
     double scaleX = 1.0,
     double scaleY = 1.0,
+    int zIndex = 1,
+    bool visible = true,
+    _CardDimension dimension = _CardDimension.main,
+    bool vice = false,
+    bool vicing = false,
     double mainOpacity = 1.0,
     _GestureType gestureType = _GestureType.normal,
     void Function(_Card card) onTap,
@@ -629,11 +611,6 @@ class _CoreCard extends _GridCard {
     double mainElevation = 1.0,
     _RadiusType radiusType = _RadiusType.small,
   }) : super(screen,
-    zIndex: zIndex,
-    visible: visible,
-    dimension: dimension,
-    vice: vice,
-    vicing: vicing,
     rotateX: rotateX,
     rotateY: rotateY,
     rotateZ: rotateZ,
@@ -641,6 +618,11 @@ class _CoreCard extends _GridCard {
     translateY: translateY,
     scaleX: scaleX,
     scaleY: scaleY,
+    zIndex: zIndex,
+    visible: visible,
+    dimension: dimension,
+    vice: vice,
+    vicing: vicing,
     mainOpacity: mainOpacity,
     gestureType: gestureType,
     onTap: onTap,
@@ -724,11 +706,6 @@ class _CoreCard extends _GridCard {
 /// 精灵卡片.
 class _SpriteCard extends _CoreCard {
   _SpriteCard(_SpriteScreen screen, {
-    int zIndex = 1,
-    /// 默认不可见, 通过动画进入.
-    bool visible = false,
-    _CardDimension dimension = _CardDimension.main,
-    bool vicing = false,
     double rotateX = 0.0,
     double rotateY = 0.0,
     double rotateZ = 0.0,
@@ -736,6 +713,11 @@ class _SpriteCard extends _CoreCard {
     double translateY = 0.0,
     double scaleX = 1.0,
     double scaleY = 1.0,
+    int zIndex = 1,
+    /// 默认不可见, 通过动画进入.
+    bool visible = false,
+    _CardDimension dimension = _CardDimension.main,
+    bool vicing = false,
     double mainOpacity = 1.0,
     _GestureType gestureType = _GestureType.normal,
     void Function(_Card card) onTap,
@@ -747,12 +729,6 @@ class _SpriteCard extends _CoreCard {
     double mainElevation = 1.0,
     _RadiusType radiusType = _RadiusType.small,
   }) : super(screen,
-    zIndex: zIndex,
-    visible: visible,
-    dimension: dimension,
-    /// 固定为主尺寸卡片.
-    vice: false,
-    vicing: vicing,
     rotateX: rotateX,
     rotateY: rotateY,
     rotateZ: rotateZ,
@@ -760,6 +736,12 @@ class _SpriteCard extends _CoreCard {
     translateY: translateY,
     scaleX: scaleX,
     scaleY: scaleY,
+    zIndex: zIndex,
+    visible: visible,
+    dimension: dimension,
+    /// 固定为主尺寸卡片.
+    vice: false,
+    vicing: vicing,
     mainOpacity: mainOpacity,
     gestureType: gestureType,
     onTap: onTap,
@@ -1148,11 +1130,6 @@ class _SpriteCard extends _CoreCard {
 /// 开屏 Cards 标题.
 class _SplashTitleCard extends _CoreCard {
   _SplashTitleCard(_SplashScreen screen, {
-    int zIndex = 1,
-    bool visible = true,
-    _CardDimension dimension = _CardDimension.main,
-    bool vice = false,
-    bool vicing = false,
     double rotateX = 0.0,
     double rotateY = 0.0,
     double rotateZ = 0.0,
@@ -1160,6 +1137,11 @@ class _SplashTitleCard extends _CoreCard {
     double translateY = 0.0,
     double scaleX = 1.0,
     double scaleY = 1.0,
+    int zIndex = 1,
+    bool visible = true,
+    _CardDimension dimension = _CardDimension.main,
+    bool vice = false,
+    bool vicing = false,
     double mainOpacity = 1.0,
     _GestureType gestureType = _GestureType.normal,
     void Function(_Card card) onTap,
@@ -1167,11 +1149,6 @@ class _SplashTitleCard extends _CoreCard {
     double mainElevation = 1.0,
     _RadiusType radiusType = _RadiusType.small,
   }) : super(screen,
-    zIndex: zIndex,
-    visible: visible,
-    dimension: dimension,
-    vice: vice,
-    vicing: vicing,
     rotateX: rotateX,
     rotateY: rotateY,
     rotateZ: rotateZ,
@@ -1179,6 +1156,11 @@ class _SplashTitleCard extends _CoreCard {
     translateY: translateY,
     scaleX: scaleX,
     scaleY: scaleY,
+    zIndex: zIndex,
+    visible: visible,
+    dimension: dimension,
+    vice: vice,
+    vicing: vicing,
     mainOpacity: mainOpacity,
     gestureType: gestureType,
     onTap: onTap,
@@ -1203,11 +1185,6 @@ class _SplashTitleCard extends _CoreCard {
 /// 玩家卡片.
 class _PlayerCard extends _SpriteCard {
   _PlayerCard(_SpriteScreen screen, {
-    int zIndex = 1,
-    /// 默认不可见, 通过动画进入.
-    bool visible = false,
-    _CardDimension dimension = _CardDimension.main,
-    bool vicing = false,
     double rotateX = 0.0,
     double rotateY = 0.0,
     double rotateZ = 0.0,
@@ -1215,6 +1192,11 @@ class _PlayerCard extends _SpriteCard {
     double translateY = 0.0,
     double scaleX = 1.0,
     double scaleY = 1.0,
+    int zIndex = 1,
+    /// 默认不可见, 通过动画进入.
+    bool visible = false,
+    _CardDimension dimension = _CardDimension.main,
+    bool vicing = false,
     double mainOpacity = 1.0,
     _GestureType gestureType = _GestureType.normal,
     void Function(_Card card) onTap,
@@ -1226,10 +1208,6 @@ class _PlayerCard extends _SpriteCard {
     double mainElevation = 1.0,
     _RadiusType radiusType = _RadiusType.small,
   }) : super(screen,
-    zIndex: zIndex,
-    visible: visible,
-    dimension: dimension,
-    vicing: vicing,
     rotateX: rotateX,
     rotateY: rotateY,
     rotateZ: rotateZ,
@@ -1237,6 +1215,10 @@ class _PlayerCard extends _SpriteCard {
     translateY: translateY,
     scaleX: scaleX,
     scaleY: scaleY,
+    zIndex: zIndex,
+    visible: visible,
+    dimension: dimension,
+    vicing: vicing,
     mainOpacity: mainOpacity,
     gestureType: gestureType,
     onTap: onTap,
@@ -1256,11 +1238,6 @@ class _PlayerCard extends _SpriteCard {
 
   /// [_randomRowColumnIndex].
   _PlayerCard.random(_SpriteScreen screen, {
-    int zIndex = 1,
-    /// 默认不可见, 通过动画进入.
-    bool visible = false,
-    _CardDimension dimension = _CardDimension.main,
-    bool vicing = false,
     double rotateX = 0.0,
     double rotateY = 0.0,
     double rotateZ = 0.0,
@@ -1268,6 +1245,11 @@ class _PlayerCard extends _SpriteCard {
     double translateY = 0.0,
     double scaleX = 1.0,
     double scaleY = 1.0,
+    int zIndex = 1,
+    /// 默认不可见, 通过动画进入.
+    bool visible = false,
+    _CardDimension dimension = _CardDimension.main,
+    bool vicing = false,
     double mainOpacity = 1.0,
     _GestureType gestureType = _GestureType.normal,
     void Function(_Card card) onTap,
@@ -1275,10 +1257,6 @@ class _PlayerCard extends _SpriteCard {
     double mainElevation = 1.0,
     _RadiusType radiusType = _RadiusType.small,
   }) : this(screen,
-    zIndex: zIndex,
-    visible: visible,
-    dimension: dimension,
-    vicing: vicing,
     rotateX: rotateX,
     rotateY: rotateY,
     rotateZ: rotateZ,
@@ -1286,6 +1264,10 @@ class _PlayerCard extends _SpriteCard {
     translateY: translateY,
     scaleX: scaleX,
     scaleY: scaleY,
+    zIndex: zIndex,
+    visible: visible,
+    dimension: dimension,
+    vicing: vicing,
     mainOpacity: mainOpacity,
     gestureType: gestureType,
     onTap: onTap,

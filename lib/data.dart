@@ -5,6 +5,7 @@ import 'package:cards/metric.dart';
 import 'package:flutter/material.dart' hide Card;
 
 part 'data/game.dart';
+part 'data/box.dart';
 part 'data/card.dart';
 part 'data/util.dart';
 
