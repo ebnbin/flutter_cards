@@ -19,7 +19,6 @@ abstract class _Card {
     this.scaleX = 1.0,
     this.scaleY = 1.0,
     this.mainOpacity = 1.0,
-    this.mainRadius = 4.0,
     this.gestureType = _GestureType.normal,
     this.onTap,
     this.onLongPress,
@@ -132,24 +131,6 @@ abstract class _Card {
     return (vice ? screen.viceOpacity : (1.0 - screen.viceOpacity)) * mainOpacity;
   }
 
-  /// 主尺寸圆角. 建议范围 4.0.
-  double mainRadius;
-
-  /// TODO _GridCard 才有 radius.
-  /// 渲染圆角.
-  double get radius {
-    switch (dimension) {
-      case _CardDimension.main:
-        return mainRadius;
-      case _CardDimension.vice:
-        return mainRadius * 4;
-      case _CardDimension.full:
-        return 0.0;
-      default:
-        throw Exception();
-    }
-  }
-
   //*******************************************************************************************************************
 
   /// 手势类型.
@@ -186,6 +167,36 @@ abstract class _Card {
 //*********************************************************************************************************************
 //*********************************************************************************************************************
 
+/// 圆角类型.
+enum _RadiusType {
+  /// 直角.
+  none,
+  /// 小圆角. 2.0 / 56.0.
+  small,
+  /// 大圆角. 8.0 / 56.0.
+  big,
+  /// 圆形.
+  round,
+}
+
+extension _RadiusTypeExtensions on _RadiusType {
+  /// 根据 [rect] 计算圆角值.
+  double value(Rect rect) {
+    switch (this) {
+      case _RadiusType.none:
+        return 0.0;
+      case _RadiusType.small:
+        return min(rect.width, rect.height) / 56.0 * 2.0;
+      case _RadiusType.big:
+        return min(rect.width, rect.height) / 56.0 * 8.0;
+      case _RadiusType.round:
+        return min(rect.width, rect.height) / 2.0;
+      default:
+        throw Exception();
+    }
+  }
+}
+
 /// 通过网格定位的卡片.
 class _GridCard extends _Card {
   _GridCard(_Screen screen, {
@@ -202,7 +213,6 @@ class _GridCard extends _Card {
     double scaleX = 1.0,
     double scaleY = 1.0,
     double mainOpacity = 1.0,
-    double mainRadius = 4.0,
     _GestureType gestureType = _GestureType.normal,
     void Function(_Card card) onTap,
     void Function(_Card card) onLongPress,
@@ -215,6 +225,7 @@ class _GridCard extends _Card {
     this.horizontalRowGridSpan = 1,
     this.horizontalColumnGridSpan = 1,
     this.mainElevation = 2.0,
+    this.radiusType = _RadiusType.small,
   }) : super(screen,
     zIndex: zIndex,
     visible: visible,
@@ -229,7 +240,6 @@ class _GridCard extends _Card {
     scaleX: scaleX,
     scaleY: scaleY,
     mainOpacity: mainOpacity,
-    mainRadius: mainRadius,
     gestureType: gestureType,
     onTap: onTap,
     onLongPress: onLongPress,
@@ -366,6 +376,22 @@ class _GridCard extends _Card {
     }
   }
 
+  /// 圆角类型.
+  _RadiusType radiusType;
+
+  /// 渲染圆角.
+  double get radius {
+    switch (dimension) {
+      case _CardDimension.main:
+      case _CardDimension.vice:
+        return radiusType.value(contentRect);
+      case _CardDimension.full:
+        return 0.0;
+      default:
+        throw Exception();
+    }
+  }
+
   //*******************************************************************************************************************
 
   /// 演示动画.
@@ -381,7 +407,6 @@ class _GridCard extends _Card {
         card.scaleX = _ValueCalc.aba(1.0, 2.0).calc(value);
         card.scaleY = _ValueCalc.aba(1.0, 2.0).calc(value);
         card.mainElevation = _ValueCalc.aba(2.0, 4.0).calc(value);
-        card.mainRadius = _ValueCalc.aba(4.0, 8.0).calc(value);
         if (last) {
           card.zIndex = 1;
           card.rotateY = 0.0;
@@ -593,8 +618,6 @@ class _CoreCard extends _GridCard {
     double scaleX = 1.0,
     double scaleY = 1.0,
     double mainOpacity = 1.0,
-    double mainElevation = 1.0,
-    double mainRadius = 4.0,
     _GestureType gestureType = _GestureType.normal,
     void Function(_Card card) onTap,
     void Function(_Card card) onLongPress,
@@ -602,6 +625,8 @@ class _CoreCard extends _GridCard {
     int columnIndex = 0,
     int rowSpan = 1,
     int columnSpan = 1,
+    double mainElevation = 1.0,
+    _RadiusType radiusType = _RadiusType.small,
   }) : super(screen,
     zIndex: zIndex,
     visible: visible,
@@ -616,11 +641,11 @@ class _CoreCard extends _GridCard {
     scaleX: scaleX,
     scaleY: scaleY,
     mainOpacity: mainOpacity,
-    mainElevation: mainElevation,
-    mainRadius: mainRadius,
     gestureType: gestureType,
     onTap: onTap,
     onLongPress: onLongPress,
+    mainElevation: mainElevation,
+    radiusType: radiusType,
   ) {
     this.rowIndex = rowIndex;
     this.columnIndex = columnIndex;
@@ -711,8 +736,6 @@ class _SpriteCard extends _CoreCard {
     double scaleX = 1.0,
     double scaleY = 1.0,
     double mainOpacity = 1.0,
-    double mainElevation = 1.0,
-    double mainRadius = 4.0,
     _GestureType gestureType = _GestureType.normal,
     void Function(_Card card) onTap,
     void Function(_Card card) onLongPress,
@@ -720,6 +743,8 @@ class _SpriteCard extends _CoreCard {
     int rowIndex,
     @required
     int columnIndex,
+    double mainElevation = 1.0,
+    _RadiusType radiusType = _RadiusType.small,
   }) : super(screen,
     zIndex: zIndex,
     visible: visible,
@@ -735,8 +760,6 @@ class _SpriteCard extends _CoreCard {
     scaleX: scaleX,
     scaleY: scaleY,
     mainOpacity: mainOpacity,
-    mainElevation: mainElevation,
-    mainRadius: mainRadius,
     gestureType: gestureType,
     onTap: onTap,
     onLongPress: onLongPress,
@@ -746,6 +769,8 @@ class _SpriteCard extends _CoreCard {
     rowSpan: 1,
     /// 固定为 1.
     columnSpan: 1,
+    mainElevation: mainElevation,
+    radiusType: radiusType,
   ) {
     this.onTap = (card) {
       actOnTap(this);
@@ -1135,11 +1160,11 @@ class _SplashTitleCard extends _CoreCard {
     double scaleX = 1.0,
     double scaleY = 1.0,
     double mainOpacity = 1.0,
-    double mainElevation = 1.0,
-    double mainRadius = 4.0,
     _GestureType gestureType = _GestureType.normal,
     void Function(_Card card) onTap,
     void Function(_Card card) onLongPress,
+    double mainElevation = 1.0,
+    _RadiusType radiusType = _RadiusType.small,
   }) : super(screen,
     zIndex: zIndex,
     visible: visible,
@@ -1154,8 +1179,6 @@ class _SplashTitleCard extends _CoreCard {
     scaleX: scaleX,
     scaleY: scaleY,
     mainOpacity: mainOpacity,
-    mainElevation: mainElevation,
-    mainRadius: mainRadius,
     gestureType: gestureType,
     onTap: onTap,
     onLongPress: onLongPress,
@@ -1163,6 +1186,8 @@ class _SplashTitleCard extends _CoreCard {
     columnIndex: 0,
     rowSpan: 1,
     columnSpan: 3,
+    mainElevation: mainElevation,
+    radiusType: radiusType,
   ) {
 //    this.onTap = (card) {
 //    };
@@ -1190,8 +1215,6 @@ class _PlayerCard extends _SpriteCard {
     double scaleX = 1.0,
     double scaleY = 1.0,
     double mainOpacity = 1.0,
-    double mainElevation = 1.0,
-    double mainRadius = 4.0,
     _GestureType gestureType = _GestureType.normal,
     void Function(_Card card) onTap,
     void Function(_Card card) onLongPress,
@@ -1199,6 +1222,8 @@ class _PlayerCard extends _SpriteCard {
     int rowIndex,
     @required
     int columnIndex,
+    double mainElevation = 1.0,
+    _RadiusType radiusType = _RadiusType.small,
   }) : super(screen,
     zIndex: zIndex,
     visible: visible,
@@ -1212,13 +1237,13 @@ class _PlayerCard extends _SpriteCard {
     scaleX: scaleX,
     scaleY: scaleY,
     mainOpacity: mainOpacity,
-    mainElevation: mainElevation,
-    mainRadius: mainRadius,
     gestureType: gestureType,
     onTap: onTap,
     onLongPress: onLongPress,
     rowIndex: rowIndex,
     columnIndex: columnIndex,
+    mainElevation: mainElevation,
+    radiusType: radiusType,
   );
 
   /// 随机非边缘位置.
@@ -1243,11 +1268,11 @@ class _PlayerCard extends _SpriteCard {
     double scaleX = 1.0,
     double scaleY = 1.0,
     double mainOpacity = 1.0,
-    double mainElevation = 1.0,
-    double mainRadius = 4.0,
     _GestureType gestureType = _GestureType.normal,
     void Function(_Card card) onTap,
     void Function(_Card card) onLongPress,
+    double mainElevation = 1.0,
+    _RadiusType radiusType = _RadiusType.small,
   }) : this(screen,
     zIndex: zIndex,
     visible: visible,
@@ -1261,13 +1286,13 @@ class _PlayerCard extends _SpriteCard {
     scaleX: scaleX,
     scaleY: scaleY,
     mainOpacity: mainOpacity,
-    mainElevation: mainElevation,
-    mainRadius: mainRadius,
     gestureType: gestureType,
     onTap: onTap,
     onLongPress: onLongPress,
     rowIndex: _randomRowColumnIndex(screen),
     columnIndex: _randomRowColumnIndex(screen),
+    mainElevation: mainElevation,
+    radiusType: radiusType,
   );
 
   @override
