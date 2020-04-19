@@ -23,7 +23,7 @@ abstract class _Box {
   /// Matrix4.setEntry(3, 2, value). 数值只与 [rect] 相关.
   double get matrix4Entry32 {
     // 数值越大, 3d 旋转镜头越近, 效果越明显, 但越容易绘制异常.
-    return 0.4 / max(rect.width, rect.height);
+    return 0.4 / rect.longSize();
   }
 
   double rotateX;

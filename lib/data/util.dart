@@ -15,6 +15,33 @@ extension _ListExtension<E> on List<E> {
 
 //*********************************************************************************************************************
 //*********************************************************************************************************************
+
+extension _SizeExtension on Size {
+  /// [width] [height] 取短边.
+  double shortSize() {
+    return min(this.width, this.height);
+  }
+
+  /// [width] [height] 取长边.
+  double longSize() {
+    return max(this.width, this.height);
+  }
+}
+
+extension _RectExtension on Rect {
+  /// [width] [height] 取短边.
+  double shortSize() {
+    return min(this.width, this.height);
+  }
+
+  /// [width] [height] 取长边.
+  double longSize() {
+    return max(this.width, this.height);
+  }
+}
+
+//*********************************************************************************************************************
+//*********************************************************************************************************************
 // 方向.
 
 extension _AxisDirectionExtension on AxisDirection {
