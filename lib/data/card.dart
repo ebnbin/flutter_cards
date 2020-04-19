@@ -19,7 +19,6 @@ abstract class _Card {
     this.scaleX = 1.0,
     this.scaleY = 1.0,
     this.mainOpacity = 1.0,
-    this.mainMargin = 0.0,
     this.mainElevation = 1.0,
     this.mainRadius = 4.0,
     this.gestureType = _GestureType.normal,
@@ -58,6 +57,7 @@ abstract class _Card {
     };
   }
 
+  /// TODO _GridCard 才有 dimension.
   /// 卡片尺寸.
   /// 
   /// 可能因不同尺寸而变化的值: [rect], [margin], [elevation], [radius].
@@ -131,24 +131,6 @@ abstract class _Card {
       return mainOpacity;
     }
     return (vice ? screen.viceOpacity : (1.0 - screen.viceOpacity)) * mainOpacity;
-  }
-
-  /// 主尺寸外边距.
-  double mainMargin;
-
-  /// TODO _GridCard 才有 margin.
-  /// 渲染外边距.
-  double get margin {
-    switch (dimension) {
-      case _CardDimension.main:
-        return mainMargin;
-      case _CardDimension.vice:
-        return mainMargin;
-      case _CardDimension.full:
-        return 0.0;
-      default:
-        throw Exception();
-    }
   }
 
   /// 主尺寸厚度. 建议范围 0.0 ~ 4.0.
@@ -473,8 +455,6 @@ class _GridCard extends _Card {
     scaleX: scaleX,
     scaleY: scaleY,
     mainOpacity: mainOpacity,
-    // 不可修改.
-    mainMargin: 0.0,
     mainElevation: mainElevation,
     mainRadius: mainRadius,
     gestureType: gestureType,
@@ -547,16 +527,22 @@ class _GridCard extends _Card {
     );
   }
 
-  @override
-  double get mainMargin {
-    // 60 分之 2.
-    Rect rect = this.rect;
-    return min(rect.width, rect.height) / Metric.coreNoPaddingGrid * 2.0;
-  }
-  @override
-  set mainMargin(double margin) {
-    // 不可修改.
-    throw Exception();
+  //*******************************************************************************************************************
+
+  /// 外边距.
+  ///
+  /// 只与 [rect] 相关, 60 分之 2. 全屏尺寸时为 0.
+  double get margin {
+    switch (dimension) {
+      case _CardDimension.main:
+      case _CardDimension.vice:
+        Rect rect = this.rect;
+        return min(rect.width, rect.height) / Metric.coreNoPaddingGrid * 2.0;
+      case _CardDimension.full:
+        return 0.0;
+      default:
+        throw Exception();
+    }
   }
 }
 
