@@ -132,6 +132,7 @@ class _GameWidget extends StatelessWidget {
     return Container(
       margin: EdgeInsets.all(gridCard.marginA),
       child: Material(
+        shadowColor: Colors.cyanAccent,
         elevation: gridCard.elevation,
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(gridCard.radius),

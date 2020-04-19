@@ -19,7 +19,6 @@ abstract class _Card {
     this.scaleX = 1.0,
     this.scaleY = 1.0,
     this.mainOpacity = 1.0,
-    this.mainElevation = 1.0,
     this.mainRadius = 4.0,
     this.gestureType = _GestureType.normal,
     this.onTap,
@@ -133,24 +132,6 @@ abstract class _Card {
     return (vice ? screen.viceOpacity : (1.0 - screen.viceOpacity)) * mainOpacity;
   }
 
-  /// 主尺寸厚度. 建议范围 0.0 ~ 4.0.
-  double mainElevation;
-
-  /// TODO _GridCard 才有 elevation.
-  /// 渲染厚度.
-  double get elevation {
-    switch (dimension) {
-      case _CardDimension.main:
-        return mainElevation;
-      case _CardDimension.vice:
-        return mainElevation * 4;
-      case _CardDimension.full:
-        return mainElevation * 4;
-      default:
-        throw Exception();
-    }
-  }
-
   /// 主尺寸圆角. 建议范围 4.0.
   double mainRadius;
 
@@ -221,7 +202,6 @@ class _GridCard extends _Card {
     double scaleX = 1.0,
     double scaleY = 1.0,
     double mainOpacity = 1.0,
-    double mainElevation = 1.0,
     double mainRadius = 4.0,
     _GestureType gestureType = _GestureType.normal,
     void Function(_Card card) onTap,
@@ -234,6 +214,7 @@ class _GridCard extends _Card {
     this.horizontalColumnGridIndex = 0,
     this.horizontalRowGridSpan = 1,
     this.horizontalColumnGridSpan = 1,
+    this.mainElevation = 2.0,
   }) : super(screen,
     zIndex: zIndex,
     visible: visible,
@@ -248,7 +229,6 @@ class _GridCard extends _Card {
     scaleX: scaleX,
     scaleY: scaleY,
     mainOpacity: mainOpacity,
-    mainElevation: mainElevation,
     mainRadius: mainRadius,
     gestureType: gestureType,
     onTap: onTap,
@@ -363,6 +343,29 @@ class _GridCard extends _Card {
     );
   }
 
+  /// 主尺寸厚度. 与 [zIndex] 相关.
+  ///
+  /// 0.0 ~ 2.0: 在做下沉动画.
+  ///
+  /// 2.0: 默认.
+  ///
+  /// 2.0 ~ 4.0: 在做上升动画.
+  double mainElevation;
+
+  /// 渲染厚度.
+  double get elevation {
+    switch (dimension) {
+      case _CardDimension.main:
+        return mainElevation;
+      case _CardDimension.vice:
+        return mainElevation * 4.0;
+      case _CardDimension.full:
+        return 0.0;
+      default:
+        throw Exception();
+    }
+  }
+
   //*******************************************************************************************************************
 
   /// 演示动画.
@@ -377,7 +380,7 @@ class _GridCard extends _Card {
         card.rotateY = _ValueCalc.ab(0.0, _VisibleAngle.clockwise360.value).calc(value);
         card.scaleX = _ValueCalc.aba(1.0, 2.0).calc(value);
         card.scaleY = _ValueCalc.aba(1.0, 2.0).calc(value);
-        card.mainElevation = _ValueCalc.aba(1.0, 2.0).calc(value);
+        card.mainElevation = _ValueCalc.aba(2.0, 4.0).calc(value);
         card.mainRadius = _ValueCalc.aba(4.0, 8.0).calc(value);
         if (last) {
           card.zIndex = 1;
@@ -420,7 +423,7 @@ class _GridCard extends _Card {
           card.scaleX = _ValueCalc.ab(card.mainRect.width / card.viceRect.width, 1.0).calc(value);
           card.scaleY = _ValueCalc.ab(card.mainRect.height / card.viceRect.height, 1.0).calc(value);
         }
-        card.mainElevation = _ValueCalc.ab(1.0, 4.0).calc(value);
+        card.mainElevation = _ValueCalc.ab(2.0, 4.0).calc(value);
         if (half) {
           card.dimension = _CardDimension.vice;
           card.screen.viceOpacity = 1.0;
@@ -458,7 +461,7 @@ class _GridCard extends _Card {
           // 改变其他所有卡片透明度.
           card.screen.viceOpacity = _ValueCalc.ab(1.0, 0.0).calc(value * 2.0 - 1.0);
         }
-        card.mainElevation = _ValueCalc.ab(4.0, 1.0).calc(value);
+        card.mainElevation = _ValueCalc.ab(4.0, 2.0).calc(value);
         if (half) {
           card.dimension = _CardDimension.main;
         }
@@ -562,7 +565,7 @@ class _GridCard extends _Card {
         card.rotateY = _ValueCalc.aba(0.0, 1.0 / 8.0 * pi).calc(value);
         card.scaleX = _ValueCalc.aba(1.0, 7.0 / 8.0).calc(value);
         card.scaleY = _ValueCalc.aba(1.0, 7.0 / 8.0).calc(value);
-        card.mainElevation = _ValueCalc.aba(1.0, 7.0 / 8.0).calc(value);
+        card.mainElevation = _ValueCalc.aba(2.0, 0.0).calc(value);
         if (last) {
           card.zIndex = 1;
         }
@@ -1013,7 +1016,7 @@ class _SpriteCard extends _CoreCard {
         card.rotateY = _ValueCalc.ab(_InvisibleAngle.clockwise90.value, 0.0).calc(value);
         card.scaleX = _ValueCalc.ab(0.5, 1.0).calc(value);
         card.scaleY = _ValueCalc.ab(0.5, 1.0).calc(value);
-        card.mainElevation = _ValueCalc.ab(0.5, 1.0).calc(value);
+        card.mainElevation = _ValueCalc.ab(0.0, 2.0).calc(value);
         if (last) {
           card.zIndex = 1;
         }
@@ -1039,7 +1042,7 @@ class _SpriteCard extends _CoreCard {
         card.rotateY = _ValueCalc.ab(0.0, _InvisibleAngle.counterClockwise90.value).calc(value);
         card.scaleX = _ValueCalc.ab(1.0, 0.5).calc(value);
         card.scaleY = _ValueCalc.ab(1.0, 0.5).calc(value);
-        card.mainElevation = _ValueCalc.ab(1.0, 0.5).calc(value);
+        card.mainElevation = _ValueCalc.ab(2.0, 0.0).calc(value);
         if (last) {
           card.visible = false;
         }
@@ -1072,7 +1075,7 @@ class _SpriteCard extends _CoreCard {
         card.rotateY = _ValueCalc.ab(rotateYA, 0.0).calc(value);
         card.scaleX = _ValueCalc.ab(0.5, 1.0).calc(value);
         card.scaleY = _ValueCalc.ab(0.5, 1.0).calc(value);
-        card.mainElevation = _ValueCalc.ab(0.5, 1.0).calc(value);
+        card.mainElevation = _ValueCalc.ab(0.0, 2.0).calc(value);
         if (last) {
           card.zIndex = 1;
         }
@@ -1104,7 +1107,7 @@ class _SpriteCard extends _CoreCard {
         card.rotateY = _ValueCalc.ab(0.0, rotateYB).calc(value);
         card.scaleX = _ValueCalc.ab(1.0, 0.5).calc(value);
         card.scaleY = _ValueCalc.ab(1.0, 0.5).calc(value);
-        card.mainElevation = _ValueCalc.ab(1.0, 0.5).calc(value);
+        card.mainElevation = _ValueCalc.ab(2.0, 0.0).calc(value);
         if (last) {
           card.visible = false;
         }

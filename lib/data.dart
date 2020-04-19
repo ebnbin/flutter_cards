@@ -106,6 +106,8 @@ class GridCard {
   double get marginA => _gridCard.marginA;
   double get marginB => _gridCard.marginB;
 
+  Rect get contentRect => _gridCard.contentRect;
+
   double get elevation => _gridCard.elevation;
 
   /// 是否启用圆角.
@@ -117,8 +119,6 @@ class GridCard {
     }
     return _gridCard.radius;
   }
-
-  Rect get contentRect => _gridCard.contentRect;
 
   GestureTapCallback get onTap {
     return _gridCard.onTap == null ? null : () {
