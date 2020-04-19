@@ -53,7 +53,14 @@ class _SplashScreen extends _Screen {
     /// Test: 2.
     cardLength: 2,
   ) {
-    cards[0] = _SplashTitleCard(this);
+    cards[0] = _SplashTitleCard(this,
+      onTap: (card) {
+        game.screen = _SpriteScreen(game,
+          square: 4,
+        );
+        game.callback.notifyStateChanged();
+      },
+    );
 
     _GridCard sampleCard = _GridCard(this,
       verticalRowGridIndex: 1,
