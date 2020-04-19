@@ -60,7 +60,7 @@ abstract class _Card {
   /// TODO _GridCard 才有 dimension.
   /// 卡片尺寸.
   /// 
-  /// 可能因不同尺寸而变化的值: [rect], [margin], [elevation], [radius].
+  /// 可能因不同尺寸而变化的值: [rect], [marginA], [marginB], [elevation], [radius].
   _CardDimension dimension;
 
   /// 值为 false 表示 [screen.viceOpacity] 为 0.0 时显示, 为 1.0 时隐藏, 值为 true 时相反.
@@ -322,15 +322,31 @@ class _GridCard extends _Card {
 
   //*******************************************************************************************************************
 
-  /// 外边距.
+  /// 第一层外边距, Material 外层. 两层外边距是为了能更明显地显示 material 阴影.
   ///
-  /// 只与 [rect] 相关, 60 分之 2. 全屏尺寸时为 0.
-  double get margin {
+  /// 只与 [rect] 相关, 60 分之 1.5. 全屏尺寸时为 0.
+  double get marginA {
     switch (dimension) {
       case _CardDimension.main:
       case _CardDimension.vice:
         Rect rect = this.rect;
-        return min(rect.width, rect.height) / Metric.coreNoPaddingGrid * 2.0;
+        return min(rect.width, rect.height) / Metric.coreNoPaddingGrid * 1.5;
+      case _CardDimension.full:
+        return 0.0;
+      default:
+        throw Exception();
+    }
+  }
+
+  /// 第二层外边距, Material 内层. 两层外边距是为了能更明显地显示 material 阴影.
+  ///
+  /// 只与 [rect] 相关, 60 分之 0.5. 全屏尺寸时为 0.
+  double get marginB {
+    switch (dimension) {
+      case _CardDimension.main:
+      case _CardDimension.vice:
+        Rect rect = this.rect;
+        return min(rect.width, rect.height) / Metric.coreNoPaddingGrid * 0.5;
       case _CardDimension.full:
         return 0.0;
       default:

@@ -103,7 +103,8 @@ class GridCard {
 
   final _GridCard _gridCard;
 
-  double get margin => _gridCard.margin;
+  double get marginA => _gridCard.marginA;
+  double get marginB => _gridCard.marginB;
 
   double get elevation => _gridCard.elevation;
 

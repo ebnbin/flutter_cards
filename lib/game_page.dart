@@ -132,22 +132,28 @@ class _GameWidget extends StatelessWidget {
   /// 根据网格定位的卡片, 渲染为 Material 卡片.
   Widget _buildGridCard(GridCard gridCard) {
     return Container(
-      margin: EdgeInsets.all(gridCard.margin),
+      margin: EdgeInsets.all(gridCard.marginA),
       child: Material(
         elevation: gridCard.elevation,
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(gridCard.radius),
-        clipBehavior: Clip.hardEdge,
+        clipBehavior: Clip.antiAlias,
         animationDuration: Duration.zero,
-        child: GestureDetector(
-          child: Stack(
-            children: <Widget>[
-              _buildGridCardBackground(gridCard),
-              _buildGridCardChildren(gridCard),
-            ],
+        child: Container(
+          margin: EdgeInsets.all(gridCard.marginB),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(gridCard.radius),
+            child: GestureDetector(
+              child: Stack(
+                children: <Widget>[
+                  _buildGridCardBackground(gridCard),
+                  _buildGridCardChildren(gridCard),
+                ],
+              ),
+              onTap: gridCard.onTap,
+              onLongPress: gridCard.onLongPress,
+            ),
           ),
-          onTap: gridCard.onTap,
-          onLongPress: gridCard.onLongPress,
         ),
       ),
     );
