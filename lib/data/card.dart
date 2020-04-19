@@ -181,7 +181,7 @@ abstract class _Card {
       case _CardDimension.vice:
         return mainRadius * 4;
       case _CardDimension.full:
-        return mainRadius * 4;
+        return 0.0;
       default:
         throw Exception();
     }
@@ -238,7 +238,7 @@ abstract class _Card {
 
   /// 主尺寸 -> 副尺寸动画.
   ///
-  /// 前 0.5 时隐藏其他卡片.
+  /// 逆时针. 前 0.5 时隐藏其他卡片.
   _Animation<_Card> animateMainToVice({
     int duration = 400,
     int beginDelay = 0,
@@ -280,7 +280,7 @@ abstract class _Card {
 
   /// 副尺寸 -> 主尺寸动画.
   ///
-  /// 后 0.5 时显示其他卡片.
+  /// 顺时针. 后 0.5 时显示其他卡片.
   _Animation<_Card> animateViceToMain({
     int duration = 400,
     int beginDelay = 0,
@@ -314,6 +314,80 @@ abstract class _Card {
         if (last) {
           card.zIndex = 1;
           card.vicing = false;
+        }
+      },
+    );
+  }
+
+  /// 主尺寸 -> 全屏尺寸动画.
+  ///
+  /// 逆时针.
+  _Animation<_Card> animateMainToFill({
+    int duration = 800,
+    int beginDelay = 0,
+    int endDelay = 0,
+  }) {
+    return _Animation<_Card>(this,
+      duration: duration,
+      beginDelay: beginDelay,
+      endDelay: endDelay,
+      curve: Curves.easeInOut,
+      listener: (card, value, first, half, last) {
+        if (first) {
+          card.zIndex = 3;
+        }
+        if (value < 0.5) {
+          card.rotateX = _ValueCalc.ab(0.0, _VisibleAngle.counterClockwise180.value).calc(value);
+          card.translateX = _ValueCalc.ab(0.0, card.fullRect.center.dx - card.mainRect.center.dx).calc(value);
+          card.translateY = _ValueCalc.ab(0.0, card.fullRect.center.dy - card.mainRect.center.dy).calc(value);
+          card.scaleX = _ValueCalc.ab(1.0, card.fullRect.width / card.mainRect.width).calc(value);
+          card.scaleY = _ValueCalc.ab(1.0, card.fullRect.height / card.mainRect.height).calc(value);
+        } else {
+          card.rotateX = _ValueCalc.ab(_VisibleAngle.clockwise180.value, 0.0).calc(value);
+          card.translateX = _ValueCalc.ab(card.mainRect.center.dx - card.fullRect.center.dx, 0.0).calc(value);
+          card.translateY = _ValueCalc.ab(card.mainRect.center.dy - card.fullRect.center.dy, 0.0).calc(value);
+          card.scaleX = _ValueCalc.ab(card.mainRect.width / card.fullRect.width, 1.0).calc(value);
+          card.scaleY = _ValueCalc.ab(card.mainRect.height / card.fullRect.height, 1.0).calc(value);
+        }
+        if (half) {
+          card.dimension = _CardDimension.full;
+        }
+      },
+    );
+  }
+
+  /// 全屏尺寸 -> 主尺寸动画.
+  ///
+  /// 逆时针.
+  _Animation<_Card> animateFullToMain({
+    int duration = 800,
+    int beginDelay = 0,
+    int endDelay = 0,
+  }) {
+    return _Animation<_Card>(this,
+      duration: duration,
+      beginDelay: beginDelay,
+      endDelay: endDelay,
+      curve: Curves.easeInOut,
+      listener: (card, value, first, half, last) {
+        if (value < 0.5) {
+          card.rotateX = _ValueCalc.ab(0.0, _VisibleAngle.counterClockwise180.value).calc(value);
+          card.translateX = _ValueCalc.ab(0.0, card.mainRect.center.dx - card.fullRect.center.dx).calc(value);
+          card.translateY = _ValueCalc.ab(0.0, card.mainRect.center.dy - card.fullRect.center.dy).calc(value);
+          card.scaleX = _ValueCalc.ab(1.0, card.mainRect.width / card.fullRect.width).calc(value);
+          card.scaleY = _ValueCalc.ab(1.0, card.mainRect.height / card.fullRect.height).calc(value);
+        } else {
+          card.rotateX = _ValueCalc.ab(_VisibleAngle.clockwise180.value, 0.0).calc(value);
+          card.translateX = _ValueCalc.ab(card.fullRect.center.dx - card.mainRect.center.dx, 0.0).calc(value);
+          card.translateY = _ValueCalc.ab(card.fullRect.center.dy - card.mainRect.center.dy, 0.0).calc(value);
+          card.scaleX = _ValueCalc.ab(card.fullRect.width / card.mainRect.width, 1.0).calc(value);
+          card.scaleY = _ValueCalc.ab(card.fullRect.height / card.mainRect.height, 1.0).calc(value);
+        }
+        if (half) {
+          card.dimension = _CardDimension.main;
+        }
+        if (last) {
+          card.zIndex = 1;
         }
       },
     );
@@ -1076,10 +1150,10 @@ class _SplashTitleCard extends _CoreCard {
     rowSpan: 1,
     columnSpan: 3,
   ) {
-    this.onTap = (card) {
-    };
-    this.onLongPress = (card) {
-    };
+//    this.onTap = (card) {
+//    };
+//    this.onLongPress = (card) {
+//    };
   }
 }
 
