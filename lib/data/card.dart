@@ -69,32 +69,8 @@ abstract class _Card {
   /// 值为 true 表示当前正在执行副尺寸动画, [opacity] 始终取 [mainOpacity].
   bool vicing;
 
-  /// 主尺寸定位矩形.
-  Rect get mainRect;
-
-  /// 副尺寸定位矩形.
-  Rect get viceRect {
-    return Metric.get().coreNoPaddingRect;
-  }
-
-  /// 全屏尺寸定位矩形.
-  Rect get fullRect {
-    return Metric.get().screenRect;
-  }
-
-  /// 渲染定位矩形.
-  Rect get rect {
-    switch (dimension) {
-      case _CardDimension.main:
-        return mainRect;
-      case _CardDimension.vice:
-        return viceRect;
-      case _CardDimension.full:
-        return fullRect;
-      default:
-        throw Exception();
-    }
-  }
+  /// 定位矩形.
+  Rect get rect;
 
   /// Matrix4.setEntry(3, 2, value). 数值只与卡片尺寸相关.
   double get matrix4Entry32 {
@@ -300,7 +276,7 @@ class _GridCard extends _Card {
 
   //*******************************************************************************************************************
 
-  @override
+  /// 主尺寸定位矩形.
   Rect get mainRect {
     return Rect.fromLTWH(
       Metric.get().safeRect.left + columnGridIndex * Metric.get().gridSize,
@@ -308,6 +284,31 @@ class _GridCard extends _Card {
       columnGridSpan * Metric.get().gridSize,
       rowGridSpan * Metric.get().gridSize,
     );
+  }
+
+  /// 副尺寸定位矩形.
+  Rect get viceRect {
+    return Metric.get().coreNoPaddingRect;
+  }
+
+  /// 全屏尺寸定位矩形.
+  Rect get fullRect {
+    return Metric.get().screenRect;
+  }
+
+  /// 渲染定位矩形.
+  @override
+  Rect get rect {
+    switch (dimension) {
+      case _CardDimension.main:
+        return mainRect;
+      case _CardDimension.vice:
+        return viceRect;
+      case _CardDimension.full:
+        return fullRect;
+      default:
+        throw Exception();
+    }
   }
 
   //*******************************************************************************************************************
