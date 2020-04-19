@@ -354,6 +354,15 @@ class _GridCard extends _Card {
     }
   }
 
+  /// 内容矩形.
+  Rect get contentRect {
+    return Rect.fromCenter(
+      center: rect.center,
+      width: rect.width - (marginA + marginB) * 2.0,
+      height: rect.height - (marginA + marginB) * 2.0,
+    );
+  }
+
   //*******************************************************************************************************************
 
   /// 演示动画.

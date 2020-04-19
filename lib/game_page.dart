@@ -111,7 +111,7 @@ class _GameWidget extends StatelessWidget {
             ignoring: visibleCard.ignorePointer,
             child: Opacity(
               opacity: visibleCard.opacity,
-              child: _buildGridCardOr(visibleCard),
+              child: _buildVisibleCardChildren(visibleCard),
             ),
           ),
         ),
@@ -119,14 +119,12 @@ class _GameWidget extends StatelessWidget {
     );
   }
 
-  /// TODO.
-  Widget _buildGridCardOr(VisibleCard visibleCard) {
+  Widget _buildVisibleCardChildren(VisibleCard visibleCard) {
     if (visibleCard.isGridCard) {
       GridCard gridCard = visibleCard.buildGridCard();
       return _buildGridCard(gridCard);
-    } else {
-      return CustomPaint();
     }
+    return CustomPaint();
   }
 
   /// 根据网格定位的卡片, 渲染为 Material 卡片.
@@ -191,10 +189,12 @@ class _GameWidget extends StatelessWidget {
 
   /// 开屏 Cards 标题.
   Widget _buildSplashTitleCard(SplashTitleCard splashTitleCard) {
-    return Positioned.fromRect(
-      rect: splashTitleCard.rect,
-      child: Image.asset('assets/cards.png',
-        fit: BoxFit.contain,
+    return Center(
+      child: SizedBox.fromSize(
+        child: Image.asset('assets/cards.png',
+          fit: BoxFit.contain,
+        ),
+        size: splashTitleCard.size,
       ),
     );
   }
