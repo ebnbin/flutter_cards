@@ -196,213 +196,6 @@ abstract class _Card {
 
   //*******************************************************************************************************************
 
-  /// 演示动画.
-  _Animation<_Card> animateSample() {
-    return _Animation<_Card>(this,
-      duration: 800,
-      curve: Curves.easeInOut,
-      listener: (card, value, first, half, last) {
-        if (first) {
-          card.zIndex = 2;
-        }
-        card.rotateY = _ValueCalc.ab(0.0, _VisibleAngle.clockwise360.value).calc(value);
-        card.scaleX = _ValueCalc.aba(1.0, 2.0).calc(value);
-        card.scaleY = _ValueCalc.aba(1.0, 2.0).calc(value);
-        card.mainElevation = _ValueCalc.aba(1.0, 2.0).calc(value);
-        card.mainRadius = _ValueCalc.aba(4.0, 8.0).calc(value);
-        if (last) {
-          card.zIndex = 1;
-          card.rotateY = 0.0;
-        }
-      },
-    );
-  }
-
-  /// 主尺寸 -> 副尺寸动画.
-  ///
-  /// 逆时针. 前 0.5 时隐藏其他卡片.
-  _Animation<_Card> animateMainToVice({
-    int duration = 400,
-    int beginDelay = 0,
-    int endDelay = 0,
-  }) {
-    return _Animation<_Card>(this,
-      duration: duration,
-      beginDelay: beginDelay,
-      endDelay: endDelay,
-      curve: Curves.easeInOut,
-      listener: (card, value, first, half, last) {
-        if (first) {
-          card.zIndex = 2;
-          card.vicing = true;
-        }
-        if (value < 0.5) {
-          card.rotateX = _ValueCalc.ab(0.0, _VisibleAngle.counterClockwise180.value).calc(value);
-          card.translateX = _ValueCalc.ab(0.0, card.viceRect.center.dx - card.mainRect.center.dx).calc(value);
-          card.translateY = _ValueCalc.ab(0.0, card.viceRect.center.dy - card.mainRect.center.dy).calc(value);
-          card.scaleX = _ValueCalc.ab(1.0, card.viceRect.width / card.mainRect.width).calc(value);
-          card.scaleY = _ValueCalc.ab(1.0, card.viceRect.height / card.mainRect.height).calc(value);
-          // 改变其他所有卡片透明度.
-          card.screen.viceOpacity = _ValueCalc.ab(0.0, 1.0).calc(value * 2.0);
-        } else {
-          card.rotateX = _ValueCalc.ab(_VisibleAngle.clockwise180.value, 0.0).calc(value);
-          card.translateX = _ValueCalc.ab(card.mainRect.center.dx - card.viceRect.center.dx, 0.0).calc(value);
-          card.translateY = _ValueCalc.ab(card.mainRect.center.dy - card.viceRect.center.dy, 0.0).calc(value);
-          card.scaleX = _ValueCalc.ab(card.mainRect.width / card.viceRect.width, 1.0).calc(value);
-          card.scaleY = _ValueCalc.ab(card.mainRect.height / card.viceRect.height, 1.0).calc(value);
-        }
-        card.mainElevation = _ValueCalc.ab(1.0, 4.0).calc(value);
-        if (half) {
-          card.dimension = _CardDimension.vice;
-          card.screen.viceOpacity = 1.0;
-        }
-      },
-    );
-  }
-
-  /// 副尺寸 -> 主尺寸动画.
-  ///
-  /// 顺时针. 后 0.5 时显示其他卡片.
-  _Animation<_Card> animateViceToMain({
-    int duration = 400,
-    int beginDelay = 0,
-    int endDelay = 0,
-  }) {
-    return _Animation<_Card>(this,
-      duration: duration,
-      beginDelay: beginDelay,
-      endDelay: endDelay,
-      curve: Curves.easeInOut,
-      listener: (card, value, first, half, last) {
-        if (value < 0.5) {
-          card.rotateX = _ValueCalc.ab(0.0, _VisibleAngle.clockwise180.value).calc(value);
-          card.translateX = _ValueCalc.ab(0.0, card.mainRect.center.dx - card.viceRect.center.dx).calc(value);
-          card.translateY = _ValueCalc.ab(0.0, card.mainRect.center.dy - card.viceRect.center.dy).calc(value);
-          card.scaleX = _ValueCalc.ab(1.0, card.mainRect.width / card.viceRect.width).calc(value);
-          card.scaleY = _ValueCalc.ab(1.0, card.mainRect.height / card.viceRect.height).calc(value);
-        } else {
-          card.rotateX = _ValueCalc.ab(_VisibleAngle.counterClockwise180.value, 0.0).calc(value);
-          card.translateX = _ValueCalc.ab(card.viceRect.center.dx - card.mainRect.center.dx, 0.0).calc(value);
-          card.translateY = _ValueCalc.ab(card.viceRect.center.dy - card.mainRect.center.dy, 0.0).calc(value);
-          card.scaleX = _ValueCalc.ab(card.viceRect.width / card.mainRect.width, 1.0).calc(value);
-          card.scaleY = _ValueCalc.ab(card.viceRect.height / card.mainRect.height, 1.0).calc(value);
-          // 改变其他所有卡片透明度.
-          card.screen.viceOpacity = _ValueCalc.ab(1.0, 0.0).calc(value * 2.0 - 1.0);
-        }
-        card.mainElevation = _ValueCalc.ab(4.0, 1.0).calc(value);
-        if (half) {
-          card.dimension = _CardDimension.main;
-        }
-        if (last) {
-          card.zIndex = 1;
-          card.vicing = false;
-        }
-      },
-    );
-  }
-
-  /// 主尺寸 -> 全屏尺寸动画.
-  ///
-  /// 逆时针.
-  _Animation<_Card> animateMainToFill({
-    int duration = 800,
-    int beginDelay = 0,
-    int endDelay = 0,
-  }) {
-    return _Animation<_Card>(this,
-      duration: duration,
-      beginDelay: beginDelay,
-      endDelay: endDelay,
-      curve: Curves.easeInOut,
-      listener: (card, value, first, half, last) {
-        if (first) {
-          card.zIndex = 3;
-        }
-        if (value < 0.5) {
-          card.rotateX = _ValueCalc.ab(0.0, _VisibleAngle.counterClockwise180.value).calc(value);
-          card.translateX = _ValueCalc.ab(0.0, card.fullRect.center.dx - card.mainRect.center.dx).calc(value);
-          card.translateY = _ValueCalc.ab(0.0, card.fullRect.center.dy - card.mainRect.center.dy).calc(value);
-          card.scaleX = _ValueCalc.ab(1.0, card.fullRect.width / card.mainRect.width).calc(value);
-          card.scaleY = _ValueCalc.ab(1.0, card.fullRect.height / card.mainRect.height).calc(value);
-        } else {
-          card.rotateX = _ValueCalc.ab(_VisibleAngle.clockwise180.value, 0.0).calc(value);
-          card.translateX = _ValueCalc.ab(card.mainRect.center.dx - card.fullRect.center.dx, 0.0).calc(value);
-          card.translateY = _ValueCalc.ab(card.mainRect.center.dy - card.fullRect.center.dy, 0.0).calc(value);
-          card.scaleX = _ValueCalc.ab(card.mainRect.width / card.fullRect.width, 1.0).calc(value);
-          card.scaleY = _ValueCalc.ab(card.mainRect.height / card.fullRect.height, 1.0).calc(value);
-        }
-        if (half) {
-          card.dimension = _CardDimension.full;
-        }
-      },
-    );
-  }
-
-  /// 全屏尺寸 -> 主尺寸动画.
-  ///
-  /// 逆时针.
-  _Animation<_Card> animateFullToMain({
-    int duration = 800,
-    int beginDelay = 0,
-    int endDelay = 0,
-  }) {
-    return _Animation<_Card>(this,
-      duration: duration,
-      beginDelay: beginDelay,
-      endDelay: endDelay,
-      curve: Curves.easeInOut,
-      listener: (card, value, first, half, last) {
-        if (value < 0.5) {
-          card.rotateX = _ValueCalc.ab(0.0, _VisibleAngle.counterClockwise180.value).calc(value);
-          card.translateX = _ValueCalc.ab(0.0, card.mainRect.center.dx - card.fullRect.center.dx).calc(value);
-          card.translateY = _ValueCalc.ab(0.0, card.mainRect.center.dy - card.fullRect.center.dy).calc(value);
-          card.scaleX = _ValueCalc.ab(1.0, card.mainRect.width / card.fullRect.width).calc(value);
-          card.scaleY = _ValueCalc.ab(1.0, card.mainRect.height / card.fullRect.height).calc(value);
-        } else {
-          card.rotateX = _ValueCalc.ab(_VisibleAngle.clockwise180.value, 0.0).calc(value);
-          card.translateX = _ValueCalc.ab(card.fullRect.center.dx - card.mainRect.center.dx, 0.0).calc(value);
-          card.translateY = _ValueCalc.ab(card.fullRect.center.dy - card.mainRect.center.dy, 0.0).calc(value);
-          card.scaleX = _ValueCalc.ab(card.fullRect.width / card.mainRect.width, 1.0).calc(value);
-          card.scaleY = _ValueCalc.ab(card.fullRect.height / card.mainRect.height, 1.0).calc(value);
-        }
-        if (half) {
-          card.dimension = _CardDimension.main;
-        }
-        if (last) {
-          card.zIndex = 1;
-        }
-      },
-    );
-  }
-
-  /// 颤抖动画, 用于点击了不可点击的卡片.
-  _Animation<_Card> animateTremble({
-    int duration = 200,
-    int beginDelay = 0,
-    int endDelay = 0,
-  }) {
-    return _Animation<_Card>(this,
-      duration: duration,
-      beginDelay: beginDelay,
-      endDelay: endDelay,
-      curve: Curves.easeInOut,
-      listener: (card, value, first, half, last) {
-        if (first) {
-          card.zIndex = 0;
-        }
-        card.rotateY = _ValueCalc.aba(0.0, 1.0 / 8.0 * pi).calc(value);
-        card.scaleX = _ValueCalc.aba(1.0, 7.0 / 8.0).calc(value);
-        card.scaleY = _ValueCalc.aba(1.0, 7.0 / 8.0).calc(value);
-        card.mainElevation = _ValueCalc.aba(1.0, 7.0 / 8.0).calc(value);
-        if (last) {
-          card.zIndex = 1;
-        }
-      },
-    );
-  }
-
-  //*******************************************************************************************************************
-
   @override
   String toString() {
     return '$index';
@@ -543,6 +336,213 @@ class _GridCard extends _Card {
       default:
         throw Exception();
     }
+  }
+
+  //*******************************************************************************************************************
+
+  /// 演示动画.
+  _Animation<_GridCard> animateGridSample() {
+    return _Animation<_GridCard>(this,
+      duration: 800,
+      curve: Curves.easeInOut,
+      listener: (card, value, first, half, last) {
+        if (first) {
+          card.zIndex = 2;
+        }
+        card.rotateY = _ValueCalc.ab(0.0, _VisibleAngle.clockwise360.value).calc(value);
+        card.scaleX = _ValueCalc.aba(1.0, 2.0).calc(value);
+        card.scaleY = _ValueCalc.aba(1.0, 2.0).calc(value);
+        card.mainElevation = _ValueCalc.aba(1.0, 2.0).calc(value);
+        card.mainRadius = _ValueCalc.aba(4.0, 8.0).calc(value);
+        if (last) {
+          card.zIndex = 1;
+          card.rotateY = 0.0;
+        }
+      },
+    );
+  }
+
+  /// 主尺寸 -> 副尺寸动画.
+  ///
+  /// 逆时针. 前 0.5 时隐藏其他卡片.
+  _Animation<_GridCard> animateGridMainToVice({
+    int duration = 400,
+    int beginDelay = 0,
+    int endDelay = 0,
+  }) {
+    return _Animation<_GridCard>(this,
+      duration: duration,
+      beginDelay: beginDelay,
+      endDelay: endDelay,
+      curve: Curves.easeInOut,
+      listener: (card, value, first, half, last) {
+        if (first) {
+          card.zIndex = 2;
+          card.vicing = true;
+        }
+        if (value < 0.5) {
+          card.rotateX = _ValueCalc.ab(0.0, _VisibleAngle.counterClockwise180.value).calc(value);
+          card.translateX = _ValueCalc.ab(0.0, card.viceRect.center.dx - card.mainRect.center.dx).calc(value);
+          card.translateY = _ValueCalc.ab(0.0, card.viceRect.center.dy - card.mainRect.center.dy).calc(value);
+          card.scaleX = _ValueCalc.ab(1.0, card.viceRect.width / card.mainRect.width).calc(value);
+          card.scaleY = _ValueCalc.ab(1.0, card.viceRect.height / card.mainRect.height).calc(value);
+          // 改变其他所有卡片透明度.
+          card.screen.viceOpacity = _ValueCalc.ab(0.0, 1.0).calc(value * 2.0);
+        } else {
+          card.rotateX = _ValueCalc.ab(_VisibleAngle.clockwise180.value, 0.0).calc(value);
+          card.translateX = _ValueCalc.ab(card.mainRect.center.dx - card.viceRect.center.dx, 0.0).calc(value);
+          card.translateY = _ValueCalc.ab(card.mainRect.center.dy - card.viceRect.center.dy, 0.0).calc(value);
+          card.scaleX = _ValueCalc.ab(card.mainRect.width / card.viceRect.width, 1.0).calc(value);
+          card.scaleY = _ValueCalc.ab(card.mainRect.height / card.viceRect.height, 1.0).calc(value);
+        }
+        card.mainElevation = _ValueCalc.ab(1.0, 4.0).calc(value);
+        if (half) {
+          card.dimension = _CardDimension.vice;
+          card.screen.viceOpacity = 1.0;
+        }
+      },
+    );
+  }
+
+  /// 副尺寸 -> 主尺寸动画.
+  ///
+  /// 顺时针. 后 0.5 时显示其他卡片.
+  _Animation<_GridCard> animateGridViceToMain({
+    int duration = 400,
+    int beginDelay = 0,
+    int endDelay = 0,
+  }) {
+    return _Animation<_GridCard>(this,
+      duration: duration,
+      beginDelay: beginDelay,
+      endDelay: endDelay,
+      curve: Curves.easeInOut,
+      listener: (card, value, first, half, last) {
+        if (value < 0.5) {
+          card.rotateX = _ValueCalc.ab(0.0, _VisibleAngle.clockwise180.value).calc(value);
+          card.translateX = _ValueCalc.ab(0.0, card.mainRect.center.dx - card.viceRect.center.dx).calc(value);
+          card.translateY = _ValueCalc.ab(0.0, card.mainRect.center.dy - card.viceRect.center.dy).calc(value);
+          card.scaleX = _ValueCalc.ab(1.0, card.mainRect.width / card.viceRect.width).calc(value);
+          card.scaleY = _ValueCalc.ab(1.0, card.mainRect.height / card.viceRect.height).calc(value);
+        } else {
+          card.rotateX = _ValueCalc.ab(_VisibleAngle.counterClockwise180.value, 0.0).calc(value);
+          card.translateX = _ValueCalc.ab(card.viceRect.center.dx - card.mainRect.center.dx, 0.0).calc(value);
+          card.translateY = _ValueCalc.ab(card.viceRect.center.dy - card.mainRect.center.dy, 0.0).calc(value);
+          card.scaleX = _ValueCalc.ab(card.viceRect.width / card.mainRect.width, 1.0).calc(value);
+          card.scaleY = _ValueCalc.ab(card.viceRect.height / card.mainRect.height, 1.0).calc(value);
+          // 改变其他所有卡片透明度.
+          card.screen.viceOpacity = _ValueCalc.ab(1.0, 0.0).calc(value * 2.0 - 1.0);
+        }
+        card.mainElevation = _ValueCalc.ab(4.0, 1.0).calc(value);
+        if (half) {
+          card.dimension = _CardDimension.main;
+        }
+        if (last) {
+          card.zIndex = 1;
+          card.vicing = false;
+        }
+      },
+    );
+  }
+
+  /// 主尺寸 -> 全屏尺寸动画.
+  ///
+  /// 逆时针.
+  _Animation<_GridCard> animateGridMainToFull({
+    int duration = 800,
+    int beginDelay = 0,
+    int endDelay = 0,
+  }) {
+    return _Animation<_GridCard>(this,
+      duration: duration,
+      beginDelay: beginDelay,
+      endDelay: endDelay,
+      curve: Curves.easeInOut,
+      listener: (card, value, first, half, last) {
+        if (first) {
+          card.zIndex = 3;
+        }
+        if (value < 0.5) {
+          card.rotateX = _ValueCalc.ab(0.0, _VisibleAngle.counterClockwise180.value).calc(value);
+          card.translateX = _ValueCalc.ab(0.0, card.fullRect.center.dx - card.mainRect.center.dx).calc(value);
+          card.translateY = _ValueCalc.ab(0.0, card.fullRect.center.dy - card.mainRect.center.dy).calc(value);
+          card.scaleX = _ValueCalc.ab(1.0, card.fullRect.width / card.mainRect.width).calc(value);
+          card.scaleY = _ValueCalc.ab(1.0, card.fullRect.height / card.mainRect.height).calc(value);
+        } else {
+          card.rotateX = _ValueCalc.ab(_VisibleAngle.clockwise180.value, 0.0).calc(value);
+          card.translateX = _ValueCalc.ab(card.mainRect.center.dx - card.fullRect.center.dx, 0.0).calc(value);
+          card.translateY = _ValueCalc.ab(card.mainRect.center.dy - card.fullRect.center.dy, 0.0).calc(value);
+          card.scaleX = _ValueCalc.ab(card.mainRect.width / card.fullRect.width, 1.0).calc(value);
+          card.scaleY = _ValueCalc.ab(card.mainRect.height / card.fullRect.height, 1.0).calc(value);
+        }
+        if (half) {
+          card.dimension = _CardDimension.full;
+        }
+      },
+    );
+  }
+
+  /// 全屏尺寸 -> 主尺寸动画.
+  ///
+  /// 逆时针.
+  _Animation<_GridCard> animateGridFullToMain({
+    int duration = 800,
+    int beginDelay = 0,
+    int endDelay = 0,
+  }) {
+    return _Animation<_GridCard>(this,
+      duration: duration,
+      beginDelay: beginDelay,
+      endDelay: endDelay,
+      curve: Curves.easeInOut,
+      listener: (card, value, first, half, last) {
+        if (value < 0.5) {
+          card.rotateX = _ValueCalc.ab(0.0, _VisibleAngle.counterClockwise180.value).calc(value);
+          card.translateX = _ValueCalc.ab(0.0, card.mainRect.center.dx - card.fullRect.center.dx).calc(value);
+          card.translateY = _ValueCalc.ab(0.0, card.mainRect.center.dy - card.fullRect.center.dy).calc(value);
+          card.scaleX = _ValueCalc.ab(1.0, card.mainRect.width / card.fullRect.width).calc(value);
+          card.scaleY = _ValueCalc.ab(1.0, card.mainRect.height / card.fullRect.height).calc(value);
+        } else {
+          card.rotateX = _ValueCalc.ab(_VisibleAngle.clockwise180.value, 0.0).calc(value);
+          card.translateX = _ValueCalc.ab(card.fullRect.center.dx - card.mainRect.center.dx, 0.0).calc(value);
+          card.translateY = _ValueCalc.ab(card.fullRect.center.dy - card.mainRect.center.dy, 0.0).calc(value);
+          card.scaleX = _ValueCalc.ab(card.fullRect.width / card.mainRect.width, 1.0).calc(value);
+          card.scaleY = _ValueCalc.ab(card.fullRect.height / card.mainRect.height, 1.0).calc(value);
+        }
+        if (half) {
+          card.dimension = _CardDimension.main;
+        }
+        if (last) {
+          card.zIndex = 1;
+        }
+      },
+    );
+  }
+
+  /// 颤抖动画, 用于点击了不可点击的卡片.
+  _Animation<_GridCard> animateGridTremble({
+    int duration = 200,
+    int beginDelay = 0,
+    int endDelay = 0,
+  }) {
+    return _Animation<_GridCard>(this,
+      duration: duration,
+      beginDelay: beginDelay,
+      endDelay: endDelay,
+      curve: Curves.easeInOut,
+      listener: (card, value, first, half, last) {
+        if (first) {
+          card.zIndex = 0;
+        }
+        card.rotateY = _ValueCalc.aba(0.0, 1.0 / 8.0 * pi).calc(value);
+        card.scaleX = _ValueCalc.aba(1.0, 7.0 / 8.0).calc(value);
+        card.scaleY = _ValueCalc.aba(1.0, 7.0 / 8.0).calc(value);
+        card.mainElevation = _ValueCalc.aba(1.0, 7.0 / 8.0).calc(value);
+        if (last) {
+          card.zIndex = 1;
+        }
+      },
+    );
   }
 }
 
@@ -740,7 +740,7 @@ class _SpriteCard extends _CoreCard {
       AxisDirection direction = playerCard.adjacentDirection(thisRef);
       if (direction == null) {
         thisRef.screen.game.actionQueue.add(<_Action>[
-          thisRef.animateTremble().action(),
+          thisRef.animateGridTremble().action(),
         ]);
         return;
       }
@@ -785,11 +785,11 @@ class _SpriteCard extends _CoreCard {
       }
       if (thisRef.dimension == _CardDimension.main) {
         thisRef.screen.game.actionQueue.add(<_Action>[
-          thisRef.animateMainToVice().action(),
+          thisRef.animateGridMainToVice().action(),
         ]);
       } else if (thisRef.dimension == _CardDimension.vice) {
         thisRef.screen.game.actionQueue.add(<_Action>[
-          thisRef.animateViceToMain().action(),
+          thisRef.animateGridViceToMain().action(),
         ]);
       }
     });
