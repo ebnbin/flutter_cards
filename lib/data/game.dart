@@ -62,7 +62,7 @@ class _SplashScreen extends _Screen {
       },
     );
 
-    _GridCard sampleCard = _GridCard(this,
+    _Card sampleCard = _Card(this,
       verticalRowGridIndex: 1,
       verticalColumnGridIndex: 1,
       verticalRowGridSpan: 15,
@@ -72,12 +72,10 @@ class _SplashScreen extends _Screen {
       horizontalRowGridSpan: 15,
       horizontalColumnGridSpan: 15,
       onTap: (card) {
-        _GridCard gridCard = card as _GridCard;
-        gridCard.animateGridMainToFull().begin();
+        card.animateMainToFull().begin();
       },
       onLongPress: (card) {
-        _GridCard gridCard = card as _GridCard;
-        gridCard.animateGridFullToMain().begin();
+        card.animateFullToMain().begin();
       },
     );
     cards[1] = sampleCard;
@@ -94,7 +92,7 @@ class _SpriteScreen extends _Screen {
     /// Test: 2.
     cardLength: square * square + 2,
   ) {
-    cards[cards.length - 2] = _GridCard(this,
+    cards[cards.length - 2] = _Card(this,
       verticalRowGridIndex: 80,
       verticalColumnGridIndex: 1,
       verticalRowGridSpan: 10,
@@ -107,7 +105,7 @@ class _SpriteScreen extends _Screen {
         actAddSpriteCards(this);
       },
     );
-    cards[cards.length - 1] = _GridCard(this,
+    cards[cards.length - 1] = _Card(this,
       verticalRowGridIndex: 80,
       verticalColumnGridIndex: 11,
       verticalRowGridSpan: 10,

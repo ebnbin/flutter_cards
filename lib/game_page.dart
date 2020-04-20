@@ -111,7 +111,7 @@ class _GameWidget extends StatelessWidget {
             ignoring: visibleCard.ignorePointer,
             child: Opacity(
               opacity: visibleCard.opacity,
-              child: _buildVisibleCardChildren(visibleCard),
+              child: _buildMaterialCard(visibleCard),
             ),
           ),
         ),
@@ -119,38 +119,30 @@ class _GameWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildVisibleCardChildren(VisibleCard visibleCard) {
-    if (visibleCard.isGridCard) {
-      GridCard gridCard = visibleCard.buildGridCard();
-      return _buildGridCard(gridCard);
-    }
-    return CustomPaint();
-  }
-
-  /// 根据网格定位的卡片, 渲染为 Material 卡片.
-  Widget _buildGridCard(GridCard gridCard) {
+  /// Material 卡片.
+  Widget _buildMaterialCard(VisibleCard visibleCard) {
     return Container(
-      margin: EdgeInsets.all(gridCard.marginA),
+      margin: EdgeInsets.all(visibleCard.marginA),
       child: Material(
         shadowColor: Colors.cyanAccent,
-        elevation: gridCard.elevation,
+        elevation: visibleCard.elevation,
         color: Colors.transparent,
-        borderRadius: BorderRadius.circular(gridCard.radius),
+        borderRadius: BorderRadius.circular(visibleCard.radius),
         clipBehavior: Clip.antiAlias,
         animationDuration: Duration.zero,
         child: Container(
-          margin: EdgeInsets.all(gridCard.marginB),
+          margin: EdgeInsets.all(visibleCard.marginB),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(gridCard.radius),
+            borderRadius: BorderRadius.circular(visibleCard.radius),
             child: GestureDetector(
               child: Stack(
                 children: <Widget>[
-                  _buildGridCardBackground(gridCard),
-                  _buildGridCardChildren(gridCard),
+                  _buildMaterialCardBackground(visibleCard),
+                  _buildMaterialCardChildren(visibleCard),
                 ],
               ),
-              onTap: gridCard.onTap,
-              onLongPress: gridCard.onLongPress,
+              onTap: visibleCard.onTap,
+              onLongPress: visibleCard.onLongPress,
             ),
           ),
         ),
@@ -158,8 +150,8 @@ class _GameWidget extends StatelessWidget {
     );
   }
 
-  /// 网格卡片背景.
-  Widget _buildGridCardBackground(GridCard gridCard) {
+  /// Material 卡片背景.
+  Widget _buildMaterialCardBackground(VisibleCard visibleCard) {
     return Positioned.fromRelativeRect(
       rect: RelativeRect.fill,
       child: Image.asset(
@@ -176,13 +168,13 @@ class _GameWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildGridCardChildren(GridCard gridCard) {
-    if (gridCard.isSplashTitleCard) {
-      SplashTitleCard splashTitleCard = gridCard.buildSplashTitleCard();
+  Widget _buildMaterialCardChildren(VisibleCard visibleCard) {
+    if (visibleCard.isSplashTitleCard) {
+      SplashTitleCard splashTitleCard = visibleCard.buildSplashTitleCard();
       return _buildSplashTitleCard(splashTitleCard);
     }
-    if (gridCard.isSpriteCard) {
-      SpriteCard spriteCard = gridCard.buildSpriteCard();
+    if (visibleCard.isSpriteCard) {
+      SpriteCard spriteCard = visibleCard.buildSpriteCard();
       return _buildSpriteCard(spriteCard);
     }
     return CustomPaint();

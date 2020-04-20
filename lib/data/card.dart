@@ -3,128 +3,6 @@ part of '../data.dart';
 //*********************************************************************************************************************
 //*********************************************************************************************************************
 
-/// 卡片.
-abstract class _Card extends _Box {
-  _Card(_Screen screen, {
-    double rotateX = 0.0,
-    double rotateY = 0.0,
-    double rotateZ = 0.0,
-    double translateX = 0.0,
-    double translateY = 0.0,
-    double scaleX = 1.0,
-    double scaleY = 1.0,
-    this.zIndex = 1,
-    this.visible = true,
-    this.dimension = _CardDimension.main,
-    this.vice = false,
-    this.vicing = false,
-    this.mainOpacity = 1.0,
-    this.gestureType = _GestureType.normal,
-    this.onTap,
-    this.onLongPress,
-  }) : super(screen,
-    rotateX: rotateX,
-    rotateY: rotateY,
-    rotateZ: rotateZ,
-    translateX: translateX,
-    translateY: translateY,
-    scaleX: scaleX,
-    scaleY: scaleY,
-  );
-
-  /// 当前卡片在 [screen.cards] 中的索引.
-  int get index {
-    return screen.cards.indexOf(this);
-  }
-
-  /// [Stack] 中的索引. 数字越大在越上层. 范围 0 ~ 3.
-  ///
-  /// 0: 在做下沉动画.
-  ///
-  /// 1: 默认.
-  ///
-  /// 2: 在做上升动画.
-  ///
-  /// 3: 在顶层做动画.
-  int zIndex;
-
-  /// 是否可见.
-  bool visible;
-
-  /// 在 [Stack] 的 [zIndex] 上是否可见.
-  ///
-  /// [zIndex] 范围 0 ~ 3.
-  bool Function(int zIndex) get zIndexVisible {
-    return (zIndex) {
-      assert(zIndex >= 0 && zIndex <= 3);
-      return max(0, min(3, this.zIndex)) == zIndex && visible;
-    };
-  }
-
-  /// TODO _GridCard 才有 dimension.
-  /// 卡片尺寸.
-  /// 
-  /// 可能因不同尺寸而变化的值: [rect], [marginA], [marginB], [elevation], [radius].
-  _CardDimension dimension;
-
-  /// 值为 false 表示 [screen.viceOpacity] 为 0.0 时显示, 为 1.0 时隐藏, 值为 true 时相反.
-  ///
-  /// 简单来说, false 表示显示副尺寸卡片时隐藏, true 表示显示副尺寸卡片时显示.
-  bool vice;
-
-  /// 值为 true 表示当前正在执行副尺寸动画, [opacity] 始终取 [mainOpacity].
-  bool vicing;
-
-  @override
-  Rect get rect;
-
-  /// 自身透明度.
-  double mainOpacity;
-
-  /// 渲染透明度.
-  double get opacity {
-    if (vicing) {
-      return mainOpacity;
-    }
-    return (vice ? screen.viceOpacity : (1.0 - screen.viceOpacity)) * mainOpacity;
-  }
-
-  //*******************************************************************************************************************
-
-  /// 手势类型.
-  _GestureType gestureType;
-
-  /// 是否拦截手势.
-  bool get absorbPointer {
-    return gestureType == _GestureType.absorb;
-  }
-
-  /// 是否忽略手势.
-  bool get ignorePointer {
-    if (opacity <= 0.0) {
-      // 透明时忽略手势.
-      return true;
-    }
-    return gestureType == _GestureType.ignore;
-  }
-
-  /// 点击事件.
-  void Function(_Card card) onTap;
-
-  /// 长按事件.
-  void Function(_Card card) onLongPress;
-
-  //*******************************************************************************************************************
-
-  @override
-  String toString() {
-    return '$index';
-  }
-}
-
-//*********************************************************************************************************************
-//*********************************************************************************************************************
-
 /// 圆角类型.
 enum _RadiusType {
   /// 直角.
@@ -155,9 +33,9 @@ extension _RadiusTypeExtensions on _RadiusType {
   }
 }
 
-/// 通过网格定位的卡片.
-class _GridCard extends _Card {
-  _GridCard(_Screen screen, {
+/// 卡片. 根据网格定位.
+class _Card extends _Box {
+  _Card(_Screen screen, {
     double rotateX = 0.0,
     double rotateY = 0.0,
     double rotateZ = 0.0,
@@ -165,15 +43,6 @@ class _GridCard extends _Card {
     double translateY = 0.0,
     double scaleX = 1.0,
     double scaleY = 1.0,
-    int zIndex = 1,
-    bool visible = true,
-    _CardDimension dimension = _CardDimension.main,
-    bool vice = false,
-    bool vicing = false,
-    double mainOpacity = 1.0,
-    _GestureType gestureType = _GestureType.normal,
-    void Function(_Card card) onTap,
-    void Function(_Card card) onLongPress,
     this.verticalRowGridIndex = 0,
     this.verticalColumnGridIndex = 0,
     this.verticalRowGridSpan = 1,
@@ -182,8 +51,17 @@ class _GridCard extends _Card {
     this.horizontalColumnGridIndex = 0,
     this.horizontalRowGridSpan = 1,
     this.horizontalColumnGridSpan = 1,
+    this.zIndex = 1,
+    this.visible = true,
+    this.dimension = _CardDimension.main,
+    this.vice = false,
+    this.vicing = false,
     this.mainElevation = 2.0,
     this.radiusType = _RadiusType.small,
+    this.mainOpacity = 1.0,
+    this.gestureType = _GestureType.normal,
+    this.onTap,
+    this.onLongPress,
   }) : super(screen,
     rotateX: rotateX,
     rotateY: rotateY,
@@ -192,15 +70,6 @@ class _GridCard extends _Card {
     translateY: translateY,
     scaleX: scaleX,
     scaleY: scaleY,
-    zIndex: zIndex,
-    visible: visible,
-    dimension: dimension,
-    vice: vice,
-    vicing: vicing,
-    mainOpacity: mainOpacity,
-    gestureType: gestureType,
-    onTap: onTap,
-    onLongPress: onLongPress,
   );
 
   /// 竖屏网格行.
@@ -255,6 +124,52 @@ class _GridCard extends _Card {
     verticalColumnGridSpan = columnGridSpan;
     horizontalColumnGridSpan = columnGridSpan;
   }
+
+  //*******************************************************************************************************************
+
+  /// 当前卡片在 [screen.cards] 中的索引.
+  int get index {
+    return screen.cards.indexOf(this);
+  }
+
+  /// [Stack] 中的索引. 数字越大在越上层. 范围 0 ~ 3.
+  ///
+  /// 0: 在做下沉动画.
+  ///
+  /// 1: 默认.
+  ///
+  /// 2: 在做上升动画.
+  ///
+  /// 3: 在顶层做动画.
+  int zIndex;
+
+  /// 是否可见.
+  bool visible;
+
+  /// 在 [Stack] 的 [zIndex] 上是否可见.
+  ///
+  /// [zIndex] 范围 0 ~ 3.
+  bool Function(int zIndex) get zIndexVisible {
+    return (zIndex) {
+      assert(zIndex >= 0 && zIndex <= 3);
+      return max(0, min(3, this.zIndex)) == zIndex && visible;
+    };
+  }
+
+  //*******************************************************************************************************************
+
+  /// 卡片尺寸.
+  /// 
+  /// 可能因不同尺寸而变化的值: [rect], [marginA], [marginB], [elevation], [radius].
+  _CardDimension dimension;
+
+  /// 值为 false 表示 [screen.viceOpacity] 为 0.0 时显示, 为 1.0 时隐藏, 值为 true 时相反.
+  ///
+  /// 简单来说, false 表示显示副尺寸卡片时隐藏, true 表示显示副尺寸卡片时显示.
+  bool vice;
+
+  /// 值为 true 表示当前正在执行副尺寸动画, [opacity] 始终取 [mainOpacity].
+  bool vicing;
 
   //*******************************************************************************************************************
 
@@ -375,11 +290,47 @@ class _GridCard extends _Card {
     }
   }
 
+  /// 自身透明度.
+  double mainOpacity;
+
+  /// 渲染透明度.
+  double get opacity {
+    if (vicing) {
+      return mainOpacity;
+    }
+    return (vice ? screen.viceOpacity : (1.0 - screen.viceOpacity)) * mainOpacity;
+  }
+
+  //*******************************************************************************************************************
+
+  /// 手势类型.
+  _GestureType gestureType;
+
+  /// 是否拦截手势.
+  bool get absorbPointer {
+    return gestureType == _GestureType.absorb;
+  }
+
+  /// 是否忽略手势.
+  bool get ignorePointer {
+    if (opacity <= 0.0) {
+      // 透明时忽略手势.
+      return true;
+    }
+    return gestureType == _GestureType.ignore;
+  }
+
+  /// 点击事件.
+  void Function(_Card card) onTap;
+
+  /// 长按事件.
+  void Function(_Card card) onLongPress;
+
   //*******************************************************************************************************************
 
   /// 演示动画.
-  _Animation<_GridCard> animateGridSample() {
-    return _Animation<_GridCard>(this,
+  _Animation<_Card> animateSample() {
+    return _Animation<_Card>(this,
       duration: 800,
       curve: Curves.easeInOut,
       listener: (card, value, first, half, last) {
@@ -401,12 +352,12 @@ class _GridCard extends _Card {
   /// 主尺寸 -> 副尺寸动画.
   ///
   /// 逆时针. 前 0.5 时隐藏其他卡片.
-  _Animation<_GridCard> animateGridMainToVice({
+  _Animation<_Card> animateMainToVice({
     int duration = 400,
     int beginDelay = 0,
     int endDelay = 0,
   }) {
-    return _Animation<_GridCard>(this,
+    return _Animation<_Card>(this,
       duration: duration,
       beginDelay: beginDelay,
       endDelay: endDelay,
@@ -443,12 +394,12 @@ class _GridCard extends _Card {
   /// 副尺寸 -> 主尺寸动画.
   ///
   /// 顺时针. 后 0.5 时显示其他卡片.
-  _Animation<_GridCard> animateGridViceToMain({
+  _Animation<_Card> animateViceToMain({
     int duration = 400,
     int beginDelay = 0,
     int endDelay = 0,
   }) {
-    return _Animation<_GridCard>(this,
+    return _Animation<_Card>(this,
       duration: duration,
       beginDelay: beginDelay,
       endDelay: endDelay,
@@ -484,12 +435,12 @@ class _GridCard extends _Card {
   /// 主尺寸 -> 全屏尺寸动画.
   ///
   /// 逆时针.
-  _Animation<_GridCard> animateGridMainToFull({
+  _Animation<_Card> animateMainToFull({
     int duration = 800,
     int beginDelay = 0,
     int endDelay = 0,
   }) {
-    return _Animation<_GridCard>(this,
+    return _Animation<_Card>(this,
       duration: duration,
       beginDelay: beginDelay,
       endDelay: endDelay,
@@ -521,12 +472,12 @@ class _GridCard extends _Card {
   /// 全屏尺寸 -> 主尺寸动画.
   ///
   /// 逆时针.
-  _Animation<_GridCard> animateGridFullToMain({
+  _Animation<_Card> animateFullToMain({
     int duration = 800,
     int beginDelay = 0,
     int endDelay = 0,
   }) {
-    return _Animation<_GridCard>(this,
+    return _Animation<_Card>(this,
       duration: duration,
       beginDelay: beginDelay,
       endDelay: endDelay,
@@ -556,12 +507,12 @@ class _GridCard extends _Card {
   }
 
   /// 颤抖动画, 用于点击了不可点击的卡片.
-  _Animation<_GridCard> animateGridTremble({
+  _Animation<_Card> animateTremble({
     int duration = 200,
     int beginDelay = 0,
     int endDelay = 0,
   }) {
-    return _Animation<_GridCard>(this,
+    return _Animation<_Card>(this,
       duration: duration,
       beginDelay: beginDelay,
       endDelay: endDelay,
@@ -580,13 +531,20 @@ class _GridCard extends _Card {
       },
     );
   }
+
+  //*******************************************************************************************************************
+
+  @override
+  String toString() {
+    return '$index';
+  }
 }
 
 //*********************************************************************************************************************
 //*********************************************************************************************************************
 
 /// 通过方格定位的卡片.
-class _CoreCard extends _GridCard {
+class _CoreCard extends _Card {
   _CoreCard(_Screen screen, {
     double rotateX = 0.0,
     double rotateY = 0.0,
@@ -776,7 +734,7 @@ class _SpriteCard extends _CoreCard {
       AxisDirection direction = playerCard.adjacentDirection(thisRef);
       if (direction == null) {
         thisRef.screen.game.actionQueue.add(<_Action>[
-          thisRef.animateGridTremble().action(),
+          thisRef.animateTremble().action(),
         ]);
         return;
       }
@@ -821,11 +779,11 @@ class _SpriteCard extends _CoreCard {
       }
       if (thisRef.dimension == _CardDimension.main) {
         thisRef.screen.game.actionQueue.add(<_Action>[
-          thisRef.animateGridMainToVice().action(),
+          thisRef.animateMainToVice().action(),
         ]);
       } else if (thisRef.dimension == _CardDimension.vice) {
         thisRef.screen.game.actionQueue.add(<_Action>[
-          thisRef.animateGridViceToMain().action(),
+          thisRef.animateViceToMain().action(),
         ]);
       }
     });
