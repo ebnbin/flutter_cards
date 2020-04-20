@@ -32,6 +32,7 @@ class _Card extends _Box {
     this.gestureType = _GestureType.normal,
     this.onTap,
     this.onLongPress,
+    Map<String, _Face> faceMap,
   }) : super(screen,
     rotateX: rotateX,
     rotateY: rotateY,
@@ -40,7 +41,12 @@ class _Card extends _Box {
     translateY: translateY,
     scaleX: scaleX,
     scaleY: scaleY,
-  );
+  ) {
+    this.faceMap['empty'] = _EmptyFace(this);
+    if (faceMap != null) {
+      this.faceMap.addAll(faceMap);
+    }
+  }
 
   /// 竖屏网格行.
   int verticalRowGridIndex;
@@ -504,6 +510,19 @@ class _Card extends _Box {
 
   //*******************************************************************************************************************
 
+  /// 卡片内容 map.
+  final Map<String, _Face> faceMap = <String, _Face>{};
+
+  String currentFace = 'empty';
+
+  /// 当前卡片内容.
+  _Face get face {
+    assert(faceMap.containsKey(currentFace));
+    return faceMap[currentFace];
+  }
+
+  //*******************************************************************************************************************
+
   @override
   String toString() {
     return '$index';
@@ -538,6 +557,7 @@ class _CoreCard extends _Card {
     int columnSpan = 1,
     double mainElevation = 2.0,
     _CardRadiusType radiusType = _CardRadiusType.small,
+    Map<String, _Face> faceMap,
   }) : super(screen,
     rotateX: rotateX,
     rotateY: rotateY,
@@ -557,6 +577,7 @@ class _CoreCard extends _Card {
     onLongPress: onLongPress,
     mainElevation: mainElevation,
     radiusType: radiusType,
+    faceMap: faceMap,
   ) {
     this.rowIndex = rowIndex;
     this.columnIndex = columnIndex;
@@ -656,6 +677,7 @@ class _SpriteCard extends _CoreCard {
     int columnIndex,
     double mainElevation = 2.0,
     _CardRadiusType radiusType = _CardRadiusType.small,
+    Map<String, _Face> faceMap,
   }) : super(screen,
     rotateX: rotateX,
     rotateY: rotateY,
@@ -682,6 +704,7 @@ class _SpriteCard extends _CoreCard {
     columnSpan: 1,
     mainElevation: mainElevation,
     radiusType: radiusType,
+    faceMap: faceMap,
   ) {
     this.onTap = (card) {
       actOnTap(this);
@@ -1076,6 +1099,7 @@ class _SplashTitleCard extends _CoreCard {
     void Function(_Card card) onLongPress,
     double mainElevation = 2.0,
     _CardRadiusType radiusType = _CardRadiusType.small,
+    Map<String, _Face> faceMap,
   }) : super(screen,
     rotateX: rotateX,
     rotateY: rotateY,
@@ -1099,6 +1123,7 @@ class _SplashTitleCard extends _CoreCard {
     columnSpan: 3,
     mainElevation: mainElevation,
     radiusType: radiusType,
+    faceMap: faceMap,
   ) {
 //    this.onTap = (card) {
 //    };
@@ -1135,6 +1160,7 @@ class _PlayerCard extends _SpriteCard {
     int columnIndex,
     double mainElevation = 2.0,
     _CardRadiusType radiusType = _CardRadiusType.small,
+    Map<String, _Face> faceMap,
   }) : super(screen,
     rotateX: rotateX,
     rotateY: rotateY,
@@ -1155,6 +1181,7 @@ class _PlayerCard extends _SpriteCard {
     columnIndex: columnIndex,
     mainElevation: mainElevation,
     radiusType: radiusType,
+    faceMap: faceMap,
   );
 
   /// 随机非边缘位置.
@@ -1184,6 +1211,7 @@ class _PlayerCard extends _SpriteCard {
     void Function(_Card card) onLongPress,
     double mainElevation = 2.0,
     _CardRadiusType radiusType = _CardRadiusType.small,
+    Map<String, _Face> faceMap,
   }) : this(screen,
     rotateX: rotateX,
     rotateY: rotateY,
@@ -1204,6 +1232,7 @@ class _PlayerCard extends _SpriteCard {
     columnIndex: _randomRowColumnIndex(screen),
     mainElevation: mainElevation,
     radiusType: radiusType,
+    faceMap: faceMap,
   );
 
   @override

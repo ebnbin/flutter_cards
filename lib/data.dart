@@ -50,6 +50,7 @@ class Game {
 
 //*********************************************************************************************************************
 //*********************************************************************************************************************
+// 卡片.
 
 /// 卡片.
 class Card {
@@ -134,6 +135,15 @@ class VisibleCard {
 
   SpriteCard buildSpriteCard() {
     return SpriteCard._(this, _card as _SpriteCard);
+  }
+
+  Object buildFace() {
+    _Face face = _card.face;
+    if (face is _EmptyFace) {
+      return EmptyFace._(face);
+    }
+    // TODO
+    return EmptyFace._(face);
   }
 }
 
@@ -374,4 +384,14 @@ class SpriteCard {
       visibleCard.contentRect.width / 56.0 * 6.0,
     );
   }
+}
+
+//*********************************************************************************************************************
+//*********************************************************************************************************************
+// 卡片内容.
+
+class EmptyFace {
+  EmptyFace._(this._face);
+
+  final _EmptyFace _face;
 }

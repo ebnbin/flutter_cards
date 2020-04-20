@@ -92,14 +92,14 @@ class _GameWidget extends StatelessWidget {
   Widget _buildCard(BuildContext context, int zIndex, Card card) {
     if (card.zIndexVisible(zIndex)) {
       VisibleCard visibleCard = card.buildVisibleCard();
-      return _buildVisibleCard(visibleCard);
+      return _buildVisibleCard(context, visibleCard);
     } else {
-      return _buildInvisibleCard();
+      return _buildInvisibleCard(context);
     }
   }
 
   /// 可见的卡片.
-  Widget _buildVisibleCard(VisibleCard visibleCard) {
+  Widget _buildVisibleCard(BuildContext context, VisibleCard visibleCard) {
     return Positioned.fromRect(
       rect: visibleCard.rect,
       child: Transform(
@@ -111,7 +111,7 @@ class _GameWidget extends StatelessWidget {
             ignoring: visibleCard.ignorePointer,
             child: Opacity(
               opacity: visibleCard.opacity,
-              child: _buildMaterialCard(visibleCard),
+              child: _buildMaterialCard(context, visibleCard),
             ),
           ),
         ),
@@ -120,7 +120,7 @@ class _GameWidget extends StatelessWidget {
   }
 
   /// Material 卡片.
-  Widget _buildMaterialCard(VisibleCard visibleCard) {
+  Widget _buildMaterialCard(BuildContext context, VisibleCard visibleCard) {
     return Container(
       margin: EdgeInsets.all(visibleCard.marginA),
       child: Material(
@@ -137,8 +137,8 @@ class _GameWidget extends StatelessWidget {
             child: GestureDetector(
               child: Stack(
                 children: <Widget>[
-                  _buildMaterialCardBackground(visibleCard),
-                  _buildMaterialCardChildren(visibleCard),
+                  _buildMaterialCardBackground(context, visibleCard),
+                  _buildMaterialCardChildren(context, visibleCard),
                 ],
               ),
               onTap: visibleCard.onTap,
@@ -151,7 +151,7 @@ class _GameWidget extends StatelessWidget {
   }
 
   /// Material 卡片背景.
-  Widget _buildMaterialCardBackground(VisibleCard visibleCard) {
+  Widget _buildMaterialCardBackground(BuildContext context, VisibleCard visibleCard) {
     return Positioned.fromRelativeRect(
       rect: RelativeRect.fill,
       child: Image.asset(
@@ -168,20 +168,30 @@ class _GameWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildMaterialCardChildren(VisibleCard visibleCard) {
-    if (visibleCard.isSplashTitleCard) {
-      SplashTitleCard splashTitleCard = visibleCard.buildSplashTitleCard();
-      return _buildSplashTitleCard(splashTitleCard);
+  Widget _buildMaterialCardChildren(BuildContext context, VisibleCard visibleCard) {
+    Object face = visibleCard.buildFace();
+    if (face is EmptyFace) {
+      return _buildEmptyFace(context, face);
     }
-    if (visibleCard.isSpriteCard) {
-      SpriteCard spriteCard = visibleCard.buildSpriteCard();
-      return _buildSpriteCard(spriteCard);
-    }
+    // TODO
+    return CustomPaint();
+//    if (visibleCard.isSplashTitleCard) {
+//      SplashTitleCard splashTitleCard = visibleCard.buildSplashTitleCard();
+//      return _buildSplashTitleCard(context, splashTitleCard);
+//    }
+//    if (visibleCard.isSpriteCard) {
+//      SpriteCard spriteCard = visibleCard.buildSpriteCard();
+//      return _buildSpriteCard(context, spriteCard);
+//    }
+  }
+
+  /// 空卡片内容.
+  Widget _buildEmptyFace(BuildContext context, EmptyFace face) {
     return CustomPaint();
   }
 
   /// 开屏 Cards 标题.
-  Widget _buildSplashTitleCard(SplashTitleCard splashTitleCard) {
+  Widget _buildSplashTitleCard(BuildContext context, SplashTitleCard splashTitleCard) {
     return Center(
       child: SizedBox.fromSize(
         child: Image.asset('assets/cards.png',
@@ -193,7 +203,7 @@ class _GameWidget extends StatelessWidget {
   }
 
   /// 精灵卡片.
-  Widget _buildSpriteCard(SpriteCard spriteCard) {
+  Widget _buildSpriteCard(BuildContext context, SpriteCard spriteCard) {
     return Positioned.fromRelativeRect(
       rect: RelativeRect.fill,
       child: Stack(
@@ -367,7 +377,7 @@ class _GameWidget extends StatelessWidget {
   }
 
   /// 不可见的卡片.
-  Widget _buildInvisibleCard() {
+  Widget _buildInvisibleCard(BuildContext context) {
     return Positioned.fill(
       child: CustomPaint(),
     );
