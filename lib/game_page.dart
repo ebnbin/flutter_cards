@@ -173,6 +173,9 @@ class _GameWidget extends StatelessWidget {
     if (face is EmptyFace) {
       return _buildEmptyFace(context, face);
     }
+    if (face is SplashFullFace) {
+      return _buildSplashFullFace(context, face);
+    }
     if (face is SplashTitleFace) {
       return _buildSplashTitleFace(context, face);
     }
@@ -186,6 +189,16 @@ class _GameWidget extends StatelessWidget {
   Widget _buildEmptyFace(BuildContext context, EmptyFace face) {
     return Positioned.fill(
       child: CustomPaint(),
+    );
+  }
+
+  /// 开屏全屏.
+  Widget _buildSplashFullFace(BuildContext context, SplashFullFace face) {
+    return Positioned.fromRect(
+      rect: face.rect,
+      child: Image.asset('assets/cards.png',
+        fit: BoxFit.contain,
+      ),
     );
   }
 

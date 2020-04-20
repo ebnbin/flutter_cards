@@ -126,6 +126,9 @@ class VisibleCard {
     if (face == null) {
       return EmptyFace._(this);
     }
+    if (face is _SplashFullFace) {
+      return SplashFullFace._(this, face);
+    }
     if (face is _SplashTitleFace) {
       return SplashTitleFace._(this, face);
     }
@@ -158,8 +161,27 @@ class SplashTitleFace {
   /// 中心图片大小.
   Size get size {
     return Size(
-      _visibleCard.rect.width / 45.0 * 30.0,
-      _visibleCard.rect.width / 45.0 * 8.0,
+      Metric.get().gridSize * 30.0,
+      Metric.get().gridSize * 8.0,
+    );
+  }
+}
+
+/// 开屏全屏.
+class SplashFullFace {
+  SplashFullFace._(this._visibleCard, this._face);
+
+  final VisibleCard _visibleCard;
+
+  final _SplashFullFace _face;
+
+  /// 定位矩形.
+  Rect get rect {
+    return Rect.fromLTWH(
+      Metric.get().gridSize * 8.5,
+      Metric.get().coreNoPaddingRect.top,
+      Metric.get().gridSize * 45.0,
+      Metric.get().gridSize * 12.0,
     );
   }
 }

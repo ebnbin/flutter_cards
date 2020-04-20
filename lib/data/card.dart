@@ -1135,12 +1135,25 @@ class _SplashTitleCard extends _CoreCard {
     mainElevation: mainElevation,
     radiusType: radiusType,
   ) {
+    faceMap['_SplashFullFace'] = _SplashFullFace(this);
     faceMap['_SplashTitleFace'] = _SplashTitleFace(this);
-    currentFace = '_SplashTitleFace';
 //    this.onTap = (card) {
 //    };
 //    this.onLongPress = (card) {
 //    };
+  }
+
+  @override
+  String get currentFace {
+    if (dimension == _CardDimension.main) {
+      return '_SplashTitleFace';
+    } else {
+      return '_SplashFullFace';
+    }
+  }
+  @override
+  set currentFace(String currentFace) {
+    throw Exception();
   }
 }
 
