@@ -2,10 +2,10 @@ part of '../data.dart';
 
 //*********************************************************************************************************************
 //*********************************************************************************************************************
-// Everything is box.
+// Everything is stuff.
 
-abstract class _Box {
-  _Box(this.screen, {
+abstract class _Stuff {
+  _Stuff(this.screen, {
     this.rotateX = 0.0,
     this.rotateY = 0.0,
     this.rotateZ = 0.0,

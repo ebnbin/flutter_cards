@@ -4,7 +4,7 @@ part of '../data.dart';
 //*********************************************************************************************************************
 
 /// 卡片. 根据网格定位.
-class _Card extends _Box {
+class _Card extends _Stuff {
   _Card(_Screen screen, {
     double rotateX = 0.0,
     double rotateY = 0.0,
