@@ -519,6 +519,19 @@ class _Card extends _Stuff {
     if (currentFace == null) {
       return null;
     }
+
+    /// 翻转角度是否在卡片背面.
+    bool backFace(double rotate) {
+      return rotate < _VisibleAngle.counterClockwise360.value ||
+          rotate > _InvisibleAngle.counterClockwise270.value && rotate < _InvisibleAngle.counterClockwise90.value ||
+          rotate > _InvisibleAngle.clockwise90.value && rotate < _InvisibleAngle.clockwise270.value ||
+          rotate > _VisibleAngle.clockwise360.value;
+    }
+
+    /// 卡片翻转到背面时不显示内容.
+    if (backFace(rotateX) || backFace(rotateY)) {
+      return null;
+    }
     assert(faceMap.containsKey(currentFace));
     return faceMap[currentFace];
   }
