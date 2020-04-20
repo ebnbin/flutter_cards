@@ -19,3 +19,13 @@ class _EmptyFace extends _Face {
 class _BlankFace extends _Face {
   _BlankFace(_Card card) : super(card);
 }
+
+/// 开屏全屏.
+class _SplashFullFace extends _Face {
+  _SplashFullFace(_Card card) : super(card);
+}
+
+/// 开屏 Cards 标题.
+class _SplashTitleFace extends _Face {
+  _SplashTitleFace(_Card card) : super(card);
+}

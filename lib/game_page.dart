@@ -173,31 +173,31 @@ class _GameWidget extends StatelessWidget {
     if (face is EmptyFace) {
       return _buildEmptyFace(context, face);
     }
-    // TODO
-    return CustomPaint();
-//    if (visibleCard.isSplashTitleCard) {
-//      SplashTitleCard splashTitleCard = visibleCard.buildSplashTitleCard();
-//      return _buildSplashTitleCard(context, splashTitleCard);
-//    }
+    if (face is SplashTitleFace) {
+      return _buildSplashTitleFace(context, face);
+    }
+    throw Exception();
 //    if (visibleCard.isSpriteCard) {
 //      SpriteCard spriteCard = visibleCard.buildSpriteCard();
 //      return _buildSpriteCard(context, spriteCard);
 //    }
   }
 
-  /// 空卡片内容.
+  /// 空.
   Widget _buildEmptyFace(BuildContext context, EmptyFace face) {
-    return CustomPaint();
+    return Positioned.fill(
+      child: CustomPaint(),
+    );
   }
 
   /// 开屏 Cards 标题.
-  Widget _buildSplashTitleCard(BuildContext context, SplashTitleCard splashTitleCard) {
+  Widget _buildSplashTitleFace(BuildContext context, SplashTitleFace face) {
     return Center(
       child: SizedBox.fromSize(
         child: Image.asset('assets/cards.png',
           fit: BoxFit.contain,
         ),
-        size: splashTitleCard.size,
+        size: face.size,
       ),
     );
   }

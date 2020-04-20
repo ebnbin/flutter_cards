@@ -42,7 +42,7 @@ class _Card extends _Box {
     scaleX: scaleX,
     scaleY: scaleY,
   ) {
-    this.faceMap['empty'] = _EmptyFace(this);
+    this.faceMap['_EmptyFace'] = _EmptyFace(this);
     if (faceMap != null) {
       this.faceMap.addAll(faceMap);
     }
@@ -513,7 +513,7 @@ class _Card extends _Box {
   /// 卡片内容 map.
   final Map<String, _Face> faceMap = <String, _Face>{};
 
-  String currentFace = 'empty';
+  String currentFace = '_EmptyFace';
 
   /// 当前卡片内容.
   _Face get face {
@@ -1099,7 +1099,6 @@ class _SplashTitleCard extends _CoreCard {
     void Function(_Card card) onLongPress,
     double mainElevation = 2.0,
     _CardRadiusType radiusType = _CardRadiusType.small,
-    Map<String, _Face> faceMap,
   }) : super(screen,
     rotateX: rotateX,
     rotateY: rotateY,
@@ -1123,8 +1122,9 @@ class _SplashTitleCard extends _CoreCard {
     columnSpan: 3,
     mainElevation: mainElevation,
     radiusType: radiusType,
-    faceMap: faceMap,
   ) {
+    faceMap['_SplashTitleFace'] = _SplashTitleFace(this);
+    currentFace = '_SplashTitleFace';
 //    this.onTap = (card) {
 //    };
 //    this.onLongPress = (card) {

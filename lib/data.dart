@@ -121,14 +121,6 @@ class VisibleCard {
     };
   }
 
-  bool get isSplashTitleCard {
-    return _card is _SplashTitleCard;
-  }
-
-  SplashTitleCard buildSplashTitleCard() {
-    return SplashTitleCard._(this, _card as _SplashTitleCard);
-  }
-
   bool get isSpriteCard {
     return _card is _SpriteCard;
   }
@@ -140,27 +132,12 @@ class VisibleCard {
   Object buildFace() {
     _Face face = _card.face;
     if (face is _EmptyFace) {
-      return EmptyFace._(face);
+      return EmptyFace._(this, face);
     }
-    // TODO
-    return EmptyFace._(face);
-  }
-}
-
-/// 开屏 Cards 标题.
-class SplashTitleCard {
-  SplashTitleCard._(this.visibleCard, this.splashTitleCard);
-
-  final VisibleCard visibleCard;
-
-  final _SplashTitleCard splashTitleCard;
-
-  /// 中心图片大小.
-  Size get size {
-    return Size(
-      visibleCard.rect.width / 45.0 * 30.0,
-      visibleCard.rect.width / 45.0 * 8.0,
-    );
+    if (face is _SplashTitleFace) {
+      return SplashTitleFace._(this, face);
+    }
+    throw Exception();
   }
 }
 
@@ -390,8 +367,28 @@ class SpriteCard {
 //*********************************************************************************************************************
 // 卡片内容.
 
+/// 空.
 class EmptyFace {
-  EmptyFace._(this._face);
+  EmptyFace._(this._visibleCard, this._face);
+
+  final VisibleCard _visibleCard;
 
   final _EmptyFace _face;
+}
+
+/// 开屏 Cards 标题.
+class SplashTitleFace {
+  SplashTitleFace._(this._visibleCard, this._face);
+
+  final VisibleCard _visibleCard;
+  
+  final _SplashTitleFace _face;
+
+  /// 中心图片大小.
+  Size get size {
+    return Size(
+      _visibleCard.rect.width / 45.0 * 30.0,
+      _visibleCard.rect.width / 45.0 * 8.0,
+    );
+  }
 }
