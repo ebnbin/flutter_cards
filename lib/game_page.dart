@@ -124,9 +124,9 @@ class _GameWidget extends StatelessWidget {
     return Container(
       margin: EdgeInsets.all(visibleCard.marginA),
       child: Material(
-        shadowColor: Colors.cyanAccent,
         elevation: visibleCard.elevation,
         color: Colors.transparent,
+        shadowColor: Colors.cyanAccent,
         borderRadius: BorderRadius.circular(visibleCard.radius),
         clipBehavior: Clip.antiAlias,
         animationDuration: Duration.zero,
@@ -176,11 +176,10 @@ class _GameWidget extends StatelessWidget {
     if (face is SplashTitleFace) {
       return _buildSplashTitleFace(context, face);
     }
+    if (face is PlayerFace) {
+      return _buildPlayerFace(context, face);
+    }
     throw Exception();
-//    if (visibleCard.isSpriteCard) {
-//      SpriteCard spriteCard = visibleCard.buildSpriteCard();
-//      return _buildSpriteCard(context, spriteCard);
-//    }
   }
 
   /// 空.
@@ -202,171 +201,171 @@ class _GameWidget extends StatelessWidget {
     );
   }
 
-  /// 精灵卡片.
-  Widget _buildSpriteCard(BuildContext context, SpriteCard spriteCard) {
+  /// 玩家.
+  Widget _buildPlayerFace(BuildContext context, PlayerFace face) {
     return Positioned.fromRelativeRect(
       rect: RelativeRect.fill,
       child: Stack(
         children: <Widget>[
           /// 主体 (中间).
           Positioned.fromRect(
-            rect: spriteCard.bodyRect,
+            rect: face.bodyRect,
             child: Image.asset('assets/steve.png',
               fit: BoxFit.contain,
             ),
           ),
           /// 数量 (左下角).
           Positioned.fromRect(
-            rect: spriteCard.amountDigit0Rect,
+            rect: face.amountDigit0Rect,
             child: Image.asset('assets/digit_0.png',
-              color: spriteCard.digitColor,
+              color: face.digitColor,
               colorBlendMode: BlendMode.srcIn,
               fit: BoxFit.contain,
             ),
           ),
           Positioned.fromRect(
-            rect: spriteCard.amountDigit1Rect,
+            rect: face.amountDigit1Rect,
             child: Image.asset('assets/digit_0.png',
-              color: spriteCard.digitColor,
+              color: face.digitColor,
               colorBlendMode: BlendMode.srcIn,
               fit: BoxFit.contain,
             ),
           ),
           /// 生命值 (右上角).
           Positioned.fromRect(
-            rect: spriteCard.healthRect,
+            rect: face.healthRect,
             child: Image.asset('assets/health.png',
               fit: BoxFit.contain,
             ),
           ),
           Positioned.fromRect(
-            rect: spriteCard.healthDigit0Rect,
+            rect: face.healthDigit0Rect,
             child: Image.asset('assets/digit_0.png',
-              color: spriteCard.digitColor,
+              color: face.digitColor,
               colorBlendMode: BlendMode.srcIn,
               fit: BoxFit.contain,
             ),
           ),
           Positioned.fromRect(
-            rect: spriteCard.healthDigit1Rect,
+            rect: face.healthDigit1Rect,
             child: Image.asset('assets/digit_0.png',
-              color: spriteCard.digitColor,
+              color: face.digitColor,
               colorBlendMode: BlendMode.srcIn,
               fit: BoxFit.contain,
             ),
           ),
           Positioned.fromRect(
-            rect: spriteCard.healthDigit2Rect,
+            rect: face.healthDigit2Rect,
             child: Image.asset('assets/digit_slash.png',
-              color: spriteCard.digitColor,
+              color: face.digitColor,
               colorBlendMode: BlendMode.srcIn,
               fit: BoxFit.contain,
             ),
           ),
           Positioned.fromRect(
-            rect: spriteCard.healthDigit3Rect,
+            rect: face.healthDigit3Rect,
             child: Image.asset('assets/digit_0.png',
-              color: spriteCard.digitColor,
+              color: face.digitColor,
               colorBlendMode: BlendMode.srcIn,
               fit: BoxFit.contain,
             ),
           ),
           Positioned.fromRect(
-            rect: spriteCard.healthDigit4Rect,
+            rect: face.healthDigit4Rect,
             child: Image.asset('assets/digit_0.png',
-              color: spriteCard.digitColor,
+              color: face.digitColor,
               colorBlendMode: BlendMode.srcIn,
               fit: BoxFit.contain,
             ),
           ),
           /// 武器 (左边, 右手).
           Positioned.fromRect(
-            rect: spriteCard.weaponRect,
+            rect: face.weaponRect,
             child: Image.asset('assets/diamond_sword.png',
               fit: BoxFit.contain,
             ),
           ),
           Positioned.fromRect(
-            rect: spriteCard.weaponDigit0Rect,
+            rect: face.weaponDigit0Rect,
             child: Image.asset('assets/digit_0.png',
-              color: spriteCard.digitColor,
+              color: face.digitColor,
               colorBlendMode: BlendMode.srcIn,
               fit: BoxFit.contain,
             ),
           ),
           Positioned.fromRect(
-            rect: spriteCard.weaponDigit1Rect,
+            rect: face.weaponDigit1Rect,
             child: Image.asset('assets/digit_0.png',
-              color: spriteCard.digitColor,
+              color: face.digitColor,
               colorBlendMode: BlendMode.srcIn,
               fit: BoxFit.contain,
             ),
           ),
           /// 盾牌 (右边, 左手).
           Positioned.fromRect(
-            rect: spriteCard.shieldRect,
+            rect: face.shieldRect,
             child: Image.asset('assets/shield.png',
               fit: BoxFit.contain,
             ),
           ),
           Positioned.fromRect(
-            rect: spriteCard.shieldDigit0Rect,
+            rect: face.shieldDigit0Rect,
             child: Image.asset('assets/digit_0.png',
-              color: spriteCard.digitColor,
+              color: face.digitColor,
               colorBlendMode: BlendMode.srcIn,
               fit: BoxFit.contain,
             ),
           ),
           Positioned.fromRect(
-            rect: spriteCard.shieldDigit1Rect,
+            rect: face.shieldDigit1Rect,
             child: Image.asset('assets/digit_0.png',
-              color: spriteCard.digitColor,
+              color: face.digitColor,
               colorBlendMode: BlendMode.srcIn,
               fit: BoxFit.contain,
             ),
           ),
           /// 效果 (右下角).
           Positioned.fromRect(
-            rect: spriteCard.effectRect,
+            rect: face.effectRect,
             child: Image.asset('assets/poison.png',
               fit: BoxFit.contain,
             ),
           ),
           Positioned.fromRect(
-            rect: spriteCard.effectDigit0Rect,
+            rect: face.effectDigit0Rect,
             child: Image.asset('assets/digit_0.png',
-              color: spriteCard.digitColor,
+              color: face.digitColor,
               colorBlendMode: BlendMode.srcIn,
               fit: BoxFit.contain,
             ),
           ),
           Positioned.fromRect(
-            rect: spriteCard.effectDigit1Rect,
+            rect: face.effectDigit1Rect,
             child: Image.asset('assets/digit_0.png',
-              color: spriteCard.digitColor,
+              color: face.digitColor,
               colorBlendMode: BlendMode.srcIn,
               fit: BoxFit.contain,
             ),
           ),
           /// 能力 (左上角).
           Positioned.fromRect(
-            rect: spriteCard.powerRect,
+            rect: face.powerRect,
             child: Image.asset('assets/absorption.png',
               fit: BoxFit.contain,
             ),
           ),
           Positioned.fromRect(
-            rect: spriteCard.powerDigit0Rect,
+            rect: face.powerDigit0Rect,
             child: Image.asset('assets/digit_0.png',
-              color: spriteCard.digitColor,
+              color: face.digitColor,
               colorBlendMode: BlendMode.srcIn,
               fit: BoxFit.contain,
             ),
           ),
           Positioned.fromRect(
-            rect: spriteCard.powerDigit1Rect,
+            rect: face.powerDigit1Rect,
             child: Image.asset('assets/digit_0.png',
-              color: spriteCard.digitColor,
+              color: face.digitColor,
               colorBlendMode: BlendMode.srcIn,
               fit: BoxFit.contain,
             ),

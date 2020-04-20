@@ -1172,7 +1172,6 @@ class _PlayerCard extends _SpriteCard {
     int columnIndex,
     double mainElevation = 2.0,
     _CardRadiusType radiusType = _CardRadiusType.small,
-    Map<String, _Face> faceMap,
   }) : super(screen,
     rotateX: rotateX,
     rotateY: rotateY,
@@ -1193,8 +1192,10 @@ class _PlayerCard extends _SpriteCard {
     columnIndex: columnIndex,
     mainElevation: mainElevation,
     radiusType: radiusType,
-    faceMap: faceMap,
-  );
+  ) {
+    faceMap['_PlayerFace'] = _PlayerFace(this);
+    currentFace = '_PlayerFace';
+  }
 
   /// 随机非边缘位置.
   ///
@@ -1223,7 +1224,6 @@ class _PlayerCard extends _SpriteCard {
     void Function(_Card card) onLongPress,
     double mainElevation = 2.0,
     _CardRadiusType radiusType = _CardRadiusType.small,
-    Map<String, _Face> faceMap,
   }) : this(screen,
     rotateX: rotateX,
     rotateY: rotateY,
@@ -1244,7 +1244,6 @@ class _PlayerCard extends _SpriteCard {
     columnIndex: _randomRowColumnIndex(screen),
     mainElevation: mainElevation,
     radiusType: radiusType,
-    faceMap: faceMap,
   );
 
   @override

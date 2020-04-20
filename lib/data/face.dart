@@ -24,3 +24,8 @@ class _SplashFullFace extends _Face {
 class _SplashTitleFace extends _Face {
   _SplashTitleFace(_Card card) : super(card);
 }
+
+/// 玩家.
+class _PlayerFace extends _Face {
+  _PlayerFace(_Card card) : super(card);
+}
