@@ -55,10 +55,20 @@ class _SplashScreen extends _Screen {
   ) {
     cards[0] = _SplashTitleCard(this,
       onTap: (card) {
+        if (card.dimension != _CardDimension.main) {
+          return;
+        }
         game.screen = _SpriteScreen(game,
           square: 4,
         );
         game.callback.notifyStateChanged();
+      },
+      onLongPress: (card) {
+        if (card.dimension == _CardDimension.full) {
+          card.animateFullToMain().begin();
+        } else {
+          card.animateMainToFull().begin();
+        }
       },
     );
 
@@ -72,10 +82,17 @@ class _SplashScreen extends _Screen {
       horizontalRowGridSpan: 15,
       horizontalColumnGridSpan: 15,
       onTap: (card) {
-        card.animateMainToFull().begin();
+        if (card.dimension != _CardDimension.main) {
+          return;
+        }
+        card.animateSample().begin();
       },
       onLongPress: (card) {
-        card.animateFullToMain().begin();
+        if (card.dimension == _CardDimension.vice) {
+          card.animateViceToMain().begin();
+        } else {
+          card.animateMainToVice().begin();
+        }
       },
     );
     cards[1] = sampleCard;
@@ -89,10 +106,10 @@ class _SpriteScreen extends _Screen {
     int square,
   }) : super(game,
     square: square,
-    /// Test: 2.
-    cardLength: square * square + 2,
+    /// Test: 3.
+    cardLength: square * square + 3,
   ) {
-    cards[cards.length - 2] = _Card(this,
+    cards[cards.length - 3] = _Card(this,
       verticalRowGridIndex: 80,
       verticalColumnGridIndex: 1,
       verticalRowGridSpan: 10,
@@ -102,15 +119,29 @@ class _SpriteScreen extends _Screen {
       horizontalRowGridSpan: 10,
       horizontalColumnGridSpan: 10,
       onTap: (card) {
-        actAddSpriteCards(this);
+        game.screen = _SplashScreen(game);
+        game.callback.notifyStateChanged();
       },
     );
-    cards[cards.length - 1] = _Card(this,
+    cards[cards.length - 2] = _Card(this,
       verticalRowGridIndex: 80,
       verticalColumnGridIndex: 11,
       verticalRowGridSpan: 10,
       verticalColumnGridSpan: 10,
       horizontalRowGridIndex: 11,
+      horizontalColumnGridIndex: 80,
+      horizontalRowGridSpan: 10,
+      horizontalColumnGridSpan: 10,
+      onTap: (card) {
+        actAddSpriteCards(this);
+      },
+    );
+    cards[cards.length - 1] = _Card(this,
+      verticalRowGridIndex: 80,
+      verticalColumnGridIndex: 21,
+      verticalRowGridSpan: 10,
+      verticalColumnGridSpan: 10,
+      horizontalRowGridIndex: 21,
       horizontalColumnGridIndex: 80,
       horizontalRowGridSpan: 10,
       horizontalColumnGridSpan: 10,
