@@ -41,9 +41,9 @@ class Game {
   final _Game _game;
 
   /// 返回当前 immutable 的全部卡片数据.
-  List<Card> buildCards(BuildContext context) {
-    return List.unmodifiable(_game.screen.cards.map<Card>((card) {
-      return Card._(card);
+  List<NullableCard> buildNullableCards(BuildContext context) {
+    return List.unmodifiable(_game.screen.cards.map<NullableCard>((card) {
+      return NullableCard._(card);
     }));
   }
 }
@@ -52,9 +52,9 @@ class Game {
 //*********************************************************************************************************************
 // 卡片.
 
-/// 卡片.
-class Card {
-  Card._(this._card);
+/// 可能为空或不可见的卡片.
+class NullableCard {
+  NullableCard._(this._card);
 
   /// 可能为 null.
   final _Card _card;
@@ -67,14 +67,16 @@ class Card {
     return _card.zIndexVisible;
   }
 
-  VisibleCard buildVisibleCard() {
-    return VisibleCard._(_card);
+  Card buildCard() {
+    return Card._(_card);
   }
 }
 
-/// 可见的卡片.
-class VisibleCard {
-  VisibleCard._(this._card);
+//*********************************************************************************************************************
+
+/// 卡片.
+class Card {
+  Card._(this._card);
 
   /// 不可能为 null.
   final _Card _card;
@@ -88,7 +90,7 @@ class VisibleCard {
   bool get ignorePointer => _card.ignorePointer;
 
   double get opacity => _card.opacity;
-  
+
   //*******************************************************************************************************************
   // Material.
 
@@ -99,7 +101,7 @@ class VisibleCard {
 
   double get elevation => _card.elevation;
 
-  /// 是否启用圆角.
+  /// 是否强制启用圆角.
   static const bool _enableRadius = true;
 
   double get radius {
@@ -123,9 +125,6 @@ class VisibleCard {
 
   Object buildFace() {
     _Face face = _card.face;
-    if (face == null) {
-      return EmptyFace._(this);
-    }
     if (face is _SplashFullFace) {
       return SplashFullFace._(this, face);
     }
@@ -135,7 +134,7 @@ class VisibleCard {
     if (face is _PlayerFace) {
       return PlayerFace._(this, face);
     }
-    throw Exception();
+    return null;
   }
 }
 
@@ -143,19 +142,12 @@ class VisibleCard {
 //*********************************************************************************************************************
 // 卡片内容.
 
-/// 空.
-class EmptyFace {
-  EmptyFace._(this._visibleCard);
-
-  final VisibleCard _visibleCard;
-}
-
 /// 开屏 Cards 标题.
 class SplashTitleFace {
-  SplashTitleFace._(this._visibleCard, this._face);
+  SplashTitleFace._(this._card, this._face);
 
-  final VisibleCard _visibleCard;
-  
+  final Card _card;
+
   final _SplashTitleFace _face;
 
   /// 中心图片大小.
@@ -169,9 +161,9 @@ class SplashTitleFace {
 
 /// 开屏全屏.
 class SplashFullFace {
-  SplashFullFace._(this._visibleCard, this._face);
+  SplashFullFace._(this._card, this._face);
 
-  final VisibleCard _visibleCard;
+  final Card _card;
 
   final _SplashFullFace _face;
 
@@ -188,9 +180,9 @@ class SplashFullFace {
 
 /// 玩家.
 class PlayerFace {
-  PlayerFace._(this._visibleCard, this._face);
+  PlayerFace._(this._card, this._face);
 
-  final VisibleCard _visibleCard;
+  final Card _card;
 
   final _PlayerFace _face;
 
@@ -200,210 +192,210 @@ class PlayerFace {
   /// 主体.
   Rect get bodyRect {
     return Rect.fromLTWH(
-      _visibleCard.contentRect.width / 56.0 * 4.0,
-      _visibleCard.contentRect.width / 56.0 * 4.0,
-      _visibleCard.contentRect.width / 56.0 * 48.0,
-      _visibleCard.contentRect.width / 56.0 * 48.0,
+      _card.contentRect.width / 56.0 * 4.0,
+      _card.contentRect.width / 56.0 * 4.0,
+      _card.contentRect.width / 56.0 * 48.0,
+      _card.contentRect.width / 56.0 * 48.0,
     );
   }
 
   /// 数量数字 0.
   Rect get amountDigit0Rect {
     return Rect.fromLTWH(
-      _visibleCard.contentRect.width / 56.0 * 1.0,
-      _visibleCard.contentRect.width / 56.0 * 48.0,
-      _visibleCard.contentRect.width / 56.0 * 4.0,
-      _visibleCard.contentRect.width / 56.0 * 6.0,
+      _card.contentRect.width / 56.0 * 1.0,
+      _card.contentRect.width / 56.0 * 48.0,
+      _card.contentRect.width / 56.0 * 4.0,
+      _card.contentRect.width / 56.0 * 6.0,
     );
   }
 
   /// 数量数字 1.
   Rect get amountDigit1Rect {
     return Rect.fromLTWH(
-      _visibleCard.contentRect.width / 56.0 * 5.0,
-      _visibleCard.contentRect.width / 56.0 * 48.0,
-      _visibleCard.contentRect.width / 56.0 * 4.0,
-      _visibleCard.contentRect.width / 56.0 * 6.0,
+      _card.contentRect.width / 56.0 * 5.0,
+      _card.contentRect.width / 56.0 * 48.0,
+      _card.contentRect.width / 56.0 * 4.0,
+      _card.contentRect.width / 56.0 * 6.0,
     );
   }
 
   /// 生命值.
   Rect get healthRect {
     return Rect.fromLTWH(
-      _visibleCard.contentRect.width / 56.0 * 47.0,
-      _visibleCard.contentRect.width / 56.0 * 9.0,
-      _visibleCard.contentRect.width / 56.0 * 9.0,
-      _visibleCard.contentRect.width / 56.0 * 9.0,
+      _card.contentRect.width / 56.0 * 47.0,
+      _card.contentRect.width / 56.0 * 9.0,
+      _card.contentRect.width / 56.0 * 9.0,
+      _card.contentRect.width / 56.0 * 9.0,
     );
   }
 
   /// 生命值数字 0.
   Rect get healthDigit0Rect {
     return Rect.fromLTWH(
-      _visibleCard.contentRect.width / 56.0 * 35.0,
-      _visibleCard.contentRect.width / 56.0 * 2.0,
-      _visibleCard.contentRect.width / 56.0 * 4.0,
-      _visibleCard.contentRect.width / 56.0 * 6.0,
+      _card.contentRect.width / 56.0 * 35.0,
+      _card.contentRect.width / 56.0 * 2.0,
+      _card.contentRect.width / 56.0 * 4.0,
+      _card.contentRect.width / 56.0 * 6.0,
     );
   }
 
   /// 生命值数字 1.
   Rect get healthDigit1Rect {
     return Rect.fromLTWH(
-      _visibleCard.contentRect.width / 56.0 * 39.0,
-      _visibleCard.contentRect.width / 56.0 * 2.0,
-      _visibleCard.contentRect.width / 56.0 * 4.0,
-      _visibleCard.contentRect.width / 56.0 * 6.0,
+      _card.contentRect.width / 56.0 * 39.0,
+      _card.contentRect.width / 56.0 * 2.0,
+      _card.contentRect.width / 56.0 * 4.0,
+      _card.contentRect.width / 56.0 * 6.0,
     );
   }
 
   /// 生命值数字 2.
   Rect get healthDigit2Rect {
     return Rect.fromLTWH(
-      _visibleCard.contentRect.width / 56.0 * 43.0,
-      _visibleCard.contentRect.width / 56.0 * 2.0,
-      _visibleCard.contentRect.width / 56.0 * 4.0,
-      _visibleCard.contentRect.width / 56.0 * 6.0,
+      _card.contentRect.width / 56.0 * 43.0,
+      _card.contentRect.width / 56.0 * 2.0,
+      _card.contentRect.width / 56.0 * 4.0,
+      _card.contentRect.width / 56.0 * 6.0,
     );
   }
 
   /// 生命值数字 3.
   Rect get healthDigit3Rect {
     return Rect.fromLTWH(
-      _visibleCard.contentRect.width / 56.0 * 47.0,
-      _visibleCard.contentRect.width / 56.0 * 2.0,
-      _visibleCard.contentRect.width / 56.0 * 4.0,
-      _visibleCard.contentRect.width / 56.0 * 6.0,
+      _card.contentRect.width / 56.0 * 47.0,
+      _card.contentRect.width / 56.0 * 2.0,
+      _card.contentRect.width / 56.0 * 4.0,
+      _card.contentRect.width / 56.0 * 6.0,
     );
   }
 
   /// 生命值数字 4.
   Rect get healthDigit4Rect {
     return Rect.fromLTWH(
-      _visibleCard.contentRect.width / 56.0 * 51.0,
-      _visibleCard.contentRect.width / 56.0 * 2.0,
-      _visibleCard.contentRect.width / 56.0 * 4.0,
-      _visibleCard.contentRect.width / 56.0 * 6.0,
+      _card.contentRect.width / 56.0 * 51.0,
+      _card.contentRect.width / 56.0 * 2.0,
+      _card.contentRect.width / 56.0 * 4.0,
+      _card.contentRect.width / 56.0 * 6.0,
     );
   }
 
   /// 武器.
   Rect get weaponRect {
     return Rect.fromLTWH(
-      _visibleCard.contentRect.width / 56.0 * 0.0,
-      _visibleCard.contentRect.width / 56.0 * 15.0,
-      _visibleCard.contentRect.width / 56.0 * 24.0,
-      _visibleCard.contentRect.width / 56.0 * 24.0,
+      _card.contentRect.width / 56.0 * 0.0,
+      _card.contentRect.width / 56.0 * 15.0,
+      _card.contentRect.width / 56.0 * 24.0,
+      _card.contentRect.width / 56.0 * 24.0,
     );
   }
 
   /// 武器数字 0.
   Rect get weaponDigit0Rect {
     return Rect.fromLTWH(
-      _visibleCard.contentRect.width / 56.0 * 1.0,
-      _visibleCard.contentRect.width / 56.0 * 40.0,
-      _visibleCard.contentRect.width / 56.0 * 4.0,
-      _visibleCard.contentRect.width / 56.0 * 6.0,
+      _card.contentRect.width / 56.0 * 1.0,
+      _card.contentRect.width / 56.0 * 40.0,
+      _card.contentRect.width / 56.0 * 4.0,
+      _card.contentRect.width / 56.0 * 6.0,
     );
   }
 
   /// 武器数字 1.
   Rect get weaponDigit1Rect {
     return Rect.fromLTWH(
-      _visibleCard.contentRect.width / 56.0 * 5.0,
-      _visibleCard.contentRect.width / 56.0 * 40.0,
-      _visibleCard.contentRect.width / 56.0 * 4.0,
-      _visibleCard.contentRect.width / 56.0 * 6.0,
+      _card.contentRect.width / 56.0 * 5.0,
+      _card.contentRect.width / 56.0 * 40.0,
+      _card.contentRect.width / 56.0 * 4.0,
+      _card.contentRect.width / 56.0 * 6.0,
     );
   }
 
   /// 盾牌.
   Rect get shieldRect {
     return Rect.fromLTWH(
-      _visibleCard.contentRect.width / 56.0 * 22.0,
-      _visibleCard.contentRect.width / 56.0 * 17.0,
-      _visibleCard.contentRect.width / 56.0 * 24.0,
-      _visibleCard.contentRect.width / 56.0 * 24.0,
+      _card.contentRect.width / 56.0 * 22.0,
+      _card.contentRect.width / 56.0 * 17.0,
+      _card.contentRect.width / 56.0 * 24.0,
+      _card.contentRect.width / 56.0 * 24.0,
     );
   }
 
   /// 盾牌数字 0.
   Rect get shieldDigit0Rect {
     return Rect.fromLTWH(
-      _visibleCard.contentRect.width / 56.0 * 47.0,
-      _visibleCard.contentRect.width / 56.0 * 29.0,
-      _visibleCard.contentRect.width / 56.0 * 4.0,
-      _visibleCard.contentRect.width / 56.0 * 6.0,
+      _card.contentRect.width / 56.0 * 47.0,
+      _card.contentRect.width / 56.0 * 29.0,
+      _card.contentRect.width / 56.0 * 4.0,
+      _card.contentRect.width / 56.0 * 6.0,
     );
   }
 
   /// 盾牌数字 1.
   Rect get shieldDigit1Rect {
     return Rect.fromLTWH(
-      _visibleCard.contentRect.width / 56.0 * 51.0,
-      _visibleCard.contentRect.width / 56.0 * 29.0,
-      _visibleCard.contentRect.width / 56.0 * 4.0,
-      _visibleCard.contentRect.width / 56.0 * 6.0,
+      _card.contentRect.width / 56.0 * 51.0,
+      _card.contentRect.width / 56.0 * 29.0,
+      _card.contentRect.width / 56.0 * 4.0,
+      _card.contentRect.width / 56.0 * 6.0,
     );
   }
 
   /// 效果.
   Rect get effectRect {
     return Rect.fromLTWH(
-      _visibleCard.contentRect.width / 56.0 * 47.0,
-      _visibleCard.contentRect.width / 56.0 * 46.0,
-      _visibleCard.contentRect.width / 56.0 * 9.0,
-      _visibleCard.contentRect.width / 56.0 * 9.0,
+      _card.contentRect.width / 56.0 * 47.0,
+      _card.contentRect.width / 56.0 * 46.0,
+      _card.contentRect.width / 56.0 * 9.0,
+      _card.contentRect.width / 56.0 * 9.0,
     );
   }
 
   /// 效果数字 0.
   Rect get effectDigit0Rect {
     return Rect.fromLTWH(
-      _visibleCard.contentRect.width / 56.0 * 38.0,
-      _visibleCard.contentRect.width / 56.0 * 48.0,
-      _visibleCard.contentRect.width / 56.0 * 4.0,
-      _visibleCard.contentRect.width / 56.0 * 6.0,
+      _card.contentRect.width / 56.0 * 38.0,
+      _card.contentRect.width / 56.0 * 48.0,
+      _card.contentRect.width / 56.0 * 4.0,
+      _card.contentRect.width / 56.0 * 6.0,
     );
   }
 
   /// 效果数字 1.
   Rect get effectDigit1Rect {
     return Rect.fromLTWH(
-      _visibleCard.contentRect.width / 56.0 * 42.0,
-      _visibleCard.contentRect.width / 56.0 * 48.0,
-      _visibleCard.contentRect.width / 56.0 * 4.0,
-      _visibleCard.contentRect.width / 56.0 * 6.0,
+      _card.contentRect.width / 56.0 * 42.0,
+      _card.contentRect.width / 56.0 * 48.0,
+      _card.contentRect.width / 56.0 * 4.0,
+      _card.contentRect.width / 56.0 * 6.0,
     );
   }
 
   /// 能力.
   Rect get powerRect {
     return Rect.fromLTWH(
-      _visibleCard.contentRect.width / 56.0 * 0.0,
-      _visibleCard.contentRect.width / 56.0 * 1.0,
-      _visibleCard.contentRect.width / 56.0 * 9.0,
-      _visibleCard.contentRect.width / 56.0 * 9.0,
+      _card.contentRect.width / 56.0 * 0.0,
+      _card.contentRect.width / 56.0 * 1.0,
+      _card.contentRect.width / 56.0 * 9.0,
+      _card.contentRect.width / 56.0 * 9.0,
     );
   }
 
   /// 能力数字 0.
   Rect get powerDigit0Rect {
     return Rect.fromLTWH(
-      _visibleCard.contentRect.width / 56.0 * 10.0,
-      _visibleCard.contentRect.width / 56.0 * 2.0,
-      _visibleCard.contentRect.width / 56.0 * 4.0,
-      _visibleCard.contentRect.width / 56.0 * 6.0,
+      _card.contentRect.width / 56.0 * 10.0,
+      _card.contentRect.width / 56.0 * 2.0,
+      _card.contentRect.width / 56.0 * 4.0,
+      _card.contentRect.width / 56.0 * 6.0,
     );
   }
 
   /// 能力数字 1.
   Rect get powerDigit1Rect {
     return Rect.fromLTWH(
-      _visibleCard.contentRect.width / 56.0 * 14.0,
-      _visibleCard.contentRect.width / 56.0 * 2.0,
-      _visibleCard.contentRect.width / 56.0 * 4.0,
-      _visibleCard.contentRect.width / 56.0 * 6.0,
+      _card.contentRect.width / 56.0 * 14.0,
+      _card.contentRect.width / 56.0 * 2.0,
+      _card.contentRect.width / 56.0 * 4.0,
+      _card.contentRect.width / 56.0 * 6.0,
     );
   }
 }

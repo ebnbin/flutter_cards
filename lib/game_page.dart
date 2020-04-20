@@ -76,12 +76,16 @@ class _GameWidget extends StatelessWidget {
 
   /// 全部卡片.
   Widget _buildCards(BuildContext context) {
-    List<Card> cards = game.buildCards(context);
+    List<NullableCard> nullableCards = game.buildNullableCards(context);
     return Stack(
       children: <int>[0, 1, 2, 3,].map<Widget>((zIndex) {
         return Stack(
-          children: cards.map<Widget>((card) {
-            return _buildCard(context, zIndex, card);
+          children: nullableCards.map<Widget>((nullableCard) {
+            if (!nullableCard.zIndexVisible(zIndex)) {
+              return _buildInvisible(context);
+            }
+            Card card = nullableCard.buildCard();
+            return _buildCard(context, card);
           }).toList(),
         );
       }).toList(),
@@ -89,60 +93,45 @@ class _GameWidget extends StatelessWidget {
   }
 
   /// 卡片.
-  Widget _buildCard(BuildContext context, int zIndex, Card card) {
-    if (card.zIndexVisible(zIndex)) {
-      VisibleCard visibleCard = card.buildVisibleCard();
-      return _buildVisibleCard(context, visibleCard);
-    } else {
-      return _buildInvisibleCard(context);
-    }
-  }
-
-  /// 可见的卡片.
-  Widget _buildVisibleCard(BuildContext context, VisibleCard visibleCard) {
+  Widget _buildCard(BuildContext context, Card card) {
     return Positioned.fromRect(
-      rect: visibleCard.rect,
+      rect: card.rect,
       child: Transform(
-        transform: visibleCard.transform,
+        transform: card.transform,
         alignment: Alignment.center,
         child: AbsorbPointer(
-          absorbing: visibleCard.absorbPointer,
+          absorbing: card.absorbPointer,
           child: IgnorePointer(
-            ignoring: visibleCard.ignorePointer,
+            ignoring: card.ignorePointer,
             child: Opacity(
-              opacity: visibleCard.opacity,
-              child: _buildMaterialCard(context, visibleCard),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  /// Material 卡片.
-  Widget _buildMaterialCard(BuildContext context, VisibleCard visibleCard) {
-    return Container(
-      margin: EdgeInsets.all(visibleCard.marginA),
-      child: Material(
-        elevation: visibleCard.elevation,
-        color: Colors.transparent,
-        shadowColor: Colors.cyanAccent,
-        borderRadius: BorderRadius.circular(visibleCard.radius),
-        clipBehavior: Clip.antiAlias,
-        animationDuration: Duration.zero,
-        child: Container(
-          margin: EdgeInsets.all(visibleCard.marginB),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(visibleCard.radius),
-            child: GestureDetector(
-              child: Stack(
-                children: <Widget>[
-                  _buildMaterialCardBackground(context, visibleCard),
-                  _buildMaterialCardChildren(context, visibleCard),
-                ],
+              opacity: card.opacity,
+              child: Container(
+                margin: EdgeInsets.all(card.marginA),
+                child: Material(
+                  elevation: card.elevation,
+                  color: Colors.transparent,
+                  shadowColor: Colors.cyanAccent,
+                  borderRadius: BorderRadius.circular(card.radius),
+                  clipBehavior: Clip.antiAlias,
+                  animationDuration: Duration.zero,
+                  child: Container(
+                    margin: EdgeInsets.all(card.marginB),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(card.radius),
+                      child: GestureDetector(
+                        child: Stack(
+                          children: <Widget>[
+                            _buildCardBackground(context, card),
+                            _buildCardFace(context, card),
+                          ],
+                        ),
+                        onTap: card.onTap,
+                        onLongPress: card.onLongPress,
+                      ),
+                    ),
+                  ),
+                ),
               ),
-              onTap: visibleCard.onTap,
-              onLongPress: visibleCard.onLongPress,
             ),
           ),
         ),
@@ -150,8 +139,8 @@ class _GameWidget extends StatelessWidget {
     );
   }
 
-  /// Material 卡片背景.
-  Widget _buildMaterialCardBackground(BuildContext context, VisibleCard visibleCard) {
+  /// 卡片背景.
+  Widget _buildCardBackground(BuildContext context, Card card) {
     return Positioned.fromRelativeRect(
       rect: RelativeRect.fill,
       child: Image.asset(
@@ -168,11 +157,9 @@ class _GameWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildMaterialCardChildren(BuildContext context, VisibleCard visibleCard) {
-    Object face = visibleCard.buildFace();
-    if (face is EmptyFace) {
-      return _buildEmptyFace(context, face);
-    }
+  /// 卡片内容.
+  Widget _buildCardFace(BuildContext context, Card card) {
+    Object face = card.buildFace();
     if (face is SplashFullFace) {
       return _buildSplashFullFace(context, face);
     }
@@ -182,14 +169,7 @@ class _GameWidget extends StatelessWidget {
     if (face is PlayerFace) {
       return _buildPlayerFace(context, face);
     }
-    throw Exception();
-  }
-
-  /// 空.
-  Widget _buildEmptyFace(BuildContext context, EmptyFace face) {
-    return Positioned.fill(
-      child: CustomPaint(),
-    );
+    return _buildInvisible(context);
   }
 
   /// 开屏全屏.
@@ -388,8 +368,8 @@ class _GameWidget extends StatelessWidget {
     );
   }
 
-  /// 不可见的卡片.
-  Widget _buildInvisibleCard(BuildContext context) {
+  /// 不可见的 Widget.
+  Widget _buildInvisible(BuildContext context) {
     return Positioned.fill(
       child: CustomPaint(),
     );
