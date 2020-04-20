@@ -207,9 +207,15 @@ class _GameWidget extends StatelessWidget {
               fit: BoxFit.contain,
             ),
           ),
-          /// 数量 (左下角).
+          /// 武器 (左边, 右手).
           Positioned.fromRect(
-            rect: face.amountDigit0Rect,
+            rect: face.weaponRect,
+            child: Image.asset('assets/diamond_sword.png',
+              fit: BoxFit.contain,
+            ),
+          ),
+          Positioned.fromRect(
+            rect: face.weaponDigit0Rect,
             child: Image.asset('assets/digit_0.png',
               color: face.digitColor,
               colorBlendMode: BlendMode.srcIn,
@@ -217,7 +223,30 @@ class _GameWidget extends StatelessWidget {
             ),
           ),
           Positioned.fromRect(
-            rect: face.amountDigit1Rect,
+            rect: face.weaponDigit1Rect,
+            child: Image.asset('assets/digit_0.png',
+              color: face.digitColor,
+              colorBlendMode: BlendMode.srcIn,
+              fit: BoxFit.contain,
+            ),
+          ),
+          /// 盾牌 (右边, 左手).
+          Positioned.fromRect(
+            rect: face.shieldRect,
+            child: Image.asset('assets/shield.png',
+              fit: BoxFit.contain,
+            ),
+          ),
+          Positioned.fromRect(
+            rect: face.shieldDigit0Rect,
+            child: Image.asset('assets/digit_0.png',
+              color: face.digitColor,
+              colorBlendMode: BlendMode.srcIn,
+              fit: BoxFit.contain,
+            ),
+          ),
+          Positioned.fromRect(
+            rect: face.shieldDigit1Rect,
             child: Image.asset('assets/digit_0.png',
               color: face.digitColor,
               colorBlendMode: BlendMode.srcIn,
@@ -271,52 +300,6 @@ class _GameWidget extends StatelessWidget {
               fit: BoxFit.contain,
             ),
           ),
-          /// 武器 (左边, 右手).
-          Positioned.fromRect(
-            rect: face.weaponRect,
-            child: Image.asset('assets/diamond_sword.png',
-              fit: BoxFit.contain,
-            ),
-          ),
-          Positioned.fromRect(
-            rect: face.weaponDigit0Rect,
-            child: Image.asset('assets/digit_0.png',
-              color: face.digitColor,
-              colorBlendMode: BlendMode.srcIn,
-              fit: BoxFit.contain,
-            ),
-          ),
-          Positioned.fromRect(
-            rect: face.weaponDigit1Rect,
-            child: Image.asset('assets/digit_0.png',
-              color: face.digitColor,
-              colorBlendMode: BlendMode.srcIn,
-              fit: BoxFit.contain,
-            ),
-          ),
-          /// 盾牌 (右边, 左手).
-          Positioned.fromRect(
-            rect: face.shieldRect,
-            child: Image.asset('assets/shield.png',
-              fit: BoxFit.contain,
-            ),
-          ),
-          Positioned.fromRect(
-            rect: face.shieldDigit0Rect,
-            child: Image.asset('assets/digit_0.png',
-              color: face.digitColor,
-              colorBlendMode: BlendMode.srcIn,
-              fit: BoxFit.contain,
-            ),
-          ),
-          Positioned.fromRect(
-            rect: face.shieldDigit1Rect,
-            child: Image.asset('assets/digit_0.png',
-              color: face.digitColor,
-              colorBlendMode: BlendMode.srcIn,
-              fit: BoxFit.contain,
-            ),
-          ),
           /// 效果 (右下角).
           Positioned.fromRect(
             rect: face.effectRect,
@@ -334,6 +317,23 @@ class _GameWidget extends StatelessWidget {
           ),
           Positioned.fromRect(
             rect: face.effectDigit1Rect,
+            child: Image.asset('assets/digit_0.png',
+              color: face.digitColor,
+              colorBlendMode: BlendMode.srcIn,
+              fit: BoxFit.contain,
+            ),
+          ),
+          /// 数量 (左下角).
+          Positioned.fromRect(
+            rect: face.amountDigit0Rect,
+            child: Image.asset('assets/digit_0.png',
+              color: face.digitColor,
+              colorBlendMode: BlendMode.srcIn,
+              fit: BoxFit.contain,
+            ),
+          ),
+          Positioned.fromRect(
+            rect: face.amountDigit1Rect,
             child: Image.asset('assets/digit_0.png',
               color: face.digitColor,
               colorBlendMode: BlendMode.srcIn,

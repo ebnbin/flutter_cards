@@ -199,86 +199,6 @@ class PlayerFace {
     );
   }
 
-  /// 数量数字 0.
-  Rect get amountDigit0Rect {
-    return Rect.fromLTWH(
-      _card.contentRect.width / 56.0 * 1.0,
-      _card.contentRect.width / 56.0 * 48.0,
-      _card.contentRect.width / 56.0 * 4.0,
-      _card.contentRect.width / 56.0 * 6.0,
-    );
-  }
-
-  /// 数量数字 1.
-  Rect get amountDigit1Rect {
-    return Rect.fromLTWH(
-      _card.contentRect.width / 56.0 * 5.0,
-      _card.contentRect.width / 56.0 * 48.0,
-      _card.contentRect.width / 56.0 * 4.0,
-      _card.contentRect.width / 56.0 * 6.0,
-    );
-  }
-
-  /// 生命值.
-  Rect get healthRect {
-    return Rect.fromLTWH(
-      _card.contentRect.width / 56.0 * 47.0,
-      _card.contentRect.width / 56.0 * 9.0,
-      _card.contentRect.width / 56.0 * 9.0,
-      _card.contentRect.width / 56.0 * 9.0,
-    );
-  }
-
-  /// 生命值数字 0.
-  Rect get healthDigit0Rect {
-    return Rect.fromLTWH(
-      _card.contentRect.width / 56.0 * 35.0,
-      _card.contentRect.width / 56.0 * 2.0,
-      _card.contentRect.width / 56.0 * 4.0,
-      _card.contentRect.width / 56.0 * 6.0,
-    );
-  }
-
-  /// 生命值数字 1.
-  Rect get healthDigit1Rect {
-    return Rect.fromLTWH(
-      _card.contentRect.width / 56.0 * 39.0,
-      _card.contentRect.width / 56.0 * 2.0,
-      _card.contentRect.width / 56.0 * 4.0,
-      _card.contentRect.width / 56.0 * 6.0,
-    );
-  }
-
-  /// 生命值数字 2.
-  Rect get healthDigit2Rect {
-    return Rect.fromLTWH(
-      _card.contentRect.width / 56.0 * 43.0,
-      _card.contentRect.width / 56.0 * 2.0,
-      _card.contentRect.width / 56.0 * 4.0,
-      _card.contentRect.width / 56.0 * 6.0,
-    );
-  }
-
-  /// 生命值数字 3.
-  Rect get healthDigit3Rect {
-    return Rect.fromLTWH(
-      _card.contentRect.width / 56.0 * 47.0,
-      _card.contentRect.width / 56.0 * 2.0,
-      _card.contentRect.width / 56.0 * 4.0,
-      _card.contentRect.width / 56.0 * 6.0,
-    );
-  }
-
-  /// 生命值数字 4.
-  Rect get healthDigit4Rect {
-    return Rect.fromLTWH(
-      _card.contentRect.width / 56.0 * 51.0,
-      _card.contentRect.width / 56.0 * 2.0,
-      _card.contentRect.width / 56.0 * 4.0,
-      _card.contentRect.width / 56.0 * 6.0,
-    );
-  }
-
   /// 武器.
   Rect get weaponRect {
     return Rect.fromLTWH(
@@ -289,7 +209,7 @@ class PlayerFace {
     );
   }
 
-  /// 武器数字 0.
+  /// 武器值 0.
   Rect get weaponDigit0Rect {
     return Rect.fromLTWH(
       _card.contentRect.width / 56.0 * 1.0,
@@ -299,7 +219,7 @@ class PlayerFace {
     );
   }
 
-  /// 武器数字 1.
+  /// 武器值 1.
   Rect get weaponDigit1Rect {
     return Rect.fromLTWH(
       _card.contentRect.width / 56.0 * 5.0,
@@ -319,7 +239,7 @@ class PlayerFace {
     );
   }
 
-  /// 盾牌数字 0.
+  /// 盾牌值 0.
   Rect get shieldDigit0Rect {
     return Rect.fromLTWH(
       _card.contentRect.width / 56.0 * 47.0,
@@ -329,11 +249,71 @@ class PlayerFace {
     );
   }
 
-  /// 盾牌数字 1.
+  /// 盾牌值 1.
   Rect get shieldDigit1Rect {
     return Rect.fromLTWH(
       _card.contentRect.width / 56.0 * 51.0,
       _card.contentRect.width / 56.0 * 29.0,
+      _card.contentRect.width / 56.0 * 4.0,
+      _card.contentRect.width / 56.0 * 6.0,
+    );
+  }
+
+  /// 生命.
+  Rect get healthRect {
+    return Rect.fromLTWH(
+      _card.contentRect.width / 56.0 * 47.0,
+      _card.contentRect.width / 56.0 * 9.0,
+      _card.contentRect.width / 56.0 * 9.0,
+      _card.contentRect.width / 56.0 * 9.0,
+    );
+  }
+
+  /// 生命值 0.
+  Rect get healthDigit0Rect {
+    return Rect.fromLTWH(
+      _card.contentRect.width / 56.0 * 35.0,
+      _card.contentRect.width / 56.0 * 2.0,
+      _card.contentRect.width / 56.0 * 4.0,
+      _card.contentRect.width / 56.0 * 6.0,
+    );
+  }
+
+  /// 生命值 1.
+  Rect get healthDigit1Rect {
+    return Rect.fromLTWH(
+      _card.contentRect.width / 56.0 * 39.0,
+      _card.contentRect.width / 56.0 * 2.0,
+      _card.contentRect.width / 56.0 * 4.0,
+      _card.contentRect.width / 56.0 * 6.0,
+    );
+  }
+
+  /// 生命值 2.
+  Rect get healthDigit2Rect {
+    return Rect.fromLTWH(
+      _card.contentRect.width / 56.0 * 43.0,
+      _card.contentRect.width / 56.0 * 2.0,
+      _card.contentRect.width / 56.0 * 4.0,
+      _card.contentRect.width / 56.0 * 6.0,
+    );
+  }
+
+  /// 生命值 3.
+  Rect get healthDigit3Rect {
+    return Rect.fromLTWH(
+      _card.contentRect.width / 56.0 * 47.0,
+      _card.contentRect.width / 56.0 * 2.0,
+      _card.contentRect.width / 56.0 * 4.0,
+      _card.contentRect.width / 56.0 * 6.0,
+    );
+  }
+
+  /// 生命值 4.
+  Rect get healthDigit4Rect {
+    return Rect.fromLTWH(
+      _card.contentRect.width / 56.0 * 51.0,
+      _card.contentRect.width / 56.0 * 2.0,
       _card.contentRect.width / 56.0 * 4.0,
       _card.contentRect.width / 56.0 * 6.0,
     );
@@ -349,7 +329,7 @@ class PlayerFace {
     );
   }
 
-  /// 效果数字 0.
+  /// 效果值 0.
   Rect get effectDigit0Rect {
     return Rect.fromLTWH(
       _card.contentRect.width / 56.0 * 38.0,
@@ -359,10 +339,30 @@ class PlayerFace {
     );
   }
 
-  /// 效果数字 1.
+  /// 效果值 1.
   Rect get effectDigit1Rect {
     return Rect.fromLTWH(
       _card.contentRect.width / 56.0 * 42.0,
+      _card.contentRect.width / 56.0 * 48.0,
+      _card.contentRect.width / 56.0 * 4.0,
+      _card.contentRect.width / 56.0 * 6.0,
+    );
+  }
+
+  /// 数量值 0.
+  Rect get amountDigit0Rect {
+    return Rect.fromLTWH(
+      _card.contentRect.width / 56.0 * 1.0,
+      _card.contentRect.width / 56.0 * 48.0,
+      _card.contentRect.width / 56.0 * 4.0,
+      _card.contentRect.width / 56.0 * 6.0,
+    );
+  }
+
+  /// 数量值 1.
+  Rect get amountDigit1Rect {
+    return Rect.fromLTWH(
+      _card.contentRect.width / 56.0 * 5.0,
       _card.contentRect.width / 56.0 * 48.0,
       _card.contentRect.width / 56.0 * 4.0,
       _card.contentRect.width / 56.0 * 6.0,
@@ -379,7 +379,7 @@ class PlayerFace {
     );
   }
 
-  /// 能力数字 0.
+  /// 能力值 0.
   Rect get powerDigit0Rect {
     return Rect.fromLTWH(
       _card.contentRect.width / 56.0 * 10.0,
@@ -389,7 +389,7 @@ class PlayerFace {
     );
   }
 
-  /// 能力数字 1.
+  /// 能力值 1.
   Rect get powerDigit1Rect {
     return Rect.fromLTWH(
       _card.contentRect.width / 56.0 * 14.0,

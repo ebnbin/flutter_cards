@@ -25,6 +25,47 @@ class _SplashTitleFace extends _Face {
   _SplashTitleFace(_Card card) : super(card);
 }
 
+/// 精灵.
+class _SpriteFace extends _Face {
+  _SpriteFace(_Card card) : super(card);
+
+  /// 主体.
+  String body;
+
+  /// 武器.
+  String weapon;
+
+  /// 武器值.
+  int weaponValue;
+
+  /// 盾牌.
+  String shield;
+
+  /// 盾牌值.
+  int shieldValue;
+
+  /// 生命值.
+  int healthValue;
+
+  /// 最大生命值.
+  int maxHealthValue;
+
+  /// 效果.
+  String effect;
+
+  /// 效果值.
+  int effectValue;
+
+  /// 数量.
+  int amount;
+
+  /// 能力.
+  String power;
+
+  /// 能力值.
+  int powerValue;
+}
+
 /// 玩家.
 class _PlayerFace extends _Face {
   _PlayerFace(_Card card) : super(card);
