@@ -131,8 +131,8 @@ class VisibleCard {
 
   Object buildFace() {
     _Face face = _card.face;
-    if (face is _EmptyFace) {
-      return EmptyFace._(this, face);
+    if (face == null) {
+      return EmptyFace._(this);
     }
     if (face is _SplashTitleFace) {
       return SplashTitleFace._(this, face);
@@ -369,11 +369,9 @@ class SpriteCard {
 
 /// 空.
 class EmptyFace {
-  EmptyFace._(this._visibleCard, this._face);
+  EmptyFace._(this._visibleCard);
 
   final VisibleCard _visibleCard;
-
-  final _EmptyFace _face;
 }
 
 /// 开屏 Cards 标题.

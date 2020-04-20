@@ -42,7 +42,6 @@ class _Card extends _Box {
     scaleX: scaleX,
     scaleY: scaleY,
   ) {
-    this.faceMap['_EmptyFace'] = _EmptyFace(this);
     if (faceMap != null) {
       this.faceMap.addAll(faceMap);
     }
@@ -513,10 +512,13 @@ class _Card extends _Box {
   /// 卡片内容 map.
   final Map<String, _Face> faceMap = <String, _Face>{};
 
-  String currentFace = '_EmptyFace';
+  String currentFace;
 
-  /// 当前卡片内容.
+  /// 当前卡片内容. 可能为 null.
   _Face get face {
+    if (currentFace == null) {
+      return null;
+    }
     assert(faceMap.containsKey(currentFace));
     return faceMap[currentFace];
   }
@@ -612,8 +614,10 @@ class _CoreCard extends _Card {
 
   /// 行.
   int get rowIndex {
-    return (rowGridIndex - Metric.paddingGrid - (Metric.get().isVertical ? Metric.headerFooterGrid : 0)) ~/
-        Metric.squareGridMap[screen.square];
+    int grid = (rowGridIndex - Metric.paddingGrid - (Metric.get().isVertical ? Metric.headerFooterGrid : 0));
+    int square = Metric.squareGridMap[screen.square];
+    assert(grid % square == 0);
+    return grid ~/ square;
   }
   set rowIndex(int rowIndex) {
     super.verticalRowGridIndex = Metric.squareGridMap[screen.square] * rowIndex + Metric.paddingGrid +
@@ -623,8 +627,10 @@ class _CoreCard extends _Card {
 
   /// 列.
   int get columnIndex {
-    return (columnGridIndex - Metric.paddingGrid - (Metric.get().isVertical ? 0 : Metric.headerFooterGrid)) ~/
-        Metric.squareGridMap[screen.square];
+    int grid = (columnGridIndex - Metric.paddingGrid - (Metric.get().isVertical ? 0 : Metric.headerFooterGrid));
+    int square = Metric.squareGridMap[screen.square];
+    assert(grid % square == 0);
+    return grid ~/ square;
   }
   set columnIndex(int columnIndex) {
     super.verticalColumnGridIndex = Metric.squareGridMap[screen.square] * columnIndex + Metric.paddingGrid;
@@ -634,7 +640,10 @@ class _CoreCard extends _Card {
 
   /// 跨行.
   int get rowSpan {
-    return rowGridSpan ~/ Metric.squareGridMap[screen.square];
+    int grid = rowGridSpan;
+    int square = Metric.squareGridMap[screen.square];
+    assert(grid % square == 0);
+    return grid ~/ square;
   }
   set rowSpan(int rowSpan) {
     super.verticalRowGridSpan = super.horizontalRowGridSpan = Metric.squareGridMap[screen.square] * rowSpan;
@@ -642,7 +651,10 @@ class _CoreCard extends _Card {
 
   /// 跨列.
   int get columnSpan {
-    return columnGridSpan ~/ Metric.squareGridMap[screen.square];
+    int grid = columnGridSpan;
+    int square = Metric.squareGridMap[screen.square];
+    assert(grid % square == 0);
+    return grid ~/ square;
   }
   set columnSpan(int columnSpan) {
     super.verticalColumnGridSpan = super.horizontalColumnGridSpan = Metric.squareGridMap[screen.square] * columnSpan;
