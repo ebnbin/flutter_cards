@@ -3,36 +3,6 @@ part of '../data.dart';
 //*********************************************************************************************************************
 //*********************************************************************************************************************
 
-/// 圆角类型.
-enum _RadiusType {
-  /// 直角.
-  none,
-  /// 小圆角. 2.0 / 56.0.
-  small,
-  /// 大圆角. 8.0 / 56.0.
-  big,
-  /// 圆形.
-  round,
-}
-
-extension _RadiusTypeExtensions on _RadiusType {
-  /// 根据 [rect] 计算圆角值.
-  double value(Rect rect) {
-    switch (this) {
-      case _RadiusType.none:
-        return 0.0;
-      case _RadiusType.small:
-        return min(rect.width, rect.height) / 56.0 * 2.0;
-      case _RadiusType.big:
-        return min(rect.width, rect.height) / 56.0 * 8.0;
-      case _RadiusType.round:
-        return min(rect.width, rect.height) / 2.0;
-      default:
-        throw Exception();
-    }
-  }
-}
-
 /// 卡片. 根据网格定位.
 class _Card extends _Box {
   _Card(_Screen screen, {
@@ -57,7 +27,7 @@ class _Card extends _Box {
     this.vice = false,
     this.vicing = false,
     this.mainElevation = 2.0,
-    this.radiusType = _RadiusType.small,
+    this.radiusType = _CardRadiusType.small,
     this.mainOpacity = 1.0,
     this.gestureType = _GestureType.normal,
     this.onTap,
@@ -274,8 +244,8 @@ class _Card extends _Box {
     }
   }
 
-  /// 圆角类型.
-  _RadiusType radiusType;
+  /// 卡片圆角类型.
+  _CardRadiusType radiusType;
 
   /// 渲染圆角.
   double get radius {
@@ -566,8 +536,8 @@ class _CoreCard extends _Card {
     int columnIndex = 0,
     int rowSpan = 1,
     int columnSpan = 1,
-    double mainElevation = 1.0,
-    _RadiusType radiusType = _RadiusType.small,
+    double mainElevation = 2.0,
+    _CardRadiusType radiusType = _CardRadiusType.small,
   }) : super(screen,
     rotateX: rotateX,
     rotateY: rotateY,
@@ -684,8 +654,8 @@ class _SpriteCard extends _CoreCard {
     int rowIndex,
     @required
     int columnIndex,
-    double mainElevation = 1.0,
-    _RadiusType radiusType = _RadiusType.small,
+    double mainElevation = 2.0,
+    _CardRadiusType radiusType = _CardRadiusType.small,
   }) : super(screen,
     rotateX: rotateX,
     rotateY: rotateY,
@@ -1104,8 +1074,8 @@ class _SplashTitleCard extends _CoreCard {
     _GestureType gestureType = _GestureType.normal,
     void Function(_Card card) onTap,
     void Function(_Card card) onLongPress,
-    double mainElevation = 1.0,
-    _RadiusType radiusType = _RadiusType.small,
+    double mainElevation = 2.0,
+    _CardRadiusType radiusType = _CardRadiusType.small,
   }) : super(screen,
     rotateX: rotateX,
     rotateY: rotateY,
@@ -1163,8 +1133,8 @@ class _PlayerCard extends _SpriteCard {
     int rowIndex,
     @required
     int columnIndex,
-    double mainElevation = 1.0,
-    _RadiusType radiusType = _RadiusType.small,
+    double mainElevation = 2.0,
+    _CardRadiusType radiusType = _CardRadiusType.small,
   }) : super(screen,
     rotateX: rotateX,
     rotateY: rotateY,
@@ -1212,8 +1182,8 @@ class _PlayerCard extends _SpriteCard {
     _GestureType gestureType = _GestureType.normal,
     void Function(_Card card) onTap,
     void Function(_Card card) onLongPress,
-    double mainElevation = 1.0,
-    _RadiusType radiusType = _RadiusType.small,
+    double mainElevation = 2.0,
+    _CardRadiusType radiusType = _CardRadiusType.small,
   }) : this(screen,
     rotateX: rotateX,
     rotateY: rotateY,
@@ -1253,4 +1223,36 @@ enum _CardDimension {
   vice,
   /// 全屏尺寸.
   full,
+}
+
+//*********************************************************************************************************************
+
+/// 卡片圆角类型.
+enum _CardRadiusType {
+  /// 直角.
+  none,
+  /// 小圆角. 2.0 / 56.0.
+  small,
+  /// 大圆角. 8.0 / 56.0.
+  big,
+  /// 圆形.
+  round,
+}
+
+extension _CardRadiusTypeExtensions on _CardRadiusType {
+  /// 根据 [rect] 计算圆角值.
+  double value(Rect rect) {
+    switch (this) {
+      case _CardRadiusType.none:
+        return 0.0;
+      case _CardRadiusType.small:
+        return min(rect.width, rect.height) / 56.0 * 2.0;
+      case _CardRadiusType.big:
+        return min(rect.width, rect.height) / 56.0 * 8.0;
+      case _CardRadiusType.round:
+        return min(rect.width, rect.height) / 2.0;
+      default:
+        throw Exception();
+    }
+  }
 }
