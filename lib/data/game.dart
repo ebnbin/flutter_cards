@@ -50,18 +50,10 @@ abstract class _Screen {
 class _SplashScreen extends _Screen {
   _SplashScreen(_Game game) : super(game,
     square: 4,
-    /// Test: 2.
-    cardLength: 2,
+    cardLength: 14,
   ) {
     cards[0] = _SplashTitleCard(this,
       onTap: (card) {
-        if (card.dimension != _CardDimension.main) {
-          return;
-        }
-        game.screen = _SpriteScreen(game,
-          square: 4,
-        );
-        game.callback.notifyStateChanged();
       },
       onLongPress: (card) {
         if (card.dimension == _CardDimension.full) {
@@ -75,12 +67,12 @@ class _SplashScreen extends _Screen {
     _Card sampleCard = _Card(this,
       verticalRowGridIndex: 1,
       verticalColumnGridIndex: 1,
-      verticalRowGridSpan: 15,
-      verticalColumnGridSpan: 15,
+      verticalRowGridSpan: 10,
+      verticalColumnGridSpan: 10,
       horizontalRowGridIndex: 1,
       horizontalColumnGridIndex: 1,
-      horizontalRowGridSpan: 15,
-      horizontalColumnGridSpan: 15,
+      horizontalRowGridSpan: 10,
+      horizontalColumnGridSpan: 10,
       onTap: (card) {
         if (card.dimension != _CardDimension.main) {
           return;
@@ -96,6 +88,68 @@ class _SplashScreen extends _Screen {
       },
     );
     cards[1] = sampleCard;
+
+    cards[2] = _CoreCard(this,
+      rowIndex: 2,
+      columnIndex: 3,
+      rowSpan: 2,
+      columnSpan: 1,
+      onTap: (card) {
+        card.screen.game.actionQueue.post(card, (thisRef, action) {
+          card.animateMainToFull().begin(endCallback: () {
+            game.screen = _SpriteScreen(game,
+              square: 3,
+            );
+            game.callback.notifyStateChanged();
+          },);
+        });
+      }
+    );
+
+    cards[3] = _CoreCard(this,
+      rowIndex: 0,
+      columnIndex: 0,
+    );
+    cards[4] = _CoreCard(this,
+      rowIndex: 0,
+      columnIndex: 1,
+    );
+    cards[5] = _CoreCard(this,
+      rowIndex: 0,
+      columnIndex: 2,
+    );
+    cards[6] = _CoreCard(this,
+      rowIndex: 0,
+      columnIndex: 3,
+    );
+    cards[7] = _CoreCard(this,
+      rowIndex: 1,
+      columnIndex: 3,
+    );
+    cards[8] = _CoreCard(this,
+      rowIndex: 2,
+      columnIndex: 0,
+    );
+    cards[9] = _CoreCard(this,
+      rowIndex: 2,
+      columnIndex: 1,
+    );
+    cards[10] = _CoreCard(this,
+      rowIndex: 2,
+      columnIndex: 2,
+    );
+    cards[11] = _CoreCard(this,
+      rowIndex: 3,
+      columnIndex: 0,
+    );
+    cards[12] = _CoreCard(this,
+      rowIndex: 3,
+      columnIndex: 1,
+    );
+    cards[13] = _CoreCard(this,
+      rowIndex: 3,
+      columnIndex: 2,
+    );
   }
 }
 
@@ -149,6 +203,7 @@ class _SpriteScreen extends _Screen {
         actRemoveSpriteCards(this);
       },
     );
+    actAddSpriteCards(this);
   }
 
   /// 从 [cards] 返回唯一 [_PlayerCard].
@@ -201,7 +256,13 @@ class _SpriteScreen extends _Screen {
         }
       }
       thisRef.game.actionQueue.add(thisRef.spriteCards().map<_Action>((element) {
-        return element.animateSpriteFirstEnter().action();
+        if (element is _PlayerCard) {
+          return element.animateFullToMain().action();
+        }
+        return element.animateSpriteFirstEnter(
+          beginDelayRandomCenter: 1000,
+          beginDelayRandomRange: 600,
+        ).action();
       }).toList(),
         addFirst: true,
       );

@@ -1220,7 +1220,19 @@ class _PlayerCard extends _SpriteCard {
     radiusType: radiusType,
   ) {
     faceMap['_PlayerFace'] = _PlayerFace(this);
-    currentFace = '_PlayerFace';
+  }
+
+  @override
+  String get currentFace {
+    if (dimension == _CardDimension.main) {
+      return '_PlayerFace';
+    } else {
+      return null;
+    }
+  }
+  @override
+  set currentFace(String currentFace) {
+    throw Exception();
   }
 
   /// 随机非边缘位置.
@@ -1239,10 +1251,10 @@ class _PlayerCard extends _SpriteCard {
     double translateY = 0.0,
     double scaleX = 1.0,
     double scaleY = 1.0,
-    int zIndex = 1,
-    /// 默认不可见, 通过动画进入.
-    bool visible = false,
-    _CardDimension dimension = _CardDimension.main,
+//    int zIndex = 1,
+//    /// 默认不可见, 通过动画进入.
+//    bool visible = false,
+//    _CardDimension dimension = _CardDimension.main,
     bool vicing = false,
     double mainOpacity = 1.0,
     _GestureType gestureType = _GestureType.normal,
@@ -1258,9 +1270,9 @@ class _PlayerCard extends _SpriteCard {
     translateY: translateY,
     scaleX: scaleX,
     scaleY: scaleY,
-    zIndex: zIndex,
-    visible: visible,
-    dimension: dimension,
+    zIndex: 3,
+    visible: true,
+    dimension: _CardDimension.full,
     vicing: vicing,
     mainOpacity: mainOpacity,
     gestureType: gestureType,
