@@ -285,40 +285,28 @@ class SpriteFace {
   }
 
   /// 盾牌值 0.
-  bool get shieldDigit0Visible {
-    return shieldVisible && _face.shieldValue != null && _face.shieldValue >= 10;
-  }
-
-  String get shieldDigit0 {
+  SpriteFaceDigit get shieldDigit0 {
+    if (!shieldVisible || _face.shieldValue == null || _face.shieldValue < 10) {
+      return SpriteFaceDigit._invisible();
+    }
     int value = max(0, min(99, _face.shieldValue));
-    return _digits[value ~/ 10];
-  }
-
-  Rect get shieldDigit0Rect {
-    return Rect.fromLTWH(
-      _card.contentRect.width / 56.0 * 47.0,
-      _card.contentRect.width / 56.0 * 29.0,
-      _card.contentRect.width / 56.0 * 4.0,
-      _card.contentRect.width / 56.0 * 6.0,
+    return SpriteFaceDigit._visible(_card,
+      left: 47.0,
+      top: 29.0,
+      digit: value ~/ 10,
     );
   }
 
   /// 盾牌值 1.
-  bool get shieldDigit1Visible {
-    return shieldVisible && _face.shieldValue != null;
-  }
-
-  String get shieldDigit1 {
+  SpriteFaceDigit get shieldDigit1 {
+    if (!shieldVisible || _face.shieldValue == null) {
+      return SpriteFaceDigit._invisible();
+    }
     int value = max(0, min(99, _face.shieldValue));
-    return _digits[value % 10];
-  }
-
-  Rect get shieldDigit1Rect {
-    return Rect.fromLTWH(
-      _card.contentRect.width / 56.0 * 51.0,
-      _card.contentRect.width / 56.0 * 29.0,
-      _card.contentRect.width / 56.0 * 4.0,
-      _card.contentRect.width / 56.0 * 6.0,
+    return SpriteFaceDigit._visible(_card,
+      left: 51.0,
+      top: 29.0,
+      digit: value % 10,
     );
   }
 
@@ -341,52 +329,119 @@ class SpriteFace {
   }
 
   /// 生命值 0.
-  Rect get healthDigit0Rect {
-    return Rect.fromLTWH(
-      _card.contentRect.width / 56.0 * 35.0,
-      _card.contentRect.width / 56.0 * 2.0,
-      _card.contentRect.width / 56.0 * 4.0,
-      _card.contentRect.width / 56.0 * 6.0,
+  SpriteFaceDigit get healthDigit0 {
+    if (_face.healthValue == null) {
+      return SpriteFaceDigit._invisible();
+    }
+    int digitCount = 0;
+    int healthValue = max(0, min(99, _face.healthValue));
+    int maxHealthValue;
+    if (_face.maxHealthValue != null) {
+      maxHealthValue = max(0, min(99, _face.maxHealthValue));
+      healthValue = min(maxHealthValue, healthValue);
+      digitCount += (maxHealthValue < 10 ? 2 : 3);
+    }
+    digitCount += (healthValue < 10 ? 1 : 2);
+    if (digitCount < 5) {
+      return SpriteFaceDigit._invisible();
+    }
+    return SpriteFaceDigit._visible(_card,
+      left: 35.0,
+      top: 2.0,
+      digit: healthValue ~/ 10,
     );
   }
 
   /// 生命值 1.
-  Rect get healthDigit1Rect {
-    return Rect.fromLTWH(
-      _card.contentRect.width / 56.0 * 39.0,
-      _card.contentRect.width / 56.0 * 2.0,
-      _card.contentRect.width / 56.0 * 4.0,
-      _card.contentRect.width / 56.0 * 6.0,
+  SpriteFaceDigit get healthDigit1 {
+    if (_face.healthValue == null) {
+      return SpriteFaceDigit._invisible();
+    }
+    int digitCount = 0;
+    int healthValue = max(0, min(99, _face.healthValue));
+    int maxHealthValue;
+    if (_face.maxHealthValue != null) {
+      maxHealthValue = max(0, min(99, _face.maxHealthValue));
+      healthValue = min(maxHealthValue, healthValue);
+      digitCount += (maxHealthValue < 10 ? 2 : 3);
+    }
+    digitCount += (healthValue < 10 ? 1 : 2);
+    if (digitCount < 4) {
+      return SpriteFaceDigit._invisible();
+    }
+    return SpriteFaceDigit._visible(_card,
+      left: 39.0,
+      top: 2.0,
+      digit: healthValue % 10,
     );
   }
 
   /// 生命值 2.
-  Rect get healthDigit2Rect {
-    return Rect.fromLTWH(
-      _card.contentRect.width / 56.0 * 43.0,
-      _card.contentRect.width / 56.0 * 2.0,
-      _card.contentRect.width / 56.0 * 4.0,
-      _card.contentRect.width / 56.0 * 6.0,
+  SpriteFaceDigit get healthDigit2 {
+    if (_face.healthValue == null) {
+      return SpriteFaceDigit._invisible();
+    }
+    int digitCount = 0;
+    int healthValue = max(0, min(99, _face.healthValue));
+    int maxHealthValue;
+    if (_face.maxHealthValue != null) {
+      maxHealthValue = max(0, min(99, _face.maxHealthValue));
+      healthValue = min(maxHealthValue, healthValue);
+      digitCount += (maxHealthValue < 10 ? 2 : 3);
+    }
+    digitCount += (healthValue < 10 ? 1 : 2);
+    if (digitCount < 3) {
+      return SpriteFaceDigit._invisible();
+    }
+    return SpriteFaceDigit._visible(_card,
+      left: 43.0,
+      top: 2.0,
+      digit: maxHealthValue < 10 ? healthValue : 10,
     );
   }
 
   /// 生命值 3.
-  Rect get healthDigit3Rect {
-    return Rect.fromLTWH(
-      _card.contentRect.width / 56.0 * 47.0,
-      _card.contentRect.width / 56.0 * 2.0,
-      _card.contentRect.width / 56.0 * 4.0,
-      _card.contentRect.width / 56.0 * 6.0,
+  SpriteFaceDigit get healthDigit3 {
+    if (_face.healthValue == null) {
+      return SpriteFaceDigit._invisible();
+    }
+    int digitCount = 0;
+    int healthValue = max(0, min(99, _face.healthValue));
+    int maxHealthValue;
+    if (_face.maxHealthValue != null) {
+      maxHealthValue = max(0, min(99, _face.maxHealthValue));
+      healthValue = min(maxHealthValue, healthValue);
+      digitCount += (maxHealthValue < 10 ? 2 : 3);
+    }
+    digitCount += (healthValue < 10 ? 1 : 2);
+    if (digitCount < 2) {
+      return SpriteFaceDigit._invisible();
+    }
+    return SpriteFaceDigit._visible(_card,
+      left: 47.0,
+      top: 2.0,
+      digit: maxHealthValue == null ? healthValue ~/ 10 : maxHealthValue < 10 ? 10 : maxHealthValue ~/ 10,
     );
   }
 
   /// 生命值 4.
-  Rect get healthDigit4Rect {
-    return Rect.fromLTWH(
-      _card.contentRect.width / 56.0 * 51.0,
-      _card.contentRect.width / 56.0 * 2.0,
-      _card.contentRect.width / 56.0 * 4.0,
-      _card.contentRect.width / 56.0 * 6.0,
+  SpriteFaceDigit get healthDigit4 {
+    if (_face.healthValue == null) {
+      return SpriteFaceDigit._invisible();
+    }
+    int digitCount = 0;
+    int healthValue = max(0, min(99, _face.healthValue));
+    int maxHealthValue;
+    if (_face.maxHealthValue != null) {
+      maxHealthValue = max(0, min(99, _face.maxHealthValue));
+      healthValue = min(maxHealthValue, healthValue);
+      digitCount += (maxHealthValue < 10 ? 2 : 3);
+    }
+    digitCount += (healthValue < 10 ? 1 : 2);
+    return SpriteFaceDigit._visible(_card,
+      left: 51.0,
+      top: 2.0,
+      digit: maxHealthValue == null ? healthValue % 10 : maxHealthValue < 10 ? maxHealthValue : maxHealthValue % 10,
     );
   }
 

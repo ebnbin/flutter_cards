@@ -204,49 +204,14 @@ class _GameWidget extends StatelessWidget {
           _buildSpriteFaceDigit(context, face.weaponDigit0),
           _buildSpriteFaceDigit(context, face.weaponDigit1),
           _buildSpriteFaceShield(context, face),
-          _buildSpriteFaceShieldDigit0(context, face),
-          _buildSpriteFaceShieldDigit1(context, face),
+          _buildSpriteFaceDigit(context, face.shieldDigit0),
+          _buildSpriteFaceDigit(context, face.shieldDigit1),
           _buildSpriteFaceHealth(context, face),
-          Positioned.fromRect(
-            rect: face.healthDigit0Rect,
-            child: Image.asset('assets/digit_0.png',
-              color: face.digitColor,
-              colorBlendMode: BlendMode.srcIn,
-              fit: BoxFit.contain,
-            ),
-          ),
-          Positioned.fromRect(
-            rect: face.healthDigit1Rect,
-            child: Image.asset('assets/digit_0.png',
-              color: face.digitColor,
-              colorBlendMode: BlendMode.srcIn,
-              fit: BoxFit.contain,
-            ),
-          ),
-          Positioned.fromRect(
-            rect: face.healthDigit2Rect,
-            child: Image.asset('assets/digit_slash.png',
-              color: face.digitColor,
-              colorBlendMode: BlendMode.srcIn,
-              fit: BoxFit.contain,
-            ),
-          ),
-          Positioned.fromRect(
-            rect: face.healthDigit3Rect,
-            child: Image.asset('assets/digit_0.png',
-              color: face.digitColor,
-              colorBlendMode: BlendMode.srcIn,
-              fit: BoxFit.contain,
-            ),
-          ),
-          Positioned.fromRect(
-            rect: face.healthDigit4Rect,
-            child: Image.asset('assets/digit_0.png',
-              color: face.digitColor,
-              colorBlendMode: BlendMode.srcIn,
-              fit: BoxFit.contain,
-            ),
-          ),
+          _buildSpriteFaceDigit(context, face.healthDigit0),
+          _buildSpriteFaceDigit(context, face.healthDigit1),
+          _buildSpriteFaceDigit(context, face.healthDigit2),
+          _buildSpriteFaceDigit(context, face.healthDigit3),
+          _buildSpriteFaceDigit(context, face.healthDigit4),
           /// 效果 (右下角).
           Positioned.fromRect(
             rect: face.effectRect,
@@ -349,36 +314,6 @@ class _GameWidget extends StatelessWidget {
     return Positioned.fromRect(
       rect: face.shieldRect,
       child: Image.asset(face.shield,
-        fit: BoxFit.contain,
-      ),
-    );
-  }
-
-  /// 盾牌值 0.
-  Widget _buildSpriteFaceShieldDigit0(BuildContext context, SpriteFace face) {
-    if (!face.shieldDigit0Visible) {
-      return _buildInvisible(context);
-    }
-    return Positioned.fromRect(
-      rect: face.shieldDigit0Rect,
-      child: Image.asset(face.shieldDigit0,
-        color: face.digitColor,
-        colorBlendMode: BlendMode.srcIn,
-        fit: BoxFit.contain,
-      ),
-    );
-  }
-
-  /// 盾牌值 1.
-  Widget _buildSpriteFaceShieldDigit1(BuildContext context, SpriteFace face) {
-    if (!face.shieldDigit1Visible) {
-      return _buildInvisible(context);
-    }
-    return Positioned.fromRect(
-      rect: face.shieldDigit1Rect,
-      child: Image.asset(face.shieldDigit1,
-        color: face.digitColor,
-        colorBlendMode: BlendMode.srcIn,
         fit: BoxFit.contain,
       ),
     );

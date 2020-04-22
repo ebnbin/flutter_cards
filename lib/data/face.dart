@@ -45,10 +45,10 @@ class _SpriteFace extends _Face {
   int shieldValue = 47;
 
   /// 生命值.
-  int healthValue = 0;
+  int healthValue = 3;
 
   /// 最大生命值.
-  int maxHealthValue;
+  int maxHealthValue = 3;
 
   /// 效果.
   String effect;
