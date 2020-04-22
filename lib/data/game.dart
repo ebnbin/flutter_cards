@@ -64,31 +64,6 @@ class _SplashScreen extends _Screen {
       },
     );
 
-    _Card sampleCard = _Card(this,
-      verticalRowGridIndex: 1,
-      verticalColumnGridIndex: 1,
-      verticalRowGridSpan: 10,
-      verticalColumnGridSpan: 10,
-      horizontalRowGridIndex: 1,
-      horizontalColumnGridIndex: 1,
-      horizontalRowGridSpan: 10,
-      horizontalColumnGridSpan: 10,
-      onTap: (card) {
-        if (card.dimension != _CardDimension.main) {
-          return;
-        }
-        card.animateSample().begin();
-      },
-      onLongPress: (card) {
-        if (card.dimension == _CardDimension.vice) {
-          card.animateViceToMain().begin();
-        } else {
-          card.animateMainToVice().begin();
-        }
-      },
-    );
-    cards[1] = sampleCard;
-
     cards[2] = _CoreCard(this,
       rowIndex: 2,
       columnIndex: 3,
@@ -161,46 +136,20 @@ class _SpriteScreen extends _Screen {
   }) : super(game,
     square: square,
     /// Test: 3.
-    cardLength: square * square + 3,
+    cardLength: square * square + 1,
   ) {
-    cards[cards.length - 3] = _Card(this,
-      verticalRowGridIndex: 80,
+    cards[cards.length - 1] = _Card(this,
+      verticalRowGridIndex: 1,
       verticalColumnGridIndex: 1,
       verticalRowGridSpan: 10,
       verticalColumnGridSpan: 10,
       horizontalRowGridIndex: 1,
-      horizontalColumnGridIndex: 80,
+      horizontalColumnGridIndex: 1,
       horizontalRowGridSpan: 10,
       horizontalColumnGridSpan: 10,
       onTap: (card) {
         game.screen = _SplashScreen(game);
         game.callback.notifyStateChanged();
-      },
-    );
-    cards[cards.length - 2] = _Card(this,
-      verticalRowGridIndex: 80,
-      verticalColumnGridIndex: 11,
-      verticalRowGridSpan: 10,
-      verticalColumnGridSpan: 10,
-      horizontalRowGridIndex: 11,
-      horizontalColumnGridIndex: 80,
-      horizontalRowGridSpan: 10,
-      horizontalColumnGridSpan: 10,
-      onTap: (card) {
-        actAddSpriteCards(this);
-      },
-    );
-    cards[cards.length - 1] = _Card(this,
-      verticalRowGridIndex: 80,
-      verticalColumnGridIndex: 21,
-      verticalRowGridSpan: 10,
-      verticalColumnGridSpan: 10,
-      horizontalRowGridIndex: 21,
-      horizontalColumnGridIndex: 80,
-      horizontalRowGridSpan: 10,
-      horizontalColumnGridSpan: 10,
-      onTap: (card) {
-        actRemoveSpriteCards(this);
       },
     );
     actAddSpriteCards(this);
