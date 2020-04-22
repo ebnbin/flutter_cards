@@ -40,6 +40,13 @@ class Game {
 
   final _Game _game;
 
+  String get background {
+    if (_game.screen is _SpriteScreen) {
+      return 'assets/purpur_block.png';
+    }
+    return 'assets/stone_bricks.png';
+  }
+
   /// 返回当前 immutable 的全部卡片数据.
   List<NullableCard> buildNullableCards(BuildContext context) {
     return List.unmodifiable(_game.screen.cards.map<NullableCard>((card) {

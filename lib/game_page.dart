@@ -60,8 +60,7 @@ class _GameWidget extends StatelessWidget {
   Widget _buildBackground(BuildContext context) {
     return Positioned.fromRelativeRect(
       rect: RelativeRect.fill,
-      child: Image.asset(
-        'assets/stone_bricks.png',
+      child: Image.asset(game.background,
         scale: Metric.get().imageScale(48, 8.0),
         /// 不需要设置宽高.
 //        width: ,
@@ -110,7 +109,7 @@ class _GameWidget extends StatelessWidget {
                 child: Material(
                   elevation: card.elevation,
                   color: Colors.transparent,
-                  shadowColor: Colors.cyanAccent,
+//                  shadowColor: Colors.cyanAccent,
                   borderRadius: BorderRadius.circular(card.radius),
                   clipBehavior: Clip.antiAlias,
                   animationDuration: Duration.zero,
