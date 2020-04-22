@@ -199,7 +199,6 @@ class SpriteFace {
     'assets/digit_8.png',
     'assets/digit_9.png',
     'assets/digit_slash.png',
-    'assets/digit_space.png',
   ];
 
   /// 数字颜色.

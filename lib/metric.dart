@@ -224,7 +224,7 @@ class Metric {
     ///
     /// [grid] 网格数.
     double Function(int imageSize, double grid) imageScale = (imageSize, grid) {
-      return imageSize / gridSize / grid;
+      return imageSize / gridSize / grid * 2.0;
     };
 
     _sizeCache = mediaQueryData.size;

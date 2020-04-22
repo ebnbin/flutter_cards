@@ -1242,7 +1242,7 @@ class _PlayerCard extends _SpriteCard {
     if (dimension == _CardDimension.main) {
       return '_SpriteFace';
     } else {
-      return null;
+      return '_SpriteFace';
     }
   }
   @override
