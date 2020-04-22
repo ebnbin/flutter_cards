@@ -202,8 +202,8 @@ class _GameWidget extends StatelessWidget {
         children: <Widget>[
           _buildSpriteFaceBody(context, face),
           _buildSpriteFaceWeapon(context, face),
-          _buildSpriteFaceWeaponDigit0(context, face),
-          _buildSpriteFaceWeaponDigit1(context, face),
+          _buildSpriteFaceDigit(context, face.weaponDigit0),
+          _buildSpriteFaceDigit(context, face.weaponDigit1),
           _buildSpriteFaceShield(context, face),
           _buildSpriteFaceShieldDigit0(context, face),
           _buildSpriteFaceShieldDigit1(context, face),
@@ -342,36 +342,6 @@ class _GameWidget extends StatelessWidget {
     );
   }
 
-  /// 武器值 0.
-  Widget _buildSpriteFaceWeaponDigit0(BuildContext context, SpriteFace face) {
-    if (!face.weaponDigit0Visible) {
-      return _buildInvisible(context);
-    }
-    return Positioned.fromRect(
-      rect: face.weaponDigit0Rect,
-      child: Image.asset(face.weaponDigit0,
-        color: face.digitColor,
-        colorBlendMode: BlendMode.srcIn,
-        fit: BoxFit.contain,
-      ),
-    );
-  }
-
-  /// 武器值 1.
-  Widget _buildSpriteFaceWeaponDigit1(BuildContext context, SpriteFace face) {
-    if (!face.weaponDigit1Visible) {
-      return _buildInvisible(context);
-    }
-    return Positioned.fromRect(
-      rect: face.weaponDigit1Rect,
-      child: Image.asset(face.weaponDigit1,
-        color: face.digitColor,
-        colorBlendMode: BlendMode.srcIn,
-        fit: BoxFit.contain,
-      ),
-    );
-  }
-
   /// 盾牌 (右边, 左手).
   Widget _buildSpriteFaceShield(BuildContext context, SpriteFace face) {
     if (!face.shieldVisible) {
@@ -423,6 +393,21 @@ class _GameWidget extends StatelessWidget {
     return Positioned.fromRect(
       rect: face.healthRect,
       child: Image.asset(face.health,
+        fit: BoxFit.contain,
+      ),
+    );
+  }
+
+  /// 精灵数字.
+  Widget _buildSpriteFaceDigit(BuildContext context, SpriteFaceDigit digit) {
+    if (!digit.visible) {
+      return _buildInvisible(context);
+    }
+    return Positioned.fromRect(
+      rect: digit.rect,
+      child: Image.asset(digit.asset,
+        color: digit.color,
+        colorBlendMode: BlendMode.srcIn,
         fit: BoxFit.contain,
       ),
     );

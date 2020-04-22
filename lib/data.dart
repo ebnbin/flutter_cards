@@ -238,43 +238,27 @@ class SpriteFace {
   }
 
   /// 武器值 0.
-  bool get weaponDigit0Visible {
-    return weaponVisible && _face.weaponValue != null;
-  }
-
-  String get weaponDigit0 {
-    int value = max(0, min(99, _face.weaponValue));
-    if (value <= 9) {
-      return _digits[value];
+  SpriteFaceDigit get weaponDigit0 {
+    if (!weaponVisible || _face.weaponValue == null) {
+      return SpriteFaceDigit._invisible();
     }
-    return _digits[value ~/ 10];
-  }
-
-  Rect get weaponDigit0Rect {
-    return Rect.fromLTWH(
-      _card.contentRect.width / 56.0 * 1.0,
-      _card.contentRect.width / 56.0 * 40.0,
-      _card.contentRect.width / 56.0 * 4.0,
-      _card.contentRect.width / 56.0 * 6.0,
+    int value = max(0, min(99, _face.weaponValue));
+    return SpriteFaceDigit._visible(_card,
+      left: 1.0,
+      top: 40.0,
+      digit: value < 10 ? value : (value ~/ 10),
     );
   }
 
-  /// 武器值 1.
-  bool get weaponDigit1Visible {
-    return weaponVisible && _face.weaponValue != null && _face.weaponValue >= 10;
-  }
-
-  String get weaponDigit1 {
+  SpriteFaceDigit get weaponDigit1 {
+    if (!weaponVisible || _face.weaponValue == null || _face.weaponValue < 10) {
+      return SpriteFaceDigit._invisible();
+    }
     int value = max(0, min(99, _face.weaponValue));
-    return _digits[value % 10];
-  }
-
-  Rect get weaponDigit1Rect {
-    return Rect.fromLTWH(
-      _card.contentRect.width / 56.0 * 5.0,
-      _card.contentRect.width / 56.0 * 40.0,
-      _card.contentRect.width / 56.0 * 4.0,
-      _card.contentRect.width / 56.0 * 6.0,
+    return SpriteFaceDigit._visible(_card,
+      left: 5.0,
+      top: 40.0,
+      digit: value % 10,
     );
   }
 
@@ -479,4 +463,62 @@ class SpriteFace {
       _card.contentRect.width / 56.0 * 6.0,
     );
   }
+}
+
+//*********************************************************************************************************************
+//*********************************************************************************************************************
+
+/// 精灵数字.
+class SpriteFaceDigit {
+  /// 数字图片资源.
+  static final List<String> _digits = <String>[
+    'assets/digit_0.png',
+    'assets/digit_1.png',
+    'assets/digit_2.png',
+    'assets/digit_3.png',
+    'assets/digit_4.png',
+    'assets/digit_5.png',
+    'assets/digit_6.png',
+    'assets/digit_7.png',
+    'assets/digit_8.png',
+    'assets/digit_9.png',
+    'assets/digit_slash.png',
+  ];
+
+  /// 不可见的.
+  SpriteFaceDigit._invisible() :
+        visible = false,
+        rect = null,
+        asset = null,
+        color = null;
+
+  /// 可见的.
+  ///
+  /// [left] [top] 用于定位.
+  ///
+  /// [digit] 在 [digits] 中的 index.
+  ///
+  /// [color] 传 null 使用默认值.
+  SpriteFaceDigit._visible(Card card, {
+    @required
+    double left,
+    @required
+    double top,
+    @required
+    int digit,
+    Color color,
+  }) : visible = true,
+        rect = Rect.fromLTWH(
+          card.contentRect.width / 56.0 * left,
+          card.contentRect.width / 56.0 * top,
+          card.contentRect.width / 56.0 * 4.0,
+          card.contentRect.width / 56.0 * 6.0,
+        ),
+        asset = _digits[digit],
+        color = color == null ? Colors.blueGrey.shade100 : color;
+
+  final bool visible;
+  final Rect rect;
+  final String asset;
+  final Color color;
 }
