@@ -238,11 +238,11 @@ class SpriteFace {
   }
 
   /// 武器值 0.
-  bool get weaponValue0Visible {
-    return _face.weaponValue != null && _face.weaponValue >= 0;
+  bool get weaponDigit0Visible {
+    return weaponVisible && _face.weaponValue != null && _face.weaponValue >= 0;
   }
 
-  String get weaponValue0 {
+  String get weaponDigit0 {
     if (_face.weaponValue >= 0 && _face.weaponValue <= 9) {
       return _digits[_face.weaponValue];
     }
@@ -252,7 +252,7 @@ class SpriteFace {
     throw Exception();
   }
 
-  Rect get weaponValue0Rect {
+  Rect get weaponDigit0Rect {
     return Rect.fromLTWH(
       _card.contentRect.width / 56.0 * 1.0,
       _card.contentRect.width / 56.0 * 40.0,
@@ -262,18 +262,18 @@ class SpriteFace {
   }
 
   /// 武器值 1.
-  bool get weaponValue1Visible {
-    return _face.weaponValue != null && _face.weaponValue >= 10;
+  bool get weaponDigit1Visible {
+    return weaponVisible && _face.weaponValue != null && _face.weaponValue >= 10;
   }
 
-  String get weaponValue1 {
+  String get weaponDigit1 {
     if (_face.weaponValue >= 10 && _face.weaponValue <= 99) {
       return _digits[_face.weaponValue % 10];
     }
     throw Exception();
   }
 
-  Rect get weaponValue1Rect {
+  Rect get weaponDigit1Rect {
     return Rect.fromLTWH(
       _card.contentRect.width / 56.0 * 5.0,
       _card.contentRect.width / 56.0 * 40.0,
@@ -283,6 +283,12 @@ class SpriteFace {
   }
 
   /// 盾牌.
+  bool get shieldVisible {
+    return shield != null && shield.isNotEmpty;
+  }
+
+  String get shield => _face.shield;
+
   Rect get shieldRect {
     return Rect.fromLTWH(
       _card.contentRect.width / 56.0 * 22.0,
@@ -293,6 +299,17 @@ class SpriteFace {
   }
 
   /// 盾牌值 0.
+  bool get shieldDigit0Visible {
+    return shieldVisible && _face.shieldValue != null && _face.shieldValue >= 10;
+  }
+
+  String get shieldDigit0 {
+    if (_face.shieldValue >= 10 && _face.shieldValue <= 99) {
+      return _digits[_face.shieldValue ~/ 10];
+    }
+    throw Exception();
+  }
+
   Rect get shieldDigit0Rect {
     return Rect.fromLTWH(
       _card.contentRect.width / 56.0 * 47.0,
@@ -303,6 +320,17 @@ class SpriteFace {
   }
 
   /// 盾牌值 1.
+  bool get shieldDigit1Visible {
+    return shieldVisible && _face.shieldValue != null && _face.shieldValue >= 0;
+  }
+
+  String get shieldDigit1 {
+    if (_face.shieldValue >= 0 && _face.shieldValue <= 99) {
+      return _digits[_face.shieldValue % 10];
+    }
+    throw Exception();
+  }
+
   Rect get shieldDigit1Rect {
     return Rect.fromLTWH(
       _card.contentRect.width / 56.0 * 51.0,

@@ -39,10 +39,10 @@ class _SpriteFace extends _Face {
   int weaponValue = 47;
 
   /// 盾牌.
-  String shield;
+  String shield = 'assets/shield.png';
 
   /// 盾牌值.
-  int shieldValue;
+  int shieldValue = 47;
 
   /// 生命值.
   int healthValue;

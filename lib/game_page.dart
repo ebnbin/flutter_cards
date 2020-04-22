@@ -202,31 +202,11 @@ class _GameWidget extends StatelessWidget {
         children: <Widget>[
           _buildSpriteFaceBody(context, face),
           _buildSpriteFaceWeapon(context, face),
-          _buildSpriteFaceWeaponValue0(context, face),
-          _buildSpriteFaceWeaponValue1(context, face),
-          /// 盾牌 (右边, 左手).
-          Positioned.fromRect(
-            rect: face.shieldRect,
-            child: Image.asset('assets/shield.png',
-              fit: BoxFit.contain,
-            ),
-          ),
-          Positioned.fromRect(
-            rect: face.shieldDigit0Rect,
-            child: Image.asset('assets/digit_0.png',
-              color: face.digitColor,
-              colorBlendMode: BlendMode.srcIn,
-              fit: BoxFit.contain,
-            ),
-          ),
-          Positioned.fromRect(
-            rect: face.shieldDigit1Rect,
-            child: Image.asset('assets/digit_0.png',
-              color: face.digitColor,
-              colorBlendMode: BlendMode.srcIn,
-              fit: BoxFit.contain,
-            ),
-          ),
+          _buildSpriteFaceWeaponDigit0(context, face),
+          _buildSpriteFaceWeaponDigit1(context, face),
+          _buildSpriteFaceShield(context, face),
+          _buildSpriteFaceShieldDigit0(context, face),
+          _buildSpriteFaceShieldDigit1(context, face),
           /// 生命值 (右上角).
           Positioned.fromRect(
             rect: face.healthRect,
@@ -369,13 +349,13 @@ class _GameWidget extends StatelessWidget {
   }
 
   /// 武器值 0.
-  Widget _buildSpriteFaceWeaponValue0(BuildContext context, SpriteFace face) {
-    if (!face.weaponValue0Visible) {
+  Widget _buildSpriteFaceWeaponDigit0(BuildContext context, SpriteFace face) {
+    if (!face.weaponDigit0Visible) {
       return _buildInvisible(context);
     }
     return Positioned.fromRect(
-      rect: face.weaponValue0Rect,
-      child: Image.asset(face.weaponValue0,
+      rect: face.weaponDigit0Rect,
+      child: Image.asset(face.weaponDigit0,
         color: face.digitColor,
         colorBlendMode: BlendMode.srcIn,
         fit: BoxFit.contain,
@@ -384,13 +364,56 @@ class _GameWidget extends StatelessWidget {
   }
 
   /// 武器值 1.
-  Widget _buildSpriteFaceWeaponValue1(BuildContext context, SpriteFace face) {
-    if (!face.weaponValue1Visible) {
+  Widget _buildSpriteFaceWeaponDigit1(BuildContext context, SpriteFace face) {
+    if (!face.weaponDigit1Visible) {
       return _buildInvisible(context);
     }
     return Positioned.fromRect(
-      rect: face.weaponValue1Rect,
-      child: Image.asset(face.weaponValue1,
+      rect: face.weaponDigit1Rect,
+      child: Image.asset(face.weaponDigit1,
+        color: face.digitColor,
+        colorBlendMode: BlendMode.srcIn,
+        fit: BoxFit.contain,
+      ),
+    );
+  }
+
+  /// 盾牌 (右边, 左手).
+  Widget _buildSpriteFaceShield(BuildContext context, SpriteFace face) {
+    if (!face.shieldVisible) {
+      return _buildInvisible(context);
+    }
+    return Positioned.fromRect(
+      rect: face.shieldRect,
+      child: Image.asset(face.shield,
+        fit: BoxFit.contain,
+      ),
+    );
+  }
+
+  /// 盾牌值 0.
+  Widget _buildSpriteFaceShieldDigit0(BuildContext context, SpriteFace face) {
+    if (!face.shieldDigit0Visible) {
+      return _buildInvisible(context);
+    }
+    return Positioned.fromRect(
+      rect: face.shieldDigit0Rect,
+      child: Image.asset(face.shieldDigit0,
+        color: face.digitColor,
+        colorBlendMode: BlendMode.srcIn,
+        fit: BoxFit.contain,
+      ),
+    );
+  }
+
+  /// 盾牌值 1.
+  Widget _buildSpriteFaceShieldDigit1(BuildContext context, SpriteFace face) {
+    if (!face.shieldDigit1Visible) {
+      return _buildInvisible(context);
+    }
+    return Positioned.fromRect(
+      rect: face.shieldDigit1Rect,
+      child: Image.asset(face.shieldDigit1,
         color: face.digitColor,
         colorBlendMode: BlendMode.srcIn,
         fit: BoxFit.contain,
