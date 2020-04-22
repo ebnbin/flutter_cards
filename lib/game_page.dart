@@ -199,148 +199,61 @@ class _GameWidget extends StatelessWidget {
       rect: RelativeRect.fill,
       child: Stack(
         children: <Widget>[
-          _buildSpriteFaceBody(context, face),
-          _buildSpriteFaceWeapon(context, face),
+          /// 主体 (中间).
+          _buildSpriteFaceImage(context, face.body),
+          /// 武器 (左边, 右手).
+          _buildSpriteFaceImage(context, face.weapon),
           _buildSpriteFaceDigit(context, face.weaponDigit0),
           _buildSpriteFaceDigit(context, face.weaponDigit1),
-          _buildSpriteFaceShield(context, face),
+          /// 盾牌 (右边, 左手).
+          _buildSpriteFaceImage(context, face.shield),
           _buildSpriteFaceDigit(context, face.shieldDigit0),
           _buildSpriteFaceDigit(context, face.shieldDigit1),
-          _buildSpriteFaceHealth(context, face),
+          /// 生命值 (右上角).
+          _buildSpriteFaceImage(context, face.health),
           _buildSpriteFaceDigit(context, face.healthDigit0),
           _buildSpriteFaceDigit(context, face.healthDigit1),
           _buildSpriteFaceDigit(context, face.healthDigit2),
           _buildSpriteFaceDigit(context, face.healthDigit3),
           _buildSpriteFaceDigit(context, face.healthDigit4),
           /// 效果 (右下角).
-          Positioned.fromRect(
-            rect: face.effectRect,
-            child: Image.asset('assets/poison.png',
-              fit: BoxFit.contain,
-            ),
-          ),
-          Positioned.fromRect(
-            rect: face.effectDigit0Rect,
-            child: Image.asset('assets/digit_0.png',
-              color: face.digitColor,
-              colorBlendMode: BlendMode.srcIn,
-              fit: BoxFit.contain,
-            ),
-          ),
-          Positioned.fromRect(
-            rect: face.effectDigit1Rect,
-            child: Image.asset('assets/digit_0.png',
-              color: face.digitColor,
-              colorBlendMode: BlendMode.srcIn,
-              fit: BoxFit.contain,
-            ),
-          ),
+          _buildSpriteFaceImage(context, face.effect),
+          _buildSpriteFaceDigit(context, face.effectDigit0),
+          _buildSpriteFaceDigit(context, face.effectDigit1),
           /// 数量 (左下角).
-          Positioned.fromRect(
-            rect: face.amountDigit0Rect,
-            child: Image.asset('assets/digit_0.png',
-              color: face.digitColor,
-              colorBlendMode: BlendMode.srcIn,
-              fit: BoxFit.contain,
-            ),
-          ),
-          Positioned.fromRect(
-            rect: face.amountDigit1Rect,
-            child: Image.asset('assets/digit_0.png',
-              color: face.digitColor,
-              colorBlendMode: BlendMode.srcIn,
-              fit: BoxFit.contain,
-            ),
-          ),
+          _buildSpriteFaceDigit(context, face.amountDigit0),
+          _buildSpriteFaceDigit(context, face.amountDigit1),
           /// 能力 (左上角).
-          Positioned.fromRect(
-            rect: face.powerRect,
-            child: Image.asset('assets/absorption.png',
-              fit: BoxFit.contain,
-            ),
-          ),
-          Positioned.fromRect(
-            rect: face.powerDigit0Rect,
-            child: Image.asset('assets/digit_0.png',
-              color: face.digitColor,
-              colorBlendMode: BlendMode.srcIn,
-              fit: BoxFit.contain,
-            ),
-          ),
-          Positioned.fromRect(
-            rect: face.powerDigit1Rect,
-            child: Image.asset('assets/digit_0.png',
-              color: face.digitColor,
-              colorBlendMode: BlendMode.srcIn,
-              fit: BoxFit.contain,
-            ),
-          ),
+          _buildSpriteFaceImage(context, face.power),
+          _buildSpriteFaceDigit(context, face.powerDigit0),
+          _buildSpriteFaceDigit(context, face.powerDigit1),
         ],
       ),
     );
   }
 
-  /// 主体 (中间).
-  Widget _buildSpriteFaceBody(BuildContext context, SpriteFace face) {
-    if (!face.bodyVisible) {
+  /// 精灵图片.
+  Widget _buildSpriteFaceImage(BuildContext context, SpriteFaceImage spriteFaceImage) {
+    if (!spriteFaceImage.visible) {
       return _buildInvisible(context);
     }
     return Positioned.fromRect(
-      rect: face.bodyRect,
-      child: Image.asset(face.body,
-        fit: BoxFit.contain,
-      ),
-    );
-  }
-
-  /// 武器 (左边, 右手).
-  Widget _buildSpriteFaceWeapon(BuildContext context, SpriteFace face) {
-    if (!face.weaponVisible) {
-      return _buildInvisible(context);
-    }
-    return Positioned.fromRect(
-      rect: face.weaponRect,
-      child: Image.asset(face.weapon,
-        fit: BoxFit.contain,
-      ),
-    );
-  }
-
-  /// 盾牌 (右边, 左手).
-  Widget _buildSpriteFaceShield(BuildContext context, SpriteFace face) {
-    if (!face.shieldVisible) {
-      return _buildInvisible(context);
-    }
-    return Positioned.fromRect(
-      rect: face.shieldRect,
-      child: Image.asset(face.shield,
-        fit: BoxFit.contain,
-      ),
-    );
-  }
-
-  /// 生命值 (右上角).
-  Widget _buildSpriteFaceHealth(BuildContext context, SpriteFace face) {
-    if (!face.healthVisible) {
-      return _buildInvisible(context);
-    }
-    return Positioned.fromRect(
-      rect: face.healthRect,
-      child: Image.asset(face.health,
+      rect: spriteFaceImage.rect,
+      child: Image.asset(spriteFaceImage.image,
         fit: BoxFit.contain,
       ),
     );
   }
 
   /// 精灵数字.
-  Widget _buildSpriteFaceDigit(BuildContext context, SpriteFaceDigit digit) {
-    if (!digit.visible) {
+  Widget _buildSpriteFaceDigit(BuildContext context, SpriteFaceDigit spriteFaceDigit) {
+    if (!spriteFaceDigit.visible) {
       return _buildInvisible(context);
     }
     return Positioned.fromRect(
-      rect: digit.rect,
-      child: Image.asset(digit.asset,
-        color: digit.color,
+      rect: spriteFaceDigit.rect,
+      child: Image.asset(spriteFaceDigit.image,
+        color: spriteFaceDigit.color,
         colorBlendMode: BlendMode.srcIn,
         fit: BoxFit.contain,
       ),

@@ -193,59 +193,37 @@ class SpriteFace {
 
   final _SpriteFace _face;
 
-  /// 数字图片资源.
-  static final List<String> _digits = <String>[
-    'assets/digit_0.png',
-    'assets/digit_1.png',
-    'assets/digit_2.png',
-    'assets/digit_3.png',
-    'assets/digit_4.png',
-    'assets/digit_5.png',
-    'assets/digit_6.png',
-    'assets/digit_7.png',
-    'assets/digit_8.png',
-    'assets/digit_9.png',
-    'assets/digit_slash.png',
-  ];
-
-  /// 数字颜色.
-  Color get digitColor => Colors.blueGrey.shade100;
-
   /// 主体.
-  bool get bodyVisible {
-    return body != null && body.isNotEmpty;
-  }
-
-  String get body => _face.body;
-
-  Rect get bodyRect {
-    return Rect.fromLTWH(
-      _card.contentRect.width / 56.0 * 4.0,
-      _card.contentRect.width / 56.0 * 4.0,
-      _card.contentRect.width / 56.0 * 48.0,
-      _card.contentRect.width / 56.0 * 48.0,
+  SpriteFaceImage get body {
+    if (_face.body == null || _face.body.isEmpty) {
+      return SpriteFaceImage._invisible();
+    }
+    return SpriteFaceImage._visible(_card,
+      left: 4.0,
+      top: 4.0,
+      width: 48.0,
+      height: 48.0,
+      image: _face.body,
     );
   }
 
   /// 武器.
-  bool get weaponVisible {
-    return weapon != null && weapon.isNotEmpty;
-  }
-
-  String get weapon => _face.weapon;
-  
-  Rect get weaponRect {
-    return Rect.fromLTWH(
-      _card.contentRect.width / 56.0 * 0.0,
-      _card.contentRect.width / 56.0 * 15.0,
-      _card.contentRect.width / 56.0 * 24.0,
-      _card.contentRect.width / 56.0 * 24.0,
+  SpriteFaceImage get weapon {
+    if (_face.weapon == null || _face.weapon.isEmpty) {
+      return SpriteFaceImage._invisible();
+    }
+    return SpriteFaceImage._visible(_card,
+      left: 0.0,
+      top: 15.0,
+      width: 24.0,
+      height: 24.0,
+      image: _face.weapon,
     );
   }
 
   /// 武器值 0.
   SpriteFaceDigit get weaponDigit0 {
-    if (!weaponVisible || _face.weaponValue == null) {
+    if (_face.weapon == null || _face.weapon.isEmpty || _face.weaponValue == null) {
       return SpriteFaceDigit._invisible();
     }
     int value = max(0, min(99, _face.weaponValue));
@@ -256,8 +234,9 @@ class SpriteFace {
     );
   }
 
+  /// 武器值 1.
   SpriteFaceDigit get weaponDigit1 {
-    if (!weaponVisible || _face.weaponValue == null || _face.weaponValue < 10) {
+    if (_face.weapon == null || _face.weapon.isEmpty || _face.weaponValue == null || _face.weaponValue < 10) {
       return SpriteFaceDigit._invisible();
     }
     int value = max(0, min(99, _face.weaponValue));
@@ -269,24 +248,22 @@ class SpriteFace {
   }
 
   /// 盾牌.
-  bool get shieldVisible {
-    return shield != null && shield.isNotEmpty;
-  }
-
-  String get shield => _face.shield;
-
-  Rect get shieldRect {
-    return Rect.fromLTWH(
-      _card.contentRect.width / 56.0 * 22.0,
-      _card.contentRect.width / 56.0 * 17.0,
-      _card.contentRect.width / 56.0 * 24.0,
-      _card.contentRect.width / 56.0 * 24.0,
+  SpriteFaceImage get shield {
+    if (_face.shield == null || _face.shield.isEmpty) {
+      return SpriteFaceImage._invisible();
+    }
+    return SpriteFaceImage._visible(_card,
+      left: 22.0,
+      top: 17.0,
+      width: 24.0,
+      height: 24.0,
+      image: _face.shield,
     );
   }
 
   /// 盾牌值 0.
   SpriteFaceDigit get shieldDigit0 {
-    if (!shieldVisible || _face.shieldValue == null || _face.shieldValue < 10) {
+    if (_face.shield == null || _face.shield.isEmpty || _face.shieldValue == null || _face.shieldValue < 10) {
       return SpriteFaceDigit._invisible();
     }
     int value = max(0, min(99, _face.shieldValue));
@@ -299,7 +276,7 @@ class SpriteFace {
 
   /// 盾牌值 1.
   SpriteFaceDigit get shieldDigit1 {
-    if (!shieldVisible || _face.shieldValue == null) {
+    if (_face.shield == null || _face.shield.isEmpty || _face.shieldValue == null) {
       return SpriteFaceDigit._invisible();
     }
     int value = max(0, min(99, _face.shieldValue));
@@ -311,20 +288,16 @@ class SpriteFace {
   }
 
   /// 生命.
-  bool get healthVisible {
-    return _face.healthValue != null;
-  }
-
-  String get health {
-    return 'assets/health.png';
-  }
-
-  Rect get healthRect {
-    return Rect.fromLTWH(
-      _card.contentRect.width / 56.0 * 47.0,
-      _card.contentRect.width / 56.0 * 9.0,
-      _card.contentRect.width / 56.0 * 9.0,
-      _card.contentRect.width / 56.0 * 9.0,
+  SpriteFaceImage get health {
+    if (_face.healthValue == null) {
+      return SpriteFaceImage._invisible();
+    }
+    return SpriteFaceImage._visible(_card,
+      left: 47.0,
+      top: 9.0,
+      width: 9.0,
+      height: 9.0,
+      image: 'assets/health.png',
     );
   }
 
@@ -446,88 +419,145 @@ class SpriteFace {
   }
 
   /// 效果.
-  Rect get effectRect {
-    return Rect.fromLTWH(
-      _card.contentRect.width / 56.0 * 47.0,
-      _card.contentRect.width / 56.0 * 46.0,
-      _card.contentRect.width / 56.0 * 9.0,
-      _card.contentRect.width / 56.0 * 9.0,
+  SpriteFaceImage get effect {
+    if (_face.effect == null || _face.effect.isEmpty) {
+      return SpriteFaceImage._invisible();
+    }
+    return SpriteFaceImage._visible(_card,
+      left: 47.0,
+      top: 46.0,
+      width: 9.0,
+      height: 9.0,
+      image: _face.effect,
     );
   }
 
   /// 效果值 0.
-  Rect get effectDigit0Rect {
-    return Rect.fromLTWH(
-      _card.contentRect.width / 56.0 * 38.0,
-      _card.contentRect.width / 56.0 * 48.0,
-      _card.contentRect.width / 56.0 * 4.0,
-      _card.contentRect.width / 56.0 * 6.0,
+  SpriteFaceDigit get effectDigit0 {
+    if (_face.effect == null || _face.effect.isEmpty || _face.effectValue == null || _face.effectValue < 10) {
+      return SpriteFaceDigit._invisible();
+    }
+    int value = max(0, min(99, _face.effectValue));
+    return SpriteFaceDigit._visible(_card,
+      left: 38.0,
+      top: 48.0,
+      digit: value ~/ 10,
     );
   }
 
   /// 效果值 1.
-  Rect get effectDigit1Rect {
-    return Rect.fromLTWH(
-      _card.contentRect.width / 56.0 * 42.0,
-      _card.contentRect.width / 56.0 * 48.0,
-      _card.contentRect.width / 56.0 * 4.0,
-      _card.contentRect.width / 56.0 * 6.0,
+  SpriteFaceDigit get effectDigit1 {
+    if (_face.effect == null || _face.effect.isEmpty || _face.effectValue == null) {
+      return SpriteFaceDigit._invisible();
+    }
+    int value = max(0, min(99, _face.effectValue));
+    return SpriteFaceDigit._visible(_card,
+      left: 42.0,
+      top: 48.0,
+      digit: value % 10,
     );
   }
 
   /// 数量值 0.
-  Rect get amountDigit0Rect {
-    return Rect.fromLTWH(
-      _card.contentRect.width / 56.0 * 1.0,
-      _card.contentRect.width / 56.0 * 48.0,
-      _card.contentRect.width / 56.0 * 4.0,
-      _card.contentRect.width / 56.0 * 6.0,
+  SpriteFaceDigit get amountDigit0 {
+    if (_face.amount == null) {
+      return SpriteFaceDigit._invisible();
+    }
+    int value = max(0, min(99, _face.amount));
+    return SpriteFaceDigit._visible(_card,
+      left: 1.0,
+      top: 48.0,
+      digit: value < 10 ? value : (value ~/ 10),
     );
   }
 
   /// 数量值 1.
-  Rect get amountDigit1Rect {
-    return Rect.fromLTWH(
-      _card.contentRect.width / 56.0 * 5.0,
-      _card.contentRect.width / 56.0 * 48.0,
-      _card.contentRect.width / 56.0 * 4.0,
-      _card.contentRect.width / 56.0 * 6.0,
+  SpriteFaceDigit get amountDigit1 {
+    if (_face.amount == null || _face.amount < 10) {
+      return SpriteFaceDigit._invisible();
+    }
+    int value = max(0, min(99, _face.amount));
+    return SpriteFaceDigit._visible(_card,
+      left: 5.0,
+      top: 48.0,
+      digit: value % 10,
     );
   }
 
   /// 能力.
-  Rect get powerRect {
-    return Rect.fromLTWH(
-      _card.contentRect.width / 56.0 * 0.0,
-      _card.contentRect.width / 56.0 * 1.0,
-      _card.contentRect.width / 56.0 * 9.0,
-      _card.contentRect.width / 56.0 * 9.0,
+  SpriteFaceImage get power {
+    if (_face.power == null || _face.power.isEmpty) {
+      return SpriteFaceImage._invisible();
+    }
+    return SpriteFaceImage._visible(_card,
+      left: 0.0,
+      top: 1.0,
+      width: 9.0,
+      height: 9.0,
+      image: _face.power,
     );
   }
 
   /// 能力值 0.
-  Rect get powerDigit0Rect {
-    return Rect.fromLTWH(
-      _card.contentRect.width / 56.0 * 10.0,
-      _card.contentRect.width / 56.0 * 2.0,
-      _card.contentRect.width / 56.0 * 4.0,
-      _card.contentRect.width / 56.0 * 6.0,
+  SpriteFaceDigit get powerDigit0 {
+    if (_face.power == null || _face.power.isEmpty || _face.powerValue == null) {
+      return SpriteFaceDigit._invisible();
+    }
+    int value = max(0, min(99, _face.powerValue));
+    return SpriteFaceDigit._visible(_card,
+      left: 10.0,
+      top: 2.0,
+      digit: value < 10 ? value : (value ~/ 10),
     );
   }
 
   /// 能力值 1.
-  Rect get powerDigit1Rect {
-    return Rect.fromLTWH(
-      _card.contentRect.width / 56.0 * 14.0,
-      _card.contentRect.width / 56.0 * 2.0,
-      _card.contentRect.width / 56.0 * 4.0,
-      _card.contentRect.width / 56.0 * 6.0,
+  SpriteFaceDigit get powerDigit1 {
+    if (_face.power == null || _face.power.isEmpty || _face.powerValue == null || _face.powerValue < 10) {
+      return SpriteFaceDigit._invisible();
+    }
+    int value = max(0, min(99, _face.powerValue));
+    return SpriteFaceDigit._visible(_card,
+      left: 14.0,
+      top: 2.0,
+      digit: value % 10,
     );
   }
 }
 
 //*********************************************************************************************************************
 //*********************************************************************************************************************
+
+/// 精灵图片.
+class SpriteFaceImage {
+  SpriteFaceImage._invisible() :
+        visible = false,
+        rect = null,
+        image = null;
+
+  SpriteFaceImage._visible(Card card, {
+    @required
+    double left,
+    @required
+    double top,
+    @required
+    double width,
+    @required
+    double height,
+    @required
+    this.image,
+  }) : visible = true,
+        rect = Rect.fromLTWH(
+          card.contentRect.width / 56.0 * left,
+          card.contentRect.width / 56.0 * top,
+          card.contentRect.width / 56.0 * width,
+          card.contentRect.width / 56.0 * height,
+        );
+  
+  final bool visible;
+  final Rect rect;
+  final String image;
+}
 
 /// 精灵数字.
 class SpriteFaceDigit {
@@ -550,7 +580,7 @@ class SpriteFaceDigit {
   SpriteFaceDigit._invisible() :
         visible = false,
         rect = null,
-        asset = null,
+        image = null,
         color = null;
 
   /// 可见的.
@@ -575,11 +605,11 @@ class SpriteFaceDigit {
           card.contentRect.width / 56.0 * 4.0,
           card.contentRect.width / 56.0 * 6.0,
         ),
-        asset = _digits[digit],
+        image = _digits[digit],
         color = color == null ? Colors.blueGrey.shade100 : color;
 
   final bool visible;
   final Rect rect;
-  final String asset;
+  final String image;
   final Color color;
 }

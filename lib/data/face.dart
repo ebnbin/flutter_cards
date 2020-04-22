@@ -36,13 +36,13 @@ class _SpriteFace extends _Face {
   String weapon = 'assets/diamond_sword.png';
 
   /// 武器值.
-  int weaponValue = 47;
+  int weaponValue = 16;
 
   /// 盾牌.
-  String shield = 'assets/shield.png';
+  String shield/* = 'assets/shield.png'*/;
 
   /// 盾牌值.
-  int shieldValue = 47;
+  int shieldValue;
 
   /// 生命值.
   int healthValue = 3;
@@ -51,16 +51,16 @@ class _SpriteFace extends _Face {
   int maxHealthValue = 3;
 
   /// 效果.
-  String effect;
+  String effect = 'assets/poison.png';
 
   /// 效果值.
-  int effectValue;
+  int effectValue = 8;
 
   /// 数量.
   int amount;
 
   /// 能力.
-  String power;
+  String power/* = 'assets/absorption.png'*/;
 
   /// 能力值.
   int powerValue;
