@@ -30,13 +30,13 @@ class _SpriteFace extends _Face {
   _SpriteFace(_Card card) : super(card);
 
   /// 主体.
-  String body;
+  String body = 'assets/steve.png';
 
   /// 武器.
-  String weapon;
+  String weapon = 'assets/diamond_sword.png';
 
   /// 武器值.
-  int weaponValue;
+  int weaponValue = 47;
 
   /// 盾牌.
   String shield;

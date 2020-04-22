@@ -200,36 +200,10 @@ class _GameWidget extends StatelessWidget {
       rect: RelativeRect.fill,
       child: Stack(
         children: <Widget>[
-          /// 主体 (中间).
-          Positioned.fromRect(
-            rect: face.bodyRect,
-            child: Image.asset('assets/steve.png',
-              fit: BoxFit.contain,
-            ),
-          ),
-          /// 武器 (左边, 右手).
-          Positioned.fromRect(
-            rect: face.weaponRect,
-            child: Image.asset('assets/diamond_sword.png',
-              fit: BoxFit.contain,
-            ),
-          ),
-          Positioned.fromRect(
-            rect: face.weaponDigit0Rect,
-            child: Image.asset('assets/digit_0.png',
-              color: face.digitColor,
-              colorBlendMode: BlendMode.srcIn,
-              fit: BoxFit.contain,
-            ),
-          ),
-          Positioned.fromRect(
-            rect: face.weaponDigit1Rect,
-            child: Image.asset('assets/digit_0.png',
-              color: face.digitColor,
-              colorBlendMode: BlendMode.srcIn,
-              fit: BoxFit.contain,
-            ),
-          ),
+          _buildSpriteFaceBody(context, face),
+          _buildSpriteFaceWeapon(context, face),
+          _buildSpriteFaceWeaponValue0(context, face),
+          _buildSpriteFaceWeaponValue1(context, face),
           /// 盾牌 (右边, 左手).
           Positioned.fromRect(
             rect: face.shieldRect,
@@ -364,6 +338,62 @@ class _GameWidget extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  /// 主体 (中间).
+  Widget _buildSpriteFaceBody(BuildContext context, SpriteFace face) {
+    if (!face.bodyVisible) {
+      return _buildInvisible(context);
+    }
+    return Positioned.fromRect(
+      rect: face.bodyRect,
+      child: Image.asset(face.body,
+        fit: BoxFit.contain,
+      ),
+    );
+  }
+
+  /// 武器 (左边, 右手).
+  Widget _buildSpriteFaceWeapon(BuildContext context, SpriteFace face) {
+    if (!face.weaponVisible) {
+      return _buildInvisible(context);
+    }
+    return Positioned.fromRect(
+      rect: face.weaponRect,
+      child: Image.asset(face.weapon,
+        fit: BoxFit.contain,
+      ),
+    );
+  }
+
+  /// 武器值 0.
+  Widget _buildSpriteFaceWeaponValue0(BuildContext context, SpriteFace face) {
+    if (!face.weaponValue0Visible) {
+      return _buildInvisible(context);
+    }
+    return Positioned.fromRect(
+      rect: face.weaponValue0Rect,
+      child: Image.asset(face.weaponValue0,
+        color: face.digitColor,
+        colorBlendMode: BlendMode.srcIn,
+        fit: BoxFit.contain,
+      ),
+    );
+  }
+
+  /// 武器值 1.
+  Widget _buildSpriteFaceWeaponValue1(BuildContext context, SpriteFace face) {
+    if (!face.weaponValue1Visible) {
+      return _buildInvisible(context);
+    }
+    return Positioned.fromRect(
+      rect: face.weaponValue1Rect,
+      child: Image.asset(face.weaponValue1,
+        color: face.digitColor,
+        colorBlendMode: BlendMode.srcIn,
+        fit: BoxFit.contain,
       ),
     );
   }

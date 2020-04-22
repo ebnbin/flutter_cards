@@ -186,10 +186,32 @@ class SpriteFace {
 
   final _SpriteFace _face;
 
+  /// 数字图片资源.
+  static final List<String> _digits = <String>[
+    'assets/digit_0.png',
+    'assets/digit_1.png',
+    'assets/digit_2.png',
+    'assets/digit_3.png',
+    'assets/digit_4.png',
+    'assets/digit_5.png',
+    'assets/digit_6.png',
+    'assets/digit_7.png',
+    'assets/digit_8.png',
+    'assets/digit_9.png',
+    'assets/digit_slash.png',
+    'assets/digit_space.png',
+  ];
+
   /// 数字颜色.
   Color get digitColor => Colors.blueGrey.shade100;
 
   /// 主体.
+  bool get bodyVisible {
+    return body != null && body.isNotEmpty;
+  }
+
+  String get body => _face.body;
+
   Rect get bodyRect {
     return Rect.fromLTWH(
       _card.contentRect.width / 56.0 * 4.0,
@@ -200,6 +222,12 @@ class SpriteFace {
   }
 
   /// 武器.
+  bool get weaponVisible {
+    return weapon != null && weapon.isNotEmpty;
+  }
+
+  String get weapon => _face.weapon;
+  
   Rect get weaponRect {
     return Rect.fromLTWH(
       _card.contentRect.width / 56.0 * 0.0,
@@ -210,7 +238,21 @@ class SpriteFace {
   }
 
   /// 武器值 0.
-  Rect get weaponDigit0Rect {
+  bool get weaponValue0Visible {
+    return _face.weaponValue != null && _face.weaponValue >= 0;
+  }
+
+  String get weaponValue0 {
+    if (_face.weaponValue >= 0 && _face.weaponValue <= 9) {
+      return _digits[_face.weaponValue];
+    }
+    if (_face.weaponValue >= 10 && _face.weaponValue <= 99) {
+      return _digits[_face.weaponValue ~/ 10];
+    }
+    throw Exception();
+  }
+
+  Rect get weaponValue0Rect {
     return Rect.fromLTWH(
       _card.contentRect.width / 56.0 * 1.0,
       _card.contentRect.width / 56.0 * 40.0,
@@ -220,7 +262,18 @@ class SpriteFace {
   }
 
   /// 武器值 1.
-  Rect get weaponDigit1Rect {
+  bool get weaponValue1Visible {
+    return _face.weaponValue != null && _face.weaponValue >= 10;
+  }
+
+  String get weaponValue1 {
+    if (_face.weaponValue >= 10 && _face.weaponValue <= 99) {
+      return _digits[_face.weaponValue % 10];
+    }
+    throw Exception();
+  }
+
+  Rect get weaponValue1Rect {
     return Rect.fromLTWH(
       _card.contentRect.width / 56.0 * 5.0,
       _card.contentRect.width / 56.0 * 40.0,
