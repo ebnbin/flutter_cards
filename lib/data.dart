@@ -320,7 +320,7 @@ class SpriteFace {
 
   String get shieldDigit1 {
     int value = max(0, min(99, _face.shieldValue));
-    return _digits[_face.shieldValue % 10];
+    return _digits[value % 10];
   }
 
   Rect get shieldDigit1Rect {
