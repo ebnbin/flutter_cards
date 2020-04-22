@@ -1234,13 +1234,13 @@ class _PlayerCard extends _SpriteCard {
     mainElevation: mainElevation,
     radiusType: radiusType,
   ) {
-    faceMap['_PlayerFace'] = _PlayerFace(this);
+    faceMap['_SpriteFace'] = _SpriteFace(this);
   }
 
   @override
   String get currentFace {
     if (dimension == _CardDimension.main) {
-      return '_PlayerFace';
+      return '_SpriteFace';
     } else {
       return null;
     }

@@ -65,8 +65,3 @@ class _SpriteFace extends _Face {
   /// 能力值.
   int powerValue;
 }
-
-/// 玩家.
-class _PlayerFace extends _Face {
-  _PlayerFace(_Card card) : super(card);
-}

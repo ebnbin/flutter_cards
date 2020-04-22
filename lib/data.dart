@@ -131,8 +131,8 @@ class Card {
     if (face is _SplashTitleFace) {
       return SplashTitleFace._(this, face);
     }
-    if (face is _PlayerFace) {
-      return PlayerFace._(this, face);
+    if (face is _SpriteFace) {
+      return SpriteFace._(this, face);
     }
     return null;
   }
@@ -178,13 +178,13 @@ class SplashFullFace {
   }
 }
 
-/// 玩家.
-class PlayerFace {
-  PlayerFace._(this._card, this._face);
+/// 精灵.
+class SpriteFace {
+  SpriteFace._(this._card, this._face);
 
   final Card _card;
 
-  final _PlayerFace _face;
+  final _SpriteFace _face;
 
   /// 数字颜色.
   Color get digitColor => Colors.blueGrey.shade100;

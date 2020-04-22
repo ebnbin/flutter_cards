@@ -166,8 +166,8 @@ class _GameWidget extends StatelessWidget {
     if (face is SplashTitleFace) {
       return _buildSplashTitleFace(context, face);
     }
-    if (face is PlayerFace) {
-      return _buildPlayerFace(context, face);
+    if (face is SpriteFace) {
+      return _buildSpriteFace(context, face);
     }
     return _buildInvisible(context);
   }
@@ -195,7 +195,7 @@ class _GameWidget extends StatelessWidget {
   }
 
   /// 玩家.
-  Widget _buildPlayerFace(BuildContext context, PlayerFace face) {
+  Widget _buildSpriteFace(BuildContext context, SpriteFace face) {
     return Positioned.fromRelativeRect(
       rect: RelativeRect.fill,
       child: Stack(
