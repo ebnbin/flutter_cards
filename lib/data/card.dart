@@ -519,6 +519,10 @@ class _Card extends _Stuff {
     if (currentFace == null) {
       return null;
     }
+    /// 全屏尺寸时不显示内容.
+    if (dimension == _CardDimension.full) {
+      return null;
+    }
 
     /// 翻转角度是否在卡片背面.
     bool backFace(double rotate) {
