@@ -319,17 +319,17 @@ class _Animation<T extends _Card> {
   /// 动画第一次过半回调.
   bool _half = false;
 
-  /// 动画开始时 [card.gestureType] 被设置为 [_GestureType.absorb] 禁止手势, 动画结束时恢复.
-  _GestureType _gestureType;
-
   /// 开始动画.
   ///
   /// [endCallback] 动画结束后, 包括 [endDelay] 延迟后回调.
   void begin({
     VoidCallback endCallback,
   }) {
-    _gestureType = card.gestureType;
-    card.gestureType = _GestureType.absorb;
+    /// 不能重叠动画.
+    if (card.animating) {
+      return;
+    }
+    card.animating = true;
     card.screen.game.callback.notifyStateChanged();
     Future.delayed(Duration(
       milliseconds: beginDelay,
@@ -358,11 +358,10 @@ class _Animation<T extends _Card> {
               Future.delayed(Duration(
                 milliseconds: endDelay,
               ), () {
-                card.gestureType = _gestureType;
-                card.screen.game.callback.notifyStateChanged();
                 _first = false;
                 _half = false;
-                _gestureType = null;
+                card.animating = false;
+                card.screen.game.callback.notifyStateChanged();
                 endCallback?.call();
               });
               break;

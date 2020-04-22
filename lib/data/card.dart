@@ -278,16 +278,27 @@ class _Card extends _Stuff {
 
   //*******************************************************************************************************************
 
+  /// 是否正在动画.
+  bool animating = false;
+
   /// 手势类型.
   _GestureType gestureType;
 
   /// 是否拦截手势.
   bool get absorbPointer {
+    /// 动画时拦截手势.
+    if (animating) {
+      return true;
+    }
     return gestureType == _GestureType.absorb;
   }
 
   /// 是否忽略手势.
   bool get ignorePointer {
+    /// 动画时拦截手势.
+    if (animating) {
+      return false;
+    }
     if (opacity <= 0.0) {
       // 透明时忽略手势.
       return true;
