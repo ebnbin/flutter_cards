@@ -239,17 +239,15 @@ class SpriteFace {
 
   /// 武器值 0.
   bool get weaponDigit0Visible {
-    return weaponVisible && _face.weaponValue != null && _face.weaponValue >= 0;
+    return weaponVisible && _face.weaponValue != null;
   }
 
   String get weaponDigit0 {
-    if (_face.weaponValue >= 0 && _face.weaponValue <= 9) {
-      return _digits[_face.weaponValue];
+    int value = max(0, min(99, _face.weaponValue));
+    if (value <= 9) {
+      return _digits[value];
     }
-    if (_face.weaponValue >= 10 && _face.weaponValue <= 99) {
-      return _digits[_face.weaponValue ~/ 10];
-    }
-    throw Exception();
+    return _digits[value ~/ 10];
   }
 
   Rect get weaponDigit0Rect {
@@ -267,10 +265,8 @@ class SpriteFace {
   }
 
   String get weaponDigit1 {
-    if (_face.weaponValue >= 10 && _face.weaponValue <= 99) {
-      return _digits[_face.weaponValue % 10];
-    }
-    throw Exception();
+    int value = max(0, min(99, _face.weaponValue));
+    return _digits[value % 10];
   }
 
   Rect get weaponDigit1Rect {
@@ -304,10 +300,8 @@ class SpriteFace {
   }
 
   String get shieldDigit0 {
-    if (_face.shieldValue >= 10 && _face.shieldValue <= 99) {
-      return _digits[_face.shieldValue ~/ 10];
-    }
-    throw Exception();
+    int value = max(0, min(99, _face.shieldValue));
+    return _digits[value ~/ 10];
   }
 
   Rect get shieldDigit0Rect {
@@ -321,14 +315,12 @@ class SpriteFace {
 
   /// 盾牌值 1.
   bool get shieldDigit1Visible {
-    return shieldVisible && _face.shieldValue != null && _face.shieldValue >= 0;
+    return shieldVisible && _face.shieldValue != null;
   }
 
   String get shieldDigit1 {
-    if (_face.shieldValue >= 0 && _face.shieldValue <= 99) {
-      return _digits[_face.shieldValue % 10];
-    }
-    throw Exception();
+    int value = max(0, min(99, _face.shieldValue));
+    return _digits[_face.shieldValue % 10];
   }
 
   Rect get shieldDigit1Rect {
@@ -341,6 +333,14 @@ class SpriteFace {
   }
 
   /// 生命.
+  bool get healthVisible {
+    return _face.healthValue != null;
+  }
+
+  String get health {
+    return 'assets/health.png';
+  }
+
   Rect get healthRect {
     return Rect.fromLTWH(
       _card.contentRect.width / 56.0 * 47.0,

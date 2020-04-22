@@ -207,13 +207,7 @@ class _GameWidget extends StatelessWidget {
           _buildSpriteFaceShield(context, face),
           _buildSpriteFaceShieldDigit0(context, face),
           _buildSpriteFaceShieldDigit1(context, face),
-          /// 生命值 (右上角).
-          Positioned.fromRect(
-            rect: face.healthRect,
-            child: Image.asset('assets/health.png',
-              fit: BoxFit.contain,
-            ),
-          ),
+          _buildSpriteFaceHealth(context, face),
           Positioned.fromRect(
             rect: face.healthDigit0Rect,
             child: Image.asset('assets/digit_0.png',
@@ -416,6 +410,19 @@ class _GameWidget extends StatelessWidget {
       child: Image.asset(face.shieldDigit1,
         color: face.digitColor,
         colorBlendMode: BlendMode.srcIn,
+        fit: BoxFit.contain,
+      ),
+    );
+  }
+
+  /// 生命值 (右上角).
+  Widget _buildSpriteFaceHealth(BuildContext context, SpriteFace face) {
+    if (!face.healthVisible) {
+      return _buildInvisible(context);
+    }
+    return Positioned.fromRect(
+      rect: face.healthRect,
+      child: Image.asset(face.health,
         fit: BoxFit.contain,
       ),
     );
