@@ -4,15 +4,15 @@ part of '../data.dart';
 //*********************************************************************************************************************
 
 /// 卡片. 根据网格定位.
-class _Card extends _Stuff {
-  _Card(_Screen screen, {
-    double rotateX = 0.0,
-    double rotateY = 0.0,
-    double rotateZ = 0.0,
-    double translateX = 0.0,
-    double translateY = 0.0,
-    double scaleX = 1.0,
-    double scaleY = 1.0,
+class _Card {
+  _Card(this.screen, {
+    this.rotateX = 0.0,
+    this.rotateY = 0.0,
+    this.rotateZ = 0.0,
+    this.translateX = 0.0,
+    this.translateY = 0.0,
+    this.scaleX = 1.0,
+    this.scaleY = 1.0,
     this.verticalRowGridIndex = 0,
     this.verticalColumnGridIndex = 0,
     this.verticalRowGridSpan = 1,
@@ -33,19 +33,39 @@ class _Card extends _Stuff {
     this.onTap,
     this.onLongPress,
     Map<String, _Face> faceMap,
-  }) : super(screen,
-    rotateX: rotateX,
-    rotateY: rotateY,
-    rotateZ: rotateZ,
-    translateX: translateX,
-    translateY: translateY,
-    scaleX: scaleX,
-    scaleY: scaleY,
-  ) {
+  }) {
     if (faceMap != null) {
       this.faceMap.addAll(faceMap);
     }
   }
+
+  final _Screen screen;
+
+  /// Matrix4.setEntry(3, 2, value). 数值只与尺寸相关.
+  double get matrix4Entry32 {
+    // 数值越大, 3d 旋转镜头越近, 效果越明显, 但越容易绘制异常.
+    return 0.2 / rect.longSize();
+  }
+
+  double rotateX;
+  double rotateY;
+  double rotateZ;
+  double translateX;
+  double translateY;
+  double scaleX;
+  double scaleY;
+
+  /// 变换矩阵.
+  Matrix4 get transform {
+    return Matrix4.identity()..setEntry(3, 2, matrix4Entry32)
+      ..rotateX(rotateX)
+      ..rotateY(rotateY)
+      ..rotateZ(rotateZ)
+      ..leftTranslate(translateX, translateY)
+      ..scale(scaleX, scaleY);
+  }
+
+  //*******************************************************************************************************************
 
   /// 竖屏网格行.
   int verticalRowGridIndex;
@@ -169,7 +189,6 @@ class _Card extends _Stuff {
   }
 
   /// 渲染定位矩形.
-  @override
   Rect get rect {
     switch (dimension) {
       case _CardDimension.main:
