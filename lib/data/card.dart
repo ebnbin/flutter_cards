@@ -41,12 +41,6 @@ class _Card {
 
   final _Screen screen;
 
-  /// Matrix4.setEntry(3, 2, value). 数值只与尺寸相关.
-  double get matrix4Entry32 {
-    // 数值越大, 3d 旋转镜头越近, 效果越明显, 但越容易绘制异常.
-    return 0.2 / rect.longSize();
-  }
-
   double rotateX;
   double rotateY;
   double rotateZ;
@@ -54,16 +48,6 @@ class _Card {
   double translateY;
   double scaleX;
   double scaleY;
-
-  /// 变换矩阵.
-  Matrix4 get transform {
-    return Matrix4.identity()..setEntry(3, 2, matrix4Entry32)
-      ..rotateX(rotateX)
-      ..rotateY(rotateY)
-      ..rotateZ(rotateZ)
-      ..leftTranslate(translateX, translateY)
-      ..scale(scaleX, scaleY);
-  }
 
   //*******************************************************************************************************************
 
@@ -140,16 +124,6 @@ class _Card {
 
   /// 是否可见.
   bool visible;
-
-  /// 在 [Stack] 的 [zIndex] 上是否可见.
-  ///
-  /// [zIndex] 范围 0 ~ 3.
-  bool Function(int zIndex) get zIndexVisible {
-    return (zIndex) {
-      assert(zIndex >= 0 && zIndex <= 3);
-      return max(0, min(3, this.zIndex)) == zIndex && visible;
-    };
-  }
 
   //*******************************************************************************************************************
 
@@ -542,11 +516,11 @@ class _Card {
   /// 卡片内容 map.
   final Map<String, _Face> faceMap = <String, _Face>{};
 
-  String currentFace;
+  String faceKey;
 
   /// 当前卡片内容. 可能为 null.
   _Face get face {
-    if (currentFace == null) {
+    if (faceKey == null) {
       return null;
     }
     /// 全屏尺寸时不显示内容.
@@ -566,8 +540,8 @@ class _Card {
     if (backFace(rotateX) || backFace(rotateY)) {
       return null;
     }
-    assert(faceMap.containsKey(currentFace));
-    return faceMap[currentFace];
+    assert(faceMap.containsKey(faceKey));
+    return faceMap[faceKey];
   }
 
   //*******************************************************************************************************************
@@ -1191,7 +1165,7 @@ class _SplashTitleCard extends _CoreCard {
   }
 
   @override
-  String get currentFace {
+  String get faceKey {
     if (dimension == _CardDimension.main) {
       return '_SplashTitleFace';
     } else {
@@ -1199,7 +1173,7 @@ class _SplashTitleCard extends _CoreCard {
     }
   }
   @override
-  set currentFace(String currentFace) {
+  set faceKey(String currentFace) {
     throw Exception();
   }
 }
@@ -1257,7 +1231,7 @@ class _PlayerCard extends _SpriteCard {
   }
 
   @override
-  String get currentFace {
+  String get faceKey {
     if (dimension == _CardDimension.main) {
       return '_SpriteFace';
     } else {
@@ -1265,7 +1239,7 @@ class _PlayerCard extends _SpriteCard {
     }
   }
   @override
-  set currentFace(String currentFace) {
+  set faceKey(String currentFace) {
     throw Exception();
   }
 

@@ -65,12 +65,17 @@ class NullableCard {
   /// 可能为 null.
   final _Card _card;
 
-  /// True 为可见卡片, false 为不可见卡片.
+  /// 在 [Stack] 的 [zIndex] 上是否可见. True 为可见卡片, false 为不可见卡片.
+  ///
+  /// [zIndex] 范围 0 ~ 3.
   bool Function(int zIndex) get zIndexVisible {
     if (_card == null) {
       return (_) => false;
     }
-    return _card.zIndexVisible;
+    return (zIndex) {
+      assert(zIndex >= 0 && zIndex <= 3);
+      return max(0, min(3, _card.zIndex)) == zIndex && _card.visible;
+    };
   }
 
   Card buildCard() {
@@ -89,7 +94,17 @@ class Card {
 
   Rect get rect => _card.rect;
 
-  Matrix4 get transform => _card.transform;
+  /// 变换矩阵.
+  Matrix4 get transform {
+    // 数值越大, 3d 旋转镜头越近, 效果越明显, 但越容易绘制异常.
+    double matrix4Entry32 = 0.2 / _card.rect.longSize();
+    return Matrix4.identity()..setEntry(3, 2, matrix4Entry32)
+      ..rotateX(_card.rotateX)
+      ..rotateY(_card.rotateY)
+      ..rotateZ(_card.rotateZ)
+      ..leftTranslate(_card.translateX, _card.translateY)
+      ..scale(_card.scaleX, _card.scaleY);
+  }
 
   bool get absorbPointer => _card.absorbPointer;
 
