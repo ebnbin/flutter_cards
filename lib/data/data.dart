@@ -154,8 +154,8 @@ class Card {
     if (_card.dimension == _CardDimension.full || _card.backFace()) {
       return null;
     }
-    if (_card is _PlayerCard) {
-      _PlayerCard playerCard = _card;
+    if (_card is _SpriteCard && (_card as _SpriteCard).sprite is _PlayerSprite) {
+      _SpriteCard playerCard = _card;
       return SpriteFace._(this, playerCard.sprite);
     }
     if (_card.name != null) {

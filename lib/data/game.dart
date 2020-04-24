@@ -52,8 +52,20 @@ class _SplashScreen extends _Screen {
     square: 4,
     cardLength: 14,
   ) {
-    cards[0] = _SplashTitleCard(this,
+    cards[0] = _CoreCard(this,
+      name: 'Cards',
+      rowIndex: 1,
+      columnIndex: 0,
+      rowSpan: 1,
+      columnSpan: 3,
       onTap: (card) {
+        card.screen.game.actionQueue.post<_CoreCard>(card, (thisRef, action) {
+          if (thisRef.dimension == _CardDimension.main) {
+            thisRef.screen.game.actionQueue.add(<_Action>[
+              thisRef.animateSample().action(),
+            ]);
+          }
+        });
       },
       onLongPress: (card) {
         if (card.dimension == _CardDimension.full) {
@@ -155,10 +167,10 @@ class _SpriteScreen extends _Screen {
     actAddSpriteCards(this);
   }
 
-  /// 从 [cards] 返回唯一 [_PlayerCard].
-  _PlayerCard get playerCard {
+  /// 从 [cards] 返回唯一玩家卡片.
+  _SpriteCard get playerCard {
     return cards.singleWhere((element) {
-      return element is _PlayerCard;
+      return element is _SpriteCard && element.sprite is _PlayerSprite;
     });
   }
 
@@ -189,9 +201,16 @@ class _SpriteScreen extends _Screen {
   /// 添加精灵卡片.
   static void actAddSpriteCards(_SpriteScreen spriteScreen) {
     spriteScreen.game.actionQueue.post<_SpriteScreen>(spriteScreen, (thisRef, action) {
-      _PlayerCard playerCard = _PlayerCard(thisRef,
+      _SpriteCard playerCard = _SpriteCard(thisRef,
+        name: 'Player',
         rowIndex: _randomPlayerRowColumnIndex(thisRef),
         columnIndex: _randomPlayerRowColumnIndex(thisRef),
+        zIndex: 3,
+        visible: true,
+        dimension: _CardDimension.full,
+        createSprite: (card) {
+          return _PlayerSprite(card);
+        },
       );
       thisRef.cards[0] = playerCard;
       int index = 1;
@@ -211,7 +230,7 @@ class _SpriteScreen extends _Screen {
         }
       }
       thisRef.game.actionQueue.add(thisRef.spriteCards().map<_Action>((element) {
-        if (element is _PlayerCard) {
+        if (element.sprite is _PlayerSprite) {
           return element.animateFullToMain().action();
         }
         return element.animateSpriteFirstEnter(

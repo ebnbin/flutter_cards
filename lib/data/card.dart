@@ -715,7 +715,7 @@ class _SpriteCard extends _CoreCard {
         }
         switch (thisRef.dimension) {
           case _CardDimension.main:
-            _PlayerCard playerCard = spriteCard.spriteScreen.playerCard;
+            _SpriteCard playerCard = spriteCard.spriteScreen.playerCard;
             AxisDirection direction = playerCard.adjacentDirection(spriteCard);
             spriteCard.sprite.onTap(playerCard.sprite, direction);
             break;
@@ -1060,112 +1060,6 @@ class _SpriteCard extends _CoreCard {
 
   /// 精灵. 不为 null.
   _Sprite sprite;
-}
-
-//*********************************************************************************************************************
-//*********************************************************************************************************************
-
-/// 开屏 Cards 标题.
-class _SplashTitleCard extends _CoreCard {
-  _SplashTitleCard(_SplashScreen screen, {
-    double rotateX = 0.0,
-    double rotateY = 0.0,
-    double rotateZ = 0.0,
-    double translateX = 0.0,
-    double translateY = 0.0,
-    double scaleX = 1.0,
-    double scaleY = 1.0,
-    int zIndex = 1,
-    bool visible = true,
-    _CardDimension dimension = _CardDimension.main,
-    bool vice = false,
-    bool vicing = false,
-    double mainOpacity = 1.0,
-    _GestureType gestureType = _GestureType.normal,
-    void Function(_Card card) onTap,
-    void Function(_Card card) onLongPress,
-    double mainElevation = 2.0,
-    _CardRadiusType radiusType = _CardRadiusType.small,
-  }) : super(screen,
-    name: 'Cards',
-    rotateX: rotateX,
-    rotateY: rotateY,
-    rotateZ: rotateZ,
-    translateX: translateX,
-    translateY: translateY,
-    scaleX: scaleX,
-    scaleY: scaleY,
-    zIndex: zIndex,
-    visible: visible,
-    dimension: dimension,
-    vice: vice,
-    vicing: vicing,
-    mainOpacity: mainOpacity,
-    gestureType: gestureType,
-    onTap: onTap,
-    onLongPress: onLongPress,
-    rowIndex: 1,
-    columnIndex: 0,
-    rowSpan: 1,
-    columnSpan: 3,
-    mainElevation: mainElevation,
-    radiusType: radiusType,
-  );
-}
-
-//*********************************************************************************************************************
-//*********************************************************************************************************************
-
-/// 玩家卡片.
-class _PlayerCard extends _SpriteCard {
-  _PlayerCard(_SpriteScreen screen, {
-    double rotateX = 0.0,
-    double rotateY = 0.0,
-    double rotateZ = 0.0,
-    double translateX = 0.0,
-    double translateY = 0.0,
-    double scaleX = 1.0,
-    double scaleY = 1.0,
-//    int zIndex = 1,
-//    /// 默认不可见, 通过动画进入.
-//    bool visible = false,
-//    _CardDimension dimension = _CardDimension.main,
-    bool vicing = false,
-    double mainOpacity = 1.0,
-    _GestureType gestureType = _GestureType.normal,
-//    void Function(_Card card) onTap,
-//    void Function(_Card card) onLongPress,
-    @required
-    int rowIndex,
-    @required
-    int columnIndex,
-    double mainElevation = 2.0,
-    _CardRadiusType radiusType = _CardRadiusType.small,
-  }) : super(screen,
-    name: 'Player',
-    rotateX: rotateX,
-    rotateY: rotateY,
-    rotateZ: rotateZ,
-    translateX: translateX,
-    translateY: translateY,
-    scaleX: scaleX,
-    scaleY: scaleY,
-    zIndex: 3,
-    visible: true,
-    dimension: _CardDimension.full,
-    vicing: vicing,
-    mainOpacity: mainOpacity,
-    gestureType: gestureType,
-//    onTap: onTap,
-//    onLongPress: onLongPress,
-    rowIndex: rowIndex,
-    columnIndex: columnIndex,
-    mainElevation: mainElevation,
-    radiusType: radiusType,
-    createSprite: (card) {
-      return _PlayerSprite(card);
-    },
-  );
 }
 
 //*********************************************************************************************************************
