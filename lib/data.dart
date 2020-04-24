@@ -6,6 +6,7 @@ import 'package:flutter/material.dart' hide Card;
 
 part 'data/game.dart';
 part 'data/card.dart';
+part 'data/sprite.dart';
 part 'data/face.dart';
 part 'data/util.dart';
 
