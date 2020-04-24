@@ -795,9 +795,18 @@ class _SpriteCard extends _CoreCard {
       rowIndex: rowIndex,
       columnIndex: columnIndex,
       createSprite: (card) {
-        if (_random.nextBool()) {
+        int random = _random.nextIntFromTo(0, 3);
+        if (random == 0) {
           return _DiamondSwordSprite(card,
             amount: _random.nextIntFromTo(1, 99),
+          );
+        } else if (random == 1) {
+          return _GoldNuggetSprite(card,
+            amount: _random.nextIntFromTo(1, 99),
+          );
+        } else if (random == 2) {
+          return _ZombieSprite(card,
+            healthValue: _random.nextIntFromTo(1, 99),
           );
         }
         return _Sprite(card);

@@ -107,15 +107,15 @@ class _Sprite {
 class _PlayerSprite extends _Sprite {
   _PlayerSprite(_SpriteCard card) : super(card,
     body: 'assets/steve.png',
-    shield: 'assets/shield.png',
-    shieldValue: 88,
+//    shield: 'assets/shield.png',
+//    shieldValue: 88,
     healthValue: 88,
     maxHealthValue: 88,
-    effect: 'assets/poison.png',
-    effectValue: 88,
-    amount: 88,
-    power: 'assets/absorption.png',
-    powerValue: 88,
+//    effect: 'assets/poison.png',
+//    effectValue: 88,
+//    amount: 88,
+//    power: 'assets/absorption.png',
+//    powerValue: 88,
   );
 }
 
@@ -185,5 +185,83 @@ class _DiamondSwordSprite extends _Sprite {
     ],
       addFirst: true,
     );
+  }
+}
+
+/// 僵尸.
+class _ZombieSprite extends _Sprite {
+  _ZombieSprite(_SpriteCard card, {
+    @required
+    int healthValue,
+  }) : initHealthValue = healthValue, super(card,
+    body: 'assets/zombie.png',
+    healthValue: healthValue,
+  );
+
+  /// 初始生命值.
+  final int initHealthValue;
+
+  @override
+  void onTap() {
+    _SpriteCard playerCard = card.spriteScreen.playerCard;
+    AxisDirection direction = playerCard.adjacentDirection(card);
+    if (direction == null) {
+      card.screen.game.actionQueue.add(<_Action>[
+        card.animateTremble().action(),
+      ]);
+      return;
+    }
+    if (playerCard.sprite.weaponValue != null) {
+      int diffValue = min(playerCard.sprite.weaponValue, healthValue);
+      playerCard.sprite.weaponValue -= diffValue;
+      healthValue -= diffValue;
+      if (playerCard.sprite.weaponValue <= 0) {
+        playerCard.sprite.weapon = null;
+        playerCard.sprite.weaponValue = null;
+      }
+    } else {
+      int diffValue = min(playerCard.sprite.healthValue, healthValue);
+      playerCard.sprite.healthValue -= diffValue;
+      healthValue -= diffValue;
+    }
+    card.screen.game.callback.notifyStateChanged();
+    if (playerCard.sprite.healthValue <= 0) {
+      // 玩家死亡.
+      card.screen.game.screen = _SplashScreen(card.screen.game);
+      card.screen.game.callback.notifyStateChanged();
+      return;
+    }
+    if (healthValue <= 0) {
+      // 僵尸死亡.
+      _Action action = _Animation<_SpriteCard>(card,
+        duration: 400,
+        beginDelay: 0,
+        curve: Curves.easeInOut,
+        listener: (card, value, first, half, last) {
+          if (first) {
+            card.zIndex = 2;
+          }
+          if (value < 0.5) {
+            card.rotateX = _ValueCalc.ab(0.0, _VisibleAngle.counterClockwise180.value).calc(value);
+          } else {
+            card.rotateX = _ValueCalc.ab(_VisibleAngle.clockwise180.value, 0.0).calc(value);
+          }
+          card.mainElevation = _ValueCalc.ab(2.0, 4.0).calc(value);
+          if (half) {
+            card.sprite = _GoldNuggetSprite(card,
+              amount: initHealthValue,
+            );
+          }
+          if (last) {
+            card.zIndex = 1;
+          }
+        },
+      ).action();
+      card.screen.game.actionQueue.add(<_Action>[
+        action,
+      ],
+        addFirst: true,
+      );
+    }
   }
 }
