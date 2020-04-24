@@ -201,17 +201,7 @@ class _SpriteScreen extends _Screen {
   /// 添加精灵卡片.
   static void actAddSpriteCards(_SpriteScreen spriteScreen) {
     spriteScreen.game.actionQueue.post<_SpriteScreen>(spriteScreen, (thisRef, action) {
-      _SpriteCard playerCard = _SpriteCard(thisRef,
-        name: 'Player',
-        rowIndex: _randomPlayerRowColumnIndex(thisRef),
-        columnIndex: _randomPlayerRowColumnIndex(thisRef),
-        zIndex: 3,
-        visible: true,
-        dimension: _CardDimension.full,
-        createSprite: (card) {
-          return _PlayerSprite(card);
-        },
-      );
+      _SpriteCard playerCard = _SpriteCard.player(thisRef);
       thisRef.cards[0] = playerCard;
       int index = 1;
       for (int rowIndex = 0; rowIndex < thisRef.square; rowIndex++) {
@@ -261,12 +251,5 @@ class _SpriteScreen extends _Screen {
         addFirst: true,
       );
     });
-  }
-
-  /// 玩家卡片随机非边缘位置.
-  ///
-  /// 3 * 3 始终在中间一格, 4 * 4 中间 4 格之一随机, 5 * 5 中间 9 格之一随机.
-  static int _randomPlayerRowColumnIndex(_SpriteScreen screen) {
-    return _random.nextIntFromTo(1, screen.square - 2);
   }
 }

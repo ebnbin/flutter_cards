@@ -764,6 +764,28 @@ class _SpriteCard extends _CoreCard {
     sprite = createSprite(this);
   }
 
+  /// 玩家.
+  factory _SpriteCard.player(_SpriteScreen screen) {
+    /// 随机非边缘位置.
+    ///
+    /// 3 * 3 始终在中间一格, 4 * 4 中间 4 格之一随机, 5 * 5 中间 9 格之一随机.
+    int _randomRowColumnIndex() {
+      return _random.nextIntFromTo(1, screen.square - 2);
+    }
+
+    return _SpriteCard(screen,
+      name: 'Player',
+      rowIndex: _randomRowColumnIndex(),
+      columnIndex: _randomRowColumnIndex(),
+      zIndex: 3,
+      visible: true,
+      dimension: _CardDimension.full,
+      createSprite: (card) {
+        return _PlayerSprite(card);
+      },
+    );
+  }
+
   /// 强转为 [_SpriteScreen].
   _SpriteScreen get spriteScreen {
     return screen as _SpriteScreen;
