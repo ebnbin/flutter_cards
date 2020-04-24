@@ -795,7 +795,7 @@ class _SpriteCard extends _CoreCard {
       rowIndex: rowIndex,
       columnIndex: columnIndex,
       createSprite: (card) {
-        int random = _random.nextIntFromTo(0, 3);
+        int random = _random.nextIntFromTo(0, 2);
         if (random == 0) {
           return _DiamondSwordSprite(card,
             amount: _random.nextIntFromTo(1, 99),

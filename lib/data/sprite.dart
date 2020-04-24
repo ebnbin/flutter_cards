@@ -211,7 +211,9 @@ class _ZombieSprite extends _Sprite {
       ]);
       return;
     }
+    bool hasWeapon;
     if (playerCard.sprite.weaponValue != null) {
+      hasWeapon = true;
       int diffValue = min(playerCard.sprite.weaponValue, healthValue);
       playerCard.sprite.weaponValue -= diffValue;
       healthValue -= diffValue;
@@ -220,6 +222,7 @@ class _ZombieSprite extends _Sprite {
         playerCard.sprite.weaponValue = null;
       }
     } else {
+      hasWeapon = false;
       int diffValue = min(playerCard.sprite.healthValue, healthValue);
       playerCard.sprite.healthValue -= diffValue;
       healthValue -= diffValue;
@@ -233,35 +236,68 @@ class _ZombieSprite extends _Sprite {
     }
     if (healthValue <= 0) {
       // 僵尸死亡.
-      _Action action = _Animation<_SpriteCard>(card,
-        duration: 400,
-        beginDelay: 0,
-        curve: Curves.easeInOut,
-        listener: (card, value, first, half, last) {
-          if (first) {
-            card.zIndex = 2;
-          }
-          if (value < 0.5) {
-            card.rotateX = _ValueCalc.ab(0.0, _VisibleAngle.counterClockwise180.value).calc(value);
-          } else {
-            card.rotateX = _ValueCalc.ab(_VisibleAngle.clockwise180.value, 0.0).calc(value);
-          }
-          card.mainElevation = _ValueCalc.ab(2.0, 4.0).calc(value);
-          if (half) {
-            card.sprite = _GoldNuggetSprite(card,
-              amount: initHealthValue,
-            );
-          }
-          if (last) {
-            card.zIndex = 1;
-          }
-        },
-      ).action();
-      card.screen.game.actionQueue.add(<_Action>[
-        action,
-      ],
-        addFirst: true,
-      );
+      if  (hasWeapon) {
+        _Action action = _Animation<_SpriteCard>(card,
+          duration: 400,
+          beginDelay: 0,
+          curve: Curves.easeInOut,
+          listener: (card, value, first, half, last) {
+            if (first) {
+              card.zIndex = 2;
+            }
+            if (value < 0.5) {
+              card.rotateX = _ValueCalc.ab(0.0, _VisibleAngle.counterClockwise180.value).calc(value);
+            } else {
+              card.rotateX = _ValueCalc.ab(_VisibleAngle.clockwise180.value, 0.0).calc(value);
+            }
+            card.mainElevation = _ValueCalc.ab(2.0, 4.0).calc(value);
+            if (half) {
+              card.sprite = _GoldNuggetSprite(card,
+                amount: initHealthValue,
+              );
+            }
+            if (last) {
+              card.zIndex = 1;
+            }
+          },
+        ).action();
+        card.screen.game.actionQueue.add(<_Action>[
+          action,
+        ],
+          addFirst: true,
+        );
+      } else {
+        AxisDirection nextDirection = playerCard.nextNonEdgeDirection(flipAxisDirection(direction));
+        List<_SpriteCard> adjacentCardAll = playerCard.adjacentCardAll(nextDirection);
+        _SpriteCard newSpriteCard = _SpriteCard.next(card.spriteScreen,
+          rowIndex: adjacentCardAll.last.rowIndex,
+          columnIndex: adjacentCardAll.last.columnIndex,
+        );
+        int index = card.index;
+
+        List<_Action> actions = <_Action>[];
+        actions.add(_Action.run((action) {
+          card.spriteScreen.cards[index] = newSpriteCard;
+        }));
+        actions.addAll(adjacentCardAll.map<_Action>((element) {
+          return element.animateSpriteMove(direction: flipAxisDirection(nextDirection)).action();
+        }).toList());
+        actions.add(newSpriteCard.animateSpriteEnter(
+          beginDelay: 200,
+        ).action());
+        card.screen.game.actionQueue.add(actions,
+          addFirst: true,
+        );
+        card.screen.game.actionQueue.add(<_Action>[
+          card.animateSpriteExit().action(),
+          playerCard.animateSpriteMove(
+            direction: direction,
+            beginDelay: 200,
+          ).action(),
+        ],
+          addFirst: true,
+        );
+      }
     }
   }
 }
