@@ -58,15 +58,17 @@ class _Sprite {
   /// 能力值.
   int powerValue;
 
-  void onTap(_Sprite playerSprite, AxisDirection direction) {
+  void onTap() {
+    _SpriteCard playerCard = card.spriteScreen.playerCard;
+    AxisDirection direction = playerCard.adjacentDirection(card);
     if (direction == null) {
       card.screen.game.actionQueue.add(<_Action>[
         card.animateTremble().action(),
       ]);
       return;
     }
-    AxisDirection nextDirection = playerSprite.card.nextNonEdgeDirection(flipAxisDirection(direction));
-    List<_SpriteCard> adjacentCardAll = playerSprite.card.adjacentCardAll(nextDirection);
+    AxisDirection nextDirection = playerCard.nextNonEdgeDirection(flipAxisDirection(direction));
+    List<_SpriteCard> adjacentCardAll = playerCard.adjacentCardAll(nextDirection);
     _SpriteCard newSpriteCard = _SpriteCard(card.spriteScreen,
       rowIndex: adjacentCardAll.last.rowIndex,
       columnIndex: adjacentCardAll.last.columnIndex,
@@ -91,7 +93,7 @@ class _Sprite {
     );
     card.screen.game.actionQueue.add(<_Action>[
       card.animateSpriteExit().action(),
-      playerSprite.card.animateSpriteMove(
+      playerCard.animateSpriteMove(
         direction: direction,
         beginDelay: 200,
       ).action(),
