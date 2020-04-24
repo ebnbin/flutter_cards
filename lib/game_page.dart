@@ -159,11 +159,8 @@ class _GameWidget extends StatelessWidget {
   /// 卡片内容.
   Widget _buildCardFace(BuildContext context, Card card) {
     Object face = card.buildFace();
-    if (face is SplashFullFace) {
-      return _buildSplashFullFace(context, face);
-    }
-    if (face is SplashTitleFace) {
-      return _buildSplashTitleFace(context, face);
+    if (face is TextFace) {
+      return _buildTextFace(context, face);
     }
     if (face is SpriteFace) {
       return _buildSpriteFace(context, face);
@@ -171,24 +168,15 @@ class _GameWidget extends StatelessWidget {
     return _buildInvisible(context);
   }
 
-  /// 开屏全屏.
-  Widget _buildSplashFullFace(BuildContext context, SplashFullFace face) {
-    return Positioned.fromRect(
-      rect: face.rect,
-      child: Image.asset('assets/cards.png',
-        fit: BoxFit.contain,
-      ),
-    );
-  }
-
-  /// 开屏 Cards 标题.
-  Widget _buildSplashTitleFace(BuildContext context, SplashTitleFace face) {
+  /// 文字.
+  Widget _buildTextFace(BuildContext context, TextFace face) {
     return Center(
-      child: SizedBox.fromSize(
-        child: Image.asset('assets/cards.png',
-          fit: BoxFit.contain,
+      child: Text(face.text,
+        style: TextStyle(
+          color: Colors.white,
+          backgroundColor: Colors.black.withOpacity(0.5),
+          fontSize: 8.0,
         ),
-        size: face.size,
       ),
     );
   }

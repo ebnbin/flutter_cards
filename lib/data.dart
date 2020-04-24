@@ -7,7 +7,6 @@ import 'package:flutter/material.dart' hide Card;
 part 'data/game.dart';
 part 'data/card.dart';
 part 'data/sprite.dart';
-part 'data/face.dart';
 part 'data/util.dart';
 
 //*********************************************************************************************************************
@@ -146,15 +145,18 @@ class Card {
   }
 
   Object buildFace() {
-    _Face face = _card.face;
-    if (face is _SplashFullFace) {
-      return SplashFullFace._(this, face);
+    /// 全屏尺寸时不显示内容. 卡片翻转到背面时不显示内容.
+    if (_card.dimension == _CardDimension.full || _card.backFace()) {
+      return null;
     }
-    if (face is _SplashTitleFace) {
-      return SplashTitleFace._(this, face);
+    if (_card is _PlayerCard) {
+      _PlayerCard playerCard = _card;
+      return SpriteFace._(this, playerCard.sprite);
     }
-    if (face is _SpriteFace) {
-      return SpriteFace._(this, face);
+    if (_card.name != null) {
+      return TextFace._(this,
+        text: _card.name,
+      );
     }
     return null;
   }
@@ -164,53 +166,28 @@ class Card {
 //*********************************************************************************************************************
 // 卡片内容.
 
-/// 开屏 Cards 标题.
-class SplashTitleFace {
-  SplashTitleFace._(this._card, this._face);
+/// 文字.
+class TextFace {
+  TextFace._(this._card, {
+    this.text,
+  });
 
   final Card _card;
 
-  final _SplashTitleFace _face;
-
-  /// 中心图片大小.
-  Size get size {
-    return Size(
-      Metric.get().gridSize * 30.0,
-      Metric.get().gridSize * 8.0,
-    );
-  }
-}
-
-/// 开屏全屏.
-class SplashFullFace {
-  SplashFullFace._(this._card, this._face);
-
-  final Card _card;
-
-  final _SplashFullFace _face;
-
-  /// 定位矩形.
-  Rect get rect {
-    return Rect.fromLTWH(
-      Metric.get().gridSize * 8.5,
-      Metric.get().coreNoPaddingRect.top,
-      Metric.get().gridSize * 45.0,
-      Metric.get().gridSize * 12.0,
-    );
-  }
+  final String text;
 }
 
 /// 精灵.
 class SpriteFace {
-  SpriteFace._(this._card, this._face);
+  SpriteFace._(this._card, this._sprite);
 
   final Card _card;
 
-  final _SpriteFace _face;
+  final _Sprite _sprite;
 
   /// 主体.
   SpriteFaceImage get body {
-    if (_face.body == null || _face.body.isEmpty) {
+    if (_sprite.body == null || _sprite.body.isEmpty) {
       return SpriteFaceImage._invisible();
     }
     return SpriteFaceImage._visible(_card,
@@ -218,13 +195,13 @@ class SpriteFace {
       top: 4.0,
       width: 48.0,
       height: 48.0,
-      image: _face.body,
+      image: _sprite.body,
     );
   }
 
   /// 武器.
   SpriteFaceImage get weapon {
-    if (_face.weapon == null || _face.weapon.isEmpty) {
+    if (_sprite.weapon == null || _sprite.weapon.isEmpty) {
       return SpriteFaceImage._invisible();
     }
     return SpriteFaceImage._visible(_card,
@@ -232,16 +209,16 @@ class SpriteFace {
       top: 15.0,
       width: 24.0,
       height: 24.0,
-      image: _face.weapon,
+      image: _sprite.weapon,
     );
   }
 
   /// 武器值 0.
   SpriteFaceDigit get weaponDigit0 {
-    if (_face.weapon == null || _face.weapon.isEmpty || _face.weaponValue == null) {
+    if (_sprite.weapon == null || _sprite.weapon.isEmpty || _sprite.weaponValue == null) {
       return SpriteFaceDigit._invisible();
     }
-    int value = max(0, min(99, _face.weaponValue));
+    int value = max(0, min(99, _sprite.weaponValue));
     return SpriteFaceDigit._visible(_card,
       left: 1.0,
       top: 40.0,
@@ -251,10 +228,10 @@ class SpriteFace {
 
   /// 武器值 1.
   SpriteFaceDigit get weaponDigit1 {
-    if (_face.weapon == null || _face.weapon.isEmpty || _face.weaponValue == null || _face.weaponValue < 10) {
+    if (_sprite.weapon == null || _sprite.weapon.isEmpty || _sprite.weaponValue == null || _sprite.weaponValue < 10) {
       return SpriteFaceDigit._invisible();
     }
-    int value = max(0, min(99, _face.weaponValue));
+    int value = max(0, min(99, _sprite.weaponValue));
     return SpriteFaceDigit._visible(_card,
       left: 5.0,
       top: 40.0,
@@ -264,7 +241,7 @@ class SpriteFace {
 
   /// 盾牌.
   SpriteFaceImage get shield {
-    if (_face.shield == null || _face.shield.isEmpty) {
+    if (_sprite.shield == null || _sprite.shield.isEmpty) {
       return SpriteFaceImage._invisible();
     }
     return SpriteFaceImage._visible(_card,
@@ -272,16 +249,16 @@ class SpriteFace {
       top: 17.0,
       width: 24.0,
       height: 24.0,
-      image: _face.shield,
+      image: _sprite.shield,
     );
   }
 
   /// 盾牌值 0.
   SpriteFaceDigit get shieldDigit0 {
-    if (_face.shield == null || _face.shield.isEmpty || _face.shieldValue == null || _face.shieldValue < 10) {
+    if (_sprite.shield == null || _sprite.shield.isEmpty || _sprite.shieldValue == null || _sprite.shieldValue < 10) {
       return SpriteFaceDigit._invisible();
     }
-    int value = max(0, min(99, _face.shieldValue));
+    int value = max(0, min(99, _sprite.shieldValue));
     return SpriteFaceDigit._visible(_card,
       left: 47.0,
       top: 29.0,
@@ -291,10 +268,10 @@ class SpriteFace {
 
   /// 盾牌值 1.
   SpriteFaceDigit get shieldDigit1 {
-    if (_face.shield == null || _face.shield.isEmpty || _face.shieldValue == null) {
+    if (_sprite.shield == null || _sprite.shield.isEmpty || _sprite.shieldValue == null) {
       return SpriteFaceDigit._invisible();
     }
-    int value = max(0, min(99, _face.shieldValue));
+    int value = max(0, min(99, _sprite.shieldValue));
     return SpriteFaceDigit._visible(_card,
       left: 51.0,
       top: 29.0,
@@ -304,7 +281,7 @@ class SpriteFace {
 
   /// 生命.
   SpriteFaceImage get health {
-    if (_face.healthValue == null) {
+    if (_sprite.healthValue == null) {
       return SpriteFaceImage._invisible();
     }
     return SpriteFaceImage._visible(_card,
@@ -318,14 +295,14 @@ class SpriteFace {
 
   /// 生命值 0.
   SpriteFaceDigit get healthDigit0 {
-    if (_face.healthValue == null) {
+    if (_sprite.healthValue == null) {
       return SpriteFaceDigit._invisible();
     }
     int digitCount = 0;
-    int healthValue = max(0, min(99, _face.healthValue));
+    int healthValue = max(0, min(99, _sprite.healthValue));
     int maxHealthValue;
-    if (_face.maxHealthValue != null) {
-      maxHealthValue = max(0, min(99, _face.maxHealthValue));
+    if (_sprite.maxHealthValue != null) {
+      maxHealthValue = max(0, min(99, _sprite.maxHealthValue));
       healthValue = min(maxHealthValue, healthValue);
       digitCount += (maxHealthValue < 10 ? 2 : 3);
     }
@@ -342,14 +319,14 @@ class SpriteFace {
 
   /// 生命值 1.
   SpriteFaceDigit get healthDigit1 {
-    if (_face.healthValue == null) {
+    if (_sprite.healthValue == null) {
       return SpriteFaceDigit._invisible();
     }
     int digitCount = 0;
-    int healthValue = max(0, min(99, _face.healthValue));
+    int healthValue = max(0, min(99, _sprite.healthValue));
     int maxHealthValue;
-    if (_face.maxHealthValue != null) {
-      maxHealthValue = max(0, min(99, _face.maxHealthValue));
+    if (_sprite.maxHealthValue != null) {
+      maxHealthValue = max(0, min(99, _sprite.maxHealthValue));
       healthValue = min(maxHealthValue, healthValue);
       digitCount += (maxHealthValue < 10 ? 2 : 3);
     }
@@ -366,14 +343,14 @@ class SpriteFace {
 
   /// 生命值 2.
   SpriteFaceDigit get healthDigit2 {
-    if (_face.healthValue == null) {
+    if (_sprite.healthValue == null) {
       return SpriteFaceDigit._invisible();
     }
     int digitCount = 0;
-    int healthValue = max(0, min(99, _face.healthValue));
+    int healthValue = max(0, min(99, _sprite.healthValue));
     int maxHealthValue;
-    if (_face.maxHealthValue != null) {
-      maxHealthValue = max(0, min(99, _face.maxHealthValue));
+    if (_sprite.maxHealthValue != null) {
+      maxHealthValue = max(0, min(99, _sprite.maxHealthValue));
       healthValue = min(maxHealthValue, healthValue);
       digitCount += (maxHealthValue < 10 ? 2 : 3);
     }
@@ -390,14 +367,14 @@ class SpriteFace {
 
   /// 生命值 3.
   SpriteFaceDigit get healthDigit3 {
-    if (_face.healthValue == null) {
+    if (_sprite.healthValue == null) {
       return SpriteFaceDigit._invisible();
     }
     int digitCount = 0;
-    int healthValue = max(0, min(99, _face.healthValue));
+    int healthValue = max(0, min(99, _sprite.healthValue));
     int maxHealthValue;
-    if (_face.maxHealthValue != null) {
-      maxHealthValue = max(0, min(99, _face.maxHealthValue));
+    if (_sprite.maxHealthValue != null) {
+      maxHealthValue = max(0, min(99, _sprite.maxHealthValue));
       healthValue = min(maxHealthValue, healthValue);
       digitCount += (maxHealthValue < 10 ? 2 : 3);
     }
@@ -414,14 +391,14 @@ class SpriteFace {
 
   /// 生命值 4.
   SpriteFaceDigit get healthDigit4 {
-    if (_face.healthValue == null) {
+    if (_sprite.healthValue == null) {
       return SpriteFaceDigit._invisible();
     }
     int digitCount = 0;
-    int healthValue = max(0, min(99, _face.healthValue));
+    int healthValue = max(0, min(99, _sprite.healthValue));
     int maxHealthValue;
-    if (_face.maxHealthValue != null) {
-      maxHealthValue = max(0, min(99, _face.maxHealthValue));
+    if (_sprite.maxHealthValue != null) {
+      maxHealthValue = max(0, min(99, _sprite.maxHealthValue));
       healthValue = min(maxHealthValue, healthValue);
       digitCount += (maxHealthValue < 10 ? 2 : 3);
     }
@@ -435,7 +412,7 @@ class SpriteFace {
 
   /// 效果.
   SpriteFaceImage get effect {
-    if (_face.effect == null || _face.effect.isEmpty) {
+    if (_sprite.effect == null || _sprite.effect.isEmpty) {
       return SpriteFaceImage._invisible();
     }
     return SpriteFaceImage._visible(_card,
@@ -443,16 +420,16 @@ class SpriteFace {
       top: 46.0,
       width: 9.0,
       height: 9.0,
-      image: _face.effect,
+      image: _sprite.effect,
     );
   }
 
   /// 效果值 0.
   SpriteFaceDigit get effectDigit0 {
-    if (_face.effect == null || _face.effect.isEmpty || _face.effectValue == null || _face.effectValue < 10) {
+    if (_sprite.effect == null || _sprite.effect.isEmpty || _sprite.effectValue == null || _sprite.effectValue < 10) {
       return SpriteFaceDigit._invisible();
     }
-    int value = max(0, min(99, _face.effectValue));
+    int value = max(0, min(99, _sprite.effectValue));
     return SpriteFaceDigit._visible(_card,
       left: 38.0,
       top: 48.0,
@@ -462,10 +439,10 @@ class SpriteFace {
 
   /// 效果值 1.
   SpriteFaceDigit get effectDigit1 {
-    if (_face.effect == null || _face.effect.isEmpty || _face.effectValue == null) {
+    if (_sprite.effect == null || _sprite.effect.isEmpty || _sprite.effectValue == null) {
       return SpriteFaceDigit._invisible();
     }
-    int value = max(0, min(99, _face.effectValue));
+    int value = max(0, min(99, _sprite.effectValue));
     return SpriteFaceDigit._visible(_card,
       left: 42.0,
       top: 48.0,
@@ -475,10 +452,10 @@ class SpriteFace {
 
   /// 数量值 0.
   SpriteFaceDigit get amountDigit0 {
-    if (_face.amount == null) {
+    if (_sprite.amount == null) {
       return SpriteFaceDigit._invisible();
     }
-    int value = max(0, min(99, _face.amount));
+    int value = max(0, min(99, _sprite.amount));
     return SpriteFaceDigit._visible(_card,
       left: 1.0,
       top: 48.0,
@@ -488,10 +465,10 @@ class SpriteFace {
 
   /// 数量值 1.
   SpriteFaceDigit get amountDigit1 {
-    if (_face.amount == null || _face.amount < 10) {
+    if (_sprite.amount == null || _sprite.amount < 10) {
       return SpriteFaceDigit._invisible();
     }
-    int value = max(0, min(99, _face.amount));
+    int value = max(0, min(99, _sprite.amount));
     return SpriteFaceDigit._visible(_card,
       left: 5.0,
       top: 48.0,
@@ -501,7 +478,7 @@ class SpriteFace {
 
   /// 能力.
   SpriteFaceImage get power {
-    if (_face.power == null || _face.power.isEmpty) {
+    if (_sprite.power == null || _sprite.power.isEmpty) {
       return SpriteFaceImage._invisible();
     }
     return SpriteFaceImage._visible(_card,
@@ -509,16 +486,16 @@ class SpriteFace {
       top: 1.0,
       width: 9.0,
       height: 9.0,
-      image: _face.power,
+      image: _sprite.power,
     );
   }
 
   /// 能力值 0.
   SpriteFaceDigit get powerDigit0 {
-    if (_face.power == null || _face.power.isEmpty || _face.powerValue == null) {
+    if (_sprite.power == null || _sprite.power.isEmpty || _sprite.powerValue == null) {
       return SpriteFaceDigit._invisible();
     }
-    int value = max(0, min(99, _face.powerValue));
+    int value = max(0, min(99, _sprite.powerValue));
     return SpriteFaceDigit._visible(_card,
       left: 10.0,
       top: 2.0,
@@ -528,10 +505,10 @@ class SpriteFace {
 
   /// 能力值 1.
   SpriteFaceDigit get powerDigit1 {
-    if (_face.power == null || _face.power.isEmpty || _face.powerValue == null || _face.powerValue < 10) {
+    if (_sprite.power == null || _sprite.power.isEmpty || _sprite.powerValue == null || _sprite.powerValue < 10) {
       return SpriteFaceDigit._invisible();
     }
-    int value = max(0, min(99, _face.powerValue));
+    int value = max(0, min(99, _sprite.powerValue));
     return SpriteFaceDigit._visible(_card,
       left: 14.0,
       top: 2.0,

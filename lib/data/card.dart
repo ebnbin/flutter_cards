@@ -6,6 +6,7 @@ part of '../data.dart';
 /// 卡片. 根据网格定位.
 class _Card {
   _Card(this.screen, {
+    this.name,
     this.rotateX = 0.0,
     this.rotateY = 0.0,
     this.rotateZ = 0.0,
@@ -32,14 +33,11 @@ class _Card {
     this.gestureType = _GestureType.normal,
     this.onTap,
     this.onLongPress,
-    Map<String, _Face> faceMap,
-  }) {
-    if (faceMap != null) {
-      this.faceMap.addAll(faceMap);
-    }
-  }
+  });
 
   final _Screen screen;
+
+  String name;
 
   double rotateX;
   double rotateY;
@@ -48,6 +46,18 @@ class _Card {
   double translateY;
   double scaleX;
   double scaleY;
+
+  /// 卡片翻转到背面时不显示内容.
+  bool backFace() {
+    /// 翻转角度是否在卡片背面.
+    bool backFace(double rotate) {
+      return rotate < _VisibleAngle.counterClockwise360.value ||
+          rotate > _InvisibleAngle.counterClockwise270.value && rotate < _InvisibleAngle.counterClockwise90.value ||
+          rotate > _InvisibleAngle.clockwise90.value && rotate < _InvisibleAngle.clockwise270.value ||
+          rotate > _VisibleAngle.clockwise360.value;
+    }
+    return backFace(rotateX) || backFace(rotateY);
+  }
 
   //*******************************************************************************************************************
 
@@ -513,39 +523,6 @@ class _Card {
 
   //*******************************************************************************************************************
 
-  /// 卡片内容 map.
-  final Map<String, _Face> faceMap = <String, _Face>{};
-
-  String faceKey;
-
-  /// 当前卡片内容. 可能为 null.
-  _Face get face {
-    if (faceKey == null) {
-      return null;
-    }
-    /// 全屏尺寸时不显示内容.
-    if (dimension == _CardDimension.full) {
-      return null;
-    }
-
-    /// 翻转角度是否在卡片背面.
-    bool backFace(double rotate) {
-      return rotate < _VisibleAngle.counterClockwise360.value ||
-          rotate > _InvisibleAngle.counterClockwise270.value && rotate < _InvisibleAngle.counterClockwise90.value ||
-          rotate > _InvisibleAngle.clockwise90.value && rotate < _InvisibleAngle.clockwise270.value ||
-          rotate > _VisibleAngle.clockwise360.value;
-    }
-
-    /// 卡片翻转到背面时不显示内容.
-    if (backFace(rotateX) || backFace(rotateY)) {
-      return null;
-    }
-    assert(faceMap.containsKey(faceKey));
-    return faceMap[faceKey];
-  }
-
-  //*******************************************************************************************************************
-
   @override
   String toString() {
     return '$index';
@@ -558,6 +535,7 @@ class _Card {
 /// 通过方格定位的卡片.
 class _CoreCard extends _Card {
   _CoreCard(_Screen screen, {
+    String name,
     double rotateX = 0.0,
     double rotateY = 0.0,
     double rotateZ = 0.0,
@@ -580,8 +558,8 @@ class _CoreCard extends _Card {
     int columnSpan = 1,
     double mainElevation = 2.0,
     _CardRadiusType radiusType = _CardRadiusType.small,
-    Map<String, _Face> faceMap,
   }) : super(screen,
+    name: name,
     rotateX: rotateX,
     rotateY: rotateY,
     rotateZ: rotateZ,
@@ -600,7 +578,6 @@ class _CoreCard extends _Card {
     onLongPress: onLongPress,
     mainElevation: mainElevation,
     radiusType: radiusType,
-    faceMap: faceMap,
   ) {
     this.rowIndex = rowIndex;
     this.columnIndex = columnIndex;
@@ -688,6 +665,7 @@ class _CoreCard extends _Card {
 /// 精灵卡片.
 class _SpriteCard extends _CoreCard {
   _SpriteCard(_SpriteScreen screen, {
+    String name,
     double rotateX = 0.0,
     double rotateY = 0.0,
     double rotateZ = 0.0,
@@ -710,8 +688,8 @@ class _SpriteCard extends _CoreCard {
     int columnIndex,
     double mainElevation = 2.0,
     _CardRadiusType radiusType = _CardRadiusType.small,
-    Map<String, _Face> faceMap,
   }) : super(screen,
+    name: name,
     rotateX: rotateX,
     rotateY: rotateY,
     rotateZ: rotateZ,
@@ -737,7 +715,6 @@ class _SpriteCard extends _CoreCard {
     columnSpan: 1,
     mainElevation: mainElevation,
     radiusType: radiusType,
-    faceMap: faceMap,
   ) {
     this.onTap = (card) {
       actOnTap(this);
@@ -1138,6 +1115,7 @@ class _SplashTitleCard extends _CoreCard {
     double mainElevation = 2.0,
     _CardRadiusType radiusType = _CardRadiusType.small,
   }) : super(screen,
+    name: 'Cards',
     rotateX: rotateX,
     rotateY: rotateY,
     rotateZ: rotateZ,
@@ -1160,27 +1138,7 @@ class _SplashTitleCard extends _CoreCard {
     columnSpan: 3,
     mainElevation: mainElevation,
     radiusType: radiusType,
-  ) {
-    faceMap['_SplashFullFace'] = _SplashFullFace(this);
-    faceMap['_SplashTitleFace'] = _SplashTitleFace(this);
-//    this.onTap = (card) {
-//    };
-//    this.onLongPress = (card) {
-//    };
-  }
-
-  @override
-  String get faceKey {
-    if (dimension == _CardDimension.main) {
-      return '_SplashTitleFace';
-    } else {
-      return '_SplashFullFace';
-    }
-  }
-  @override
-  set faceKey(String currentFace) {
-    throw Exception();
-  }
+  );
 }
 
 //*********************************************************************************************************************
@@ -1212,6 +1170,7 @@ class _PlayerCard extends _SpriteCard {
     double mainElevation = 2.0,
     _CardRadiusType radiusType = _CardRadiusType.small,
   }) : super(screen,
+    name: 'Player',
     rotateX: rotateX,
     rotateY: rotateY,
     rotateZ: rotateZ,
@@ -1232,20 +1191,7 @@ class _PlayerCard extends _SpriteCard {
     mainElevation: mainElevation,
     radiusType: radiusType,
   ) {
-    faceMap['_SpriteFace'] = _SpriteFace(this);
-  }
-
-  @override
-  String get faceKey {
-    if (dimension == _CardDimension.main) {
-      return '_SpriteFace';
-    } else {
-      return null;
-    }
-  }
-  @override
-  set faceKey(String currentFace) {
-    throw Exception();
+    sprite = _PlayerSprite(this);
   }
 
   /// 随机非边缘位置.
