@@ -680,8 +680,8 @@ class _SpriteCard extends _CoreCard {
     bool vicing = false,
     double mainOpacity = 1.0,
     _GestureType gestureType = _GestureType.normal,
-    void Function(_Card card) onTap,
-    void Function(_Card card) onLongPress,
+//    void Function(_Card card) onTap,
+//    void Function(_Card card) onLongPress,
     @required
     int rowIndex,
     @required
@@ -705,8 +705,49 @@ class _SpriteCard extends _CoreCard {
     vicing: vicing,
     mainOpacity: mainOpacity,
     gestureType: gestureType,
-    onTap: onTap,
-    onLongPress: onLongPress,
+    onTap: (card) {
+      _SpriteCard spriteCard = card;
+      spriteCard.screen.game.actionQueue.post<_SpriteCard>(spriteCard, (thisRef, action) {
+        if (thisRef.index < 0) {
+          return;
+        }
+        switch (thisRef.dimension) {
+          case _CardDimension.main:
+            spriteCard.sprite.onTap?.call(spriteCard.sprite);
+            break;
+          case _CardDimension.vice:
+            break;
+          case _CardDimension.full:
+            break;
+          default:
+            break;
+        }
+      });
+    },
+    onLongPress: (card) {
+      _SpriteCard spriteCard = card;
+      spriteCard.screen.game.actionQueue.post<_SpriteCard>(spriteCard, (thisRef, action) {
+        if (thisRef.index < 0) {
+          return;
+        }
+        switch (thisRef.dimension) {
+          case _CardDimension.main:
+            thisRef.screen.game.actionQueue.add(<_Action>[
+              thisRef.animateMainToVice().action(),
+            ]);
+            break;
+          case _CardDimension.vice:
+            thisRef.screen.game.actionQueue.add(<_Action>[
+              thisRef.animateViceToMain().action(),
+            ]);
+            break;
+          case _CardDimension.full:
+            break;
+          default:
+            break;
+        }
+      });
+    },
     rowIndex: rowIndex,
     columnIndex: columnIndex,
     /// 固定为 1.
@@ -716,80 +757,7 @@ class _SpriteCard extends _CoreCard {
     mainElevation: mainElevation,
     radiusType: radiusType,
   ) {
-    this.onTap = (card) {
-      actOnTap(this);
-    };
-    this.onLongPress = (card) {
-      actOnLongPress(this);
-    };
-  }
-
-  /// 卡片点击.
-  static void actOnTap(_SpriteCard spriteCard) {
-    spriteCard.screen.game.actionQueue.post<_SpriteCard>(spriteCard, (thisRef, action) {
-      if (thisRef.index < 0) {
-        return;
-      }
-      if (thisRef.dimension != _CardDimension.main) {
-        return;
-      }
-      _PlayerCard playerCard = thisRef.spriteScreen.playerCard;
-      AxisDirection direction = playerCard.adjacentDirection(thisRef);
-      if (direction == null) {
-        thisRef.screen.game.actionQueue.add(<_Action>[
-          thisRef.animateTremble().action(),
-        ]);
-        return;
-      }
-      AxisDirection nextDirection = playerCard.nextNonEdgeDirection(flipAxisDirection(direction));
-      List<_SpriteCard> adjacentCardAll = playerCard.adjacentCardAll(nextDirection);
-      _SpriteCard newSpriteCard = _SpriteCard(thisRef.spriteScreen,
-        rowIndex: adjacentCardAll.last.rowIndex,
-        columnIndex: adjacentCardAll.last.columnIndex,
-      );
-      int index = thisRef.index;
-
-      List<_Action> actions = <_Action>[];
-      actions.add(_Action.run((action) {
-        thisRef.spriteScreen.cards[index] = newSpriteCard;
-      }));
-      actions.addAll(adjacentCardAll.map<_Action>((element) {
-        return element.animateSpriteMove(direction: flipAxisDirection(nextDirection)).action();
-      }).toList());
-      actions.add(newSpriteCard.animateSpriteEnter(
-        beginDelay: 200,
-      ).action());
-      thisRef.screen.game.actionQueue.add(actions,
-        addFirst: true,
-      );
-      thisRef.screen.game.actionQueue.add(<_Action>[
-        thisRef.animateSpriteExit().action(),
-        playerCard.animateSpriteMove(
-          direction: direction,
-          beginDelay: 200,
-        ).action(),
-      ],
-        addFirst: true,
-      );
-    });
-  }
-
-  /// 卡片长按.
-  static void actOnLongPress(_SpriteCard spriteCard) {
-    spriteCard.screen.game.actionQueue.post<_SpriteCard>(spriteCard, (thisRef, action) {
-      if (thisRef.index < 0) {
-        return;
-      }
-      if (thisRef.dimension == _CardDimension.main) {
-        thisRef.screen.game.actionQueue.add(<_Action>[
-          thisRef.animateMainToVice().action(),
-        ]);
-      } else if (thisRef.dimension == _CardDimension.vice) {
-        thisRef.screen.game.actionQueue.add(<_Action>[
-          thisRef.animateViceToMain().action(),
-        ]);
-      }
-    });
+    sprite = _Sprite(this);
   }
 
   /// 强转为 [_SpriteScreen].
@@ -1086,7 +1054,7 @@ class _SpriteCard extends _CoreCard {
 
   //*******************************************************************************************************************
 
-  /// 精灵.
+  /// 精灵. 不为 null.
   _Sprite sprite;
 }
 
@@ -1161,8 +1129,8 @@ class _PlayerCard extends _SpriteCard {
     bool vicing = false,
     double mainOpacity = 1.0,
     _GestureType gestureType = _GestureType.normal,
-    void Function(_Card card) onTap,
-    void Function(_Card card) onLongPress,
+//    void Function(_Card card) onTap,
+//    void Function(_Card card) onLongPress,
     @required
     int rowIndex,
     @required
@@ -1184,8 +1152,8 @@ class _PlayerCard extends _SpriteCard {
     vicing: vicing,
     mainOpacity: mainOpacity,
     gestureType: gestureType,
-    onTap: onTap,
-    onLongPress: onLongPress,
+//    onTap: onTap,
+//    onLongPress: onLongPress,
     rowIndex: rowIndex,
     columnIndex: columnIndex,
     mainElevation: mainElevation,
@@ -1235,8 +1203,8 @@ class _PlayerCard extends _SpriteCard {
     vicing: vicing,
     mainOpacity: mainOpacity,
     gestureType: gestureType,
-    onTap: onTap,
-    onLongPress: onLongPress,
+//    onTap: onTap,
+//    onLongPress: onLongPress,
     rowIndex: _randomRowColumnIndex(screen),
     columnIndex: _randomRowColumnIndex(screen),
     mainElevation: mainElevation,
