@@ -784,6 +784,27 @@ class _SpriteCard extends _CoreCard {
     );
   }
 
+  /// 随机.
+  factory _SpriteCard.next(_SpriteScreen screen, {
+    @required
+    int rowIndex,
+    @required
+    int columnIndex,
+  }) {
+    return _SpriteCard(screen,
+      rowIndex: rowIndex,
+      columnIndex: columnIndex,
+      createSprite: (card) {
+        if (_random.nextBool()) {
+          return _DiamondSwordSprite(card,
+            amount: _random.nextIntFromTo(1, 99),
+          );
+        }
+        return _Sprite(card);
+      },
+    );
+  }
+
   /// 强转为 [_SpriteScreen].
   _SpriteScreen get spriteScreen {
     return screen as _SpriteScreen;

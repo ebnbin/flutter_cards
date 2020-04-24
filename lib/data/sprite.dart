@@ -69,17 +69,9 @@ class _Sprite {
     }
     AxisDirection nextDirection = playerCard.nextNonEdgeDirection(flipAxisDirection(direction));
     List<_SpriteCard> adjacentCardAll = playerCard.adjacentCardAll(nextDirection);
-    _SpriteCard newSpriteCard = _SpriteCard(card.spriteScreen,
+    _SpriteCard newSpriteCard = _SpriteCard.next(card.spriteScreen,
       rowIndex: adjacentCardAll.last.rowIndex,
       columnIndex: adjacentCardAll.last.columnIndex,
-      createSprite: (card) {
-        if (_random.nextBool()) {
-          return _DiamondSwordSprite(card,
-            amount: _random.nextIntFromTo(1, 99),
-          );
-        }
-        return _Sprite(card);
-      },
     );
     int index = card.index;
 
@@ -115,8 +107,6 @@ class _Sprite {
 class _PlayerSprite extends _Sprite {
   _PlayerSprite(_SpriteCard card) : super(card,
     body: 'assets/steve.png',
-    weapon: 'assets/diamond_sword.png',
-    weaponValue: 88,
     shield: 'assets/shield.png',
     shieldValue: 88,
     healthValue: 88,
@@ -151,17 +141,9 @@ class _DiamondSwordSprite extends _Sprite {
     }
     AxisDirection nextDirection = playerCard.nextNonEdgeDirection(flipAxisDirection(direction));
     List<_SpriteCard> adjacentCardAll = playerCard.adjacentCardAll(nextDirection);
-    _SpriteCard newSpriteCard = _SpriteCard(card.spriteScreen,
+    _SpriteCard newSpriteCard = _SpriteCard.next(card.spriteScreen,
       rowIndex: adjacentCardAll.last.rowIndex,
       columnIndex: adjacentCardAll.last.columnIndex,
-      createSprite: (card) {
-        if (_random.nextBool()) {
-          return _DiamondSwordSprite(card,
-            amount: _random.nextIntFromTo(1, 99),
-          );
-        }
-        return _Sprite(card);
-      },
     );
     int index = card.index;
 

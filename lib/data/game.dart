@@ -77,6 +77,7 @@ class _SplashScreen extends _Screen {
     );
 
     cards[2] = _CoreCard(this,
+      name: 'Play',
       rowIndex: 2,
       columnIndex: 3,
       rowSpan: 2,
@@ -147,10 +148,10 @@ class _SpriteScreen extends _Screen {
     int square,
   }) : super(game,
     square: square,
-    /// Test: 3.
     cardLength: square * square + 1,
   ) {
     cards[cards.length - 1] = _Card(this,
+      name: 'Back',
       verticalRowGridIndex: 1,
       verticalColumnGridIndex: 1,
       verticalRowGridSpan: 10,
@@ -209,19 +210,10 @@ class _SpriteScreen extends _Screen {
           if (rowIndex == playerCard.rowIndex && columnIndex == playerCard.columnIndex) {
             continue;
           }
-          _SpriteCard spriteCard = _SpriteCard(thisRef,
+          thisRef.cards[index++] = _SpriteCard.next(thisRef,
             rowIndex: rowIndex,
             columnIndex: columnIndex,
-            createSprite: (card) {
-              if (_random.nextBool()) {
-                return _DiamondSwordSprite(card,
-                  amount: _random.nextIntFromTo(1, 99),
-                );
-              }
-              return _Sprite(card);
-            },
           );
-          thisRef.cards[index++] = spriteCard;
         }
       }
       thisRef.game.actionQueue.add(thisRef.spriteCards().map<_Action>((element) {
