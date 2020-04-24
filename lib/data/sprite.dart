@@ -73,6 +73,11 @@ class _Sprite {
       rowIndex: adjacentCardAll.last.rowIndex,
       columnIndex: adjacentCardAll.last.columnIndex,
       createSprite: (card) {
+        if (_random.nextBool()) {
+          return _DiamondSwordSprite(card,
+            amount: _random.nextIntFromTo(1, 99),
+          );
+        }
         return _Sprite(card);
       },
     );
@@ -122,4 +127,70 @@ class _PlayerSprite extends _Sprite {
     power: 'assets/absorption.png',
     powerValue: 88,
   );
+}
+
+/// 钻石剑.
+class _DiamondSwordSprite extends _Sprite {
+  _DiamondSwordSprite(_SpriteCard card, {
+    @required
+    int amount,
+  }) : super(card,
+    body: 'assets/diamond_sword.png',
+    amount: amount,
+  );
+
+  @override
+  void onTap() {
+    _SpriteCard playerCard = card.spriteScreen.playerCard;
+    AxisDirection direction = playerCard.adjacentDirection(card);
+    if (direction == null) {
+      card.screen.game.actionQueue.add(<_Action>[
+        card.animateTremble().action(),
+      ]);
+      return;
+    }
+    AxisDirection nextDirection = playerCard.nextNonEdgeDirection(flipAxisDirection(direction));
+    List<_SpriteCard> adjacentCardAll = playerCard.adjacentCardAll(nextDirection);
+    _SpriteCard newSpriteCard = _SpriteCard(card.spriteScreen,
+      rowIndex: adjacentCardAll.last.rowIndex,
+      columnIndex: adjacentCardAll.last.columnIndex,
+      createSprite: (card) {
+        if (_random.nextBool()) {
+          return _DiamondSwordSprite(card,
+            amount: _random.nextIntFromTo(1, 99),
+          );
+        }
+        return _Sprite(card);
+      },
+    );
+    int index = card.index;
+
+    List<_Action> actions = <_Action>[];
+    actions.add(_Action.run((action) {
+      card.spriteScreen.cards[index] = newSpriteCard;
+    }));
+    actions.addAll(adjacentCardAll.map<_Action>((element) {
+      return element.animateSpriteMove(direction: flipAxisDirection(nextDirection)).action();
+    }).toList());
+    actions.add(newSpriteCard.animateSpriteEnter(
+      beginDelay: 200,
+    ).action());
+    card.screen.game.actionQueue.add(actions,
+      addFirst: true,
+    );
+    card.screen.game.actionQueue.add(<_Action>[
+      card.animateSpriteExit().action(),
+      _Action.run((action) {
+        playerCard.sprite.weapon = body;
+        playerCard.sprite.weaponValue = amount;
+        card.screen.game.callback.notifyStateChanged();
+      }),
+      playerCard.animateSpriteMove(
+        direction: direction,
+        beginDelay: 200,
+      ).action(),
+    ],
+      addFirst: true,
+    );
+  }
 }

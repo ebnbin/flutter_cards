@@ -213,6 +213,11 @@ class _SpriteScreen extends _Screen {
             rowIndex: rowIndex,
             columnIndex: columnIndex,
             createSprite: (card) {
+              if (_random.nextBool()) {
+                return _DiamondSwordSprite(card,
+                  amount: _random.nextIntFromTo(1, 99),
+                );
+              }
               return _Sprite(card);
             },
           );
