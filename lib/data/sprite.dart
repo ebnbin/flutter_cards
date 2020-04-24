@@ -119,6 +119,17 @@ class _PlayerSprite extends _Sprite {
   );
 }
 
+/// 金粒.
+class _GoldNuggetSprite extends _Sprite {
+  _GoldNuggetSprite(_SpriteCard card, {
+    @required
+    int amount,
+  }) : super(card,
+    body: 'assets/gold_nugget.png',
+    amount: amount,
+  );
+}
+
 /// 钻石剑.
 class _DiamondSwordSprite extends _Sprite {
   _DiamondSwordSprite(_SpriteCard card, {
