@@ -80,7 +80,7 @@ class _Card {
 
   /// 当前屏幕旋转方向的网格行.
   int get rowGridIndex {
-    return Metric.get().isVertical ? verticalRowGridIndex : horizontalRowGridIndex;
+    return _Metric.get().isVertical ? verticalRowGridIndex : horizontalRowGridIndex;
   }
   set rowGridIndex(int rowGridIndex) {
     verticalRowGridIndex = rowGridIndex;
@@ -89,7 +89,7 @@ class _Card {
 
   /// 当前屏幕旋转方向的网格列.
   int get columnGridIndex {
-    return Metric.get().isVertical ? verticalColumnGridIndex : horizontalColumnGridIndex;
+    return _Metric.get().isVertical ? verticalColumnGridIndex : horizontalColumnGridIndex;
   }
   set columnGridIndex(int columnGridIndex) {
     verticalColumnGridIndex = columnGridIndex;
@@ -98,7 +98,7 @@ class _Card {
 
   /// 当前屏幕旋转方向的网格跨行.
   int get rowGridSpan {
-    return Metric.get().isVertical ? verticalRowGridSpan : horizontalRowGridSpan;
+    return _Metric.get().isVertical ? verticalRowGridSpan : horizontalRowGridSpan;
   }
   set rowGridSpan(int rowGridSpan) {
     verticalRowGridSpan = rowGridSpan;
@@ -107,7 +107,7 @@ class _Card {
 
   /// 当前屏幕旋转方向的网格跨列.
   int get columnGridSpan {
-    return Metric.get().isVertical ? verticalColumnGridSpan : horizontalColumnGridSpan;
+    return _Metric.get().isVertical ? verticalColumnGridSpan : horizontalColumnGridSpan;
   }
   set columnGridSpan(int columnGridSpan) {
     verticalColumnGridSpan = columnGridSpan;
@@ -155,21 +155,21 @@ class _Card {
   /// 主尺寸定位矩形.
   Rect get mainRect {
     return Rect.fromLTWH(
-      Metric.get().safeRect.left + columnGridIndex * Metric.get().gridSize,
-      Metric.get().safeRect.top + rowGridIndex * Metric.get().gridSize,
-      columnGridSpan * Metric.get().gridSize,
-      rowGridSpan * Metric.get().gridSize,
+      _Metric.get().safeRect.left + columnGridIndex * _Metric.get().gridSize,
+      _Metric.get().safeRect.top + rowGridIndex * _Metric.get().gridSize,
+      columnGridSpan * _Metric.get().gridSize,
+      rowGridSpan * _Metric.get().gridSize,
     );
   }
 
   /// 副尺寸定位矩形.
   Rect get viceRect {
-    return Metric.get().coreNoPaddingRect;
+    return _Metric.get().coreNoPaddingRect;
   }
 
   /// 全屏尺寸定位矩形.
   Rect get fullRect {
-    return Metric.get().screenRect;
+    return _Metric.get().screenRect;
   }
 
   /// 渲染定位矩形.
@@ -196,7 +196,7 @@ class _Card {
       case _CardDimension.main:
       case _CardDimension.vice:
         Rect rect = this.rect;
-        return min(rect.width, rect.height) / Metric.coreNoPaddingGrid * 1.5;
+        return min(rect.width, rect.height) / _Metric.coreNoPaddingGrid * 1.5;
       case _CardDimension.full:
         return 0.0;
       default:
@@ -212,7 +212,7 @@ class _Card {
       case _CardDimension.main:
       case _CardDimension.vice:
         Rect rect = this.rect;
-        return min(rect.width, rect.height) / Metric.coreNoPaddingGrid * 0.5;
+        return min(rect.width, rect.height) / _Metric.coreNoPaddingGrid * 0.5;
       case _CardDimension.full:
         return 0.0;
       default:
@@ -612,50 +612,50 @@ class _CoreCard extends _Card {
 
   /// 行.
   int get rowIndex {
-    int grid = (rowGridIndex - Metric.paddingGrid - (Metric.get().isVertical ? Metric.headerFooterGrid : 0));
-    int square = Metric.squareGridMap[screen.square];
+    int grid = (rowGridIndex - _Metric.paddingGrid - (_Metric.get().isVertical ? _Metric.headerFooterGrid : 0));
+    int square = _Metric.squareGridMap[screen.square];
     assert(grid % square == 0);
     return grid ~/ square;
   }
   set rowIndex(int rowIndex) {
-    super.verticalRowGridIndex = Metric.squareGridMap[screen.square] * rowIndex + Metric.paddingGrid +
-        Metric.headerFooterGrid;
-    super.horizontalRowGridIndex = Metric.squareGridMap[screen.square] * rowIndex + Metric.paddingGrid;
+    super.verticalRowGridIndex = _Metric.squareGridMap[screen.square] * rowIndex + _Metric.paddingGrid +
+        _Metric.headerFooterGrid;
+    super.horizontalRowGridIndex = _Metric.squareGridMap[screen.square] * rowIndex + _Metric.paddingGrid;
   }
 
   /// 列.
   int get columnIndex {
-    int grid = (columnGridIndex - Metric.paddingGrid - (Metric.get().isVertical ? 0 : Metric.headerFooterGrid));
-    int square = Metric.squareGridMap[screen.square];
+    int grid = (columnGridIndex - _Metric.paddingGrid - (_Metric.get().isVertical ? 0 : _Metric.headerFooterGrid));
+    int square = _Metric.squareGridMap[screen.square];
     assert(grid % square == 0);
     return grid ~/ square;
   }
   set columnIndex(int columnIndex) {
-    super.verticalColumnGridIndex = Metric.squareGridMap[screen.square] * columnIndex + Metric.paddingGrid;
-    super.horizontalColumnGridIndex = Metric.squareGridMap[screen.square] * columnIndex + Metric.paddingGrid +
-        Metric.headerFooterGrid;
+    super.verticalColumnGridIndex = _Metric.squareGridMap[screen.square] * columnIndex + _Metric.paddingGrid;
+    super.horizontalColumnGridIndex = _Metric.squareGridMap[screen.square] * columnIndex + _Metric.paddingGrid +
+        _Metric.headerFooterGrid;
   }
 
   /// 跨行.
   int get rowSpan {
     int grid = rowGridSpan;
-    int square = Metric.squareGridMap[screen.square];
+    int square = _Metric.squareGridMap[screen.square];
     assert(grid % square == 0);
     return grid ~/ square;
   }
   set rowSpan(int rowSpan) {
-    super.verticalRowGridSpan = super.horizontalRowGridSpan = Metric.squareGridMap[screen.square] * rowSpan;
+    super.verticalRowGridSpan = super.horizontalRowGridSpan = _Metric.squareGridMap[screen.square] * rowSpan;
   }
 
   /// 跨列.
   int get columnSpan {
     int grid = columnGridSpan;
-    int square = Metric.squareGridMap[screen.square];
+    int square = _Metric.squareGridMap[screen.square];
     assert(grid % square == 0);
     return grid ~/ square;
   }
   set columnSpan(int columnSpan) {
-    super.verticalColumnGridSpan = super.horizontalColumnGridSpan = Metric.squareGridMap[screen.square] * columnSpan;
+    super.verticalColumnGridSpan = super.horizontalColumnGridSpan = _Metric.squareGridMap[screen.square] * columnSpan;
   }
 }
 
@@ -948,14 +948,14 @@ class _SpriteCard extends _CoreCard {
       curve: Curves.easeInOut,
       listener: (card, value, first, half, last) {
         if (value < 0.5) {
-          card.translateX = _ValueCalc.ab(0.0, Metric.get().squareSizeMap[card.screen.square] * direction.x)
+          card.translateX = _ValueCalc.ab(0.0, _Metric.get().squareSizeMap[card.screen.square] * direction.x)
               .calc(value);
-          card.translateY = _ValueCalc.ab(0.0, Metric.get().squareSizeMap[card.screen.square] * direction.y)
+          card.translateY = _ValueCalc.ab(0.0, _Metric.get().squareSizeMap[card.screen.square] * direction.y)
               .calc(value);
         } else {
-          card.translateX = _ValueCalc.ab(Metric.get().squareSizeMap[card.screen.square] * -direction.x, 0.0)
+          card.translateX = _ValueCalc.ab(_Metric.get().squareSizeMap[card.screen.square] * -direction.x, 0.0)
               .calc(value);
-          card.translateY = _ValueCalc.ab(Metric.get().squareSizeMap[card.screen.square] * -direction.y, 0.0)
+          card.translateY = _ValueCalc.ab(_Metric.get().squareSizeMap[card.screen.square] * -direction.y, 0.0)
               .calc(value);
         }
         if (half) {

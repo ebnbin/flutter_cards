@@ -18,6 +18,8 @@ class Data {
 
   /// 返回当前 immutable 的游戏数据.
   Game buildGame(BuildContext context) {
+    // 更新网格标尺.
+    _Metric.build(context);
     return Game._(_game);
   }
 }
@@ -38,7 +40,7 @@ class Game {
   }
 
   double get backgroundScale {
-    return Metric.get().imageScale(48, 8.0);
+    return _Metric.get().imageScale(48, 8.0);
   }
 
   /// 返回当前 immutable 的全部卡片数据.
@@ -92,7 +94,7 @@ class Card {
   }
 
   double get backgroundScale {
-    return Metric.get().imageScale(96, 16.0);
+    return _Metric.get().imageScale(96, 16.0);
   }
 
   Rect get rect => _card.rect;

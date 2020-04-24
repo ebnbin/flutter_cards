@@ -1,13 +1,11 @@
-import 'dart:math';
-
-import 'package:flutter/material.dart';
+part of '../data.dart';
 
 //*********************************************************************************************************************
 //*********************************************************************************************************************
 // 网格标尺.
 
 /// 网格标尺单例.
-class Metric {
+class _Metric {
   /// Padding 网格数.
   static const int paddingGrid = 1;
   /// Core 网格数 (不包含 padding).
@@ -31,15 +29,15 @@ class Metric {
 
   static Size _sizeCache;
   static EdgeInsets _paddingCache;
-  static Metric _metricCache;
+  static _Metric _metricCache;
 
   /// 必需在第一次 [build] 之后调用.
-  static Metric get() {
+  static _Metric get() {
     assert(_metricCache != null);
     return _metricCache;
   }
 
-  const Metric._(
+  const _Metric(
       this.screenRect,
       this.safeScreenRect,
       this.isVertical,
@@ -229,7 +227,7 @@ class Metric {
 
     _sizeCache = mediaQueryData.size;
     _paddingCache = mediaQueryData.padding;
-    _metricCache = Metric._(
+    _metricCache = _Metric(
       screenRect,
       safeScreenRect,
       isVertical,
