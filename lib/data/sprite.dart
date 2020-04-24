@@ -58,31 +58,24 @@ class _Sprite {
   /// 能力值.
   int powerValue;
 
-  void Function(_Sprite sprite) onTap = (sprite) {
-    actOnTap(sprite.card);
-  };
-
-  /// 卡片点击.
-  static void actOnTap(_SpriteCard spriteCard) {
-    _PlayerCard playerCard = spriteCard.spriteScreen.playerCard;
-    AxisDirection direction = playerCard.adjacentDirection(spriteCard);
+  void onTap(_Sprite playerSprite, AxisDirection direction) {
     if (direction == null) {
-      spriteCard.screen.game.actionQueue.add(<_Action>[
-        spriteCard.animateTremble().action(),
+      card.screen.game.actionQueue.add(<_Action>[
+        card.animateTremble().action(),
       ]);
       return;
     }
-    AxisDirection nextDirection = playerCard.nextNonEdgeDirection(flipAxisDirection(direction));
-    List<_SpriteCard> adjacentCardAll = playerCard.adjacentCardAll(nextDirection);
-    _SpriteCard newSpriteCard = _SpriteCard(spriteCard.spriteScreen,
+    AxisDirection nextDirection = playerSprite.card.nextNonEdgeDirection(flipAxisDirection(direction));
+    List<_SpriteCard> adjacentCardAll = playerSprite.card.adjacentCardAll(nextDirection);
+    _SpriteCard newSpriteCard = _SpriteCard(card.spriteScreen,
       rowIndex: adjacentCardAll.last.rowIndex,
       columnIndex: adjacentCardAll.last.columnIndex,
     );
-    int index = spriteCard.index;
+    int index = card.index;
 
     List<_Action> actions = <_Action>[];
     actions.add(_Action.run((action) {
-      spriteCard.spriteScreen.cards[index] = newSpriteCard;
+      card.spriteScreen.cards[index] = newSpriteCard;
     }));
     actions.addAll(adjacentCardAll.map<_Action>((element) {
       return element.animateSpriteMove(direction: flipAxisDirection(nextDirection)).action();
@@ -90,12 +83,12 @@ class _Sprite {
     actions.add(newSpriteCard.animateSpriteEnter(
       beginDelay: 200,
     ).action());
-    spriteCard.screen.game.actionQueue.add(actions,
+    card.screen.game.actionQueue.add(actions,
       addFirst: true,
     );
-    spriteCard.screen.game.actionQueue.add(<_Action>[
-      spriteCard.animateSpriteExit().action(),
-      playerCard.animateSpriteMove(
+    card.screen.game.actionQueue.add(<_Action>[
+      card.animateSpriteExit().action(),
+      playerSprite.card.animateSpriteMove(
         direction: direction,
         beginDelay: 200,
       ).action(),

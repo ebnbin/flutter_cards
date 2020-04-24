@@ -713,7 +713,9 @@ class _SpriteCard extends _CoreCard {
         }
         switch (thisRef.dimension) {
           case _CardDimension.main:
-            spriteCard.sprite.onTap?.call(spriteCard.sprite);
+            _PlayerCard playerCard = spriteCard.spriteScreen.playerCard;
+            AxisDirection direction = playerCard.adjacentDirection(spriteCard);
+            spriteCard.sprite.onTap(playerCard.sprite, direction);
             break;
           case _CardDimension.vice:
             break;
