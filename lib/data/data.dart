@@ -37,6 +37,10 @@ class Game {
     return 'assets/stone_bricks.png';
   }
 
+  double get backgroundScale {
+    return Metric.get().imageScale(48, 8.0);
+  }
+
   /// 返回当前 immutable 的全部卡片数据.
   List<NullableCard> buildNullableCards(BuildContext context) {
     return List.unmodifiable(_game.screen.cards.map<NullableCard>((card) {
@@ -82,6 +86,14 @@ class Card {
 
   /// 不可能为 null.
   final _Card _card;
+
+  String get background {
+    return 'assets/oak_planks.png';
+  }
+
+  double get backgroundScale {
+    return Metric.get().imageScale(96, 16.0);
+  }
 
   Rect get rect => _card.rect;
 

@@ -61,7 +61,7 @@ class _GameWidget extends StatelessWidget {
     return Positioned.fromRelativeRect(
       rect: RelativeRect.fill,
       child: Image.asset(game.background,
-        scale: Metric.get().imageScale(48, 8.0),
+        scale: game.backgroundScale,
         /// 不需要设置宽高.
 //        width: ,
 //        height: ,
@@ -142,9 +142,8 @@ class _GameWidget extends StatelessWidget {
   Widget _buildCardBackground(BuildContext context, Card card) {
     return Positioned.fromRelativeRect(
       rect: RelativeRect.fill,
-      child: Image.asset(
-        'assets/oak_planks.png',
-        scale: Metric.get().imageScale(96, 16.0),
+      child: Image.asset(card.background,
+        scale: card.backgroundScale,
         /// 不需要设置宽高.
 //        width: ,
 //        height: ,
