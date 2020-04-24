@@ -70,6 +70,9 @@ class _Sprite {
     _SpriteCard newSpriteCard = _SpriteCard(card.spriteScreen,
       rowIndex: adjacentCardAll.last.rowIndex,
       columnIndex: adjacentCardAll.last.columnIndex,
+      createSprite: (card) {
+        return _Sprite(card);
+      },
     );
     int index = card.index;
 
