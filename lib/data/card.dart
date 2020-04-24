@@ -688,6 +688,8 @@ class _SpriteCard extends _CoreCard {
     int columnIndex,
     double mainElevation = 2.0,
     _CardRadiusType radiusType = _CardRadiusType.small,
+    @required
+    _Sprite Function(_SpriteCard card) createSprite,
   }) : super(screen,
     name: name,
     rotateX: rotateX,
@@ -759,7 +761,7 @@ class _SpriteCard extends _CoreCard {
     mainElevation: mainElevation,
     radiusType: radiusType,
   ) {
-    sprite = _Sprite(this);
+    sprite = createSprite(this);
   }
 
   /// 强转为 [_SpriteScreen].
@@ -1124,10 +1126,10 @@ class _PlayerCard extends _SpriteCard {
     double translateY = 0.0,
     double scaleX = 1.0,
     double scaleY = 1.0,
-    int zIndex = 1,
-    /// 默认不可见, 通过动画进入.
-    bool visible = false,
-    _CardDimension dimension = _CardDimension.main,
+//    int zIndex = 1,
+//    /// 默认不可见, 通过动画进入.
+//    bool visible = false,
+//    _CardDimension dimension = _CardDimension.main,
     bool vicing = false,
     double mainOpacity = 1.0,
     _GestureType gestureType = _GestureType.normal,
@@ -1148,9 +1150,9 @@ class _PlayerCard extends _SpriteCard {
     translateY: translateY,
     scaleX: scaleX,
     scaleY: scaleY,
-    zIndex: zIndex,
-    visible: visible,
-    dimension: dimension,
+    zIndex: 3,
+    visible: true,
+    dimension: _CardDimension.full,
     vicing: vicing,
     mainOpacity: mainOpacity,
     gestureType: gestureType,
@@ -1160,63 +1162,10 @@ class _PlayerCard extends _SpriteCard {
     columnIndex: columnIndex,
     mainElevation: mainElevation,
     radiusType: radiusType,
-  ) {
-    sprite = _PlayerSprite(this);
-  }
-
-  /// 随机非边缘位置.
-  ///
-  /// 3 * 3 始终在中间一格, 4 * 4 中间 4 格之一随机, 5 * 5 中间 9 格之一随机.
-  static int _randomRowColumnIndex(_SpriteScreen screen) {
-    return _random.nextIntFromTo(1, screen.square - 2);
-  }
-
-  /// [_randomRowColumnIndex].
-  _PlayerCard.random(_SpriteScreen screen, {
-    double rotateX = 0.0,
-    double rotateY = 0.0,
-    double rotateZ = 0.0,
-    double translateX = 0.0,
-    double translateY = 0.0,
-    double scaleX = 1.0,
-    double scaleY = 1.0,
-//    int zIndex = 1,
-//    /// 默认不可见, 通过动画进入.
-//    bool visible = false,
-//    _CardDimension dimension = _CardDimension.main,
-    bool vicing = false,
-    double mainOpacity = 1.0,
-    _GestureType gestureType = _GestureType.normal,
-    void Function(_Card card) onTap,
-    void Function(_Card card) onLongPress,
-    double mainElevation = 2.0,
-    _CardRadiusType radiusType = _CardRadiusType.small,
-  }) : this(screen,
-    rotateX: rotateX,
-    rotateY: rotateY,
-    rotateZ: rotateZ,
-    translateX: translateX,
-    translateY: translateY,
-    scaleX: scaleX,
-    scaleY: scaleY,
-    zIndex: 3,
-    visible: true,
-    dimension: _CardDimension.full,
-    vicing: vicing,
-    mainOpacity: mainOpacity,
-    gestureType: gestureType,
-//    onTap: onTap,
-//    onLongPress: onLongPress,
-    rowIndex: _randomRowColumnIndex(screen),
-    columnIndex: _randomRowColumnIndex(screen),
-    mainElevation: mainElevation,
-    radiusType: radiusType,
+    createSprite: (card) {
+      return _PlayerSprite(card);
+    },
   );
-
-  @override
-  String toString() {
-    return '${super.toString()}\nPlayer';
-  }
 }
 
 //*********************************************************************************************************************
