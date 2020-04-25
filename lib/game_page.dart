@@ -45,8 +45,8 @@ class _GameWidget extends StatelessWidget {
         Positioned.fromRelativeRect(
           rect: RelativeRect.fill,
           child: CustomPaint(
-//            painter: Metric.get().debugPainter,
-//            foregroundPainter: Metric.get().debugForegroundPainter,
+//            painter: game.debugPainter,
+//            foregroundPainter: game.debugForegroundPainter,
             child: _buildCards(context),
           ),
         ),

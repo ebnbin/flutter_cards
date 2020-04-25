@@ -49,6 +49,14 @@ class Game {
       return NullableCard._(card);
     }));
   }
+
+  CustomPainter get debugPainter {
+    return _Metric.get().debugPainter;
+  }
+
+  CustomPainter get debugForegroundPainter {
+    return _Metric.get().debugForegroundPainter;
+  }
 }
 
 //*********************************************************************************************************************
