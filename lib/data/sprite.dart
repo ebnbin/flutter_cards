@@ -106,7 +106,7 @@ class _Sprite {
 /// 玩家.
 class _PlayerSprite extends _Sprite {
   _PlayerSprite(_SpriteCard card) : super(card,
-    body: 'assets/steve.png',
+    body: 'images/steve.png',
 //    shield: 'assets/shield.png',
 //    shieldValue: 88,
     healthValue: 88,
@@ -125,7 +125,7 @@ class _GoldNuggetSprite extends _Sprite {
     @required
     int amount,
   }) : super(card,
-    body: 'assets/gold_nugget.png',
+    body: 'images/gold_nugget.png',
     amount: amount,
   );
 }
@@ -136,7 +136,7 @@ class _DiamondSwordSprite extends _Sprite {
     @required
     int amount,
   }) : super(card,
-    body: 'assets/diamond_sword.png',
+    body: 'images/diamond_sword.png',
     amount: amount,
   );
 
@@ -194,7 +194,7 @@ class _ZombieSprite extends _Sprite {
     @required
     int healthValue,
   }) : initHealthValue = healthValue, super(card,
-    body: 'assets/zombie.png',
+    body: 'images/husk.png',
     healthValue: healthValue,
   );
 

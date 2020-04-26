@@ -34,13 +34,13 @@ class Game {
 
   String get background {
     if (_game.screen is _SpriteScreen) {
-      return 'assets/purpur_block.png';
+      return 'images/purpur_block.png';
     }
-    return 'assets/stone_bricks.png';
+    return 'images/stone_bricks.png';
   }
 
   double get backgroundScale {
-    return _Metric.get().imageScale(48, 8.0);
+    return _Metric.get().imageScale(144, 8.0);
   }
 
   /// 返回当前 immutable 的全部卡片数据.
@@ -98,11 +98,11 @@ class Card {
   final _Card _card;
 
   String get background {
-    return 'assets/oak_planks.png';
+    return 'images/oak_planks.png';
   }
 
   double get backgroundScale {
-    return _Metric.get().imageScale(96, 16.0);
+    return _Metric.get().imageScale(288, 16.0);
   }
 
   Rect get rect => _card.rect;
@@ -302,7 +302,7 @@ class SpriteFace {
       top: 9.0,
       width: 9.0,
       height: 9.0,
-      image: 'assets/health.png',
+      image: 'images/health.png',
     );
   }
 
@@ -568,17 +568,17 @@ class SpriteFaceImage {
 class SpriteFaceDigit {
   /// 数字图片资源.
   static final List<String> _digits = <String>[
-    'assets/digit_0.png',
-    'assets/digit_1.png',
-    'assets/digit_2.png',
-    'assets/digit_3.png',
-    'assets/digit_4.png',
-    'assets/digit_5.png',
-    'assets/digit_6.png',
-    'assets/digit_7.png',
-    'assets/digit_8.png',
-    'assets/digit_9.png',
-    'assets/digit_slash.png',
+    'images/digit_0.png',
+    'images/digit_1.png',
+    'images/digit_2.png',
+    'images/digit_3.png',
+    'images/digit_4.png',
+    'images/digit_5.png',
+    'images/digit_6.png',
+    'images/digit_7.png',
+    'images/digit_8.png',
+    'images/digit_9.png',
+    'images/digit_slash.png',
   ];
 
   /// 不可见的.
