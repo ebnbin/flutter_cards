@@ -142,7 +142,7 @@ class _Card {
   /// 可能因不同尺寸而变化的值: [rect], [marginA], [marginB], [elevation], [radius].
   _CardDimension dimension;
 
-  /// 值为 false 表示 [screen.viceOpacity] 为 0.0 时显示, 为 1.0 时隐藏, 值为 true 时相反.
+  /// 值为 true 使用 [screen.mainOpacity] 渲染透明度, 值为 false 使用 [screen.viceOpacity] 渲染透明度.
   ///
   /// 简单来说, false 表示显示副尺寸卡片时隐藏, true 表示显示副尺寸卡片时显示.
   bool vice;
@@ -276,7 +276,11 @@ class _Card {
     if (vicing) {
       return mainOpacity;
     }
-    return (vice ? screen.viceOpacity : (1.0 - screen.viceOpacity)) * mainOpacity;
+    if (vice) {
+      return screen.viceOpacity * mainOpacity;
+    } else {
+      return screen.mainOpacity * mainOpacity;
+    }
   }
 
   //*******************************************************************************************************************
@@ -363,18 +367,20 @@ class _Card {
           card.scaleX = _ValueCalc.ab(1.0, card.viceRect.width / card.mainRect.width).calc(value);
           card.scaleY = _ValueCalc.ab(1.0, card.viceRect.height / card.mainRect.height).calc(value);
           // 改变其他所有卡片透明度.
-          card.screen.viceOpacity = _ValueCalc.ab(0.0, 1.0).calc(value * 2.0);
+          card.screen.mainOpacity = _ValueCalc.ab(1.0, 0.0).calc(value * 2.0);
         } else {
           card.rotateX = _ValueCalc.ab(_VisibleAngle.clockwise180.value, 0.0).calc(value);
           card.translateX = _ValueCalc.ab(card.mainRect.center.dx - card.viceRect.center.dx, 0.0).calc(value);
           card.translateY = _ValueCalc.ab(card.mainRect.center.dy - card.viceRect.center.dy, 0.0).calc(value);
           card.scaleX = _ValueCalc.ab(card.mainRect.width / card.viceRect.width, 1.0).calc(value);
           card.scaleY = _ValueCalc.ab(card.mainRect.height / card.viceRect.height, 1.0).calc(value);
+          // 改变其他所有卡片透明度.
+          card.screen.viceOpacity = _ValueCalc.ab(0.0, 1.0).calc(value * 2.0 - 1.0);
         }
         card.mainElevation = _ValueCalc.ab(2.0, 4.0).calc(value);
         if (half) {
           card.dimension = _CardDimension.vice;
-          card.screen.viceOpacity = 1.0;
+          card.screen.mainOpacity = 0.0;
         }
       },
     );
@@ -400,6 +406,8 @@ class _Card {
           card.translateY = _ValueCalc.ab(0.0, card.mainRect.center.dy - card.viceRect.center.dy).calc(value);
           card.scaleX = _ValueCalc.ab(1.0, card.mainRect.width / card.viceRect.width).calc(value);
           card.scaleY = _ValueCalc.ab(1.0, card.mainRect.height / card.viceRect.height).calc(value);
+          // 改变其他所有卡片透明度.
+          card.screen.viceOpacity = _ValueCalc.ab(1.0, 0.0).calc(value * 2.0);
         } else {
           card.rotateX = _ValueCalc.ab(_VisibleAngle.counterClockwise180.value, 0.0).calc(value);
           card.translateX = _ValueCalc.ab(card.viceRect.center.dx - card.mainRect.center.dx, 0.0).calc(value);
@@ -407,11 +415,12 @@ class _Card {
           card.scaleX = _ValueCalc.ab(card.viceRect.width / card.mainRect.width, 1.0).calc(value);
           card.scaleY = _ValueCalc.ab(card.viceRect.height / card.mainRect.height, 1.0).calc(value);
           // 改变其他所有卡片透明度.
-          card.screen.viceOpacity = _ValueCalc.ab(1.0, 0.0).calc(value * 2.0 - 1.0);
+          card.screen.mainOpacity = _ValueCalc.ab(0.0, 1.0).calc(value * 2.0 - 1.0);
         }
         card.mainElevation = _ValueCalc.ab(4.0, 2.0).calc(value);
         if (half) {
           card.dimension = _CardDimension.main;
+          card.screen.viceOpacity = 0.0;
         }
         if (last) {
           card.zIndex = 1;
@@ -739,10 +748,6 @@ class _SpriteCard extends _CoreCard {
             ]);
             break;
           case _CardDimension.vice:
-            thisRef.screen.game.actionQueue.add(<_Action>[
-              thisRef.animateViceToMain().action(),
-            ]);
-            break;
           case _CardDimension.full:
             break;
           default:

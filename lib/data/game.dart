@@ -40,10 +40,22 @@ abstract class _Screen {
   /// 所有卡片.
   final List<_Card> cards;
 
-  /// 值为 0.0 表示当前显示主尺寸卡片, 值为 1.0 表示当前显示副尺寸卡片.
+  /// 主尺寸透明度.
+  ///
+  /// 在副尺寸动画中改变值. 显示副尺寸卡片时其他卡片需要隐藏.
+  double mainOpacity = 1.0;
+
+  /// 副尺寸透明度.
   ///
   /// 在副尺寸动画中改变值. 显示副尺寸卡片时其他卡片需要隐藏.
   double viceOpacity = 0.0;
+
+  /// 正在显示副尺寸的卡片, 可能为 null.
+  _Card get vicingCard {
+    return cards.firstWhere((element) {
+      return element.vicing;
+    }, orElse: () => null);
+  }
 }
 
 /// 开屏.
@@ -148,21 +160,38 @@ class _SpriteScreen extends _Screen {
     int square,
   }) : super(game,
     square: square,
-    cardLength: square * square + 1,
+    cardLength: square * square + 2,
   ) {
     cards[cards.length - 1] = _Card(this,
       name: 'Back',
-      verticalRowGridIndex: 1,
+      verticalRowGridIndex: 6,
       verticalColumnGridIndex: 1,
       verticalRowGridSpan: 10,
       verticalColumnGridSpan: 10,
       horizontalRowGridIndex: 1,
-      horizontalColumnGridIndex: 1,
+      horizontalColumnGridIndex: 6,
       horizontalRowGridSpan: 10,
       horizontalColumnGridSpan: 10,
       onTap: (card) {
         game.screen = _SplashScreen(game);
         game.callback.notifyStateChanged();
+      },
+    );
+    cards[cards.length - 2] = _Card(this,
+      name: 'Close',
+      verticalRowGridIndex: 80,
+      verticalColumnGridIndex: 26,
+      verticalRowGridSpan: 10,
+      verticalColumnGridSpan: 10,
+      horizontalRowGridIndex: 26,
+      horizontalColumnGridIndex: 80,
+      horizontalRowGridSpan: 10,
+      horizontalColumnGridSpan: 10,
+      vice: true,
+      onTap: (card) {
+        card.screen.game.actionQueue.post<_Card>(card, (thisRef, action) {
+          thisRef.screen.vicingCard?.animateViceToMain()?.begin();
+        });
       },
     );
     actAddSpriteCards(this);
