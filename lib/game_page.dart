@@ -145,7 +145,7 @@ class _GameWidget extends StatelessWidget {
         /// 不需要设置宽高.
 //        width: ,
 //        height: ,
-        color: Colors.black.withOpacity(0.25),
+        color: Colors.black.withOpacity(0.5),
         colorBlendMode: BlendMode.darken,
         fit: BoxFit.none,
         repeat: ImageRepeat.repeat,

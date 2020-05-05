@@ -98,7 +98,7 @@ class Card {
   final _Card _card;
 
   String get background {
-    return 'images/oak_planks.png';
+    return 'images/white_wool.png';
   }
 
   double get backgroundScale {
