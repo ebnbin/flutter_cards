@@ -42,18 +42,18 @@ abstract class _Screen {
 
   /// 主尺寸透明度.
   ///
-  /// 在副尺寸动画中改变值. 显示副尺寸卡片时其他卡片需要隐藏.
+  /// 在详情尺寸动画中改变值. 显示详情尺寸卡片时其他卡片需要隐藏.
   double mainOpacity = 1.0;
 
-  /// 副尺寸透明度.
+  /// 详情尺寸透明度.
   ///
-  /// 在副尺寸动画中改变值. 显示副尺寸卡片时其他卡片需要隐藏.
-  double viceOpacity = 0.0;
+  /// 在详情尺寸动画中改变值. 显示详情尺寸卡片时其他卡片需要隐藏.
+  double detailOpacity = 0.0;
 
-  /// 正在显示副尺寸的卡片, 可能为 null.
-  _Card get vicingCard {
+  /// 正在显示详情尺寸的卡片, 可能为 null.
+  _Card get detailingCard {
     return cards.firstWhere((element) {
-      return element.vicing;
+      return element.detailing;
     }, orElse: () => null);
   }
 }
@@ -188,10 +188,10 @@ class _SpriteScreen extends _Screen {
       horizontalRowGridSpan: 10,
       horizontalColumnGridSpan: 10,
       radiusType: _CardRadiusType.round,
-      vice: true,
+      detail: true,
       onTap: (card) {
         card.screen.game.actionQueue.post<_Card>(card, (thisRef, action) {
-          thisRef.screen.vicingCard?.animateViceToMain()?.begin();
+          thisRef.screen.detailingCard?.animateDetailToMain()?.begin();
         });
       },
     );

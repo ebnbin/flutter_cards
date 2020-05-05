@@ -26,8 +26,8 @@ class _Card {
     this.zIndex = 1,
     this.visible = true,
     this.dimension = _CardDimension.main,
-    this.vice = false,
-    this.vicing = false,
+    this.detail = false,
+    this.detailing = false,
     this.mainElevation = 2.0,
     this.radiusType = _CardRadiusType.small,
     this.mainOpacity = 1.0,
@@ -143,15 +143,15 @@ class _Card {
   /// 可能因不同尺寸而变化的值: [rect], [marginA], [marginB], [elevation], [radius].
   _CardDimension dimension;
 
-  /// 值为 true 使用 [screen.mainOpacity] 渲染透明度, 值为 false 使用 [screen.viceOpacity] 渲染透明度.
+  /// 值为 true 使用 [screen.mainOpacity] 渲染透明度, 值为 false 使用 [screen.detailOpacity] 渲染透明度.
   ///
-  /// 与 [dimension] 的 vice 不同的是, 它通常在初始化后不再修改, 表示卡片以哪种面板做为主态, 而 [dimension] 通常在动画中修改.
+  /// 与 [dimension] 的 detail 不同的是, 它通常在初始化后不再修改, 表示卡片以哪种面板做为主态, 而 [dimension] 通常在动画中修改.
   ///
-  /// 简单来说, false 表示显示副尺寸卡片时隐藏, true 表示显示副尺寸卡片时显示.
-  bool vice;
+  /// 简单来说, false 表示显示详情尺寸卡片时隐藏, true 表示显示详情尺寸卡片时显示.
+  bool detail;
 
-  /// 值为 true 表示当前正在执行副尺寸动画, [opacity] 始终取 [mainOpacity].
-  bool vicing;
+  /// 值为 true 表示当前正在执行详情尺寸动画, [opacity] 始终取 [mainOpacity].
+  bool detailing;
 
   //*******************************************************************************************************************
 
@@ -165,8 +165,8 @@ class _Card {
     );
   }
 
-  /// 副尺寸定位矩形.
-  Rect get viceRect {
+  /// 详情尺寸定位矩形.
+  Rect get detailRect {
     return _Metric.get().coreNoPaddingRect;
   }
 
@@ -180,8 +180,8 @@ class _Card {
     switch (dimension) {
       case _CardDimension.main:
         return mainRect;
-      case _CardDimension.vice:
-        return viceRect;
+      case _CardDimension.detail:
+        return detailRect;
       case _CardDimension.full:
         return fullRect;
       default:
@@ -197,7 +197,7 @@ class _Card {
   double get marginA {
     switch (dimension) {
       case _CardDimension.main:
-      case _CardDimension.vice:
+      case _CardDimension.detail:
         Rect rect = this.rect;
         return min(rect.width, rect.height) / _Metric.coreNoPaddingGrid * 1.0;
       case _CardDimension.full:
@@ -213,7 +213,7 @@ class _Card {
   double get marginB {
     switch (dimension) {
       case _CardDimension.main:
-      case _CardDimension.vice:
+      case _CardDimension.detail:
         Rect rect = this.rect;
         return min(rect.width, rect.height) / _Metric.coreNoPaddingGrid * 1.0;
       case _CardDimension.full:
@@ -246,7 +246,7 @@ class _Card {
     switch (dimension) {
       case _CardDimension.main:
         return mainElevation;
-      case _CardDimension.vice:
+      case _CardDimension.detail:
         return mainElevation * 4.0;
       case _CardDimension.full:
         return 0.0;
@@ -262,7 +262,7 @@ class _Card {
   double get radius {
     switch (dimension) {
       case _CardDimension.main:
-      case _CardDimension.vice:
+      case _CardDimension.detail:
         return radiusType.value(contentRect);
       case _CardDimension.full:
         return 0.0;
@@ -276,11 +276,11 @@ class _Card {
 
   /// 渲染透明度.
   double get opacity {
-    if (vicing) {
+    if (detailing) {
       return mainOpacity;
     }
-    if (vice) {
-      return screen.viceOpacity * mainOpacity;
+    if (detail) {
+      return screen.detailOpacity * mainOpacity;
     } else {
       return screen.mainOpacity * mainOpacity;
     }
@@ -345,10 +345,10 @@ class _Card {
     );
   }
 
-  /// 主尺寸 -> 副尺寸动画.
+  /// 主尺寸 -> 详情尺寸动画.
   ///
   /// 逆时针. 前 0.5 时隐藏其他卡片.
-  _Animation<_Card> animateMainToVice({
+  _Animation<_Card> animateMainToDetail({
     int duration = 400,
     int beginDelay = 0,
     int endDelay = 0,
@@ -361,38 +361,38 @@ class _Card {
       listener: (card, value, first, half, last) {
         if (first) {
           card.zIndex = 2;
-          card.vicing = true;
+          card.detailing = true;
         }
         if (value < 0.5) {
           card.rotateX = _ValueCalc.ab(0.0, _VisibleAngle.counterClockwise180.value).calc(value);
-          card.translateX = _ValueCalc.ab(0.0, card.viceRect.center.dx - card.mainRect.center.dx).calc(value);
-          card.translateY = _ValueCalc.ab(0.0, card.viceRect.center.dy - card.mainRect.center.dy).calc(value);
-          card.scaleX = _ValueCalc.ab(1.0, card.viceRect.width / card.mainRect.width).calc(value);
-          card.scaleY = _ValueCalc.ab(1.0, card.viceRect.height / card.mainRect.height).calc(value);
+          card.translateX = _ValueCalc.ab(0.0, card.detailRect.center.dx - card.mainRect.center.dx).calc(value);
+          card.translateY = _ValueCalc.ab(0.0, card.detailRect.center.dy - card.mainRect.center.dy).calc(value);
+          card.scaleX = _ValueCalc.ab(1.0, card.detailRect.width / card.mainRect.width).calc(value);
+          card.scaleY = _ValueCalc.ab(1.0, card.detailRect.height / card.mainRect.height).calc(value);
           // 改变其他所有卡片透明度.
           card.screen.mainOpacity = _ValueCalc.ab(1.0, 0.0).calc(value * 2.0);
         } else {
           card.rotateX = _ValueCalc.ab(_VisibleAngle.clockwise180.value, 0.0).calc(value);
-          card.translateX = _ValueCalc.ab(card.mainRect.center.dx - card.viceRect.center.dx, 0.0).calc(value);
-          card.translateY = _ValueCalc.ab(card.mainRect.center.dy - card.viceRect.center.dy, 0.0).calc(value);
-          card.scaleX = _ValueCalc.ab(card.mainRect.width / card.viceRect.width, 1.0).calc(value);
-          card.scaleY = _ValueCalc.ab(card.mainRect.height / card.viceRect.height, 1.0).calc(value);
+          card.translateX = _ValueCalc.ab(card.mainRect.center.dx - card.detailRect.center.dx, 0.0).calc(value);
+          card.translateY = _ValueCalc.ab(card.mainRect.center.dy - card.detailRect.center.dy, 0.0).calc(value);
+          card.scaleX = _ValueCalc.ab(card.mainRect.width / card.detailRect.width, 1.0).calc(value);
+          card.scaleY = _ValueCalc.ab(card.mainRect.height / card.detailRect.height, 1.0).calc(value);
           // 改变其他所有卡片透明度.
-          card.screen.viceOpacity = _ValueCalc.ab(0.0, 1.0).calc(value * 2.0 - 1.0);
+          card.screen.detailOpacity = _ValueCalc.ab(0.0, 1.0).calc(value * 2.0 - 1.0);
         }
         card.mainElevation = _ValueCalc.ab(2.0, 4.0).calc(value);
         if (half) {
-          card.dimension = _CardDimension.vice;
+          card.dimension = _CardDimension.detail;
           card.screen.mainOpacity = 0.0;
         }
       },
     );
   }
 
-  /// 副尺寸 -> 主尺寸动画.
+  /// 详情尺寸 -> 主尺寸动画.
   ///
   /// 顺时针. 后 0.5 时显示其他卡片.
-  _Animation<_Card> animateViceToMain({
+  _Animation<_Card> animateDetailToMain({
     int duration = 400,
     int beginDelay = 0,
     int endDelay = 0,
@@ -405,29 +405,29 @@ class _Card {
       listener: (card, value, first, half, last) {
         if (value < 0.5) {
           card.rotateX = _ValueCalc.ab(0.0, _VisibleAngle.clockwise180.value).calc(value);
-          card.translateX = _ValueCalc.ab(0.0, card.mainRect.center.dx - card.viceRect.center.dx).calc(value);
-          card.translateY = _ValueCalc.ab(0.0, card.mainRect.center.dy - card.viceRect.center.dy).calc(value);
-          card.scaleX = _ValueCalc.ab(1.0, card.mainRect.width / card.viceRect.width).calc(value);
-          card.scaleY = _ValueCalc.ab(1.0, card.mainRect.height / card.viceRect.height).calc(value);
+          card.translateX = _ValueCalc.ab(0.0, card.mainRect.center.dx - card.detailRect.center.dx).calc(value);
+          card.translateY = _ValueCalc.ab(0.0, card.mainRect.center.dy - card.detailRect.center.dy).calc(value);
+          card.scaleX = _ValueCalc.ab(1.0, card.mainRect.width / card.detailRect.width).calc(value);
+          card.scaleY = _ValueCalc.ab(1.0, card.mainRect.height / card.detailRect.height).calc(value);
           // 改变其他所有卡片透明度.
-          card.screen.viceOpacity = _ValueCalc.ab(1.0, 0.0).calc(value * 2.0);
+          card.screen.detailOpacity = _ValueCalc.ab(1.0, 0.0).calc(value * 2.0);
         } else {
           card.rotateX = _ValueCalc.ab(_VisibleAngle.counterClockwise180.value, 0.0).calc(value);
-          card.translateX = _ValueCalc.ab(card.viceRect.center.dx - card.mainRect.center.dx, 0.0).calc(value);
-          card.translateY = _ValueCalc.ab(card.viceRect.center.dy - card.mainRect.center.dy, 0.0).calc(value);
-          card.scaleX = _ValueCalc.ab(card.viceRect.width / card.mainRect.width, 1.0).calc(value);
-          card.scaleY = _ValueCalc.ab(card.viceRect.height / card.mainRect.height, 1.0).calc(value);
+          card.translateX = _ValueCalc.ab(card.detailRect.center.dx - card.mainRect.center.dx, 0.0).calc(value);
+          card.translateY = _ValueCalc.ab(card.detailRect.center.dy - card.mainRect.center.dy, 0.0).calc(value);
+          card.scaleX = _ValueCalc.ab(card.detailRect.width / card.mainRect.width, 1.0).calc(value);
+          card.scaleY = _ValueCalc.ab(card.detailRect.height / card.mainRect.height, 1.0).calc(value);
           // 改变其他所有卡片透明度.
           card.screen.mainOpacity = _ValueCalc.ab(0.0, 1.0).calc(value * 2.0 - 1.0);
         }
         card.mainElevation = _ValueCalc.ab(4.0, 2.0).calc(value);
         if (half) {
           card.dimension = _CardDimension.main;
-          card.screen.viceOpacity = 0.0;
+          card.screen.detailOpacity = 0.0;
         }
         if (last) {
           card.zIndex = 1;
-          card.vicing = false;
+          card.detailing = false;
         }
       },
     );
@@ -558,8 +558,8 @@ class _CoreCard extends _Card {
     int zIndex = 1,
     bool visible = true,
     _CardDimension dimension = _CardDimension.main,
-    bool vice = false,
-    bool vicing = false,
+    bool detail = false,
+    bool detailing = false,
     double mainOpacity = 1.0,
     _GestureType gestureType = _GestureType.normal,
     void Function(_Card card) onTap,
@@ -582,8 +582,8 @@ class _CoreCard extends _Card {
     zIndex: zIndex,
     visible: visible,
     dimension: dimension,
-    vice: vice,
-    vicing: vicing,
+    detail: detail,
+    detailing: detailing,
     mainOpacity: mainOpacity,
     gestureType: gestureType,
     onTap: onTap,
@@ -715,8 +715,8 @@ class _SpriteCard extends _CoreCard {
     visible: visible,
     dimension: dimension,
     /// 固定为主尺寸卡片.
-    vice: false,
-    vicing: vicing,
+    detail: false,
+    detailing: vicing,
     mainOpacity: mainOpacity,
     gestureType: gestureType,
     onTap: (card) {
@@ -729,7 +729,7 @@ class _SpriteCard extends _CoreCard {
           case _CardDimension.main:
             spriteCard.sprite.onTap();
             break;
-          case _CardDimension.vice:
+          case _CardDimension.detail:
             break;
           case _CardDimension.full:
             break;
@@ -747,10 +747,10 @@ class _SpriteCard extends _CoreCard {
         switch (thisRef.dimension) {
           case _CardDimension.main:
             thisRef.screen.game.actionQueue.add(<_Action>[
-              thisRef.animateMainToVice().action(),
+              thisRef.animateMainToDetail().action(),
             ]);
             break;
-          case _CardDimension.vice:
+          case _CardDimension.detail:
           case _CardDimension.full:
             break;
           default:
@@ -1127,8 +1127,8 @@ class _SpriteCard extends _CoreCard {
 enum _CardDimension {
   /// 主尺寸.
   main,
-  /// 副尺寸. 目前始终为 square * square 大卡片.
-  vice,
+  /// 详情尺寸. 目前始终为 square * square 大卡片.
+  detail,
   /// 全屏尺寸.
   full,
 }
