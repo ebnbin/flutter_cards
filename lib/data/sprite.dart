@@ -107,14 +107,14 @@ class _Sprite {
 class _PlayerSprite extends _Sprite {
   _PlayerSprite(_SpriteCard card) : super(card,
     body: 'images/steve.png',
-//    shield: 'assets/shield.png',
+//    shield: 'images/gold_nugget.png',
 //    shieldValue: 88,
     healthValue: 88,
     maxHealthValue: 88,
-//    effect: 'assets/poison.png',
+//    effect: 'images/diamond_sword.png',
 //    effectValue: 88,
 //    amount: 88,
-//    power: 'assets/absorption.png',
+//    power: 'images/diamond_sword.png',
 //    powerValue: 88,
   );
 }

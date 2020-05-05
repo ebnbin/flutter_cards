@@ -223,6 +223,19 @@ class _Card {
     }
   }
 
+  double get borderWidth {
+    switch (dimension) {
+      case _CardDimension.main:
+      case _CardDimension.detail:
+        Rect rect = this.rect;
+        return min(rect.width, rect.height) / _Metric.coreNoPaddingGrid * 1.0;
+      case _CardDimension.full:
+        return 0.0;
+      default:
+        throw Exception();
+    }
+  }
+
   /// 内容矩形.
   Rect get contentRect {
     return Rect.fromCenter(

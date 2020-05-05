@@ -107,7 +107,7 @@ class _GameWidget extends StatelessWidget {
                 child: Material(
                   elevation: card.elevation,
                   color: Colors.transparent,
-//                  shadowColor: Colors.cyanAccent,
+                  shadowColor: card.shadowColor,
                   borderRadius: BorderRadius.circular(card.radius),
                   clipBehavior: Clip.antiAlias,
                   animationDuration: Duration.zero,
@@ -120,6 +120,7 @@ class _GameWidget extends StatelessWidget {
                           children: <Widget>[
                             _buildCardBackground(context, card),
                             _buildCardFace(context, card),
+                            _buildCardForeground(context, card),
                           ],
                         ),
                         onTap: card.onTap,
@@ -241,6 +242,22 @@ class _GameWidget extends StatelessWidget {
         color: spriteFaceDigit.color,
         colorBlendMode: BlendMode.srcIn,
         fit: BoxFit.contain,
+      ),
+    );
+  }
+
+  /// 卡片前景.
+  Widget _buildCardForeground(BuildContext context, Card card) {
+    return Positioned.fromRelativeRect(
+      rect: RelativeRect.fill,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: card.borderColor,
+            width: card.borderWidth,
+          ),
+          borderRadius: BorderRadius.circular(card.radius),
+        ),
       ),
     );
   }

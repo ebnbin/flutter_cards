@@ -131,6 +131,31 @@ class Card {
   double get marginA => _card.marginA;
   double get marginB => _card.marginB;
 
+  double get borderWidth => _card.borderWidth;
+
+  Color get borderColor {
+    if (_card is _SpriteCard) {
+      _SpriteCard spriteCard = _card;
+      if (spriteCard.sprite is _PlayerSprite) {
+        return Colors.cyanAccent.withOpacity(0.5);
+      }
+    }
+    return Colors.transparent;
+  }
+
+  Color get shadowColor {
+    if (_card is _SpriteCard) {
+      _SpriteCard spriteCard = _card;
+      if (spriteCard.sprite is _PlayerSprite) {
+        return Colors.cyanAccent;
+      }
+      if (spriteCard.spriteScreen.playerCard.adjacentDirection(spriteCard) != null) {
+        return Colors.cyanAccent;
+      }
+    }
+    return Colors.black;
+  }
+
   Rect get contentRect => _card.contentRect;
 
   double get elevation => _card.elevation;
@@ -218,10 +243,10 @@ class SpriteFace {
       return SpriteFaceImage._invisible();
     }
     return SpriteFaceImage._visible(_card,
-      left: 0.0,
-      top: 15.0,
-      width: 24.0,
-      height: 24.0,
+      left: 3.0,
+      top: 18.0,
+      width: 20.0,
+      height: 20.0,
       image: _sprite.weapon,
     );
   }
@@ -233,8 +258,8 @@ class SpriteFace {
     }
     int value = max(0, min(99, _sprite.weaponValue));
     return SpriteFaceDigit._visible(_card,
-      left: 0.0,
-      top: 39.0,
+      left: 3.0,
+      top: 38.0,
       digit: value < 10 ? value : (value ~/ 10),
     );
   }
@@ -246,8 +271,8 @@ class SpriteFace {
     }
     int value = max(0, min(99, _sprite.weaponValue));
     return SpriteFaceDigit._visible(_card,
-      left: 5.0,
-      top: 39.0,
+      left: 8.0,
+      top: 38.0,
       digit: value % 10,
     );
   }
@@ -258,10 +283,10 @@ class SpriteFace {
       return SpriteFaceImage._invisible();
     }
     return SpriteFaceImage._visible(_card,
-      left: 22.0,
-      top: 17.0,
-      width: 24.0,
-      height: 24.0,
+      left: 25.0,
+      top: 22.0,
+      width: 20.0,
+      height: 20.0,
       image: _sprite.shield,
     );
   }
@@ -273,7 +298,7 @@ class SpriteFace {
     }
     int value = max(0, min(99, _sprite.shieldValue));
     return SpriteFaceDigit._visible(_card,
-      left: 46.0,
+      left: 45.0,
       top: 28.0,
       digit: value ~/ 10,
     );
@@ -286,7 +311,7 @@ class SpriteFace {
     }
     int value = max(0, min(99, _sprite.shieldValue));
     return SpriteFaceDigit._visible(_card,
-      left: 51.0,
+      left: 50.0,
       top: 28.0,
       digit: value % 10,
     );
@@ -298,7 +323,7 @@ class SpriteFace {
       return SpriteFaceImage._invisible();
     }
     return SpriteFaceImage._visible(_card,
-      left: 47.0,
+      left: 46.0,
       top: 8.0,
       width: 9.0,
       height: 9.0,
@@ -324,7 +349,7 @@ class SpriteFace {
       return SpriteFaceDigit._invisible();
     }
     return SpriteFaceDigit._visible(_card,
-      left: 31.0,
+      left: 30.0,
       top: 1.0,
       digit: healthValue ~/ 10,
     );
@@ -348,7 +373,7 @@ class SpriteFace {
       return SpriteFaceDigit._invisible();
     }
     return SpriteFaceDigit._visible(_card,
-      left: 36.0,
+      left: 35.0,
       top: 1.0,
       digit: healthValue % 10,
     );
@@ -372,7 +397,7 @@ class SpriteFace {
       return SpriteFaceDigit._invisible();
     }
     return SpriteFaceDigit._visible(_card,
-      left: 41.0,
+      left: 40.0,
       top: 1.0,
       digit: maxHealthValue < 10 ? healthValue : 10,
     );
@@ -396,7 +421,7 @@ class SpriteFace {
       return SpriteFaceDigit._invisible();
     }
     return SpriteFaceDigit._visible(_card,
-      left: 46.0,
+      left: 45.0,
       top: 1.0,
       digit: maxHealthValue == null ? healthValue ~/ 10 : maxHealthValue < 10 ? 10 : maxHealthValue ~/ 10,
     );
@@ -417,7 +442,7 @@ class SpriteFace {
     }
     digitCount += (healthValue < 10 ? 1 : 2);
     return SpriteFaceDigit._visible(_card,
-      left: 51.0,
+      left: 50.0,
       top: 1.0,
       digit: maxHealthValue == null ? healthValue % 10 : maxHealthValue < 10 ? maxHealthValue : maxHealthValue % 10,
     );
@@ -429,7 +454,7 @@ class SpriteFace {
       return SpriteFaceImage._invisible();
     }
     return SpriteFaceImage._visible(_card,
-      left: 47.0,
+      left: 46.0,
       top: 46.0,
       width: 9.0,
       height: 9.0,
@@ -444,7 +469,7 @@ class SpriteFace {
     }
     int value = max(0, min(99, _sprite.effectValue));
     return SpriteFaceDigit._visible(_card,
-      left: 37.0,
+      left: 36.0,
       top: 48.0,
       digit: value ~/ 10,
     );
@@ -457,7 +482,7 @@ class SpriteFace {
     }
     int value = max(0, min(99, _sprite.effectValue));
     return SpriteFaceDigit._visible(_card,
-      left: 42.0,
+      left: 41.0,
       top: 48.0,
       digit: value % 10,
     );
@@ -470,7 +495,7 @@ class SpriteFace {
     }
     int value = max(0, min(99, _sprite.amount));
     return SpriteFaceDigit._visible(_card,
-      left: 0.0,
+      left: 1.0,
       top: 48.0,
       digit: value < 10 ? value : (value ~/ 10),
     );
@@ -483,7 +508,7 @@ class SpriteFace {
     }
     int value = max(0, min(99, _sprite.amount));
     return SpriteFaceDigit._visible(_card,
-      left: 5.0,
+      left: 6.0,
       top: 48.0,
       digit: value % 10,
     );
@@ -495,7 +520,7 @@ class SpriteFace {
       return SpriteFaceImage._invisible();
     }
     return SpriteFaceImage._visible(_card,
-      left: 0.0,
+      left: 1.0,
       top: 1.0,
       width: 9.0,
       height: 9.0,
@@ -510,7 +535,7 @@ class SpriteFace {
     }
     int value = max(0, min(99, _sprite.powerValue));
     return SpriteFaceDigit._visible(_card,
-      left: 9.0,
+      left: 10.0,
       top: 1.0,
       digit: value < 10 ? value : (value ~/ 10),
     );
@@ -523,7 +548,7 @@ class SpriteFace {
     }
     int value = max(0, min(99, _sprite.powerValue));
     return SpriteFaceDigit._visible(_card,
-      left: 14.0,
+      left: 15.0,
       top: 1.0,
       digit: value % 10,
     );
