@@ -73,9 +73,7 @@ class _SplashScreen extends _Screen {
       onTap: (card) {
         card.screen.game.actionQueue.post<_CoreCard>(card, (thisRef, action) {
           if (thisRef.dimension == _CardDimension.main) {
-            thisRef.screen.game.actionQueue.add(<_Action>[
-              thisRef.animateSample().action(),
-            ]);
+            thisRef.screen.game.actionQueue.addSingleFirst(thisRef.animateSample().action());
           }
         });
       },
@@ -173,8 +171,10 @@ class _SpriteScreen extends _Screen {
       horizontalRowGridSpan: 10,
       horizontalColumnGridSpan: 10,
       onTap: (card) {
-        game.screen = _SplashScreen(game);
-        game.callback.notifyStateChanged();
+        card.screen.game.actionQueue.post<_Card>(card, (thisRef, action) {
+          thisRef.screen.game.screen = _SplashScreen(game);
+          thisRef.screen.game.callback.notifyStateChanged();
+        });
       },
     );
     cards[cards.length - 2] = _Card(this,
@@ -246,7 +246,7 @@ class _SpriteScreen extends _Screen {
           );
         }
       }
-      thisRef.game.actionQueue.add(thisRef.spriteCards().map<_Action>((element) {
+      thisRef.game.actionQueue.addFirst(thisRef.spriteCards().map<_Action>((element) {
         if (element.sprite is _PlayerSprite) {
           return element.animateFullToMain().action();
         }
@@ -254,29 +254,21 @@ class _SpriteScreen extends _Screen {
           beginDelayRandomCenter: 1000,
           beginDelayRandomRange: 600,
         ).action();
-      }).toList(),
-        addFirst: true,
-      );
+      }).toList());
     });
   }
 
   /// 移除精灵卡片.
   static void actRemoveSpriteCards(_SpriteScreen spriteScreen) {
     spriteScreen.game.actionQueue.post<_SpriteScreen>(spriteScreen, (thisRef, action) {
-      thisRef.game.actionQueue.add(<_Action>[
-        _Action.run((action) {
-          thisRef.spriteCards().forEach((element) {
-            thisRef.cards[element.index] = null;
-          });
-        }),
-      ],
-        addFirst: true,
-      );
-      thisRef.game.actionQueue.add(thisRef.spriteCards().map<_Action>((element) {
+      thisRef.game.actionQueue.addSingleFirst(_Action.run((action) {
+        thisRef.spriteCards().forEach((element) {
+          thisRef.cards[element.index] = null;
+        });
+      }));
+      thisRef.game.actionQueue.addFirst(thisRef.spriteCards().map<_Action>((element) {
         return element.animateSpriteLastExit().action();
-      }).toList(),
-        addFirst: true,
-      );
+      }).toList());
     });
   }
 }

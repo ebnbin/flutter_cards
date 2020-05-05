@@ -62,9 +62,7 @@ class _Sprite {
     _SpriteCard playerCard = card.spriteScreen.playerCard;
     AxisDirection direction = playerCard.adjacentDirection(card);
     if (direction == null) {
-      card.screen.game.actionQueue.add(<_Action>[
-        card.animateTremble().action(),
-      ]);
+      card.screen.game.actionQueue.addSingleFirst(card.animateTremble().action());
       return;
     }
     AxisDirection nextDirection = playerCard.nextNonEdgeDirection(flipAxisDirection(direction));
@@ -85,18 +83,14 @@ class _Sprite {
     actions.add(newSpriteCard.animateSpriteEnter(
       beginDelay: 200,
     ).action());
-    card.screen.game.actionQueue.add(actions,
-      addFirst: true,
-    );
-    card.screen.game.actionQueue.add(<_Action>[
+    card.screen.game.actionQueue.addFirst(actions);
+    card.screen.game.actionQueue.addFirst(<_Action>[
       card.animateSpriteExit().action(),
       playerCard.animateSpriteMove(
         direction: direction,
         beginDelay: 200,
       ).action(),
-    ],
-      addFirst: true,
-    );
+    ]);
   }
 }
 
@@ -145,9 +139,7 @@ class _DiamondSwordSprite extends _Sprite {
     _SpriteCard playerCard = card.spriteScreen.playerCard;
     AxisDirection direction = playerCard.adjacentDirection(card);
     if (direction == null) {
-      card.screen.game.actionQueue.add(<_Action>[
-        card.animateTremble().action(),
-      ]);
+      card.screen.game.actionQueue.addSingleFirst(card.animateTremble().action());
       return;
     }
     AxisDirection nextDirection = playerCard.nextNonEdgeDirection(flipAxisDirection(direction));
@@ -168,10 +160,8 @@ class _DiamondSwordSprite extends _Sprite {
     actions.add(newSpriteCard.animateSpriteEnter(
       beginDelay: 200,
     ).action());
-    card.screen.game.actionQueue.add(actions,
-      addFirst: true,
-    );
-    card.screen.game.actionQueue.add(<_Action>[
+    card.screen.game.actionQueue.addFirst(actions);
+    card.screen.game.actionQueue.addFirst(<_Action>[
       card.animateSpriteExit().action(),
       _Action.run((action) {
         playerCard.sprite.weapon = body;
@@ -182,9 +172,7 @@ class _DiamondSwordSprite extends _Sprite {
         direction: direction,
         beginDelay: 200,
       ).action(),
-    ],
-      addFirst: true,
-    );
+    ]);
   }
 }
 
@@ -206,9 +194,7 @@ class _ZombieSprite extends _Sprite {
     _SpriteCard playerCard = card.spriteScreen.playerCard;
     AxisDirection direction = playerCard.adjacentDirection(card);
     if (direction == null) {
-      card.screen.game.actionQueue.add(<_Action>[
-        card.animateTremble().action(),
-      ]);
+      card.screen.game.actionQueue.addSingleFirst(card.animateTremble().action());
       return;
     }
     bool hasWeapon;
@@ -261,11 +247,7 @@ class _ZombieSprite extends _Sprite {
             }
           },
         ).action();
-        card.screen.game.actionQueue.add(<_Action>[
-          action,
-        ],
-          addFirst: true,
-        );
+        card.screen.game.actionQueue.addSingleFirst(action);
       } else {
         AxisDirection nextDirection = playerCard.nextNonEdgeDirection(flipAxisDirection(direction));
         List<_SpriteCard> adjacentCardAll = playerCard.adjacentCardAll(nextDirection);
@@ -285,18 +267,14 @@ class _ZombieSprite extends _Sprite {
         actions.add(newSpriteCard.animateSpriteEnter(
           beginDelay: 200,
         ).action());
-        card.screen.game.actionQueue.add(actions,
-          addFirst: true,
-        );
-        card.screen.game.actionQueue.add(<_Action>[
+        card.screen.game.actionQueue.addFirst(actions);
+        card.screen.game.actionQueue.addFirst(<_Action>[
           card.animateSpriteExit().action(),
           playerCard.animateSpriteMove(
             direction: direction,
             beginDelay: 200,
           ).action(),
-        ],
-          addFirst: true,
-        );
+        ]);
       }
     }
   }

@@ -759,9 +759,7 @@ class _SpriteCard extends _CoreCard {
         }
         switch (thisRef.dimension) {
           case _CardDimension.main:
-            thisRef.screen.game.actionQueue.add(<_Action>[
-              thisRef.animateMainToDetail().action(),
-            ]);
+            thisRef.screen.game.actionQueue.addSingleFirst(thisRef.animateMainToDetail().action());
             break;
           case _CardDimension.detail:
           case _CardDimension.full:

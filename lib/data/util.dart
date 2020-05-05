@@ -188,7 +188,7 @@ class _ActionQueue {
   /// 添加事件并处理.
   ///
   /// [addFirst] 添加到队列头部或尾部.
-  void add(List<_Action> actions, {
+  void _add(List<_Action> actions, {
     bool addFirst = false,
   }) {
     if (actions == null || actions.isEmpty) {
@@ -202,18 +202,52 @@ class _ActionQueue {
     _handle();
   }
 
+  void _addSingle(_Action action, {
+    bool addFirst = false,
+  }) {
+    _add(<_Action>[
+      action,
+    ],
+      addFirst: addFirst,
+    );
+  }
+
+  void addFirst(List<_Action> actions) {
+    _add(actions,
+      addFirst: true,
+    );
+  }
+
+  void addLast(List<_Action> actions) {
+    _add(actions,
+      addFirst: false,
+    );
+  }
+
+  void addSingleFirst(_Action action) {
+    _addSingle(action,
+      addFirst: true,
+    );
+  }
+
+  void addSingleLast(_Action action) {
+    _addSingle(action,
+      addFirst: false,
+    );
+  }
+
   /// 延迟到 [_Action] 被执行时可以访问调用者引用.
   ///
   /// [thisRef] 调用者引用.
   ///
   /// [runnable] 执行后自动结束事件.
   void post<T>(T thisRef, void Function(T thisRef, _Action action) runnable) {
-    add([
-      _Action.run((action) {
-        runnable(action._thisRef, action);
-        action._thisRef = null;
-      }).._thisRef = thisRef,
-    ]);
+    _Action action = _Action.run((action) {
+      runnable(action._thisRef, action);
+      action._thisRef = null;
+    });
+    action._thisRef = thisRef;
+    addSingleLast(action);
   }
 
   /// 只能被 [_Action] 调用.
