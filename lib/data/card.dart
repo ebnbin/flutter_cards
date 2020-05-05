@@ -144,6 +144,8 @@ class _Card {
 
   /// 值为 true 使用 [screen.mainOpacity] 渲染透明度, 值为 false 使用 [screen.viceOpacity] 渲染透明度.
   ///
+  /// 与 [dimension] 的 vice 不同的是, 它通常在初始化后不再修改, 表示卡片以哪种面板做为主态, 而 [dimension] 通常在动画中修改.
+  ///
   /// 简单来说, false 表示显示副尺寸卡片时隐藏, true 表示显示副尺寸卡片时显示.
   bool vice;
 
@@ -696,7 +698,7 @@ class _SpriteCard extends _CoreCard {
     @required
     int columnIndex,
     double mainElevation = 2.0,
-    _CardRadiusType radiusType = _CardRadiusType.small,
+    _CardRadiusType radiusType = _CardRadiusType.none,
     @required
     _Sprite Function(_SpriteCard card) createSprite,
   }) : super(screen,

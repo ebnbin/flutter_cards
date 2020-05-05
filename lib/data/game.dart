@@ -187,6 +187,7 @@ class _SpriteScreen extends _Screen {
       horizontalColumnGridIndex: 80,
       horizontalRowGridSpan: 10,
       horizontalColumnGridSpan: 10,
+      radiusType: _CardRadiusType.round,
       vice: true,
       onTap: (card) {
         card.screen.game.actionQueue.post<_Card>(card, (thisRef, action) {

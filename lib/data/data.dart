@@ -135,11 +135,11 @@ class Card {
 
   double get elevation => _card.elevation;
 
-  /// 是否强制启用圆角.
-  static const bool _enableRadius = false;
+  /// 是否强制禁用圆角.
+  static const bool _disableRadius = false;
 
   double get radius {
-    if (!_enableRadius) {
+    if (_disableRadius) {
       return 0.0;
     }
     return _card.radius;
