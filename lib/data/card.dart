@@ -196,7 +196,7 @@ class _Card {
       case _CardDimension.main:
       case _CardDimension.vice:
         Rect rect = this.rect;
-        return min(rect.width, rect.height) / _Metric.coreNoPaddingGrid * 1.5;
+        return min(rect.width, rect.height) / _Metric.coreNoPaddingGrid * 1.0;
       case _CardDimension.full:
         return 0.0;
       default:
@@ -212,7 +212,7 @@ class _Card {
       case _CardDimension.main:
       case _CardDimension.vice:
         Rect rect = this.rect;
-        return min(rect.width, rect.height) / _Metric.coreNoPaddingGrid * 0.5;
+        return min(rect.width, rect.height) / _Metric.coreNoPaddingGrid * 1.0;
       case _CardDimension.full:
         return 0.0;
       default:

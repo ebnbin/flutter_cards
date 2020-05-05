@@ -136,7 +136,7 @@ class Card {
   double get elevation => _card.elevation;
 
   /// 是否强制启用圆角.
-  static const bool _enableRadius = true;
+  static const bool _enableRadius = false;
 
   double get radius {
     if (!_enableRadius) {
@@ -233,8 +233,8 @@ class SpriteFace {
     }
     int value = max(0, min(99, _sprite.weaponValue));
     return SpriteFaceDigit._visible(_card,
-      left: 1.0,
-      top: 40.0,
+      left: 0.0,
+      top: 39.0,
       digit: value < 10 ? value : (value ~/ 10),
     );
   }
@@ -247,7 +247,7 @@ class SpriteFace {
     int value = max(0, min(99, _sprite.weaponValue));
     return SpriteFaceDigit._visible(_card,
       left: 5.0,
-      top: 40.0,
+      top: 39.0,
       digit: value % 10,
     );
   }
@@ -273,8 +273,8 @@ class SpriteFace {
     }
     int value = max(0, min(99, _sprite.shieldValue));
     return SpriteFaceDigit._visible(_card,
-      left: 47.0,
-      top: 29.0,
+      left: 46.0,
+      top: 28.0,
       digit: value ~/ 10,
     );
   }
@@ -287,7 +287,7 @@ class SpriteFace {
     int value = max(0, min(99, _sprite.shieldValue));
     return SpriteFaceDigit._visible(_card,
       left: 51.0,
-      top: 29.0,
+      top: 28.0,
       digit: value % 10,
     );
   }
@@ -299,7 +299,7 @@ class SpriteFace {
     }
     return SpriteFaceImage._visible(_card,
       left: 47.0,
-      top: 9.0,
+      top: 8.0,
       width: 9.0,
       height: 9.0,
       image: 'images/health.png',
@@ -324,8 +324,8 @@ class SpriteFace {
       return SpriteFaceDigit._invisible();
     }
     return SpriteFaceDigit._visible(_card,
-      left: 35.0,
-      top: 2.0,
+      left: 31.0,
+      top: 1.0,
       digit: healthValue ~/ 10,
     );
   }
@@ -348,8 +348,8 @@ class SpriteFace {
       return SpriteFaceDigit._invisible();
     }
     return SpriteFaceDigit._visible(_card,
-      left: 39.0,
-      top: 2.0,
+      left: 36.0,
+      top: 1.0,
       digit: healthValue % 10,
     );
   }
@@ -372,8 +372,8 @@ class SpriteFace {
       return SpriteFaceDigit._invisible();
     }
     return SpriteFaceDigit._visible(_card,
-      left: 43.0,
-      top: 2.0,
+      left: 41.0,
+      top: 1.0,
       digit: maxHealthValue < 10 ? healthValue : 10,
     );
   }
@@ -396,8 +396,8 @@ class SpriteFace {
       return SpriteFaceDigit._invisible();
     }
     return SpriteFaceDigit._visible(_card,
-      left: 47.0,
-      top: 2.0,
+      left: 46.0,
+      top: 1.0,
       digit: maxHealthValue == null ? healthValue ~/ 10 : maxHealthValue < 10 ? 10 : maxHealthValue ~/ 10,
     );
   }
@@ -418,7 +418,7 @@ class SpriteFace {
     digitCount += (healthValue < 10 ? 1 : 2);
     return SpriteFaceDigit._visible(_card,
       left: 51.0,
-      top: 2.0,
+      top: 1.0,
       digit: maxHealthValue == null ? healthValue % 10 : maxHealthValue < 10 ? maxHealthValue : maxHealthValue % 10,
     );
   }
@@ -444,7 +444,7 @@ class SpriteFace {
     }
     int value = max(0, min(99, _sprite.effectValue));
     return SpriteFaceDigit._visible(_card,
-      left: 38.0,
+      left: 37.0,
       top: 48.0,
       digit: value ~/ 10,
     );
@@ -470,7 +470,7 @@ class SpriteFace {
     }
     int value = max(0, min(99, _sprite.amount));
     return SpriteFaceDigit._visible(_card,
-      left: 1.0,
+      left: 0.0,
       top: 48.0,
       digit: value < 10 ? value : (value ~/ 10),
     );
@@ -510,8 +510,8 @@ class SpriteFace {
     }
     int value = max(0, min(99, _sprite.powerValue));
     return SpriteFaceDigit._visible(_card,
-      left: 10.0,
-      top: 2.0,
+      left: 9.0,
+      top: 1.0,
       digit: value < 10 ? value : (value ~/ 10),
     );
   }
@@ -524,7 +524,7 @@ class SpriteFace {
     int value = max(0, min(99, _sprite.powerValue));
     return SpriteFaceDigit._visible(_card,
       left: 14.0,
-      top: 2.0,
+      top: 1.0,
       digit: value % 10,
     );
   }
@@ -607,8 +607,8 @@ class SpriteFaceDigit {
         rect = Rect.fromLTWH(
           card.contentRect.width / 56.0 * left,
           card.contentRect.width / 56.0 * top,
-          card.contentRect.width / 56.0 * 4.0,
-          card.contentRect.width / 56.0 * 6.0,
+          card.contentRect.width / 56.0 * 5.0,
+          card.contentRect.width / 56.0 * 7.0,
         ),
         image = _digits[digit],
         color = color == null ? Colors.blueGrey.shade100 : color;
