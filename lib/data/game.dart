@@ -64,21 +64,21 @@ class _SplashScreen extends _Screen {
     square: 4,
     cardLength: 14,
   ) {
-    cards[0] = _CoreCard(this,
+    cards[0] = _Card.core(this,
       name: 'Cards',
       rowIndex: 1,
       columnIndex: 0,
       rowSpan: 1,
       columnSpan: 3,
       onTap: (card) {
-        card.post<_CoreCard>((card) {
+        card.post<_Card>((card) {
           if (card.dimension == _CardDimension.main) {
             card.game.actionQueue.addSingleFirst(card.animateSample().action());
           }
         });
       },
       onLongPress: (card) {
-        card.post<_CoreCard>((card) {
+        card.post<_Card>((card) {
           if (card.dimension == _CardDimension.full) {
             card.animateFullToMain().begin();
           } else {
@@ -88,14 +88,14 @@ class _SplashScreen extends _Screen {
       },
     );
 
-    cards[2] = _CoreCard(this,
+    cards[2] = _Card.core(this,
       name: 'Play',
       rowIndex: 2,
       columnIndex: 3,
       rowSpan: 2,
       columnSpan: 1,
       onTap: (card) {
-        card.post<_CoreCard>((card) {
+        card.post<_Card>((card) {
           card.animateMainToFull().begin(endCallback: () {
             card.game.screen = _SpriteScreen(card.game,
               square: 3,
@@ -106,47 +106,47 @@ class _SplashScreen extends _Screen {
       }
     );
 
-    cards[3] = _CoreCard(this,
+    cards[3] = _Card.core(this,
       rowIndex: 0,
       columnIndex: 0,
     );
-    cards[4] = _CoreCard(this,
+    cards[4] = _Card.core(this,
       rowIndex: 0,
       columnIndex: 1,
     );
-    cards[5] = _CoreCard(this,
+    cards[5] = _Card.core(this,
       rowIndex: 0,
       columnIndex: 2,
     );
-    cards[6] = _CoreCard(this,
+    cards[6] = _Card.core(this,
       rowIndex: 0,
       columnIndex: 3,
     );
-    cards[7] = _CoreCard(this,
+    cards[7] = _Card.core(this,
       rowIndex: 1,
       columnIndex: 3,
     );
-    cards[8] = _CoreCard(this,
+    cards[8] = _Card.core(this,
       rowIndex: 2,
       columnIndex: 0,
     );
-    cards[9] = _CoreCard(this,
+    cards[9] = _Card.core(this,
       rowIndex: 2,
       columnIndex: 1,
     );
-    cards[10] = _CoreCard(this,
+    cards[10] = _Card.core(this,
       rowIndex: 2,
       columnIndex: 2,
     );
-    cards[11] = _CoreCard(this,
+    cards[11] = _Card.core(this,
       rowIndex: 3,
       columnIndex: 0,
     );
-    cards[12] = _CoreCard(this,
+    cards[12] = _Card.core(this,
       rowIndex: 3,
       columnIndex: 1,
     );
-    cards[13] = _CoreCard(this,
+    cards[13] = _Card.core(this,
       rowIndex: 3,
       columnIndex: 2,
     );
@@ -162,7 +162,7 @@ class _SpriteScreen extends _Screen {
     square: square,
     cardLength: square * square + 2,
   ) {
-    cards[cards.length - 1] = _Card(this,
+    cards[cards.length - 1] = _Card.grid(this,
       name: 'Back',
       verticalRowGridIndex: 6,
       verticalColumnGridIndex: 1,
@@ -179,7 +179,7 @@ class _SpriteScreen extends _Screen {
         });
       },
     );
-    cards[cards.length - 2] = _Card(this,
+    cards[cards.length - 2] = _Card.grid(this,
       name: 'Close',
       verticalRowGridIndex: 80,
       verticalColumnGridIndex: 26,

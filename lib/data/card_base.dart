@@ -4,9 +4,10 @@ part of '../data.dart';
 //*********************************************************************************************************************
 // 基础卡片.
 
-/// 卡片. 根据网格定位.
+/// 卡片.
 class _Card {
-  _Card(this.screen, {
+  /// 根据网格定位.
+  _Card.grid(this.screen, {
     this.name,
     this.rotateX = 0.0,
     this.rotateY = 0.0,
@@ -15,14 +16,14 @@ class _Card {
     this.translateY = 0.0,
     this.scaleX = 1.0,
     this.scaleY = 1.0,
-    this.verticalRowGridIndex = 0,
-    this.verticalColumnGridIndex = 0,
-    this.verticalRowGridSpan = 1,
-    this.verticalColumnGridSpan = 1,
-    this.horizontalRowGridIndex = 0,
-    this.horizontalColumnGridIndex = 0,
-    this.horizontalRowGridSpan = 1,
-    this.horizontalColumnGridSpan = 1,
+    int verticalRowGridIndex = 0,
+    int verticalColumnGridIndex = 0,
+    int verticalRowGridSpan = 1,
+    int verticalColumnGridSpan = 1,
+    int horizontalRowGridIndex = 0,
+    int horizontalColumnGridIndex = 0,
+    int horizontalRowGridSpan = 1,
+    int horizontalColumnGridSpan = 1,
     this.zIndex = 1,
     this.visible = true,
     this.dimension = _CardDimension.main,
@@ -34,13 +35,56 @@ class _Card {
     this.gestureType = _GestureType.normal,
     this.onTap,
     this.onLongPress,
-  });
+  }) : this.isCore = false {
+    this.verticalRowGridIndex = verticalRowGridIndex;
+    this.verticalColumnGridIndex = verticalColumnGridIndex;
+    this.verticalRowGridSpan = verticalRowGridSpan;
+    this.verticalColumnGridSpan = verticalColumnGridSpan;
+    this.horizontalRowGridIndex = horizontalRowGridIndex;
+    this.horizontalColumnGridIndex = horizontalColumnGridIndex;
+    this.horizontalRowGridSpan = horizontalRowGridSpan;
+    this.horizontalColumnGridSpan = horizontalColumnGridSpan;
+  }
+
+  /// 根据方格定位.
+  _Card.core(this.screen, {
+    this.name,
+    this.rotateX = 0.0,
+    this.rotateY = 0.0,
+    this.rotateZ = 0.0,
+    this.translateX = 0.0,
+    this.translateY = 0.0,
+    this.scaleX = 1.0,
+    this.scaleY = 1.0,
+    int rowIndex = 0,
+    int columnIndex = 0,
+    int rowSpan = 1,
+    int columnSpan = 1,
+    this.zIndex = 1,
+    this.visible = true,
+    this.dimension = _CardDimension.main,
+    this.detail = false,
+    this.detailing = false,
+    this.mainElevation = 2.0,
+    this.radiusType = _CardRadiusType.small,
+    this.mainOpacity = 1.0,
+    this.gestureType = _GestureType.normal,
+    this.onTap,
+    this.onLongPress,
+  }) : this.isCore = true {
+    this.rowIndex = rowIndex;
+    this.columnIndex = columnIndex;
+    this.rowSpan = rowSpan;
+    this.columnSpan = columnSpan;
+  }
 
   final _Screen screen;
 
   _Game get game {
     return screen.game;
   }
+
+  final bool isCore;
 
   String name;
 
@@ -67,56 +111,258 @@ class _Card {
   //*******************************************************************************************************************
 
   /// 竖屏网格行.
-  int verticalRowGridIndex;
+  int _verticalRowGridIndex;
   /// 竖屏网格列.
-  int verticalColumnGridIndex;
+  int _verticalColumnGridIndex;
   /// 竖屏网格跨行.
-  int verticalRowGridSpan;
+  int _verticalRowGridSpan;
   /// 竖屏网格跨列.
-  int verticalColumnGridSpan;
+  int _verticalColumnGridSpan;
   /// 横屏网格行.
-  int horizontalRowGridIndex;
+  int _horizontalRowGridIndex;
   /// 横屏网格列.
-  int horizontalColumnGridIndex;
+  int _horizontalColumnGridIndex;
   /// 横屏网格跨行.
-  int horizontalRowGridSpan;
+  int _horizontalRowGridSpan;
   /// 横屏网格跨列.
-  int horizontalColumnGridSpan;
+  int _horizontalColumnGridSpan;
+
+  int get verticalRowGridIndex {
+//    if (isCore) {
+//      throw Exception();
+//    }
+    return _verticalRowGridIndex;
+  }
+  set verticalRowGridIndex(int verticalRowGridIndex) {
+    if (isCore) {
+      throw Exception();
+    }
+    _verticalRowGridIndex = verticalRowGridIndex;
+  }
+
+  int get verticalColumnGridIndex {
+//    if (isCore) {
+//      throw Exception();
+//    }
+    return _verticalColumnGridIndex;
+  }
+  set verticalColumnGridIndex(int verticalColumnGridIndex) {
+    if (isCore) {
+      throw Exception();
+    }
+    _verticalColumnGridIndex = verticalColumnGridIndex;
+  }
+
+  int get verticalRowGridSpan {
+//    if (isCore) {
+//      throw Exception();
+//    }
+    return _verticalRowGridSpan;
+  }
+  set verticalRowGridSpan(int verticalRowGridSpan) {
+    if (isCore) {
+      throw Exception();
+    }
+    _verticalRowGridSpan = verticalRowGridSpan;
+  }
+
+  int get verticalColumnGridSpan {
+//    if (isCore) {
+//      throw Exception();
+//    }
+    return _verticalColumnGridSpan;
+  }
+  set verticalColumnGridSpan(int verticalColumnGridSpan) {
+    if (isCore) {
+      throw Exception();
+    }
+    _verticalColumnGridSpan = verticalColumnGridSpan;
+  }
+
+  int get horizontalRowGridIndex {
+//    if (isCore) {
+//      throw Exception();
+//    }
+    return _horizontalRowGridIndex;
+  }
+  set horizontalRowGridIndex(int horizontalRowGridIndex) {
+    if (isCore) {
+      throw Exception();
+    }
+    _horizontalRowGridIndex = horizontalRowGridIndex;
+  }
+
+  int get horizontalColumnGridIndex {
+//    if (isCore) {
+//      throw Exception();
+//    }
+    return _horizontalColumnGridIndex;
+  }
+  set horizontalColumnGridIndex(int horizontalColumnGridIndex) {
+    if (isCore) {
+      throw Exception();
+    }
+    _horizontalColumnGridIndex = horizontalColumnGridIndex;
+  }
+
+  int get horizontalRowGridSpan {
+//    if (isCore) {
+//      throw Exception();
+//    }
+    return _horizontalRowGridSpan;
+  }
+  set horizontalRowGridSpan(int horizontalRowGridSpan) {
+    if (isCore) {
+      throw Exception();
+    }
+    _horizontalRowGridSpan = horizontalRowGridSpan;
+  }
+
+  int get horizontalColumnGridSpan {
+//    if (isCore) {
+//      throw Exception();
+//    }
+    return _horizontalColumnGridSpan;
+  }
+  set horizontalColumnGridSpan(int horizontalColumnGridSpan) {
+    if (isCore) {
+      throw Exception();
+    }
+    _horizontalColumnGridSpan = horizontalColumnGridSpan;
+  }
 
   /// 当前屏幕旋转方向的网格行.
   int get rowGridIndex {
-    return _Metric.get().isVertical ? verticalRowGridIndex : horizontalRowGridIndex;
+//    if (isCore) {
+//      throw Exception();
+//    }
+    return _Metric.get().isVertical ? _verticalRowGridIndex : _horizontalRowGridIndex;
   }
   set rowGridIndex(int rowGridIndex) {
-    verticalRowGridIndex = rowGridIndex;
-    horizontalRowGridIndex = rowGridIndex;
+    if (isCore) {
+      throw Exception();
+    }
+    _verticalRowGridIndex = rowGridIndex;
+    _horizontalRowGridIndex = rowGridIndex;
   }
 
   /// 当前屏幕旋转方向的网格列.
   int get columnGridIndex {
-    return _Metric.get().isVertical ? verticalColumnGridIndex : horizontalColumnGridIndex;
+//    if (isCore) {
+//      throw Exception();
+//    }
+    return _Metric.get().isVertical ? _verticalColumnGridIndex : _horizontalColumnGridIndex;
   }
   set columnGridIndex(int columnGridIndex) {
-    verticalColumnGridIndex = columnGridIndex;
-    horizontalColumnGridIndex = columnGridIndex;
+    if (isCore) {
+      throw Exception();
+    }
+    _verticalColumnGridIndex = columnGridIndex;
+    _horizontalColumnGridIndex = columnGridIndex;
   }
 
   /// 当前屏幕旋转方向的网格跨行.
   int get rowGridSpan {
-    return _Metric.get().isVertical ? verticalRowGridSpan : horizontalRowGridSpan;
+//    if (isCore) {
+//      throw Exception();
+//    }
+    return _Metric.get().isVertical ? _verticalRowGridSpan : _horizontalRowGridSpan;
   }
   set rowGridSpan(int rowGridSpan) {
-    verticalRowGridSpan = rowGridSpan;
-    horizontalRowGridSpan = rowGridSpan;
+    if (isCore) {
+      throw Exception();
+    }
+    _verticalRowGridSpan = rowGridSpan;
+    _horizontalRowGridSpan = rowGridSpan;
   }
 
   /// 当前屏幕旋转方向的网格跨列.
   int get columnGridSpan {
-    return _Metric.get().isVertical ? verticalColumnGridSpan : horizontalColumnGridSpan;
+//    if (isCore) {
+//      throw Exception();
+//    }
+    return _Metric.get().isVertical ? _verticalColumnGridSpan : _horizontalColumnGridSpan;
   }
   set columnGridSpan(int columnGridSpan) {
-    verticalColumnGridSpan = columnGridSpan;
-    horizontalColumnGridSpan = columnGridSpan;
+    if (isCore) {
+      throw Exception();
+    }
+    _verticalColumnGridSpan = columnGridSpan;
+    _horizontalColumnGridSpan = columnGridSpan;
+  }
+
+  //*******************************************************************************************************************
+
+  /// 行.
+  int get rowIndex {
+    if (!isCore) {
+      throw Exception();
+    }
+    int grid = (rowGridIndex - _Metric.paddingGrid - (_Metric.get().isVertical ? _Metric.headerFooterGrid : 0));
+    int square = _Metric.squareGridMap[screen.square];
+    assert(grid % square == 0);
+    return grid ~/ square;
+  }
+  set rowIndex(int rowIndex) {
+    if (!isCore) {
+      throw Exception();
+    }
+    _verticalRowGridIndex = _Metric.squareGridMap[screen.square] * rowIndex + _Metric.paddingGrid +
+        _Metric.headerFooterGrid;
+    _horizontalRowGridIndex = _Metric.squareGridMap[screen.square] * rowIndex + _Metric.paddingGrid;
+  }
+
+  /// 列.
+  int get columnIndex {
+    if (!isCore) {
+      throw Exception();
+    }
+    int grid = (columnGridIndex - _Metric.paddingGrid - (_Metric.get().isVertical ? 0 : _Metric.headerFooterGrid));
+    int square = _Metric.squareGridMap[screen.square];
+    assert(grid % square == 0);
+    return grid ~/ square;
+  }
+  set columnIndex(int columnIndex) {
+    if (!isCore) {
+      throw Exception();
+    }
+    _verticalColumnGridIndex = _Metric.squareGridMap[screen.square] * columnIndex + _Metric.paddingGrid;
+    _horizontalColumnGridIndex = _Metric.squareGridMap[screen.square] * columnIndex + _Metric.paddingGrid +
+        _Metric.headerFooterGrid;
+  }
+
+  /// 跨行.
+  int get rowSpan {
+    if (!isCore) {
+      throw Exception();
+    }
+    int grid = rowGridSpan;
+    int square = _Metric.squareGridMap[screen.square];
+    assert(grid % square == 0);
+    return grid ~/ square;
+  }
+  set rowSpan(int rowSpan) {
+    if (!isCore) {
+      throw Exception();
+    }
+    _verticalRowGridSpan = _horizontalRowGridSpan = _Metric.squareGridMap[screen.square] * rowSpan;
+  }
+
+  /// 跨列.
+  int get columnSpan {
+    if (!isCore) {
+      throw Exception();
+    }
+    int grid = columnGridSpan;
+    int square = _Metric.squareGridMap[screen.square];
+    assert(grid % square == 0);
+    return grid ~/ square;
+  }
+  set columnSpan(int columnSpan) {
+    if (!isCore) {
+      throw Exception();
+    }
+    _verticalColumnGridSpan = _horizontalColumnGridSpan = _Metric.squareGridMap[screen.square] * columnSpan;
   }
 
   //*******************************************************************************************************************
@@ -569,138 +815,8 @@ class _Card {
 //*********************************************************************************************************************
 //*********************************************************************************************************************
 
-/// 通过方格定位的卡片.
-class _CoreCard extends _Card {
-  _CoreCard(_Screen screen, {
-    String name,
-    double rotateX = 0.0,
-    double rotateY = 0.0,
-    double rotateZ = 0.0,
-    double translateX = 0.0,
-    double translateY = 0.0,
-    double scaleX = 1.0,
-    double scaleY = 1.0,
-    int zIndex = 1,
-    bool visible = true,
-    _CardDimension dimension = _CardDimension.main,
-    bool detail = false,
-    bool detailing = false,
-    double mainOpacity = 1.0,
-    _GestureType gestureType = _GestureType.normal,
-    void Function(_Card card) onTap,
-    void Function(_Card card) onLongPress,
-    int rowIndex = 0,
-    int columnIndex = 0,
-    int rowSpan = 1,
-    int columnSpan = 1,
-    double mainElevation = 2.0,
-    _CardRadiusType radiusType = _CardRadiusType.small,
-  }) : super(screen,
-    name: name,
-    rotateX: rotateX,
-    rotateY: rotateY,
-    rotateZ: rotateZ,
-    translateX: translateX,
-    translateY: translateY,
-    scaleX: scaleX,
-    scaleY: scaleY,
-    zIndex: zIndex,
-    visible: visible,
-    dimension: dimension,
-    detail: detail,
-    detailing: detailing,
-    mainOpacity: mainOpacity,
-    gestureType: gestureType,
-    onTap: onTap,
-    onLongPress: onLongPress,
-    mainElevation: mainElevation,
-    radiusType: radiusType,
-  ) {
-    this.rowIndex = rowIndex;
-    this.columnIndex = columnIndex;
-    this.rowSpan = rowSpan;
-    this.columnSpan = columnSpan;
-  }
-
-  set verticalRowGridIndex(int verticalRowGridIndex) {
-    throw Exception();
-  }
-  set verticalColumnGridIndex(int verticalColumnGridIndex) {
-    throw Exception();
-  }
-  set verticalRowGridSpan(int verticalRowGridSpan) {
-    throw Exception();
-  }
-  set verticalColumnGridSpan(int verticalColumnGridSpan) {
-    throw Exception();
-  }
-  set horizontalRowGridIndex(int horizontalRowGridIndex) {
-    throw Exception();
-  }
-  set horizontalColumnGridIndex(int horizontalColumnGridIndex) {
-    throw Exception();
-  }
-  set horizontalRowGridSpan(int horizontalRowGridSpan) {
-    throw Exception();
-  }
-  set horizontalColumnGridSpan(int horizontalColumnGridSpan) {
-    throw Exception();
-  }
-
-  /// 行.
-  int get rowIndex {
-    int grid = (rowGridIndex - _Metric.paddingGrid - (_Metric.get().isVertical ? _Metric.headerFooterGrid : 0));
-    int square = _Metric.squareGridMap[screen.square];
-    assert(grid % square == 0);
-    return grid ~/ square;
-  }
-  set rowIndex(int rowIndex) {
-    super.verticalRowGridIndex = _Metric.squareGridMap[screen.square] * rowIndex + _Metric.paddingGrid +
-        _Metric.headerFooterGrid;
-    super.horizontalRowGridIndex = _Metric.squareGridMap[screen.square] * rowIndex + _Metric.paddingGrid;
-  }
-
-  /// 列.
-  int get columnIndex {
-    int grid = (columnGridIndex - _Metric.paddingGrid - (_Metric.get().isVertical ? 0 : _Metric.headerFooterGrid));
-    int square = _Metric.squareGridMap[screen.square];
-    assert(grid % square == 0);
-    return grid ~/ square;
-  }
-  set columnIndex(int columnIndex) {
-    super.verticalColumnGridIndex = _Metric.squareGridMap[screen.square] * columnIndex + _Metric.paddingGrid;
-    super.horizontalColumnGridIndex = _Metric.squareGridMap[screen.square] * columnIndex + _Metric.paddingGrid +
-        _Metric.headerFooterGrid;
-  }
-
-  /// 跨行.
-  int get rowSpan {
-    int grid = rowGridSpan;
-    int square = _Metric.squareGridMap[screen.square];
-    assert(grid % square == 0);
-    return grid ~/ square;
-  }
-  set rowSpan(int rowSpan) {
-    super.verticalRowGridSpan = super.horizontalRowGridSpan = _Metric.squareGridMap[screen.square] * rowSpan;
-  }
-
-  /// 跨列.
-  int get columnSpan {
-    int grid = columnGridSpan;
-    int square = _Metric.squareGridMap[screen.square];
-    assert(grid % square == 0);
-    return grid ~/ square;
-  }
-  set columnSpan(int columnSpan) {
-    super.verticalColumnGridSpan = super.horizontalColumnGridSpan = _Metric.squareGridMap[screen.square] * columnSpan;
-  }
-}
-
-//*********************************************************************************************************************
-//*********************************************************************************************************************
-
 /// 精灵卡片.
-class _SpriteCard extends _CoreCard {
+class _SpriteCard extends _Card {
   _SpriteCard(_SpriteScreen screen, {
     String name,
     double rotateX = 0.0,
@@ -727,7 +843,7 @@ class _SpriteCard extends _CoreCard {
     _CardRadiusType radiusType = _CardRadiusType.none,
     @required
     _Sprite Function(_SpriteCard card) createSprite,
-  }) : super(screen,
+  }) : super.core(screen,
     name: name,
     rotateX: rotateX,
     rotateY: rotateY,
