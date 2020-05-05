@@ -71,9 +71,9 @@ class _SplashScreen extends _Screen {
       rowSpan: 1,
       columnSpan: 3,
       onTap: (card) {
-        card.screen.game.actionQueue.post<_CoreCard>(card, (thisRef, action) {
+        card.game.actionQueue.post<_CoreCard>(card, (thisRef, action) {
           if (thisRef.dimension == _CardDimension.main) {
-            thisRef.screen.game.actionQueue.addSingleFirst(thisRef.animateSample().action());
+            thisRef.game.actionQueue.addSingleFirst(thisRef.animateSample().action());
           }
         });
       },
@@ -93,7 +93,7 @@ class _SplashScreen extends _Screen {
       rowSpan: 2,
       columnSpan: 1,
       onTap: (card) {
-        card.screen.game.actionQueue.post(card, (thisRef, action) {
+        card.game.actionQueue.post(card, (thisRef, action) {
           card.animateMainToFull().begin(endCallback: () {
             game.screen = _SpriteScreen(game,
               square: 3,
@@ -171,9 +171,9 @@ class _SpriteScreen extends _Screen {
       horizontalRowGridSpan: 10,
       horizontalColumnGridSpan: 10,
       onTap: (card) {
-        card.screen.game.actionQueue.post<_Card>(card, (thisRef, action) {
-          thisRef.screen.game.screen = _SplashScreen(game);
-          thisRef.screen.game.callback.notifyStateChanged();
+        card.game.actionQueue.post<_Card>(card, (thisRef, action) {
+          thisRef.game.screen = _SplashScreen(game);
+          thisRef.game.callback.notifyStateChanged();
         });
       },
     );
@@ -190,7 +190,7 @@ class _SpriteScreen extends _Screen {
       radiusType: _CardRadiusType.round,
       detail: true,
       onTap: (card) {
-        card.screen.game.actionQueue.post<_Card>(card, (thisRef, action) {
+        card.game.actionQueue.post<_Card>(card, (thisRef, action) {
           thisRef.screen.detailingCard?.animateDetailToMain()?.begin();
         });
       },

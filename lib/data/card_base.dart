@@ -38,6 +38,10 @@ class _Card {
 
   final _Screen screen;
 
+  _Game get game {
+    return screen.game;
+  }
+
   String name;
 
   double rotateX;
@@ -734,7 +738,7 @@ class _SpriteCard extends _CoreCard {
     gestureType: gestureType,
     onTap: (card) {
       _SpriteCard spriteCard = card;
-      spriteCard.screen.game.actionQueue.post<_SpriteCard>(spriteCard, (thisRef, action) {
+      spriteCard.game.actionQueue.post<_SpriteCard>(spriteCard, (thisRef, action) {
         if (thisRef.index < 0) {
           return;
         }
@@ -753,13 +757,13 @@ class _SpriteCard extends _CoreCard {
     },
     onLongPress: (card) {
       _SpriteCard spriteCard = card;
-      spriteCard.screen.game.actionQueue.post<_SpriteCard>(spriteCard, (thisRef, action) {
+      spriteCard.game.actionQueue.post<_SpriteCard>(spriteCard, (thisRef, action) {
         if (thisRef.index < 0) {
           return;
         }
         switch (thisRef.dimension) {
           case _CardDimension.main:
-            thisRef.screen.game.actionQueue.addSingleFirst(thisRef.animateMainToDetail().action());
+            thisRef.game.actionQueue.addSingleFirst(thisRef.animateMainToDetail().action());
             break;
           case _CardDimension.detail:
           case _CardDimension.full:
