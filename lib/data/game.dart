@@ -17,6 +17,9 @@ class _Game {
 
   /// 当前屏幕. 始终不为 null.
   _Screen screen;
+
+  /// 全屏尺寸内容.
+  String full = 'Cards';
 }
 
 //*********************************************************************************************************************
@@ -30,7 +33,9 @@ abstract class _Screen {
     this.square,
     @required
     int cardLength,
-  }) : cards = List<_Card>.filled(cardLength, null, growable: false);
+  }) : cards = List<_Card>.filled(cardLength, null, growable: false) {
+    game.full = null;
+  }
 
   final _Game game;
 
@@ -97,10 +102,19 @@ class _SplashScreen extends _Screen {
       mainOnTap: (card) {
         card.post<_Card>((card) {
           card.animateMainToFull().begin(endCallback: () {
-            card.game.screen = _SpriteScreen(card.game,
-              square: 3,
-            );
+            /// TODO 模拟异步加载资源.
+            card.game.full = 'Mock loading';
             card.game.callback.notifyStateChanged();
+            Future.delayed(Duration(
+              milliseconds: 1000,
+            ), () {
+              card.game.full = null;
+              card.game.callback.notifyStateChanged();
+              card.game.screen = _SpriteScreen(card.game,
+                square: 3,
+              );
+              card.game.callback.notifyStateChanged();
+            });
           },);
         });
       }

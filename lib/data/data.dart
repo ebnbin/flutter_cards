@@ -211,7 +211,13 @@ class Card {
     }
     /// TODO 全屏尺寸时内容属于全局.
     if (_card.dimension == _CardDimension.full) {
-      return null;
+      if (_card.game.full == null) {
+        return null;
+      } else {
+        return TextFace._(this,
+          text: _card.game.full,
+        );
+      }
     }
     if (_card is _SpriteCard) {
       _SpriteCard spriteCard = _card;
