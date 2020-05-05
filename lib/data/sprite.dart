@@ -22,6 +22,10 @@ class _Sprite {
 
   final _SpriteCard card;
 
+  _Game get game {
+    return card.game;
+  }
+
   /// 主体.
   String body;
 
@@ -62,7 +66,7 @@ class _Sprite {
     _SpriteCard playerCard = card.spriteScreen.playerCard;
     AxisDirection direction = playerCard.adjacentDirection(card);
     if (direction == null) {
-      card.game.actionQueue.addSingleFirst(card.animateTremble().action());
+      game.actionQueue.addSingleFirst(card.animateTremble().action());
       return;
     }
     AxisDirection nextDirection = playerCard.nextNonEdgeDirection(flipAxisDirection(direction));
@@ -83,8 +87,8 @@ class _Sprite {
     actions.add(newSpriteCard.animateSpriteEnter(
       beginDelay: 200,
     ).action());
-    card.game.actionQueue.addFirst(actions);
-    card.game.actionQueue.addFirst(<_Action>[
+    game.actionQueue.addFirst(actions);
+    game.actionQueue.addFirst(<_Action>[
       card.animateSpriteExit().action(),
       playerCard.animateSpriteMove(
         direction: direction,
@@ -139,7 +143,7 @@ class _DiamondSwordSprite extends _Sprite {
     _SpriteCard playerCard = card.spriteScreen.playerCard;
     AxisDirection direction = playerCard.adjacentDirection(card);
     if (direction == null) {
-      card.game.actionQueue.addSingleFirst(card.animateTremble().action());
+      game.actionQueue.addSingleFirst(card.animateTremble().action());
       return;
     }
     AxisDirection nextDirection = playerCard.nextNonEdgeDirection(flipAxisDirection(direction));
@@ -160,13 +164,13 @@ class _DiamondSwordSprite extends _Sprite {
     actions.add(newSpriteCard.animateSpriteEnter(
       beginDelay: 200,
     ).action());
-    card.game.actionQueue.addFirst(actions);
-    card.game.actionQueue.addFirst(<_Action>[
+    game.actionQueue.addFirst(actions);
+    game.actionQueue.addFirst(<_Action>[
       card.animateSpriteExit().action(),
       _Action.run((action) {
         playerCard.sprite.weapon = body;
         playerCard.sprite.weaponValue = amount;
-        card.game.callback.notifyStateChanged();
+        game.callback.notifyStateChanged();
       }),
       playerCard.animateSpriteMove(
         direction: direction,
@@ -194,7 +198,7 @@ class _ZombieSprite extends _Sprite {
     _SpriteCard playerCard = card.spriteScreen.playerCard;
     AxisDirection direction = playerCard.adjacentDirection(card);
     if (direction == null) {
-      card.game.actionQueue.addSingleFirst(card.animateTremble().action());
+      game.actionQueue.addSingleFirst(card.animateTremble().action());
       return;
     }
     bool hasWeapon;
@@ -213,11 +217,11 @@ class _ZombieSprite extends _Sprite {
       playerCard.sprite.healthValue -= diffValue;
       healthValue -= diffValue;
     }
-    card.game.callback.notifyStateChanged();
+    game.callback.notifyStateChanged();
     if (playerCard.sprite.healthValue <= 0) {
       // 玩家死亡.
-      card.game.screen = _SplashScreen(card.game);
-      card.game.callback.notifyStateChanged();
+      game.screen = _SplashScreen(game);
+      game.callback.notifyStateChanged();
       return;
     }
     if (healthValue <= 0) {
@@ -247,7 +251,7 @@ class _ZombieSprite extends _Sprite {
             }
           },
         ).action();
-        card.game.actionQueue.addSingleFirst(action);
+        game.actionQueue.addSingleFirst(action);
       } else {
         AxisDirection nextDirection = playerCard.nextNonEdgeDirection(flipAxisDirection(direction));
         List<_SpriteCard> adjacentCardAll = playerCard.adjacentCardAll(nextDirection);
@@ -267,8 +271,8 @@ class _ZombieSprite extends _Sprite {
         actions.add(newSpriteCard.animateSpriteEnter(
           beginDelay: 200,
         ).action());
-        card.game.actionQueue.addFirst(actions);
-        card.game.actionQueue.addFirst(<_Action>[
+        game.actionQueue.addFirst(actions);
+        game.actionQueue.addFirst(<_Action>[
           card.animateSpriteExit().action(),
           playerCard.animateSpriteMove(
             direction: direction,

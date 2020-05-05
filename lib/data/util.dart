@@ -331,6 +331,11 @@ class _Animation<T extends _Card> {
 
   /// 动画应用到的卡片.
   final T card;
+
+  _Game get game {
+    return card.game;
+  }
+
   /// 动画时长.
   final int duration;
   /// [onBegin] 之前延迟.
@@ -364,7 +369,7 @@ class _Animation<T extends _Card> {
       return;
     }
     card.animating = true;
-    card.game.callback.notifyStateChanged();
+    game.callback.notifyStateChanged();
     Future.delayed(Duration(
       milliseconds: beginDelay,
     ), () {
@@ -372,7 +377,7 @@ class _Animation<T extends _Card> {
         duration: Duration(
           milliseconds: duration,
         ),
-        vsync: card.game.callback,
+        vsync: game.callback,
       );
       CurvedAnimation curvedAnimation = CurvedAnimation(
         parent: animationController,
@@ -395,7 +400,7 @@ class _Animation<T extends _Card> {
                 _first = false;
                 _half = false;
                 card.animating = false;
-                card.game.callback.notifyStateChanged();
+                game.callback.notifyStateChanged();
                 endCallback?.call();
               });
               break;
@@ -412,7 +417,7 @@ class _Animation<T extends _Card> {
           }
           bool last = curvedAnimation.status == AnimationStatus.completed;
           listener.call(card, curvedAnimation.value, first, half, last);
-          card.game.callback.notifyStateChanged();
+          game.callback.notifyStateChanged();
         });
       animationController.forward();
     });
