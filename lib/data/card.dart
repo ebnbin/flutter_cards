@@ -32,8 +32,10 @@ class _Card {
     this.radiusType = _CardRadiusType.small,
     this.mainOpacity = 1.0,
     this.gestureType = _GestureType.normal,
-    this.onTap,
-    this.onLongPress,
+    this.mainOnTap,
+    this.detailOnTap,
+    this.mainOnLongPress,
+    this.detailOnLongPress,
   }) : this.isCore = false {
     this.verticalRowGridIndex = verticalRowGridIndex;
     this.verticalColumnGridIndex = verticalColumnGridIndex;
@@ -68,8 +70,10 @@ class _Card {
     this.radiusType = _CardRadiusType.small,
     this.mainOpacity = 1.0,
     this.gestureType = _GestureType.normal,
-    this.onTap,
-    this.onLongPress,
+    this.mainOnTap,
+    this.detailOnTap,
+    this.mainOnLongPress,
+    this.detailOnLongPress,
   }) : this.isCore = true {
     this.rowIndex = rowIndex;
     this.columnIndex = columnIndex;
@@ -578,11 +582,17 @@ class _Card {
     return gestureType == _GestureType.ignore;
   }
 
-  /// 点击事件.
-  void Function(_Card card) onTap;
+  /// 主尺寸点击事件.
+  void Function(_Card card) mainOnTap;
 
-  /// 长按事件.
-  void Function(_Card card) onLongPress;
+  /// 详情尺寸点击事件.
+  void Function(_Card card) detailOnTap;
+
+  /// 主尺寸长按事件.
+  void Function(_Card card) mainOnLongPress;
+
+  /// 详情尺寸长按事件.
+  void Function(_Card card) detailOnLongPress;
 
   //*******************************************************************************************************************
 
@@ -813,7 +823,7 @@ enum _CardDimension {
   main,
   /// 详情尺寸. 目前始终为 square * square 大卡片.
   detail,
-  /// 全屏尺寸.
+  /// 全屏尺寸. 内容属于全局, 不属于卡片.
   full,
 }
 

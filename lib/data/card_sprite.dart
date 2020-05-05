@@ -48,41 +48,24 @@ class _SpriteCard extends _Card {
     detailing: vicing,
     mainOpacity: mainOpacity,
     gestureType: gestureType,
-    onTap: (card) {
+    mainOnTap: (card) {
       card.post<_SpriteCard>((card) {
         if (card.index < 0) {
           return;
         }
-        switch (card.dimension) {
-          case _CardDimension.main:
-            card.sprite.onTap();
-            break;
-          case _CardDimension.detail:
-            break;
-          case _CardDimension.full:
-            break;
-          default:
-            break;
-        }
+        card.sprite.onTap();
       });
     },
-    onLongPress: (card) {
+    detailOnTap: null,
+    mainOnLongPress: (card) {
       card.post<_SpriteCard>((card) {
         if (card.index < 0) {
           return;
         }
-        switch (card.dimension) {
-          case _CardDimension.main:
-            card.game.actionQueue.addSingleFirst(card.animateMainToDetail().action());
-            break;
-          case _CardDimension.detail:
-          case _CardDimension.full:
-            break;
-          default:
-            break;
-        }
+        card.game.actionQueue.addSingleFirst(card.animateMainToDetail().action());
       });
     },
+    detailOnLongPress: null,
     rowIndex: rowIndex,
     columnIndex: columnIndex,
     /// 固定为 1.

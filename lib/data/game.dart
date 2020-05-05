@@ -70,22 +70,22 @@ class _SplashScreen extends _Screen {
       columnIndex: 0,
       rowSpan: 1,
       columnSpan: 3,
-      onTap: (card) {
+      mainOnTap: (card) {
         card.post<_Card>((card) {
-          if (card.dimension == _CardDimension.main) {
-            card.game.actionQueue.addSingleFirst(card.animateSample().action());
-          }
+          card.game.actionQueue.addSingleFirst(card.animateSample().action());
         });
       },
-      onLongPress: (card) {
+      mainOnLongPress: (card) {
         card.post<_Card>((card) {
-          if (card.dimension == _CardDimension.full) {
-            card.animateFullToMain().begin();
-          } else {
-            card.animateMainToFull().begin();
-          }
+          card.animateMainToFull().begin(
+            endCallback: () {
+              card.animateFullToMain(
+                beginDelay: 1000,
+              ).begin();
+            },
+          );
         });
-      },
+      }
     );
 
     cards[2] = _Card.core(this,
@@ -94,7 +94,7 @@ class _SplashScreen extends _Screen {
       columnIndex: 3,
       rowSpan: 2,
       columnSpan: 1,
-      onTap: (card) {
+      mainOnTap: (card) {
         card.post<_Card>((card) {
           card.animateMainToFull().begin(endCallback: () {
             card.game.screen = _SpriteScreen(card.game,
@@ -172,7 +172,7 @@ class _SpriteScreen extends _Screen {
       horizontalColumnGridIndex: 6,
       horizontalRowGridSpan: 10,
       horizontalColumnGridSpan: 10,
-      onTap: (card) {
+      mainOnTap: (card) {
         card.post<_Card>((card) {
           card.game.screen = _SplashScreen(card.game);
           card.game.callback.notifyStateChanged();
@@ -191,7 +191,7 @@ class _SpriteScreen extends _Screen {
       horizontalColumnGridSpan: 10,
       radiusType: _CardRadiusType.round,
       detail: true,
-      onTap: (card) {
+      mainOnTap: (card) {
         card.post<_Card>((card) {
           card.screen.detailingCard?.animateDetailToMain()?.begin();
         });

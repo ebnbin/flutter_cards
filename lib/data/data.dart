@@ -171,20 +171,46 @@ class Card {
   }
 
   GestureTapCallback get onTap {
-    return _card.onTap == null ? null : () {
-      _card.onTap(_card);
-    };
+    switch (_card.dimension) {
+      case _CardDimension.main:
+        return _card.mainOnTap == null ? null : () {
+          _card.mainOnTap(_card);
+        };
+      case _CardDimension.detail:
+        return _card.detailOnTap == null ? null : () {
+          _card.detailOnTap(_card);
+        };
+      case _CardDimension.full:
+        return null;
+      default:
+        throw Exception();
+    }
   }
 
   GestureLongPressCallback get onLongPress {
-    return _card.onLongPress == null ? null : () {
-      _card.onLongPress(_card);
-    };
+    switch (_card.dimension) {
+      case _CardDimension.main:
+        return _card.mainOnLongPress == null ? null : () {
+          _card.mainOnLongPress(_card);
+        };
+      case _CardDimension.detail:
+        return _card.detailOnLongPress == null ? null : () {
+          _card.detailOnLongPress(_card);
+        };
+      case _CardDimension.full:
+        return null;
+      default:
+        throw Exception();
+    }
   }
 
   Object buildFace() {
-    /// 全屏尺寸时不显示内容. 卡片翻转到背面时不显示内容.
-    if (_card.dimension == _CardDimension.full || _card.backFace()) {
+    /// 卡片翻转到背面时不显示内容.
+    if (_card.backFace()) {
+      return null;
+    }
+    /// TODO 全屏尺寸时内容属于全局.
+    if (_card.dimension == _CardDimension.full) {
       return null;
     }
     if (_card is _SpriteCard) {
