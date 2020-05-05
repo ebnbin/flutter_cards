@@ -241,9 +241,9 @@ class _ActionQueue {
   /// [thisRef] 调用者引用.
   ///
   /// [runnable] 执行后自动结束事件.
-  void post<T>(T thisRef, void Function(T thisRef, _Action action) runnable) {
+  void post<T>(T thisRef, void Function(T thisRef) runnable) {
     _Action action = _Action.run((action) {
-      runnable(action._thisRef, action);
+      runnable(action._thisRef);
       action._thisRef = null;
     });
     action._thisRef = thisRef;

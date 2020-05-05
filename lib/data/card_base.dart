@@ -341,6 +341,14 @@ class _Card {
 
   //*******************************************************************************************************************
 
+  void post<T extends _Card>(void Function(T card) runnable) {
+    game.actionQueue.post<T>(this, (thisRef) {
+      runnable(thisRef);
+    });
+  }
+
+  //*******************************************************************************************************************
+
   /// 演示动画.
   _Animation<_Card> animateSample() {
     return _Animation<_Card>(this,
@@ -737,14 +745,13 @@ class _SpriteCard extends _CoreCard {
     mainOpacity: mainOpacity,
     gestureType: gestureType,
     onTap: (card) {
-      _SpriteCard spriteCard = card;
-      spriteCard.game.actionQueue.post<_SpriteCard>(spriteCard, (thisRef, action) {
-        if (thisRef.index < 0) {
+      card.post<_SpriteCard>((card) {
+        if (card.index < 0) {
           return;
         }
-        switch (thisRef.dimension) {
+        switch (card.dimension) {
           case _CardDimension.main:
-            spriteCard.sprite.onTap();
+            card.sprite.onTap();
             break;
           case _CardDimension.detail:
             break;
@@ -756,14 +763,13 @@ class _SpriteCard extends _CoreCard {
       });
     },
     onLongPress: (card) {
-      _SpriteCard spriteCard = card;
-      spriteCard.game.actionQueue.post<_SpriteCard>(spriteCard, (thisRef, action) {
-        if (thisRef.index < 0) {
+      card.post<_SpriteCard>((card) {
+        if (card.index < 0) {
           return;
         }
-        switch (thisRef.dimension) {
+        switch (card.dimension) {
           case _CardDimension.main:
-            thisRef.game.actionQueue.addSingleFirst(thisRef.animateMainToDetail().action());
+            card.game.actionQueue.addSingleFirst(card.animateMainToDetail().action());
             break;
           case _CardDimension.detail:
           case _CardDimension.full:

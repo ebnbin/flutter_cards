@@ -71,18 +71,20 @@ class _SplashScreen extends _Screen {
       rowSpan: 1,
       columnSpan: 3,
       onTap: (card) {
-        card.game.actionQueue.post<_CoreCard>(card, (thisRef, action) {
-          if (thisRef.dimension == _CardDimension.main) {
-            thisRef.game.actionQueue.addSingleFirst(thisRef.animateSample().action());
+        card.post<_CoreCard>((card) {
+          if (card.dimension == _CardDimension.main) {
+            card.game.actionQueue.addSingleFirst(card.animateSample().action());
           }
         });
       },
       onLongPress: (card) {
-        if (card.dimension == _CardDimension.full) {
-          card.animateFullToMain().begin();
-        } else {
-          card.animateMainToFull().begin();
-        }
+        card.post<_CoreCard>((card) {
+          if (card.dimension == _CardDimension.full) {
+            card.animateFullToMain().begin();
+          } else {
+            card.animateMainToFull().begin();
+          }
+        });
       },
     );
 
@@ -93,12 +95,12 @@ class _SplashScreen extends _Screen {
       rowSpan: 2,
       columnSpan: 1,
       onTap: (card) {
-        card.game.actionQueue.post(card, (thisRef, action) {
+        card.post<_CoreCard>((card) {
           card.animateMainToFull().begin(endCallback: () {
-            game.screen = _SpriteScreen(game,
+            card.game.screen = _SpriteScreen(card.game,
               square: 3,
             );
-            game.callback.notifyStateChanged();
+            card.game.callback.notifyStateChanged();
           },);
         });
       }
@@ -171,9 +173,9 @@ class _SpriteScreen extends _Screen {
       horizontalRowGridSpan: 10,
       horizontalColumnGridSpan: 10,
       onTap: (card) {
-        card.game.actionQueue.post<_Card>(card, (thisRef, action) {
-          thisRef.game.screen = _SplashScreen(game);
-          thisRef.game.callback.notifyStateChanged();
+        card.post<_Card>((card) {
+          card.game.screen = _SplashScreen(card.game);
+          card.game.callback.notifyStateChanged();
         });
       },
     );
@@ -190,8 +192,8 @@ class _SpriteScreen extends _Screen {
       radiusType: _CardRadiusType.round,
       detail: true,
       onTap: (card) {
-        card.game.actionQueue.post<_Card>(card, (thisRef, action) {
-          thisRef.screen.detailingCard?.animateDetailToMain()?.begin();
+        card.post<_Card>((card) {
+          card.screen.detailingCard?.animateDetailToMain()?.begin();
         });
       },
     );
@@ -231,7 +233,7 @@ class _SpriteScreen extends _Screen {
 
   /// 添加精灵卡片.
   static void actAddSpriteCards(_SpriteScreen spriteScreen) {
-    spriteScreen.game.actionQueue.post<_SpriteScreen>(spriteScreen, (thisRef, action) {
+    spriteScreen.game.actionQueue.post<_SpriteScreen>(spriteScreen, (thisRef) {
       _SpriteCard playerCard = _SpriteCard.player(thisRef);
       thisRef.cards[0] = playerCard;
       int index = 1;
@@ -260,7 +262,7 @@ class _SpriteScreen extends _Screen {
 
   /// 移除精灵卡片.
   static void actRemoveSpriteCards(_SpriteScreen spriteScreen) {
-    spriteScreen.game.actionQueue.post<_SpriteScreen>(spriteScreen, (thisRef, action) {
+    spriteScreen.game.actionQueue.post<_SpriteScreen>(spriteScreen, (thisRef) {
       thisRef.game.actionQueue.addSingleFirst(_Action.run((action) {
         thisRef.spriteCards().forEach((element) {
           thisRef.cards[element.index] = null;
