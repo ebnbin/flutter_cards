@@ -27,10 +27,9 @@ class _Card {
     this.visible = true,
     this.dimension = _CardDimension.main,
     this.detail = false,
-    this.detailing = false,
     this.mainElevation = 2.0,
     this.radiusType = _CardRadiusType.small,
-    this.mainOpacity = 1.0,
+    this.selfOpacity = 1.0,
     this.gestureType = _GestureType.normal,
     this.mainOnTap,
     this.detailOnTap,
@@ -65,10 +64,9 @@ class _Card {
     this.visible = true,
     this.dimension = _CardDimension.main,
     this.detail = false,
-    this.detailing = false,
     this.mainElevation = 2.0,
     this.radiusType = _CardRadiusType.small,
-    this.mainOpacity = 1.0,
+    this.selfOpacity = 1.0,
     this.gestureType = _GestureType.normal,
     this.mainOnTap,
     this.detailOnTap,
@@ -401,10 +399,12 @@ class _Card {
   /// 与 [dimension] 的 detail 不同的是, 它通常在初始化后不再修改, 表示卡片以哪种面板做为主态, 而 [dimension] 通常在动画中修改.
   ///
   /// 简单来说, false 表示显示详情尺寸卡片时隐藏, true 表示显示详情尺寸卡片时显示.
-  bool detail;
+  final bool detail;
 
-  /// 值为 true 表示当前正在执行详情尺寸动画, [opacity] 始终取 [mainOpacity].
-  bool detailing;
+  /// 值为 true 表示当前正在执行详情尺寸动画, [opacity] 始终取 [selfOpacity].
+  ///
+  /// 在动画中修改.
+  bool detailing = false;
 
   //*******************************************************************************************************************
 
@@ -538,17 +538,17 @@ class _Card {
   }
 
   /// 自身透明度.
-  double mainOpacity;
+  double selfOpacity;
 
   /// 渲染透明度.
   double get opacity {
     if (detailing) {
-      return mainOpacity;
+      return selfOpacity;
     }
     if (detail) {
-      return screen.detailOpacity * mainOpacity;
+      return screen.detailOpacity * selfOpacity;
     } else {
-      return screen.mainOpacity * mainOpacity;
+      return screen.mainOpacity * selfOpacity;
     }
   }
 
