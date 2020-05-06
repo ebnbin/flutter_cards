@@ -141,6 +141,12 @@ class _SplashScreen extends _Screen {
       rowIndex: 1,
       columnIndex: 3,
       name: 'Special Event',
+      mainOnTap: (card) {
+        card.post<_Card>((thisRef) {
+          thisRef.game.screen = _LevelScreen(thisRef.game);
+          thisRef.game.callback.notifyStateChanged();
+        });
+      }
     );
     cards[8] = _Card.core(this,
       rowIndex: 2,
@@ -186,12 +192,12 @@ class _SpriteScreen extends _Screen {
   ) {
     cards[cards.length - 1] = _Card.grid(this,
       name: 'Back',
-      verticalRowGridIndex: 6,
+      verticalRowGridIndex: 7,
       verticalColumnGridIndex: 1,
       verticalRowGridSpan: 10,
       verticalColumnGridSpan: 10,
       horizontalRowGridIndex: 1,
-      horizontalColumnGridIndex: 6,
+      horizontalColumnGridIndex: 7,
       horizontalRowGridSpan: 10,
       horizontalColumnGridSpan: 10,
       mainOnTap: (card) {
@@ -203,12 +209,12 @@ class _SpriteScreen extends _Screen {
     );
     cards[cards.length - 2] = _Card.grid(this,
       name: 'Close',
-      verticalRowGridIndex: 80,
+      verticalRowGridIndex: 81,
       verticalColumnGridIndex: 26,
       verticalRowGridSpan: 10,
       verticalColumnGridSpan: 10,
       horizontalRowGridIndex: 26,
-      horizontalColumnGridIndex: 80,
+      horizontalColumnGridIndex: 81,
       horizontalRowGridSpan: 10,
       horizontalColumnGridSpan: 10,
       radiusType: _CardRadiusType.round,
@@ -294,5 +300,48 @@ class _SpriteScreen extends _Screen {
         return element.animateSpriteLastExit().action();
       }).toList());
     });
+  }
+}
+
+/// 选关屏幕.
+class _LevelScreen extends _Screen {
+  _LevelScreen(_Game game) : super(game,
+    square: 4,
+    cardLength: 3,
+  ) {
+    cards[0] = _Card.core(this,
+      rowIndex: 0,
+      columnIndex: 0,
+      rowSpan: 4,
+      columnSpan: 4,
+    );
+    cards[1] = _Card.grid(this,
+      name: 'Back',
+      verticalRowGridIndex: 7,
+      verticalColumnGridIndex: 1,
+      verticalRowGridSpan: 10,
+      verticalColumnGridSpan: 10,
+      horizontalRowGridIndex: 1,
+      horizontalColumnGridIndex: 7,
+      horizontalRowGridSpan: 10,
+      horizontalColumnGridSpan: 10,
+      mainOnTap: (card) {
+        card.post<_Card>((card) {
+          card.game.screen = _SplashScreen(card.game);
+          card.game.callback.notifyStateChanged();
+        });
+      },
+    );
+    cards[2] = _Card.grid(this,
+      name: 'Level',
+      verticalRowGridIndex: 9,
+      verticalColumnGridIndex: 23,
+      verticalRowGridSpan: 8,
+      verticalColumnGridSpan: 16,
+      horizontalRowGridIndex: 27,
+      horizontalColumnGridIndex: 1,
+      horizontalRowGridSpan: 8,
+      horizontalColumnGridSpan: 16,
+    );
   }
 }

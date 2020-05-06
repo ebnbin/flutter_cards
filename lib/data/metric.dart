@@ -11,7 +11,7 @@ class _Metric {
   /// Core 网格数 (不包含 padding).
   static const int coreNoPaddingGrid = 60;
   /// Header footer 网格数 (不包含 padding).
-  static const int headerFooterNoPaddingGrid = 15;
+  static const int headerFooterNoPaddingGrid = 16;
   /// Core 网格数.
   static const int coreGrid = coreNoPaddingGrid + paddingGrid * 2;
   /// Header footer 网格数.
