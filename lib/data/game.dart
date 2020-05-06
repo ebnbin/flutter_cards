@@ -100,24 +100,11 @@ class _SplashScreen extends _Screen {
       rowSpan: 2,
       columnSpan: 1,
       mainOnTap: (card) {
-        card.post<_Card>((card) {
-          card.animateMainToFull().begin(endCallback: () {
-            /// TODO 模拟异步加载资源.
-            card.game.full = 'Mock loading';
-            card.game.callback.notifyStateChanged();
-            Future.delayed(Duration(
-              milliseconds: 1000,
-            ), () {
-              card.game.full = null;
-              card.game.callback.notifyStateChanged();
-              card.game.screen = _SpriteScreen(card.game,
-                square: 3,
-              );
-              card.game.callback.notifyStateChanged();
-            });
-          },);
+        card.post<_Card>((thisRef) {
+          thisRef.game.screen = _LevelScreen(thisRef.game);
+          thisRef.game.callback.notifyStateChanged();
         });
-      }
+      },
     );
 
     cards[3] = _Card.core(this,
@@ -141,12 +128,6 @@ class _SplashScreen extends _Screen {
       rowIndex: 1,
       columnIndex: 3,
       name: 'Special Event',
-      mainOnTap: (card) {
-        card.post<_Card>((thisRef) {
-          thisRef.game.screen = _LevelScreen(thisRef.game);
-          thisRef.game.callback.notifyStateChanged();
-        });
-      }
     );
     cards[8] = _Card.core(this,
       rowIndex: 2,
@@ -191,7 +172,7 @@ class _SpriteScreen extends _Screen {
     cardLength: square * square + 2,
   ) {
     cards[cards.length - 1] = _Card.grid(this,
-      name: 'Back',
+      name: 'Home',
       verticalRowGridIndex: 7,
       verticalColumnGridIndex: 1,
       verticalRowGridSpan: 10,
@@ -307,16 +288,10 @@ class _SpriteScreen extends _Screen {
 class _LevelScreen extends _Screen {
   _LevelScreen(_Game game) : super(game,
     square: 4,
-    cardLength: 3,
+    cardLength: 7,
   ) {
-    cards[0] = _Card.core(this,
-      rowIndex: 0,
-      columnIndex: 0,
-      rowSpan: 4,
-      columnSpan: 4,
-    );
     cards[1] = _Card.grid(this,
-      name: 'Back',
+      name: 'Home',
       verticalRowGridIndex: 7,
       verticalColumnGridIndex: 1,
       verticalRowGridSpan: 10,
@@ -342,6 +317,57 @@ class _LevelScreen extends _Screen {
       horizontalColumnGridIndex: 1,
       horizontalRowGridSpan: 8,
       horizontalColumnGridSpan: 16,
+    );
+    cards[3] = _Card.core(this,
+      name: '3*3',
+      rowIndex: 0,
+      columnIndex: 0,
+      rowSpan: 2,
+      columnSpan: 2,
+      mainOnTap: (card) {
+        card.post<_Card>((card) {
+          card.animateMainToFull().begin(endCallback: () {
+            card.game.screen = _SpriteScreen(card.game,
+              square: 3,
+            );
+            card.game.callback.notifyStateChanged();
+          });
+        });
+      },
+    );
+    cards[4] = _Card.core(this,
+      name: '4*4',
+      rowIndex: 0,
+      columnIndex: 2,
+      rowSpan: 2,
+      columnSpan: 2,
+      mainOnTap: (card) {
+        card.post<_Card>((card) {
+          card.animateMainToFull().begin(endCallback: () {
+            card.game.screen = _SpriteScreen(card.game,
+              square: 4,
+            );
+            card.game.callback.notifyStateChanged();
+          });
+        });
+      },
+    );
+    cards[5] = _Card.core(this,
+      name: '5*5',
+      rowIndex: 2,
+      columnIndex: 0,
+      rowSpan: 2,
+      columnSpan: 2,
+      mainOnTap: (card) {
+        card.post<_Card>((card) {
+          card.animateMainToFull().begin(endCallback: () {
+            card.game.screen = _SpriteScreen(card.game,
+              square: 5,
+            );
+            card.game.callback.notifyStateChanged();
+          });
+        });
+      },
     );
   }
 }

@@ -173,7 +173,7 @@ class _GameWidget extends StatelessWidget {
         style: TextStyle(
           color: Colors.white,
           backgroundColor: Colors.black.withOpacity(0.5),
-          fontSize: 8.0,
+          fontSize: 12.0,
         ),
       ),
     );
