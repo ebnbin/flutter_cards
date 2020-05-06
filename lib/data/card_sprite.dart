@@ -18,7 +18,7 @@ class _SpriteCard extends _Card {
     /// 默认不可见, 通过动画进入.
     bool visible = false,
     _CardDimension dimension = _CardDimension.main,
-    double mainOpacity = 1.0,
+    double selfOpacity = 1.0,
     _GestureType gestureType = _GestureType.normal,
 //    void Function(_Card card) onTap,
 //    void Function(_Card card) onLongPress,
@@ -44,7 +44,7 @@ class _SpriteCard extends _Card {
     dimension: dimension,
     /// 固定为主尺寸卡片.
     detail: false,
-    selfOpacity: mainOpacity,
+    selfOpacity: selfOpacity,
     gestureType: gestureType,
     mainOnTap: (card) {
       card.post<_SpriteCard>((card) {

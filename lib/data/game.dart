@@ -70,7 +70,7 @@ class _SplashScreen extends _Screen {
     cardLength: 14,
   ) {
     cards[0] = _Card.core(this,
-      name: 'Cards',
+      name: 'Title',
       rowIndex: 1,
       columnIndex: 0,
       rowSpan: 1,
@@ -123,46 +123,54 @@ class _SplashScreen extends _Screen {
     cards[3] = _Card.core(this,
       rowIndex: 0,
       columnIndex: 0,
+      name: 'Game Center',
     );
     cards[4] = _Card.core(this,
       rowIndex: 0,
       columnIndex: 1,
-    );
-    cards[5] = _Card.core(this,
-      rowIndex: 0,
-      columnIndex: 2,
+      rowSpan: 1,
+      columnSpan: 2,
+      name: 'Money\nStore',
     );
     cards[6] = _Card.core(this,
       rowIndex: 0,
       columnIndex: 3,
+      name: 'Settings',
     );
     cards[7] = _Card.core(this,
       rowIndex: 1,
       columnIndex: 3,
+      name: 'Special Event',
     );
     cards[8] = _Card.core(this,
       rowIndex: 2,
       columnIndex: 0,
+      name: 'Cards',
     );
     cards[9] = _Card.core(this,
       rowIndex: 2,
       columnIndex: 1,
+      name: 'Roles',
     );
     cards[10] = _Card.core(this,
       rowIndex: 2,
       columnIndex: 2,
+      name: 'Skills',
     );
     cards[11] = _Card.core(this,
       rowIndex: 3,
       columnIndex: 0,
+      name: 'Statistics'
     );
     cards[12] = _Card.core(this,
       rowIndex: 3,
       columnIndex: 1,
+      name: 'Achievement',
     );
     cards[13] = _Card.core(this,
       rowIndex: 3,
       columnIndex: 2,
+      name: 'Daily Task',
     );
   }
 }
